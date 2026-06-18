@@ -42,7 +42,7 @@ doc-sync-close
 | Skill | 类型 | 默认执行 | 负责什么 |
 |---|---|---:|---|
 | `setup-doc-governance` | 初始化 / 周期性治理 | 否 | 以固定分层标准从历史文档、当前文档、代码和测试中抽取事实，写出 `GOVERNANCE_PLAN.md`，经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新 |
-| `context-authority` | 主流程 | 是 | 从当前任务上下文、权威文档、代码、测试中获取上下文并判断冲突 |
+| `context-authority` | 主流程 | 按需 | 在需要计划前上下文 gate、恢复任务、权威判断或冲突判断时，读取最小相关上下文并输出路由 verdict |
 | `plan-confirm` | 主流程 | 是 | 生成计划、标记风险等级、绑定计划版本、等待用户确认、落计划文档 |
 | `grill` | 手动可选 | 否 | 拷问需求、计划、测试策略、架构方案、文档影响 |
 | `tdd-execute` | 主流程 | 是 | 按确认后的计划做 TDD 执行、测试、质量检查、执行记录；必要时记录 TDD 例外 |
@@ -101,12 +101,12 @@ full-repo
   在 docs-only 基础上读取相关代码和测试作为事实证据，但不修改代码和测试。
 ```
 
-### 2.2 每个开发任务的默认流程
+### 2.2 需要文档驱动计划的开发任务默认流程
 
 ```text
 进入当前任务上下文
   ↓
-context-authority
+context-authority（需要上下文 gate 时）
   ↓
 plan-confirm
   ↓
@@ -457,7 +457,7 @@ case docs: docs/cases/20260617-auth-refresh-flow/
 1. 用户明确指定的 case id
 2. 用户明确指定的 case docs 目录
 3. 已存在的 docs/cases/<case-id>/plan.md
-4. 当前会话新生成的 case id
+4. plan-confirm 在需要落盘时新建的 case id
 ```
 
 ### 4.5 case Context Resolution Order
@@ -467,7 +467,7 @@ case docs: docs/cases/20260617-auth-refresh-flow/
 2. 当前 worktree + case branch 可推导出的 case id
 3. 当前 branch 可推导出的 case id
 4. 当前目录下已有明确 case docs
-5. 当前会话创建的新 case id
+5. 当前会话提出 proposed_case_slug，由 plan-confirm 决定是否创建正式 case
 6. 仍无法判断时，要求用户选择或确认
 ```
 
@@ -1194,9 +1194,9 @@ related_docs: []
 2. 当前生产代码
 3. 当前测试
 4. 已接受 ADR / migration / release note
-5. L2 operational docs
-6. L3 derived docs
-7. 用户本轮新信息，默认进入计划或任务文档确认，不能静默写入 authority
+5. 用户本轮新信息，默认进入计划或治理确认，不能静默写入 authority
+6. L2 operational docs
+7. L3 derived docs
 8. L4 historical docs
 9. L5 scratch docs
 ```
@@ -1208,7 +1208,8 @@ related_docs: []
 - 如果 L3 文档和 authority 文档冲突，更新或标记 L3 stale。
 - 如果 historical docs 看起来相关，只能作为证据或历史上下文。
 - 没有 metadata 的文档默认 unclassified，降低信任等级。
-- 用户本轮提供的新事实默认进入 `GOVERNANCE_PLAN.md` 或任务计划确认，不能静默进入 authority。
+- 用户本轮提供的新事实作为 pending fact 高于 L2 / L3，但不能压过 active authority、当前代码、当前测试或已接受 ADR。
+- 只影响当前任务的新事实进入任务计划确认；改变长期产品事实、workflow policy、authority docs、public contract 或 agent behavior 的新事实进入 `GOVERNANCE_PLAN.md` 或 authority update proposal。
 ```
 
 ---
@@ -1342,23 +1343,19 @@ docs/governance/CONTEXT_PACK_POLICY.md
 
 上下文获取与权威源判断 Skill。
 
-它负责在计划前建立事实基础。
+它负责在计划前建立最小事实基础。它不是所有开发任务的固定入口，只在任务需要上下文 gate、恢复任务、权威判断或冲突判断时触发。
 
 ## 负责什么
 
 ```text
 - 识别当前任务上下文。
 - 尝试读取当前 branch / worktree。
-- 根据 case Context Resolution Order 解析 case id。
-- 读取已有任务文档。
-- 读取入口索引：`docs/README.md` 或 `docs/DOC_INDEX.md`。
-- 读取 `docs/authority/` 下的 active authority 文档。
-- 如存在，读取 `docs/governance/GOVERNANCE_PLAN.md` 以了解最近治理状态和 blocked decisions。
-- 读取相关代码。
-- 读取相关测试。
-- 识别代码和文档冲突。
+- 根据 case Context Resolution Order 解析已有 case，或提出 proposed_case_slug。
+- 按任务意图读取已有任务文档、入口索引、active authority、相关代码和测试。
+- 仅在任务涉及文档治理、authority 变更、workflow / agent policy、public contract、高风险冲突或 blocked decision 时读取 `docs/governance/GOVERNANCE_PLAN.md`。
+- 识别并分级 authority / code / tests / case docs 冲突。
 - 标记不确定点和风险。
-- 给后续计划提供上下文包。
+- 输出 route verdict，给 `plan-confirm` 判断是否能计划。
 ```
 
 ## 固定开始动作
@@ -1367,8 +1364,9 @@ docs/governance/CONTEXT_PACK_POLICY.md
 git rev-parse --show-toplevel
 git branch --show-current
 git status --short
-git diff --name-only
 ```
+
+`git diff --name-only` 仅在 dirty workspace、恢复任务、需要判断当前变更范围或计划 baseline 时运行。
 
 ## 输入
 
@@ -1377,59 +1375,67 @@ git diff --name-only
 - 当前 workspace
 - 当前 branch
 - docs/README.md 或 docs/DOC_INDEX.md
-- docs/governance/GOVERNANCE_PLAN.md，如存在
-- docs/authority/
-- 代码和测试
-- 已有 case docs
+- docs/authority/ 中相关 active authority
+- docs/governance/GOVERNANCE_PLAN.md，仅在相关时
+- 相关代码和测试，按 intent 决定
+- 已有 case docs，仅在已有 case 或恢复任务时
 ```
 
-## 输出：`Context & Authority Brief`
+## 输出
+
+默认输出是对话中的最小上下文摘要，或交给 `plan-confirm` 内嵌到 `plan.md` 的 `Context Summary / Context Sources`。
+
+只有已有 case、恢复任务、高风险任务、存在冲突、多 agent / 跨会话接续或用户明确要求时，才写：
+
+```text
+docs/cases/<case-id>/context-authority-brief.md
+```
+
+最小内容：
 
 ```md
-# Context & Authority Brief
-
-## Current case
-- Mode:
-- Branch:
-- Worktree:
-- case ID:
-- case Docs:
-- case State File:
-- Governance Scope:
-
 ## User Request
-...
 
-## Relevant Authority Docs
-- ...
+## Intent
+- Type:
+- Reason:
+- Minimum Evidence Needed:
 
-## Relevant Code
-- ...
+## Workspace Snapshot
 
-## Relevant Tests
-- ...
+## Case Context
 
-## Existing case Docs
-- ...
-
-## Current Behavior
-...
-
-## Constraints
-...
-
-## Conflicts
-| Topic | L1 Says | Code Says | Resolution Needed |
+## Sources Read
+| Source | Layer / Type | Why Included | Trust / Freshness |
 |---|---|---|---|
 
-## Unknowns
-- ...
+## Sources Excluded
+| Source | Reason |
+|---|---|
 
-## Risks
-- ...
+## Authority / Constraints
 
-## Recommended Next Step
-...
+## Relevant Code / Tests
+
+## Conflicts / Unknowns
+| Topic | Conflict / Unknown | Risk | Required Decision |
+|---|---|---|---|
+
+## Route Verdict
+- Verdict:
+- Reason:
+- Required Next Owner:
+```
+
+Route verdict：
+
+```text
+proceed_to_plan
+proceed_to_plan_with_risk
+needs_user_decision
+needs_case_selection
+run_setup_doc_governance
+blocked_by_authority_conflict
 ```
 
 ## 边界
@@ -1438,7 +1444,10 @@ git diff --name-only
 - 只收集事实。
 - 不写实现计划。
 - 不改代码。
+- 不创建 branch、worktree 或 case docs。
+- 不修改 authority、GOVERNANCE_PLAN、plan、execution、review 或 closure。
 - 不自动解决权威冲突。
+- 默认不落盘；条件满足时才写 context brief。
 ```
 
 ---
@@ -1998,6 +2007,7 @@ skills/
     SKILL.md
     templates/
       context-authority-brief.md
+      context-sources.md
 
   plan-confirm/
     SKILL.md
@@ -2156,7 +2166,7 @@ docs/cases/<case-id>/handoff.md
 - 文件和事实治理 verdict 统一为 promote / merge / bridge / archive / block。
 - branch/worktree 是推荐任务定位机制，不是强制前置条件。
 - agent 不应擅自创建 branch 或 worktree，除非用户明确要求或确认。
-- case docs 可以由 branch 推导，也可以由用户指定或当前会话生成。
+- case docs 可以由 branch 推导，也可以由用户指定；新 case 由 `plan-confirm` 在需要落盘时创建。
 - 所有任务过程文档都属于 L2 Operational。
 - 每个任务建议维护 case_state.yaml，作为机器可读状态缓存。
 - Authority 更新必须用户确认。
@@ -2180,7 +2190,7 @@ docs/cases/<case-id>/handoff.md
 
 这套工作流可以概括为：
 
-> 用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；用任务上下文和 case_state.yaml 定位当前工作；用 `context-authority → plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认和 TDD 纪律的开发闭环；`grill` 和 `review` 作为用户手动触发的质量增强 Skill，review 可由 agent 基于风险建议。
+> 用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认和 TDD 纪律的开发闭环；`grill` 和 `review` 作为用户手动触发的质量增强 Skill，review 可由 agent 基于风险建议。
 
 
 ---
