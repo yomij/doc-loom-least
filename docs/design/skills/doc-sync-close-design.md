@@ -16,7 +16,7 @@
 
 ```text
 Authority 文档更新必须用户确认。
-每个任务结束或中断都必须写 closure.md。
+有 case docs 的任务结束或中断都必须写 closure.md。
 结项时必须识别新知识，但不能把未验证知识静默晋升为长期权威。
 ```
 
@@ -71,8 +71,13 @@ description: Close a document-driven workflow case by syncing docs and writing c
 
 ```text
 docs/cases/<case-id>/closure.md
-docs/cases/<case-id>/handoff.md
 docs/cases/<case-id>/case_state.yaml
+```
+
+条件输出：
+
+```text
+docs/cases/<case-id>/handoff.md    # Paused / Blocked / 需要未来恢复时
 ```
 
 可选更新：
@@ -97,6 +102,7 @@ doc-sync-close/
   SKILL.md
   templates/
     closure.md
+    handoff.md
     case_state.yaml
   references/
     shared-protocol.md
@@ -227,8 +233,8 @@ Evidence 可以是：
 
 确保：
 
-- `execution.md` 已更新。
-- `handoff.md` 指向 closure。
+- 需要执行证据时，`execution.md` 已更新。
+- 如果存在未来恢复点，`handoff.md` 指向 closure 并写清恢复条件。
 - `case_state.yaml` phase 为 `closed` 或对应中断状态。
 
 ### Step 5. Sync L3
@@ -338,6 +344,8 @@ Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
 
 ## 11. handoff.md 收尾模板
 
+仅在 `Paused`、`Blocked` 或存在未来恢复点时生成。
+
 ```md
 # Handoff
 
@@ -374,7 +382,7 @@ Handoff 规则：
 - Authority 更新必须用户确认。
 - 未满足 acceptance criteria 不能标记 `Done`。
 - review verdict 为 `Needs Changes` 不能直接关闭为 `Done`。
-- 没有 `closure.md` 的任务不能算结束。
+- 有 case docs 但没有 `closure.md` 的任务不能算结束。
 - 任务取消、阻塞、暂停、替代也必须写 closure。
 - 未评审的候选知识不能写成 active / canonical。
 - 生命周期状态迁移必须遵守 owner / review / freshness 规则。

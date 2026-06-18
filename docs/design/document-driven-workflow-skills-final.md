@@ -13,23 +13,27 @@
 相比初版，本版增加以下落地机制：
 
 ```text
-1. setup-doc-governance 使用单一固定流程，通过 `scope: current-case | docs-only | full-repo` 控制扫描范围。
-2. TDD 是默认纪律，但允许记录化例外，避免纯文档、配置、Spike、紧急修复被流程卡死。
-3. plan-confirm 增加 risk_level、plan_version、approved_plan_hash、base_commit，确保确认对象可追溯。
-4. 每个任务目录增加 case_state.yaml，降低接续任务时的状态推导歧义。
-5. review 仍默认不自动执行，但 agent 可以基于风险建议 review。
-6. closure 状态补充 Cancelled / Superseded / Paused / Abandoned，覆盖真实任务中断场景。
-7. Authority Order 拆分为 Execution Instruction Order 和 Fact Authority Order，避免把用户临时指令误写为长期事实。
-8. setup-doc-governance 使用 `GOVERNANCE_PLAN.md` 作为唯一默认中间产物，文件级和事实级都用 `promote / merge / bridge / archive / block` verdict。
+1. 新增 docloom-workflow 作为 public automatic entry，但保持 thin router，不做重型 orchestrator。
+2. setup-doc-governance 使用单一固定流程，通过 `scope: current-case | docs-only | full-repo` 控制扫描范围。
+3. TDD 是默认纪律，但允许记录化例外，避免纯文档、配置、Spike、紧急修复被流程卡死。
+4. plan-confirm 增加 risk_level、plan_version、approved_plan_hash、base_commit，确保确认对象可追溯。
+5. case_state.yaml 瘦身为机器可读状态缓存，不复制 plan.md 的权威字段。
+6. review 仍默认不自动执行，但 agent 可以基于风险建议 review。
+7. closure 状态补充 Cancelled / Superseded / Paused / Abandoned，覆盖真实任务中断场景。
+8. Authority Order 拆分为 Execution Instruction Order 和 Fact Authority Order，避免把用户临时指令误写为长期事实。
+9. setup-doc-governance 使用 `GOVERNANCE_PLAN.md` 作为唯一默认中间产物，文件级和事实级都用 `promote / merge / bridge / archive / block` verdict。
+10. 产物生成改为 Artifact Policy：handoff、context brief、execution 等按条件生成，不再每阶段固定铺满文件。
+11. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`，只操作文档产物。
 ```
 
 ---
 
 ## 1. 最终 Skill 列表
 
-最终拆解为 **5 个主流程 Skill + 2 个手动可选 Skill**。其中 `setup-doc-governance` 使用固定治理标准和一次确认流程，`review` 仍以手动触发为主，但允许 agent 基于风险给出 review 建议：
+最终拆解为 **1 个入口 Skill + 5 个主流程 Skill + 2 个手动可选 Skill**。其中 `docloom-workflow` 是公开自动入口和轻量路由器；`setup-doc-governance` 使用固定治理标准和一次确认流程；`review` 仍以手动触发为主，但允许 agent 基于风险给出 review 建议：
 
 ```text
+docloom-workflow       # public automatic entry / thin router
 setup-doc-governance
 context-authority
 plan-confirm
@@ -41,6 +45,7 @@ doc-sync-close
 
 | Skill | 类型 | 默认执行 | 负责什么 |
 |---|---|---:|---|
+| `docloom-workflow` | 入口 / 路由 | 是 | 作为 public automatic entry，读取最小 workspace / case 状态，延迟创建 case，维护 Artifact Policy，并路由到具体 skill；不替代具体 skill、不自动执行 |
 | `setup-doc-governance` | 初始化 / 周期性治理 | 否 | 以固定分层标准从历史文档、当前文档、代码和测试中抽取事实，写出 `GOVERNANCE_PLAN.md`，经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新 |
 | `context-authority` | 主流程 | 按需 | 在需要计划前上下文 gate、恢复任务、权威判断或冲突判断时，读取最小相关上下文并输出路由 verdict |
 | `plan-confirm` | 主流程 | 是 | 生成计划、标记风险等级、绑定计划版本、等待用户确认、落计划文档 |
@@ -58,6 +63,7 @@ approved_plan_hash     用户确认的计划内容哈希
 base_commit            计划确认时的代码基线
 tdd_applicability      是否适合严格 TDD
 case_state.yaml        机器可读任务状态
+artifact_policy        case 级产物生成策略
 review_recommendation  是否建议 review
 closure_status         Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
 governance_scope       current-case | docs-only | full-repo
@@ -104,7 +110,9 @@ full-repo
 ### 2.2 需要文档驱动计划的开发任务默认流程
 
 ```text
-进入当前任务上下文
+docloom-workflow
+  ↓
+解析用户意图、workspace、已有 case 和状态
   ↓
 context-authority（需要上下文 gate 时）
   ↓
@@ -157,7 +165,7 @@ review
 
 ## 3. 全局 Workflow Protocol
 
-不单独保留 `workflow-orchestrator` Skill，而是把编排规则沉淀为所有 Skill 必须遵守的全局协议。
+保留全局协议，同时新增 `docloom-workflow` 作为 thin entry/router。它只做路由、状态推导、延迟 case 创建和 Artifact Policy 判定，不替代具体阶段 skill，不维护中心任务索引，也不成为复杂 pipeline。
 
 ### 3.1 核心原则
 
@@ -168,16 +176,19 @@ review
 4. 当前任务上下文可以来自 branch/worktree，也可以来自用户指定或 case docs。
 5. branch/worktree 是推荐隔离机制，不是强制前置条件。
 6. agent 不应擅自创建 branch 或 worktree，除非用户明确要求或确认。
-7. 没有 context，不准计划。
-8. 默认没有用户确认计划，不准执行；低风险任务可由项目策略显式放宽。
-9. TDD 是默认纪律；无法先写失败测试时，必须记录 TDD exception 和替代验证方式。
-10. 执行偏离计划，必须记录；严重偏离，必须重新确认。
-11. plan-confirm 必须绑定 plan_version、approved_plan_hash 和 base_commit。
-12. 每个任务应维护 case_state.yaml，作为机器可读状态缓存。
-13. Authority 更新必须通过 `GOVERNANCE_PLAN.md` 一次确认；未确认原始材料不得写入 authority。
-14. 每个任务结束必须写 closure.md；中断任务也必须有明确 closure_status。
-15. grill 只能由用户手动触发。
-16. review 只能由用户手动触发或明确要求；agent 可以基于风险建议 review。
+7. docloom-workflow 是默认公开自动入口；用户显式点名具体 skill 时，直接进入该 skill。
+8. 没有 context，不准计划。
+9. 默认没有用户确认计划，不准执行；Doc Loom Least v1 不支持 low-risk auto execution。
+10. TDD 是默认纪律；无法先写失败测试时，必须记录 TDD exception 和替代验证方式。
+11. 执行偏离计划，必须记录；严重偏离，必须重新确认。
+12. plan-confirm 必须绑定 plan_version、approved_plan_hash 和 base_commit。
+13. case_state.yaml 是瘦身状态缓存，不是唯一真相。
+14. docloom-workflow 持有 Artifact Policy，各阶段 skill 负责写自己的产物。
+15. Authority 更新必须通过 `GOVERNANCE_PLAN.md` 一次确认；未确认原始材料不得写入 authority。
+16. 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
+17. grill 只能由用户手动触发。
+18. review 只能由用户手动触发或明确要求；agent 可以基于风险建议 review。
+19. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
 ```
 
 ### 3.2 风险等级与计划确认策略
@@ -198,7 +209,7 @@ high
   示例：权限、安全、计费、数据删除、public API、schema migration、认证、隐私。
 ```
 
-默认策略：
+Doc Loom Least v1 的 skill-defined 策略：
 
 ```yaml
 plan_confirmation_policy:
@@ -207,16 +218,7 @@ plan_confirmation_policy:
   high_risk_changes: require_explicit_confirmation
 ```
 
-项目可以显式放宽低风险任务：
-
-```yaml
-plan_confirmation_policy:
-  low_risk_changes: auto
-  medium_risk_changes: require_confirmation
-  high_risk_changes: require_explicit_confirmation
-```
-
-如果项目没有声明策略，必须使用默认策略。
+普通项目文档、authority 文档或入口索引不能放宽这个 gate。`low_risk_changes: auto` 不进入 v1；如未来支持，必须由 skill-owned 配置机制明确设计。
 
 ### 3.3 TDD 适用性与例外机制
 
@@ -278,7 +280,7 @@ base_commit:
 
 ### 3.5 机器可读任务状态
 
-每个任务目录建议维护：
+创建 case docs 时维护：
 
 ```text
 docs/cases/<case-id>/case_state.yaml
@@ -289,16 +291,14 @@ docs/cases/<case-id>/case_state.yaml
 ```yaml
 case_id: 20260617-auth-refresh-flow
 phase: executing
-mode: branch
-branch: case/20260617-auth-refresh-flow
-worktree:
-plan_status: approved
 plan_version: 2
-review_status: not_requested
 closure_status: open
-risk_level: medium
-base_commit: abc123
 last_updated: 2026-06-17T11:00:00+09:00
+artifacts:
+  context_brief: inline
+  handoff: not_needed
+  execution: conditional
+  closure: required
 ```
 
 定位：
@@ -306,27 +306,56 @@ last_updated: 2026-06-17T11:00:00+09:00
 ```text
 - Markdown 文档仍是人类可读主记录。
 - case_state.yaml 是机器可读状态缓存。
+- case_state.yaml 只记录本 case 的状态和产物决策，不复制完整 Artifact Policy。
+- risk_level、base_commit、approved_plan_hash 默认属于 plan.md。
 - 如果 case_state.yaml 与 Markdown 冲突，必须报告并以 Markdown + git 状态重新推导。
 ```
 
-### 3.6 Handoff 写入规则
+### 3.6 Artifact Policy
+
+`docloom-workflow` 持有全局 Artifact Policy，各阶段 skill 负责写自己的产物。
+
+| Artifact | Required When | Optional / Skip When | Writer |
+|---|---|---|---|
+| `plan.md` | case enters `plan-confirm` | no persistent case workflow | `plan-confirm` |
+| `case_state.yaml` | case docs are created | status-only without case creation | `docloom-workflow` initially; stage skills update |
+| `context-authority-brief.md` | high risk, conflict, resume, multi-agent / cross-session, explicit request | inline `Context Sources` otherwise | `context-authority` |
+| `handoff.md` | future resume point exists | continuous same-session flow | current stage skill |
+| `execution.md` | TDD required, code / behavior change, plan deviation, failed/retried tests, review recommended/requested, resume needed | docs-only, trivial config, verification fits in closure | `tdd-execute` |
+| `review.md` | user explicitly requests review | otherwise no file | `review` |
+| `grill.md` | user explicitly triggers grill and case docs exist | otherwise conversation only | `grill` |
+| `closure.md` | case docs exist and task ends or pauses / blocks / cancels | no case docs one-shot task | `doc-sync-close` |
+
+### 3.7 Handoff 写入规则
 
 ```text
 handoff.md
-  - 保存当前状态摘要。
-  - 可以覆盖。
+  - 只在存在未来恢复点时生成或更新。
+  - 由当前阶段 skill 写入，因为当前阶段最知道下一步和注意事项。
   - 必须短、准、适合接续任务。
 
 execution.md
-  - 记录完整执行日志。
-  - 原则上 append-only。
+  - 记录 TDD / 行为变更 / 偏离 / 复杂验证证据。
+  - docs-only、trivial config 或验证证据可放入 closure 时可跳过。
 
 closure.md
   - 保存最终结果。
-  - 任务结束、中断、取消、替代时都必须写。
+  - 有 case docs 的任务结束、中断、取消、替代时必须写。
+  - 可使用轻量模板。
 ```
 
-### 3.7 Review 建议机制
+未来恢复点包括：
+
+```text
+- 用户要求稍后继续、交给别人、交给另一个 agent 或另一个会话。
+- 计划已确认但不立刻执行。
+- 执行已开始但未完成。
+- 等待 review、用户确认或外部依赖。
+- 任务进入 Paused、Blocked、Needs Changes。
+- 高风险或跨模块任务需要恢复摘要。
+```
+
+### 3.8 Review 建议机制
 
 `review` 不自动执行，但 agent 可以在以下情况建议 review：
 
@@ -350,7 +379,7 @@ closure.md
   - ...
 ```
 
-### 3.8 异常收尾状态
+### 3.9 异常收尾状态
 
 `closure.md` 的最终状态支持：
 
@@ -457,7 +486,7 @@ case docs: docs/cases/20260617-auth-refresh-flow/
 1. 用户明确指定的 case id
 2. 用户明确指定的 case docs 目录
 3. 已存在的 docs/cases/<case-id>/plan.md
-4. plan-confirm 在需要落盘时新建的 case id
+4. docloom-workflow 在进入持久化 case workflow 时创建的新 case id
 ```
 
 ### 4.5 case Context Resolution Order
@@ -467,7 +496,7 @@ case docs: docs/cases/20260617-auth-refresh-flow/
 2. 当前 worktree + case branch 可推导出的 case id
 3. 当前 branch 可推导出的 case id
 4. 当前目录下已有明确 case docs
-5. 当前会话提出 proposed_case_slug，由 plan-confirm 决定是否创建正式 case
+5. 当前会话提出 proposed_case_slug，由 docloom-workflow 决定是否创建正式 case
 6. 仍无法判断时，要求用户选择或确认
 ```
 
@@ -1218,7 +1247,79 @@ related_docs: []
 
 ---
 
-# 11.1 `setup-doc-governance`
+# 11.1 `docloom-workflow`
+
+## 定位
+
+public automatic entry / thin router。
+
+它负责识别用户意图、读取最小 workspace 和 case 状态、延迟创建 case、维护 Artifact Policy，并路由到具体阶段 skill。它不生成详细计划、不执行代码、不自动 review / grill，也不维护中心任务索引。
+
+## 负责什么
+
+```text
+- 作为默认公开入口；用户显式点名 skill 时尊重用户点名。
+- 读取目标仓库 AGENTS.md 作为本地工作约束，但不从中引入 CLI backend 架构。
+- 固定读取最小 git 状态：root、branch、status。
+- 按需读取 git diff --name-only。
+- 解析现有 case 或生成正式 case_id。
+- 延迟创建 docs/cases/<case-id>/ 和最小 case_state.yaml。
+- 执行 status-only 查询。
+- 判定本 case 的 Artifact Policy。
+- 根据状态和用户意图路由到 setup-doc-governance、context-authority、plan-confirm、tdd-execute、doc-sync-close，或显式触发的 grill/review。
+```
+
+## 不是做什么
+
+```text
+- 不依赖 CLI backend。
+- 不调用 `.agents/doc-loom/bin/doc-loom`。
+- 不创建 `.agents/doc-loom` control zone。
+- 不生成 workflow.md / route.md。
+- 不因为存在 approved plan 就自动执行。
+- 不默认运行 context-authority。
+- 不自动触发 grill 或 review。
+- 不静默修复 case_state.yaml 与 Markdown 的冲突。
+```
+
+## 输出
+
+默认对话输出：
+
+```text
+Current phase:
+Evidence:
+Route decision:
+Next skill:
+Blocking issue:
+```
+
+允许写入：
+
+```text
+docs/cases/<case-id>/case_state.yaml
+```
+
+只在创建 case、阶段转换或当前 skill 完成时更新。
+
+## 路由原则
+
+```text
+- 用户明确要求治理初始化 / 重建 -> setup-doc-governance。
+- 需要上下文 gate / 恢复 / 权威判断 / 冲突判断 -> context-authority。
+- 进入持久化开发计划且 context 足够 -> plan-confirm。
+- approved plan + 用户明确要求执行 / 继续 -> tdd-execute。
+- 用户要求收尾 / 同步文档 / closure -> doc-sync-close。
+- 用户显式要求 grill -> grill。
+- 用户显式要求 review -> review。
+- 意图不清 -> status-only + 一个澄清问题。
+```
+
+详见 `docs/design/skills/docloom-workflow-design.md`。
+
+---
+
+# 11.2 `setup-doc-governance`
 
 ## 定位
 
@@ -1337,7 +1438,7 @@ docs/governance/CONTEXT_PACK_POLICY.md
 
 ---
 
-# 11.2 `context-authority`
+# 11.3 `context-authority`
 
 ## 定位
 
@@ -1452,13 +1553,14 @@ blocked_by_authority_conflict
 
 ---
 
-# 11.3 `plan-confirm`
+# 11.4 `plan-confirm`
 
 ## 定位
 
 计划生成、用户确认、落计划文档 Skill。
 
 这是执行前的唯一入口。
+它要求 `docloom-workflow` 已经确定 `case_id` 和 `case_docs`。如果缺少 case identity，应返回 `needs_docloom_workflow` 或 `needs_case_initialization`，不自行生成 case。
 
 ## 负责什么
 
@@ -1474,7 +1576,9 @@ blocked_by_authority_conflict
 - 明确文档影响。
 - 标记哪些权威文档更新需要用户确认。
 - 等待用户确认。
-- 用户确认后写入 plan.md 和 handoff.md。
+- 确认前写入 `status: draft` 的 plan.md。
+- 用户确认后更新 approval metadata、approved_plan_hash、Confirmation Log 和 case_state.yaml。
+- 只有存在未来恢复点时才写 handoff.md。
 ```
 
 ## 注意
@@ -1553,7 +1657,9 @@ Reason:
 - approved_plan_hash:
 ```
 
-## 输出接续摘要：`docs/cases/<case-id>/handoff.md`
+## 条件输出接续摘要：`docs/cases/<case-id>/handoff.md`
+
+只有存在未来恢复点时才写，例如计划已确认但不立刻执行、需要跨会话接续、等待用户或外部依赖。
 
 ````md
 # Handoff
@@ -1589,22 +1695,15 @@ planned
 ```yaml
 case_id:
 phase: planned
-mode:
-branch:
-worktree:
-plan_status: approved
 plan_version:
-review_status: not_requested
 closure_status: open
-risk_level:
-base_commit:
 last_updated:
 ```
 
 ## 关键 Gate
 
 ```text
-没有用户确认，不进入 tdd-execute，除非项目策略显式允许低风险自动执行。
+没有用户确认，不进入 tdd-execute。
 计划变化后，plan_version 必须递增，并重新确认。
 approved_plan_hash 与当前 plan 内容不一致时，不准执行。
 如果 grill 后计划变化，必须回到 plan-confirm。
@@ -1612,7 +1711,7 @@ approved_plan_hash 与当前 plan 内容不一致时，不准执行。
 
 ---
 
-# 11.4 `grill`
+# 11.5 `grill`
 
 ## 定位
 
@@ -1699,7 +1798,7 @@ Proceed / Revise Plan / Blocked
 
 ---
 
-# 11.5 `tdd-execute`
+# 11.6 `tdd-execute`
 
 ## 定位
 
@@ -1720,7 +1819,8 @@ TDD 执行和质量检查 Skill。
 - 重构。
 - 跑 lint / typecheck / build。
 - 记录执行日志。
-- 更新 handoff.md。
+- 按 Artifact Policy 写 execution.md。
+- 只有存在未来恢复点时更新 handoff.md。
 - 如果偏离计划，记录偏离。
 - 如果严重偏离计划，回到 plan-confirm。
 ```
@@ -1739,7 +1839,20 @@ Quality Check
 Update Execution Docs
 ```
 
-## 输出：`docs/cases/<case-id>/execution.md`
+## 条件输出：`docs/cases/<case-id>/execution.md`
+
+以下情况必须写：
+
+```text
+- TDD Required: Yes。
+- 存在代码或行为变化。
+- 出现计划偏离。
+- 测试失败、重试或需要记录失败原因。
+- 建议或请求 review。
+- 任务可能需要恢复。
+```
+
+纯文档、trivial config 或替代验证证据能完整放入 `closure.md` 时，可以跳过独立 `execution.md`。
 
 ```md
 # Execution Report
@@ -1796,7 +1909,9 @@ Yes / No
 Yes / No
 ```
 
-## 输出：`docs/cases/<case-id>/handoff.md`
+## 条件输出：`docs/cases/<case-id>/handoff.md`
+
+只有存在未来恢复点时写。
 
 ````md
 # Handoff
@@ -1825,7 +1940,7 @@ executing
 ## 关键 Gate
 
 ```text
-没有用户确认的 plan，不准执行，除非项目策略显式允许低风险自动执行。
+没有用户确认的 plan，不准执行。
 approved_plan_hash 不匹配，不准执行。
 默认没有失败测试，不准实现；如果不适用 TDD，必须记录 TDD exception 和替代验证。
 执行偏离计划，必须记录。
@@ -1834,7 +1949,7 @@ approved_plan_hash 不匹配，不准执行。
 
 ---
 
-# 11.6 `review`
+# 11.7 `review`
 
 ## 定位
 
@@ -1911,7 +2026,7 @@ Approved / Needs Changes
 
 ---
 
-# 11.7 `doc-sync-close`
+# 11.8 `doc-sync-close`
 
 ## 定位
 
@@ -1982,7 +2097,7 @@ L5 Scratch     可清理或转正
 
 ```text
 Authority 文档更新必须用户确认。
-任务结束必须写 closure.md。
+有 case docs 的任务结束必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 如果 acceptance criteria 未满足，不能标记 Done，只能 Done with Caveats、Blocked、Cancelled、Superseded、Paused 或 Abandoned。
 ```
 
@@ -1994,6 +2109,11 @@ Authority 文档更新必须用户确认。
 
 ```text
 skills/
+  docloom-workflow/
+    SKILL.md
+    templates/
+      case_state.yaml
+
   setup-doc-governance/
     SKILL.md
     templates/
@@ -2035,6 +2155,8 @@ skills/
     SKILL.md
     templates/
       closure.md
+      handoff.md
+      case_state.yaml
 ```
 
 ### 12.2 项目文档目录结构
@@ -2062,10 +2184,10 @@ docs/
       evidence/
       case_state.yaml
       plan.md
-      execution.md
-      handoff.md
-      grill.md
-      review.md
+      execution.md       # conditional
+      handoff.md         # only when a future resume point exists
+      grill.md           # only when user explicitly triggers grill
+      review.md          # only when user explicitly requests review
       closure.md
 
   derived/
@@ -2086,17 +2208,17 @@ docs/
 
 ## 13. Agent 接续任务的最短路径
 
-当 agent 进入一个 workspace，需要快速恢复上下文时：
+当 agent 进入一个 workspace，需要快速恢复上下文时，优先走 `docloom-workflow` status-only：
 
 ```text
 1. 执行 git rev-parse --show-toplevel。
 2. 执行 git branch --show-current。
 3. 根据 case Context Resolution Order 解析 case_id。
 4. 推导或确认 docs/cases/<case-id>/。
-5. 读取 handoff.md。
-6. 读取 plan.md。
-7. 读取 execution.md。
-8. 如存在，读取 review.md / closure.md。
+5. 读取 case_state.yaml。
+6. 如存在且需要恢复，读取 handoff.md。
+7. 读取 plan.md。
+8. 如存在，读取 execution.md / review.md / closure.md。
 9. 检查 git status 和 diff。
 10. 判断下一步。
 ```
@@ -2105,10 +2227,10 @@ docs/
 
 ```text
 docs/cases/<case-id>/case_state.yaml
-docs/cases/<case-id>/handoff.md
+docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 ```
 
-其中 `case_state.yaml` 用于快速判断机器状态，`handoff.md` 用于读取人类可读接续摘要。`handoff.md` 应该回答：
+其中 `case_state.yaml` 用于快速判断机器状态；`handoff.md` 不是固定产物，只在存在未来恢复点时读取。`handoff.md` 应该回答：
 
 ```text
 - 当前阶段是什么？
@@ -2132,16 +2254,22 @@ docs/cases/<case-id>/handoff.md
 如果当前 branch 符合 case/<case-id>
   -> 从 branch 推导任务上下文。
 
+如果 case docs 不存在且用户只是查询
+  -> status-only。
+
 如果 docs/cases/<case-id>/plan.md 不存在
   -> planning 阶段。
 
 如果 plan.md 存在但未标记 approved
   -> waiting for plan confirmation。
 
-如果 plan.md approved 且 execution.md 不存在
+如果 plan.md approved 且用户明确要求执行 / 继续
   -> ready to execute。
 
-如果 execution.md 存在且 closure.md 不存在
+如果 plan.md approved 但用户只是查询
+  -> status-only，报告 ready to execute。
+
+如果 execution.md 存在或 git 状态显示 case 范围内有执行中改动，且 closure.md 不存在
   -> executing / reviewing / doc_syncing。
 
 如果 review.md 存在且 verdict = Needs Changes
@@ -2164,24 +2292,28 @@ docs/cases/<case-id>/handoff.md
 - docs/authority/ 是按需创建的当前事实源集合，不创建空目录或占位文档。
 - 未确认原始材料进入 docs/cases/<case-id>/evidence/ 或 archive，不进入 authority。
 - 文件和事实治理 verdict 统一为 promote / merge / bridge / archive / block。
+- docloom-workflow 是 public automatic entry 和 thin router；用户显式点名 skill 时尊重用户点名。
+- docloom-workflow 拥有 case_id 生成和延迟 case 创建职责。
+- docloom-workflow 持有 Artifact Policy；阶段 skill 按 policy 写自己的产物。
 - branch/worktree 是推荐任务定位机制，不是强制前置条件。
 - agent 不应擅自创建 branch 或 worktree，除非用户明确要求或确认。
-- case docs 可以由 branch 推导，也可以由用户指定；新 case 由 `plan-confirm` 在需要落盘时创建。
+- case docs 可以由 branch 推导，也可以由用户指定；新 case 由 `docloom-workflow` 在进入持久化 case workflow 时创建。
 - 所有任务过程文档都属于 L2 Operational。
-- 每个任务建议维护 case_state.yaml，作为机器可读状态缓存。
+- case docs 创建后维护瘦身 case_state.yaml，作为机器可读状态缓存。
 - Authority 更新必须用户确认。
 - 用户本轮新事实不能静默写入 authority。
 - L4 历史文档默认不能作为当前事实。
 - 没有 context，不准计划。
-- 默认没有用户确认计划，不准执行；低风险自动执行必须由项目策略显式允许。
+- 默认没有用户确认计划，不准执行；Doc Loom Least v1 不支持低风险自动执行。
 - plan-confirm 必须维护 plan_version、approved_plan_hash、base_commit。
 - 默认没有失败测试，不准实现；不适用 TDD 时必须记录 TDD exception 和替代验证。
 - 执行偏离计划，必须记录。
 - 严重偏离计划，必须重新确认。
 - grill 只由用户手动触发。
 - review 只由用户手动触发或明确要求；agent 可以基于风险建议 review。
-- 每个任务结束或中断都必须写 closure.md。
+- 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 - closure_status 必须明确：Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned。
+- Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
 ```
 
 ---
@@ -2190,7 +2322,7 @@ docs/cases/<case-id>/handoff.md
 
 这套工作流可以概括为：
 
-> 用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认和 TDD 纪律的开发闭环；`grill` 和 `review` 作为用户手动触发的质量增强 Skill，review 可由 agent 基于风险建议。
+> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case 并应用 Artifact Policy；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认和 TDD 纪律的开发闭环；`grill` 和 `review` 作为用户手动触发的质量增强 Skill，review 可由 agent 基于风险建议。
 
 
 ---
@@ -2206,9 +2338,8 @@ docs/cases/<case-id>/handoff.md
 2. docs/authority/README.md
 3. docs/README.md 或 docs/DOC_INDEX.md
 4. docs/cases/<case-id>/plan.md
-5. docs/cases/<case-id>/handoff.md
-6. docs/cases/<case-id>/execution.md
-7. docs/cases/<case-id>/closure.md
+5. docs/cases/<case-id>/case_state.yaml
+6. docs/cases/<case-id>/closure.md
 ```
 
 目标：先让任务闭环跑起来。
@@ -2216,11 +2347,12 @@ docs/cases/<case-id>/handoff.md
 ### P1：增强接续稳定性
 
 ```text
-1. case_state.yaml
-2. plan_version
-3. approved_plan_hash
-4. base_commit
-5. risk_level
+1. plan_version
+2. approved_plan_hash
+3. base_commit
+4. risk_level
+5. conditional handoff.md
+6. conditional execution.md
 ```
 
 目标：降低 agent 续跑、多人协作和计划漂移风险。
@@ -2257,6 +2389,6 @@ docs/cases/<case-id>/handoff.md
 可追溯，但不繁琐。
 文档优先，但不脱离代码。
 TDD 默认，但允许记录化例外。
-用户确认关键事实，但允许低风险任务通过项目策略提速。
+用户确认计划 gate 不由普通项目文档或 authority 文档放宽。
 历史文档作为证据，authority 文档作为治理后的权威。
 ```

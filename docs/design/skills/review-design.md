@@ -57,7 +57,6 @@ description: Review completed or in-progress work in the document-driven workflo
 ## 4. 输入
 
 - `plan.md`。
-- `execution.md`。
 - git diff 或变更文件列表。
 - 测试结果。
 - 相关 authority 文档。
@@ -67,8 +66,10 @@ description: Review completed or in-progress work in the document-driven workflo
 
 可选输入：
 
+- `execution.md`，如果 Artifact Policy 生成了执行报告。
 - `context-authority-brief.md`。
 - `grill.md`。
+- `closure.md` 中的验证证据，如果 review 发生在收尾后。
 - 已有 `review.md`。
 
 ---
@@ -88,7 +89,7 @@ docs/cases/<case-id>/review.md
 
 ## Inputs Reviewed
 - plan.md
-- execution.md
+- execution.md, if present
 - git diff
 - test results
 - authority docs
@@ -404,8 +405,14 @@ Needs Changes
 
 如果没有 git diff：
 
-- 使用变更文件列表和 `execution.md`。
+- 使用变更文件列表、`execution.md` 或 `closure.md` 中的验证证据。
 - 记录 diff 不可用。
+
+如果没有 `execution.md`：
+
+- 判断它是否按 Artifact Policy 可以省略。
+- 使用 git diff、测试结果、closure evidence 或用户提供的命令结果替代。
+- 不能假设 Red / Green / Refactor 已完成；证据不足时必须标记 review risk。
 
 如果测试结果缺失：
 

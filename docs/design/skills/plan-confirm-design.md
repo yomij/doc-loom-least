@@ -10,7 +10,9 @@
 
 `plan-confirm` 是计划生成、用户确认和任务计划文档落盘 skill。
 
-它是进入执行前的唯一入口。任何开发任务在进入 `tdd-execute` 之前，必须有已确认的 `plan.md`，除非项目治理策略明确允许低风险自动执行。
+它是进入执行前的唯一计划确认 gate。任何进入 Doc Loom Least 持久化 case workflow 的开发任务，在进入 `tdd-execute` 之前，必须有已确认的 `plan.md`。
+
+`plan-confirm` 不生成 `case_id`，也不创建 case docs。`case_id` 与 `docs/cases/<case-id>/` 由 `docloom-workflow` 延迟创建。如果缺少 case identity，本 skill 必须返回 `needs_docloom_workflow` 或 `needs_case_initialization`。
 
 核心规则：
 
@@ -18,6 +20,7 @@
 没有 context，不准计划。
 默认没有用户确认计划，不准执行。
 计划必须让一个不了解当前会话的工程师能按步骤执行。
+writing-plans 只作为计划质量规则参考，不继承其运行路径、worktree 前提或执行分叉。
 ```
 
 ---
@@ -27,7 +30,7 @@
 ```yaml
 ---
 name: plan-confirm
-description: Create and confirm an implementation plan before execution in a document-driven workflow. Use after context-authority when a case needs a plan, risk level, TDD strategy, documentation impact, plan_version, approved_plan_hash, base_commit, case_state.yaml, and explicit user confirmation before tdd-execute.
+description: Create and confirm an implementation plan before execution in a document-driven workflow. Use after docloom-workflow has established case_id and case_docs, and after context-authority when a context gate is needed. Produces plan.md with risk level, TDD strategy, documentation impact, plan_version, approved_plan_hash, base_commit, and explicit user confirmation before tdd-execute.
 ---
 ```
 
@@ -56,11 +59,13 @@ description: Create and confirm an implementation plan before execution in a doc
 - `Context & Authority Brief`。
 - 用户本轮需求。
 - 当前 git baseline。
-- 项目计划确认策略。
+- skill-defined 计划确认策略。
 - 相关 authority 文档。
+- `docloom-workflow` 确认的 `case_id` 和 `case_docs`。
+- `case_state.yaml`，如果已经创建。
 - 已有 `plan.md`，如果是修改计划。
 - 已有 `grill.md`，如果计划来自 grill 反馈。
-- Context Pack candidate，如果 `context-authority` 已生成。
+- Context Sources / route verdict，如果 `context-authority` 已生成。
 
 ---
 
@@ -68,8 +73,13 @@ description: Create and confirm an implementation plan before execution in a doc
 
 ```text
 docs/cases/<case-id>/plan.md
-docs/cases/<case-id>/handoff.md
 docs/cases/<case-id>/case_state.yaml
+```
+
+条件输出：
+
+```text
+docs/cases/<case-id>/handoff.md    # 仅当存在未来恢复点
 ```
 
 等待确认时：
@@ -93,7 +103,6 @@ plan-confirm/
   templates/
     plan.md
     handoff.md
-    case_state.yaml
   references/
     shared-protocol.md
     plan-hash.md
@@ -103,16 +112,12 @@ plan-confirm/
 
 ## 7. case ID 与运行模式
 
-如果 case docs 不存在，创建：
+`case_id` 归 `docloom-workflow` 生成或确认。`plan-confirm` 只消费已有 `case_id` 和 `case_docs`。
+
+如果 case docs 不存在：
 
 ```text
-docs/cases/<case-id>/
-```
-
-case ID 推荐格式：
-
-```text
-YYYYMMDD-短描述
+return needs_docloom_workflow / needs_case_initialization
 ```
 
 运行模式：
@@ -158,7 +163,7 @@ plan_confirmation_policy:
   high_risk_changes: require_explicit_confirmation
 ```
 
-只有 authority 中的 workflow / governance policy 或入口索引明确允许时，低风险任务才可自动执行。
+Doc Loom Least v1 不支持 `low_risk_changes: auto`。普通项目文档、authority 文档或入口索引不能放宽此 gate。未来如支持自动执行，必须由 skill-owned 配置机制明确设计。
 
 ---
 
@@ -298,26 +303,54 @@ TDD Required: Yes
 
 ---
 
-## 13. 核心工作流
+## 13. writing-plans 参考边界
+
+`writing-plans` 是计划质量参考，不是运行协议来源。
+
+继承：
+
+- 先锁定文件结构和职责。
+- 任务步骤粒度保持 2-5 分钟。
+- 使用精确文件路径、精确命令和预期结果。
+- 禁止 TBD / TODO / later / “类似 case N”。
+- 行为变化默认 TDD，测试目标和失败原因必须清楚。
+- 写完 draft 后自审 spec coverage、placeholder、type/name consistency、buildability 和 TDD integrity。
+
+不继承：
+
+- 不保存到 `docs/superpowers/plans/**`。
+- 不要求 dedicated worktree 作为前提。
+- 不提供 subagent-driven / inline execution 二选一。
+- 不把 `superpowers:executing-plans` 作为执行入口。
+
+这些运行职责由 `docloom-workflow`、`plan-confirm` 和 `tdd-execute` 承担。
+
+---
+
+## 14. 核心工作流
 
 ### Step 1. Validate Context
 
 检查：
 
-- 是否有 `Context & Authority Brief`。
+- 是否有足够 context。
+- 如果有 `Context & Authority Brief`，读取 brief。
+- 如果没有独立 brief，读取 `Context Sources` / route verdict。
 - 是否有阻塞冲突。
 - 是否有足够文件和文档依据。
 
-如果没有 context brief，回到 `context-authority`。
+如果缺少足够 context，回到 `context-authority`。
 
 ### Step 2. Determine case ID and Mode
 
-解析或创建：
+解析：
 
 - `case_id`。
 - `docs/cases/<case-id>/`。
 - `case_state.yaml`。
 - mode：`isolated` / `branch` / `inline`。
+
+如果缺少 `case_id` 或 `case_docs`，停止并返回 `docloom-workflow` 初始化 case。
 
 ### Step 3. Classify Risk
 
@@ -436,9 +469,9 @@ base_commit:
 
 ## Context Summary
 
-## Context Pack Reference
+## Context Sources
 - Context Brief:
-- Context Pack Candidate:
+- Route Verdict:
 - Included Authority Docs:
 - Excluded Docs and Reasons:
 
@@ -490,7 +523,7 @@ base_commit:
 - TDD 是否适用。
 - 涉及的文档影响。
 - 是否有 L1 变更需要确认。
-- 计划引用了哪些 Context Pack 条目，以及排除了哪些过期/低权威文档。
+- 计划引用了哪些 Context Sources，以及排除了哪些过期/低权威文档。
 - 请求确认。
 
 High risk 必须明确确认，不能把沉默当作确认。
@@ -502,8 +535,8 @@ High risk 必须明确确认，不能把沉默当作确认。
 - 计算 `approved_plan_hash`。
 - 更新 frontmatter。
 - 更新 `Confirmation Log`。
-- 更新 `handoff.md`。
 - 更新 `case_state.yaml`。
+- 如果存在未来恢复点，更新 `handoff.md`。
 
 ### Step 11. Plan Revision
 
@@ -525,7 +558,9 @@ High risk 必须明确确认，不能把沉默当作确认。
 
 ---
 
-## 14. Handoff 模板
+## 15. Handoff 模板
+
+只有存在未来恢复点时生成或更新。
 
 ```md
 # Handoff
@@ -554,50 +589,45 @@ planned
 
 ---
 
-## 15. case_state.yaml 模板
+## 16. case_state.yaml 更新
+
+`case_state.yaml` 是由 `docloom-workflow` 创建的瘦身状态缓存。`plan-confirm` 只更新计划阶段相关字段。
 
 ```yaml
 case_id:
 phase: planned
-mode:
-branch:
-worktree:
 case_docs:
-plan_status: approved
 plan_version:
-approved_plan_hash:
-review_status: not_requested
 closure_status: open
-risk_level:
-base_commit:
 last_updated:
 ```
 
 ---
 
-## 16. Gate
+## 17. Gate
 
 - 没有 context，不写计划。
+- 没有 `case_id` / `case_docs`，不写计划，返回 `docloom-workflow`。
 - 有阻塞冲突，不写执行计划。
-- 没有用户确认，不进入 `tdd-execute`，除非项目策略明确允许。
+- 没有用户确认，不进入 `tdd-execute`。
 - 计划变化后必须递增 `plan_version` 并重新确认。
 - `approved_plan_hash` 与当前计划审批载荷不一致，不准执行。
 - `grill` 后计划变化，必须回到 `plan-confirm`。
 
 ---
 
-## 17. 验收标准
+## 18. 验收标准
 
 - `plan.md` 可独立说明任务目标、范围、风险和测试策略。
 - `plan.md` 包含 `plan_version`、`risk_level`、`base_commit`。
 - 用户确认后包含 `approved_plan_hash`。
-- `handoff.md` 能让执行阶段直接接续。
-- `case_state.yaml` 与 `plan.md` 一致。
+- 如果存在未来恢复点，`handoff.md` 能让执行阶段直接接续。
+- `case_state.yaml` 与当前 phase 一致，且不复制 `plan.md` 的权威字段。
 - 高风险计划有明确用户确认记录。
 
 ---
 
-## 18. 失败与恢复
+## 19. 失败与恢复
 
 如果用户拒绝计划：
 
@@ -617,7 +647,7 @@ last_updated:
 
 ---
 
-## 19. 参考资料
+## 20. 参考资料
 
 - [writing-plans/SKILL.md](../../reference/skills/writing-plans/SKILL.md)
 - [writing-plans/plan-document-reviewer-prompt.md](../../reference/skills/writing-plans/plan-document-reviewer-prompt.md)

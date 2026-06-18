@@ -2,7 +2,7 @@
 
 > 来源：`docs/design/document-driven-workflow-skills-final.md`
 >
-> 目标：定义 `tdd-execute` 如何校验已确认计划、执行 Red-Green-Refactor、处理 TDD 例外、记录执行日志、更新 handoff 和提出 review 建议。
+> 目标：定义 `tdd-execute` 如何校验已确认计划、执行 Red-Green-Refactor、处理 TDD 例外、按 Artifact Policy 记录执行证据、更新 handoff 和提出 review 建议。
 
 ---
 
@@ -64,10 +64,17 @@ description: Execute an approved document-driven implementation plan using TDD d
 
 ## 5. 输出
 
+必须更新：
+
 ```text
-docs/cases/<case-id>/execution.md
-docs/cases/<case-id>/handoff.md
 docs/cases/<case-id>/case_state.yaml
+```
+
+条件输出：
+
+```text
+docs/cases/<case-id>/execution.md    # TDD / 行为变化 / 偏离 / 复杂验证 / 需要恢复时
+docs/cases/<case-id>/handoff.md      # 仅当存在未来恢复点
 ```
 
 ---
@@ -80,7 +87,6 @@ tdd-execute/
   templates/
     execution.md
     handoff.md
-    case_state.yaml
   references/
     shared-protocol.md
     tdd-exceptions.md
@@ -231,11 +237,22 @@ TDD Required: Yes
 
 ### Step 5. Update Execution Docs
 
-追加或更新 `execution.md`。
+按 Artifact Policy 追加或更新 `execution.md`。
+
+必须写 `execution.md` 的情况：
+
+- TDD required。
+- 存在代码或行为变化。
+- 执行中发生计划偏离。
+- 测试失败、重试或需要记录失败原因。
+- review recommended / requested。
+- 当前任务可能需要恢复。
+
+纯文档、trivial config 或替代验证证据可完整写入 `closure.md` 时，可以不写独立 `execution.md`。
 
 ### Step 6. Update Handoff
 
-覆盖 `handoff.md`，保持短、准、适合接续。
+只有存在未来恢复点时才覆盖 `handoff.md`，保持短、准、适合接续。
 
 ### Step 7. Review Recommendation
 
@@ -244,6 +261,8 @@ TDD Required: Yes
 ---
 
 ## 10. execution.md 模板
+
+仅在 Artifact Policy 或触发条件要求时生成。
 
 ```md
 # Execution Report
@@ -296,6 +315,8 @@ Yes / No
 
 ## 11. handoff.md 模板
 
+仅在存在未来恢复点时生成或更新。
+
 ```md
 # Handoff
 
@@ -326,7 +347,6 @@ executing
 
 ```yaml
 phase: executing
-plan_status: approved
 review_status: not_requested
 closure_status: open
 ```
@@ -420,8 +440,8 @@ phase: doc_syncing
 - 测试按计划新增或更新。
 - 至少相关测试通过。
 - 质量检查结果记录完整。
-- `execution.md` 有 Red / Green / Refactor 或明确 TDD exception。
-- `handoff.md` 能说明下一步。
+- 当 Artifact Policy 要求时，`execution.md` 有 Red / Green / Refactor 或明确 TDD exception。
+- 当存在未来恢复点时，`handoff.md` 能说明下一步。
 - `case_state.yaml` 与执行状态一致。
 - review recommendation 明确。
 - 每个行为变化都有先失败后通过的测试证据，或有确认过的 TDD exception 和替代验证证据。
