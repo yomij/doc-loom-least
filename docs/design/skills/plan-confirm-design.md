@@ -30,7 +30,7 @@ writing-plans 只作为计划质量规则参考，不继承其运行路径、wor
 ```yaml
 ---
 name: plan-confirm
-description: Create and confirm an implementation plan before execution in a document-driven workflow. Use after docloom-workflow has established case_id and case_docs, and after context-authority when a context gate is needed. Produces plan.md with decisions, risk level, TDD strategy, documentation impact, plan_version, base_commit, and explicit user confirmation before tdd-execute.
+description: Create and confirm an implementation plan before execution in a document-driven workflow. Use after docloom-workflow has established case_id and case_docs, and after context-authority when a context gate is needed. Produces plan.md with decisions, risk level, TDD strategy, optional adaptive execution policy, documentation impact, plan_version, base_commit, and explicit user confirmation before tdd-execute.
 ---
 ```
 
@@ -281,6 +281,8 @@ TDD Required: Yes
   - reviewer confirmation
 ```
 
+用户可以明确要求非 TDD 执行，但必须作为确认过的 TDD exception 写入计划，并包含替代验证。无行为变化重构不强行制造失败测试，应写成 characterization / existing behavior lock → refactor → verify no regression。
+
 ---
 
 ## 13. writing-plans 参考边界
@@ -290,7 +292,7 @@ TDD Required: Yes
 继承：
 
 - 先锁定文件结构和职责。
-- 任务步骤粒度保持 2-5 分钟。
+- 任务步骤粒度尽量保持 2-5 分钟，但这是计划质量参考，不是执行 gate。
 - 使用精确文件路径、精确命令和预期结果。
 - 禁止 TBD / TODO / later / “类似 case N”。
 - 行为变化默认 TDD，测试目标和失败原因必须清楚。
@@ -374,7 +376,7 @@ TDD Required: Yes
 
 ### Step 6. Write Bite-Sized Plan Draft
 
-计划任务必须可执行，粒度尽量是 2-5 分钟一个动作。
+计划任务必须可执行，粒度尽量是 2-5 分钟一个动作。`tdd-execute` 的硬要求是计划足够执行：目标、文件边界、测试 / 验证命令和验收标准清楚。步骤较粗但不影响执行判断时，不应为了格式重写计划。
 
 每个任务建议结构：
 
@@ -465,6 +467,15 @@ base_commit:
 
 ## TDD Plan
 
+## Adaptive Execution
+- Enabled: Yes / No
+- Scope:
+  - Low-risk same-goal amendments only.
+
+## Plan Amendments
+| When | Change | Reason | User Confirmation | Impact |
+|---|---|---|---|---|
+
 ## File Structure
 
 ## Files to Change
@@ -481,6 +492,8 @@ base_commit:
 
 ## Confirmation Log
 ```
+
+计划中的 checkbox / step status 是执行进度提示。`tdd-execute` 可以把 `[ ]` 更新为 `[x]` 或添加短状态引用，但不能改变目标、步骤语义、命令、验收标准、TDD 策略、Decisions 或文件范围。
 
 ### Step 8. Self-Review Plan
 
@@ -530,12 +543,21 @@ High risk 必须明确确认，不能把沉默当作确认。
 - 风险等级变化。
 - Authority 文档影响变化。
 - TDD exception 变化。
+- public contract、authority 影响或文件责任边界变化。
 
 发生实质变化：
 
 - `plan_version += 1`。
 - status 回到 `draft`。
 - 重新确认。
+
+不属于计划实质变化：
+
+- `tdd-execute` 更新 checkbox / step status。
+- 添加 execution / closure 引用。
+- adaptive execution 下低风险、同目标、同责任边界的小改，并记录到 `## Plan Amendments`。
+
+如果用户要求“边执行边改计划”，计划应显式开启 adaptive execution，或在执行中通过轻量 amendment 记录该授权。
 
 ---
 
@@ -594,6 +616,8 @@ last_updated:
 - 计划变化后必须递增 `plan_version` 并重新确认。
 - 当前 `plan_version` 未被确认，或 `status` 不是 `approved`，不准执行。
 - 用户确认的讨论决策改变计划时，必须更新 `## Decisions`、递增 `plan_version` 并重新确认。
+- checkbox / step status 更新不触发重新确认。
+- adaptive execution 小改不触发重新确认；实质变化必须重新确认。
 
 ---
 
@@ -606,6 +630,8 @@ last_updated:
 - 如果存在未来恢复点，`handoff.md` 能让执行阶段直接接续。
 - `case_state.yaml` 与当前 phase 一致，且不复制 `plan.md` 的权威字段。
 - 高风险计划有明确用户确认记录。
+- 如允许 adaptive execution，`plan.md` 包含 `Adaptive Execution` 或 `Plan Amendments` 承载位置。
+- checkbox / step status 的执行语义清楚，不与计划内容变化混淆。
 
 ---
 

@@ -24,6 +24,9 @@
 9. setup-doc-governance 使用 `GOVERNANCE_PLAN.md` 作为唯一默认中间产物，文件级和事实级都用 `promote / merge / bridge / archive / block` verdict。
 10. 产物生成改为 Artifact Policy：handoff、context brief、execution 等按条件生成，不再每阶段固定铺满文件。
 11. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`，只操作文档产物。
+12. `tdd-execute` 只服务持久化 case workflow；普通一次性 coding 和简单纯文档任务不强制进入。
+13. 执行阶段支持轻量 adaptive execution，用 `plan.md ## Plan Amendments` 记录同目标小改，避免额外审批产物。
+14. 执行结果应按可原子提交的边界组织；实际 stage / commit 只有在 plan 或用户明确要求时执行。
 ```
 
 ---
@@ -50,7 +53,7 @@ grill                 # 通用手动辅助，不进入 workflow 路由或 Artifa
 | `setup-doc-governance` | 初始化 / 周期性治理 | 否 | 以固定分层标准从历史文档、当前文档、代码和测试中抽取事实，写出 `GOVERNANCE_PLAN.md`，经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新 |
 | `context-authority` | 主流程 | 按需 | 在需要计划前上下文 gate、恢复任务、权威判断或冲突判断时，读取最小相关上下文并输出路由 verdict |
 | `plan-confirm` | 主流程 | 是 | 生成计划、标记风险等级、绑定计划版本、等待用户确认、落计划文档 |
-| `tdd-execute` | 主流程 | 是 | 按确认后的计划做 TDD 执行、测试、质量检查、执行记录；必要时记录 TDD 例外 |
+| `tdd-execute` | 主流程 | 条件 | 按确认后的持久化 case 计划做 TDD 执行、测试、质量检查、执行记录；必要时记录 TDD 例外、Plan Amendments 和授权的原子提交 |
 | `review` | 手动可选 / 可建议 | 否 | 子 agent review / code review / 测试审查 / 文档审查；高风险任务可由 agent 建议触发 |
 | `doc-sync-close` | 主流程 | 是 | 文档同步、权威文档更新确认、任务关闭 |
 | `grill` | 通用辅助 | 否 | 用户显式触发时，通过对话逐问挑战任意主张；不写文件、不输出流程 verdict、不进入 Artifact Policy |
@@ -67,6 +70,8 @@ case_state.yaml        机器可读任务状态
 artifact_policy        case 级产物生成策略
 review_recommendation  是否建议 review
 closure_status         Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
+adaptive_execution     是否允许执行中轻量修订计划
+plan_amendments        执行中同目标小改记录
 governance_scope       current-case | docs-only | full-repo
 governance_verdict     promote | merge | bridge | archive | block
 ```
@@ -181,7 +186,10 @@ review
 16. 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 17. grill 是流程无关的通用手动辅助 skill，不进入 Artifact Policy，不由 workflow 路由，不写文件。
 18. review 只能由用户手动触发或明确要求；agent 可以基于风险建议 review。
-19. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
+19. `tdd-execute` 只适用于持久化 case workflow；普通一次性 coding 和简单纯文档修改不强制进入。
+20. 执行阶段可以更新 `plan.md` checkbox / status 和轻量 `Plan Amendments`，但不能静默改变计划语义。
+21. 执行应保持改动可原子提交；实际 stage / commit 需要 plan 或用户明确授权。
+22. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
 ```
 
 ### 3.2 风险等级与计划确认策略
@@ -244,6 +252,10 @@ plan_confirmation_policy:
   - reviewer confirmation
 ```
 
+TDD exception 的证据位置由 Artifact Policy 决定。存在代码 / 行为变化、偏离、失败重试、review 建议或恢复需求时写 `execution.md`；纯文档、trivial config 或低风险 UI 文案等任务，如果验证证据可完整放入 `closure.md`，可以跳过独立 `execution.md`。
+
+无行为变化重构不强行制造失败测试，采用 characterization / existing behavior lock → refactor → verify no regression。用户明确要求非 TDD 执行时，必须作为已确认 TDD exception 或 Plan Amendment 记录，并保留替代验证。
+
 ### 3.4 计划确认绑定规则
 
 `plan-confirm` 写入 `plan.md` 时必须包含：
@@ -267,8 +279,10 @@ base_commit:
 - 用户确认的执行决策变化属于计划内容实质变化。
 - 用户确认后，记录 approved_by、approved_at 和 Confirmation Log。
 - tdd-execute 必须引用被确认的 plan_version。
-- 如果 plan.md 被修改但未重新确认，不得继续执行。
-- 如果 base_commit 后出现大量无关 diff，必须重新评估上下文。
+- 执行阶段更新 checkbox / status 不属于计划实质变化。
+- adaptive execution 下低风险、同目标、同责任边界的小改进入 `Plan Amendments`，不递增 `plan_version`。
+- 目标、验收标准、风险等级、TDD 策略、public contract、authority 影响或文件责任边界变化时，必须重新确认并递增 `plan_version`。
+- 如果 base_commit 后出现无法解释或影响执行语义的 diff，必须重新评估上下文。
 ```
 
 ### 3.5 机器可读任务状态
@@ -310,7 +324,7 @@ artifacts:
 
 | Artifact | Required When | Optional / Skip When | Writer |
 |---|---|---|---|
-| `plan.md` | case enters `plan-confirm` | no persistent case workflow | `plan-confirm` |
+| `plan.md` | case enters `plan-confirm` | no persistent case workflow | `plan-confirm` writes plan; `tdd-execute` may update checkbox/status and Plan Amendments |
 | `case_state.yaml` | case docs are created | status-only without case creation | `docloom-workflow` initially; stage skills update |
 | `context-authority-brief.md` | high risk, conflict, resume, multi-agent / cross-session, explicit request | inline `Context Sources` otherwise | `context-authority` |
 | `handoff.md` | future resume point exists | continuous same-session flow | current stage skill |
@@ -335,7 +349,7 @@ execution.md
 closure.md
   - 保存最终结果。
   - 有 case docs 的任务结束、中断、取消、替代时必须写。
-  - 可使用轻量模板。
+  - 正文按最新结果维护，底部保留极简 History；默认不创建编号 closure 目录。
 ```
 
 未来恢复点包括：
@@ -1774,25 +1788,30 @@ Risks / Weak Assumptions
 
 TDD 执行和质量检查 Skill。
 
-只在计划被用户确认后执行。
+只在持久化 case 的计划被用户确认后执行。普通一次性 coding、简单纯文档修改或无复杂验证的低风险任务不强制进入本 skill。
 
 ## 负责什么
 
 ```text
 - 根据已确认 plan.md 执行。
 - 校验 plan_version、approval metadata 和 base_commit。
+- 读取 `Non-goals` 和 `Decisions` 作为执行边界。
 - 默认先写失败测试。
 - 如果不适用 TDD，记录 TDD exception 和替代验证。
+- 支持轻量 adaptive execution，通过 `plan.md ## Plan Amendments` 记录低风险同目标小改。
 - 确认测试失败原因正确。
 - 写最小实现。
 - 跑测试。
 - 重构。
 - 跑 lint / typecheck / build。
-- 记录执行日志。
+- 逐项核对 acceptance criteria。
+- 记录执行证据。
+- 更新 plan checkbox / status，不改变计划语义。
 - 按 Artifact Policy 写 execution.md。
 - 只有存在未来恢复点时更新 handoff.md。
 - 如果偏离计划，记录偏离。
 - 如果严重偏离计划，回到 plan-confirm。
+- 如果 plan 或用户要求提交，按原子边界 stage / commit，并记录 commit hash。
 ```
 
 ## TDD Loop
@@ -1824,12 +1843,15 @@ Update Execution Docs
 
 纯文档、trivial config 或替代验证证据能完整放入 `closure.md` 时，可以跳过独立 `execution.md`。
 
+`execution.md` 正文按最新结果维护，底部保留极简 `History`。不默认创建编号 execution 目录。
+
 ```md
 # Execution Report
 
 ## Plan Reference
 - plan_version:
 - base_commit:
+- adaptive_execution:
 
 ## Plan Followed
 Yes / No
@@ -1863,6 +1885,10 @@ Yes / No
 | Command | Result | Notes |
 |---|---|---|
 
+## Acceptance Criteria Status
+| Criteria | Status | Evidence |
+|---|---|---|
+
 ## Deviations
 - ...
 
@@ -1876,6 +1902,10 @@ Yes / No
 
 ## Ready for Review
 Yes / No
+
+## Checkpoints / Commits
+| Commit | Scope | Verification |
+|---|---|---|
 ```
 
 ## 条件输出：`docs/cases/<case-id>/handoff.md`
@@ -2237,6 +2267,9 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 如果 plan.md approved 但用户只是查询
   -> status-only，报告 ready to execute。
 
+如果 plan.md approved 且任务是纯文档 / trivial config / 低风险 UI 文案并无复杂验证
+  -> 可以跳过 tdd-execute，直接进入相应编辑或 doc-sync-close。
+
 如果 execution.md 存在或 git 状态显示 case 范围内有执行中改动，且 closure.md 不存在
   -> executing / reviewing / doc_syncing。
 
@@ -2245,6 +2278,9 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 
 如果 closure.md 存在
   -> done / done with caveats / blocked / cancelled / superseded / paused / abandoned。
+
+如果 closure.md 存在但用户要求小范围同源 follow-up
+  -> 可复用原 case，记录 amendment / follow-up；新目标、新风险或已 Cancelled / Superseded / Abandoned 的 case 默认新开或重新确认。
 ```
 
 ---
@@ -2275,8 +2311,13 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 - 默认没有用户确认计划，不准执行；Doc Loom Least v1 不支持低风险自动执行。
 - plan-confirm 必须维护 plan_version 和 base_commit。
 - 默认没有失败测试，不准实现；不适用 TDD 时必须记录 TDD exception 和替代验证。
+- 无行为变化重构可用 characterization / existing behavior lock 替代 Red。
+- tdd-execute 只服务持久化 case workflow；普通一次性 coding 不强制进入。
+- 执行阶段可更新 plan checkbox / status，不算 plan_version 实质变化。
+- adaptive execution 下低风险同目标小改记录到 Plan Amendments；实质变化必须重新确认。
 - 执行偏离计划，必须记录。
 - 严重偏离计划，必须重新确认。
+- 实际 stage / commit 只有 plan 或用户明确要求时执行；提交必须按原子边界组织。
 - grill 是通用手动辅助 skill，不进入 workflow 路由或 Artifact Policy。
 - review 只由用户手动触发或明确要求；agent 可以基于风险建议 review。
 - 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
@@ -2290,7 +2331,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 
 这套工作流可以概括为：
 
-> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case 并应用 Artifact Policy；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认和 TDD 纪律的开发闭环；`review` 作为用户手动触发的 workflow 审查 Skill，可由 agent 基于风险建议；`grill` 作为流程无关的通用手动挑战 Skill，只通过对话压力测试主张。
+> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case 并应用 Artifact Policy；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认、TDD 纪律、轻量 adaptive execution 和授权原子提交边界的开发闭环；`review` 作为用户手动触发的 workflow 审查 Skill，可由 agent 基于风险建议；`grill` 作为流程无关的通用手动挑战 Skill，只通过对话压力测试主张。
 
 
 ---

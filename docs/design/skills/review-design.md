@@ -61,6 +61,8 @@ description: Review completed or in-progress work in the document-driven workflo
 - 测试结果。
 - 相关 authority 文档。
 - `case_state.yaml`。
+- `plan.md ## Plan Amendments`，如果执行阶段启用了 adaptive execution。
+- `plan.md` checkbox / step status。
 - 用户指定的 review 范围。
 - 可选：base/head commit 或 plan 的 `base_commit`。
 
@@ -196,11 +198,14 @@ git diff <base>..<head>
 
 - 是否实现了 acceptance criteria。
 - 是否遵守 `plan.md ## Decisions` 中用户确认的决策。
+- adaptive execution 的 `Plan Amendments` 是否仍在同目标、低风险、同责任边界内。
+- plan checkbox / step status 是否与 `execution.md` 和 git 状态一致。
 - 是否修改了未计划文件。
 - 是否绕过 TDD。
 - 是否存在未记录偏离。
 - 风险等级是否被低估。
 - 是否产生新的 authority 文档影响。
+- 如果 `review_status: addressed`，是否只是表示返工已处理，而不是 review 已批准。
 
 ### Step 3. Inspect Tests
 
@@ -347,6 +352,7 @@ Needs Changes
 
 - 是否有用户可见行为变化但未更新 acceptance criteria 或测试。
 - 是否有 `plan.md ## Decisions` 中的长期或契约相关决策未进入文档影响审查。
+- 是否有 `Plan Amendments` 中的执行期决策需要进入 closure proposal 或 authority follow-up。
 - 是否有 API/schema/错误码变化但未更新 contract / changelog / examples。
 - 是否有新知识被直接写入 authority，但缺少 evidence 或必要确认。
 - 是否有局部经验被错误提升为全局规则。
@@ -384,8 +390,10 @@ Needs Changes
 - 用户未明确要求，不执行 review。
 - review 不自动修改代码。
 - review 不自动修改 plan。
+- review 可以审查 `Plan Amendments` 是否合理，但不能把 amendment 自动升级为 authority。
 - review 发现 blocking issue 后，不进入 `doc-sync-close`。
 - verdict 为 `Needs Changes` 时，必须回到 `tdd-execute`。
+- `review_status: addressed` 不能等同于 `Approved`。
 - 不审查未读取的 diff、文件或测试结果；证据缺失必须写明。
 - Critical / Important issue 不能被降级为 follow-up。
 
@@ -398,6 +406,7 @@ Needs Changes
 - verdict 明确。
 - 不把无关重构建议当作阻塞。
 - 明确说明测试覆盖和文档影响。
+- 明确说明 adaptive execution / Plan Amendments 是否被接受。
 - 报告包含 Strengths、Issues、Recommendations 和 Assessment。
 - 明确 `Ready to close?` 判断。
 

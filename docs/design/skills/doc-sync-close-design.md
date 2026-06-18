@@ -140,6 +140,14 @@ Abandoned
 
 未满足验收标准时不能标记 `Done`。
 
+高风险任务如果 `tdd-execute` 建议 review 但用户未执行 review，通常不能无条件标记 `Done`。应记录 residual review risk，并根据证据选择 `Done with Caveats`，除非用户明确接受不 review 且验收证据充分。
+
+已关闭 case 可以承载小范围同源 follow-up：
+
+- `Done` 后的补测试、文案、小边界修正可以复用原 case。
+- 必须保留原 closure 历史，并记录本次 follow-up。
+- 新目标、新验收标准、新风险、新文件责任边界，或原状态为 `Cancelled` / `Superseded` / `Abandoned` 时，默认新开 case 或重新确认。
+
 ---
 
 ## 8. 文档更新规则
@@ -187,6 +195,9 @@ Evidence 可以是：
 - 代码 diff。
 - 手动验证说明。
 - review 结论。
+- `execution.md` 中的 `met / partially met / not met / not verified` 映射。
+
+如果 `tdd-execute` 标记某项为 `not verified`，`doc-sync-close` 不能默认为通过。必须补验证、请求用户确认、保留 caveat，或选择非 `Done` 状态。
 
 ### Step 3. Summarize Code and Tests
 
@@ -307,6 +318,8 @@ last_updated: 2026-06-17T00:00:00+08:00
 
 ## 10. closure.md 模板
 
+`closure.md` 正文按最新结果维护，底部保留极简 `## History`。不要默认创建 `closures/` 编号目录，也不要纯覆盖旧 closure 关键结论。
+
 ```md
 # Closure Report
 
@@ -346,6 +359,10 @@ last_updated: 2026-06-17T00:00:00+08:00
 
 ## Final Status
 Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
+
+## History
+| When | Previous Status | Reason Updated |
+|---|---|---|
 ```
 
 ---
@@ -390,8 +407,10 @@ Handoff 规则：
 - Authority 更新必须用户确认。
 - 未满足 acceptance criteria 不能标记 `Done`。
 - review verdict 为 `Needs Changes` 不能直接关闭为 `Done`。
+- review recommended 但未执行时，必须记录 caveat；高风险任务通常不能无 caveat 地关闭为 `Done`。
 - 有 case docs 但没有 `closure.md` 的任务不能算结束。
 - 任务取消、阻塞、暂停、替代也必须写 closure。
+- follow-up 更新不能覆盖旧 closure 关键证据，必须维护极简 History。
 - 未评审的候选知识不能写成 active / canonical。
 - 生命周期状态迁移必须遵守 owner / review / freshness 规则。
 
@@ -407,6 +426,7 @@ Handoff 规则：
 - 未完成或未验证内容没有被包装成 Done。
 - closure 中包含知识变化识别，或明确说明本任务没有可沉淀知识。
 - Authority / runbook / ADR / agent rule 的更新均以 proposal 形式呈现，等待人工确认。
+- follow-up closure 保留旧状态摘要和更新原因。
 
 ---
 
@@ -422,6 +442,12 @@ Handoff 规则：
 - 保留 proposal。
 - 记录 caveat。
 - 不直接改 authority。
+
+如果 closed case 有小范围同源 follow-up：
+
+- 更新 `closure.md` 正文为最新结果。
+- 在 `History` 中保留旧 closure status、时间和更新原因。
+- 若 follow-up 改变目标、风险或验收标准，停止并回到 `plan-confirm` 或新 case。
 
 如果任务被用户取消：
 
