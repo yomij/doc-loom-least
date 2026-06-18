@@ -27,7 +27,7 @@ Authority 文档更新必须用户确认。
 ```yaml
 ---
 name: doc-sync-close
-description: Close a document-driven workflow case by syncing docs and writing closure. Use after execution or approved review, or when a case is blocked, cancelled, paused, superseded, abandoned, or otherwise ending. Updates L2 case docs, safe L3 derived docs, proposes authority changes for user confirmation, records tests and acceptance criteria, writes closure.md, and sets closure_status.
+description: Close a document-driven workflow case by syncing docs and writing closure. Use after execution, or when a case is blocked, cancelled, paused, superseded, abandoned, or otherwise ending. Updates L2 case docs, safe L3 derived docs, proposes authority changes for user confirmation, records tests, acceptance criteria, review_risk, and evidence gaps, writes closure.md, and sets closure_status.
 ---
 ```
 
@@ -38,7 +38,6 @@ description: Close a document-driven workflow case by syncing docs and writing c
 应该触发：
 
 - 执行完成，需要收尾。
-- `review` verdict 为 `Approved`，需要关闭任务。
 - 任务被取消、暂停、阻塞、替代或放弃。
 - 用户要求“同步文档并结束”。
 - 用户要求“写 closure.md”。
@@ -46,7 +45,7 @@ description: Close a document-driven workflow case by syncing docs and writing c
 不应该触发：
 
 - 计划未执行且用户只是要改计划。
-- review 仍有 blocking issues。
+- 存在用户提供的未处理 Critical / Important findings，且这些 findings 影响当前验收。
 - Authority 更新还没有用户确认，但任务仍要继续实现。
 
 ---
@@ -56,7 +55,8 @@ description: Close a document-driven workflow case by syncing docs and writing c
 - `plan.md`。
 - `plan.md ## Decisions`，用于判断用户确认的执行决策是否需要晋升为 authority proposal。
 - `execution.md`。
-- `review.md`，如果存在。
+- `review_risk`，如果 execution 或用户上下文中存在。
+- 用户提供的审查 findings，如果存在。
 - 测试结果。
 - 代码 diff。
 - 相关 authority / L3 文档。
@@ -140,7 +140,7 @@ Abandoned
 
 未满足验收标准时不能标记 `Done`。
 
-高风险任务如果 `tdd-execute` 建议 review 但用户未执行 review，通常不能无条件标记 `Done`。应记录 residual review risk，并根据证据选择 `Done with Caveats`，除非用户明确接受不 review 且验收证据充分。
+高风险任务不以是否发生审查对话作为 closure 条件。`doc-sync-close` 只读取 `review_risk`、验收证据、测试结果和 evidence gaps；如果 `review_risk = high` 且缺少足够验收证据，不能无条件标记 `Done`。如果 `review_risk = high` 但验收证据充分，可以记录 residual risk，但不因为缺少审查对话自动降级。
 
 已关闭 case 可以承载小范围同源 follow-up：
 
@@ -194,7 +194,7 @@ Evidence 可以是：
 - 测试命令。
 - 代码 diff。
 - 手动验证说明。
-- review 结论。
+- 用户提供的审查 findings 或确认。
 - `execution.md` 中的 `met / partially met / not met / not verified` 映射。
 
 如果 `tdd-execute` 标记某项为 `not verified`，`doc-sync-close` 不能默认为通过。必须补验证、请求用户确认、保留 caveat，或选择非 `Done` 状态。
@@ -388,7 +388,6 @@ closed
 ## Source of Detailed History
 - plan.md
 - execution.md
-- review.md
 - closure.md
 ```
 
@@ -396,7 +395,7 @@ closed
 
 Handoff 规则：
 
-- 不重复 `plan.md`、`execution.md`、`review.md`、`closure.md` 已有长内容。
+- 不重复 `plan.md`、`execution.md`、`closure.md` 已有长内容。
 - 只引用路径和下一步恢复条件。
 - 对 fresh agent 只保留必要状态、阻塞项和应使用的后续 skill。
 
@@ -406,13 +405,13 @@ Handoff 规则：
 
 - Authority 更新必须用户确认。
 - 未满足 acceptance criteria 不能标记 `Done`。
-- review verdict 为 `Needs Changes` 不能直接关闭为 `Done`。
-- review recommended 但未执行时，必须记录 caveat；高风险任务通常不能无 caveat 地关闭为 `Done`。
+- 用户提供的未处理 Critical / Important findings 影响当前验收时，不能标记 `Done`。
+- `review_risk = high` 且验收证据不足时，不能无条件标记 `Done`。
 - 有 case docs 但没有 `closure.md` 的任务不能算结束。
 - 任务取消、阻塞、暂停、替代也必须写 closure。
 - follow-up 更新不能覆盖旧 closure 关键证据，必须维护极简 History。
 - 未评审的候选知识不能写成 active / canonical。
-- 生命周期状态迁移必须遵守 owner / review / freshness 规则。
+- 生命周期状态迁移必须遵守 owner / confirmation / freshness 规则。
 
 ---
 

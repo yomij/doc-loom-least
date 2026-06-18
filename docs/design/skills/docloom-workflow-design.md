@@ -29,7 +29,7 @@ When intent is ambiguous, status-only is the safe fallback.
 ```yaml
 ---
 name: docloom-workflow
-description: Public automatic entry for Doc Loom Least. Use as the default entry when a user asks for a docs-first change workflow but does not explicitly invoke a specific Doc Loom skill. Resolves current case status, routes to setup-doc-governance, context-authority, plan-confirm, tdd-execute, doc-sync-close, or explicitly requested review, owns delayed case creation and case_id generation, and applies the global Artifact Policy without becoming a heavy orchestrator.
+description: Public automatic entry for Doc Loom Least. Use as the default entry when a user asks for a docs-first change workflow but does not explicitly invoke a specific Doc Loom skill. Resolves current case status, routes to setup-doc-governance, context-authority, plan-confirm, tdd-execute, doc-sync-close, or explicitly requested conversation-only review, owns delayed case creation and case_id generation, consumes review_risk signals, and applies the global Artifact Policy without becoming a heavy orchestrator.
 ---
 ```
 
@@ -48,9 +48,9 @@ description: Public automatic entry for Doc Loom Least. Use as the default entry
 
 不应该替代：
 
-- 用户显式触发 `review`、`setup-doc-governance`、`context-authority`、`plan-confirm`、`tdd-execute`、`doc-sync-close`。
+- 用户显式触发 `review`、`grill`、`setup-doc-governance`、`context-authority`、`plan-confirm`、`tdd-execute`、`doc-sync-close`。
 - 普通一次性问答、解释或局部编辑，除非用户明确要求进入 Doc Loom workflow。
-- 用户显式触发流程无关的通用辅助 skill，例如 `grill`。
+- 用户显式触发流程无关的通用辅助 skill，例如 `review` 或 `grill`。
 
 显式 skill 调用优先：
 
@@ -69,7 +69,8 @@ The invoked skill may still fail a gate and route back to docloom-workflow or an
 - 当前 git root、branch 和 dirty status。
 - 已有 `docs/cases/<case-id>/`，如果存在或可推导。
 - `case_state.yaml`，如果存在。
-- `plan.md`、`execution.md`、`review.md`、`closure.md`，按状态推导需要读取。
+- `plan.md`、`execution.md`、`closure.md`，按状态推导需要读取。
+- `review_risk`，如果存在于 execution / closure context。
 - 可选：`context-authority` route verdict。
 
 `AGENTS.md` 读取规则：
@@ -127,7 +128,7 @@ workflow-route.md
 - 不维护中心任务索引。
 - 不替代 plan-confirm 写计划。
 - 不替代 tdd-execute 执行代码或测试。
-- 不自动执行 review。
+- 不自动运行审查对话。
 - 不拥有或路由流程无关的通用辅助 skill，例如 `grill`。
 - 不因为存在 approved plan 就自动执行。
 ```
@@ -266,7 +267,7 @@ plan_version: 1
 mode:
 branch:
 worktree:
-review_status:
+review_risk:
 artifacts:
 ```
 
@@ -282,7 +283,7 @@ base_commit
 冲突处理：
 
 ```text
-If case_state.yaml conflicts with plan/execution/review/closure markdown:
+If case_state.yaml conflicts with plan/execution/closure markdown:
 - Report state_cache_conflict.
 - Derive current phase from Markdown + git state.
 - Route based on derived phase.
@@ -301,13 +302,12 @@ If case_state.yaml conflicts with plan/execution/review/closure markdown:
 | `case_state.yaml` | case docs are created | status-only without case creation | `docloom-workflow` initially; stage skills update |
 | `context-authority-brief.md` | high risk, conflict, resume, multi-agent / cross-session, explicit request | inline `Context Sources` otherwise | `context-authority` |
 | `handoff.md` | future resume point exists | continuous same-session flow | current stage skill |
-| `execution.md` | TDD required, code / behavior change, plan deviation, failed/retried tests, review recommended/requested, resume needed | docs-only, trivial config, verification fits in closure | `tdd-execute` |
-| `review.md` | user explicitly requests review | otherwise no file | `review` |
+| `execution.md` | TDD required, code / behavior change, plan deviation, failed/retried tests, material review_risk, resume needed | docs-only, trivial config, verification fits in closure | `tdd-execute` |
 | `closure.md` | case docs exist and task ends or pauses / blocks / cancels | no case docs one-shot task | `doc-sync-close` |
 
 `case_state.yaml` 只记录本 case 的 artifact decisions，不复制完整 policy。
 
-`grill` 不在 Artifact Policy 中；它只输出对话内容，不写 case artifact。
+`review` 和 `grill` 不在 Artifact Policy 中；它们只输出对话内容，不写 case artifact。
 
 示例：
 
@@ -331,8 +331,8 @@ The current stage skill writes the handoff content because it knows the next ste
 - 用户要求稍后继续、交给别人、交给另一个 agent 或另一个会话。
 - 计划已确认但不立刻执行。
 - 执行已开始但未完成。
-- 等待 review、用户确认或外部依赖。
-- 任务进入 `Paused`、`Blocked`、`Needs Changes`。
+- 等待用户确认或外部依赖。
+- 任务进入 `Paused`、`Blocked`。
 - 高风险或跨模块任务需要恢复摘要。
 
 ---
@@ -349,7 +349,7 @@ The current stage skill writes the handoff content because it knows the next ste
 | 需要恢复 case、判断权威、处理冲突或计划前 context gate | `context-authority` |
 | 请求进入持久化开发计划，且 context 足够 | `plan-confirm` |
 | 已有 approved plan，用户明确要求执行 / 继续 / implement | `tdd-execute` |
-| 用户要求收尾、同步文档、写 closure，或执行/review 已完成 | `doc-sync-close` |
+| 用户要求收尾、同步文档、写 closure，或执行已完成 | `doc-sync-close` |
 | intent ambiguous | `status-only` + one clarifying question |
 
 `context-authority` 只在需要时路由，不作为所有任务固定前置。
@@ -361,7 +361,7 @@ approved plan + user asks to continue/execute -> route to tdd-execute
 approved plan alone -> status summary, no execution
 ```
 
-`review` 保持手动属性。高风险时可以建议，但不能自动触发。`grill` 是流程无关的通用手动辅助 skill，不属于本路由表。
+`review` 保持手动属性。`docloom-workflow` 可以消费 `review_risk` 并在状态摘要中暴露风险，但不能基于风险信号自动触发 review。`grill` 是流程无关的通用手动辅助 skill，不属于本路由表。
 
 ---
 
@@ -371,6 +371,7 @@ approved plan alone -> status summary, no execution
 - 不因存在 approved plan 就自动执行。
 - 不默认运行 `context-authority`。
 - 不自动触发 `review`。
+- 不因为 `review_risk` 自动触发 `review`。
 - 不拥有或路由 `grill`。
 - 不在 status-only 中写文件。
 - 不静默修复 `case_state.yaml` 与 Markdown 冲突。

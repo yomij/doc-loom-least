@@ -586,7 +586,6 @@ planned
 ## Source of Detailed History
 - plan.md
 - execution.md
-- review.md
 - closure.md
 ```
 

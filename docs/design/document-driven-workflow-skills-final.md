@@ -18,7 +18,7 @@
 3. TDD 是默认纪律，但允许记录化例外，避免纯文档、配置、Spike、紧急修复被流程卡死。
 4. plan-confirm 增加 risk_level、plan_version、base_commit 和 `## Decisions`，确保确认对象可追溯。
 5. case_state.yaml 瘦身为机器可读状态缓存，不复制 plan.md 的权威字段。
-6. review 仍默认不自动执行，但 agent 可以基于风险建议 review。
+6. review 是用户显式触发的只读、对话式证据审查能力，不自动执行、不产物、不路由；风险只通过 `review_risk` 信号暴露给 `docloom-workflow`。
 7. closure 状态补充 Cancelled / Superseded / Paused / Abandoned，覆盖真实任务中断场景。
 8. Authority Order 拆分为 Execution Instruction Order 和 Fact Authority Order，避免把用户临时指令误写为长期事实。
 9. setup-doc-governance 使用 `GOVERNANCE_PLAN.md` 作为唯一默认中间产物，文件级和事实级都用 `promote / merge / bridge / archive / block` verdict。
@@ -33,7 +33,7 @@
 
 ## 1. 最终 Skill 列表
 
-最终拆解为 **1 个入口 Skill + 5 个主流程 Skill + 1 个手动可选 Workflow Skill + 1 个通用辅助 Skill**。其中 `docloom-workflow` 是公开自动入口和轻量路由器；`setup-doc-governance` 使用固定治理标准和一次确认流程；`review` 仍以手动触发为主，但允许 agent 基于风险给出 review 建议；`grill` 是流程无关的通用手动挑战 skill，不属于 Doc Loom workflow 阶段：
+最终拆解为 **1 个入口 Skill + 5 个主流程 Skill + 2 个手动通用辅助 Skill**。其中 `docloom-workflow` 是公开自动入口和轻量路由器；`setup-doc-governance` 使用固定治理标准和一次确认流程；`review` 是只读、对话式证据审查能力；`grill` 是交互式挑战能力。二者都不属于 Doc Loom workflow 阶段，不进入 Artifact Policy：
 
 ```text
 docloom-workflow       # public automatic entry / thin router
@@ -41,9 +41,9 @@ setup-doc-governance
 context-authority
 plan-confirm
 tdd-execute
-review                # 手动触发 / 可选
 doc-sync-close
 
+review                # 手动通用辅助 / 证据审查，不产物、不路由
 grill                 # 通用手动辅助，不进入 workflow 路由或 Artifact Policy
 ```
 
@@ -54,9 +54,9 @@ grill                 # 通用手动辅助，不进入 workflow 路由或 Artifa
 | `context-authority` | 主流程 | 按需 | 在需要计划前上下文 gate、恢复任务、权威判断或冲突判断时，读取最小相关上下文并输出路由 verdict |
 | `plan-confirm` | 主流程 | 是 | 生成计划、标记风险等级、绑定计划版本、等待用户确认、落计划文档 |
 | `tdd-execute` | 主流程 | 条件 | 按确认后的持久化 case 计划做 TDD 执行、测试、质量检查、执行记录；必要时记录 TDD 例外、Plan Amendments 和授权的原子提交 |
-| `review` | 手动可选 / 可建议 | 否 | 子 agent review / code review / 测试审查 / 文档审查；高风险任务可由 agent 建议触发 |
 | `doc-sync-close` | 主流程 | 是 | 文档同步、权威文档更新确认、任务关闭 |
-| `grill` | 通用辅助 | 否 | 用户显式触发时，通过对话逐问挑战任意主张；不写文件、不输出流程 verdict、不进入 Artifact Policy |
+| `review` | 通用辅助 / 证据审查 | 否 | 用户显式触发时，对设计文档、方案、diff、测试、文档变更或 case evidence 做只读对话审查；输出 assessment、findings 和 evidence gaps；不写文件、不改状态、不路由 |
+| `grill` | 通用辅助 / 交互拷问 | 否 | 用户显式触发时，通过对话逐问挑战任意主张；不写文件、不输出流程 verdict、不进入 Artifact Policy |
 
 本版新增的跨 Skill 机制：
 
@@ -68,7 +68,7 @@ base_commit            计划确认时的代码基线
 tdd_applicability      是否适合严格 TDD
 case_state.yaml        机器可读任务状态
 artifact_policy        case 级产物生成策略
-review_recommendation  是否建议 review
+review_risk            low | medium | high，只作为 docloom-workflow 可消费的风险信号
 closure_status         Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
 adaptive_execution     是否允许执行中轻量修订计划
 plan_amendments        执行中同目标小改记录
@@ -149,15 +149,9 @@ doc-sync-close
 
 #### 用户手动发起 review
 
-```text
-tdd-execute 之后
-  ↓
-review
-  ↓
-如需返工，回到 tdd-execute
-  ↓
-通过后进入 doc-sync-close
-```
+用户可以在任意时刻显式请求 `review`，用于对设计文档、方案、diff、测试、文档变更或 case evidence 做只读证据审查。
+
+`review` 只在对话中输出 assessment、findings 和 evidence gaps。它不产生持久化审查文件，不修改 `case_state.yaml`，不输出 workflow route，也不决定下一阶段。所有路由仍由 `docloom-workflow` 根据用户意图、case 状态、证据和风险信号判断。
 
 ---
 
@@ -185,7 +179,7 @@ review
 15. Authority 更新必须通过 `GOVERNANCE_PLAN.md` 一次确认；未确认原始材料不得写入 authority。
 16. 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 17. grill 是流程无关的通用手动辅助 skill，不进入 Artifact Policy，不由 workflow 路由，不写文件。
-18. review 只能由用户手动触发或明确要求；agent 可以基于风险建议 review。
+18. review 只能由用户手动触发或明确要求；它是只读对话审查，不产物、不改状态、不路由。
 19. `tdd-execute` 只适用于持久化 case workflow；普通一次性 coding 和简单纯文档修改不强制进入。
 20. 执行阶段可以更新 `plan.md` checkbox / status 和轻量 `Plan Amendments`，但不能静默改变计划语义。
 21. 执行应保持改动可原子提交；实际 stage / commit 需要 plan 或用户明确授权。
@@ -252,7 +246,7 @@ plan_confirmation_policy:
   - reviewer confirmation
 ```
 
-TDD exception 的证据位置由 Artifact Policy 决定。存在代码 / 行为变化、偏离、失败重试、review 建议或恢复需求时写 `execution.md`；纯文档、trivial config 或低风险 UI 文案等任务，如果验证证据可完整放入 `closure.md`，可以跳过独立 `execution.md`。
+TDD exception 的证据位置由 Artifact Policy 决定。存在代码 / 行为变化、偏离、失败重试、material review_risk 或恢复需求时写 `execution.md`；纯文档、trivial config 或低风险 UI 文案等任务，如果验证证据可完整放入 `closure.md`，可以跳过独立 `execution.md`。
 
 无行为变化重构不强行制造失败测试，采用 characterization / existing behavior lock → refactor → verify no regression。用户明确要求非 TDD 执行时，必须作为已确认 TDD exception 或 Plan Amendment 记录，并保留替代验证。
 
@@ -328,11 +322,10 @@ artifacts:
 | `case_state.yaml` | case docs are created | status-only without case creation | `docloom-workflow` initially; stage skills update |
 | `context-authority-brief.md` | high risk, conflict, resume, multi-agent / cross-session, explicit request | inline `Context Sources` otherwise | `context-authority` |
 | `handoff.md` | future resume point exists | continuous same-session flow | current stage skill |
-| `execution.md` | TDD required, code / behavior change, plan deviation, failed/retried tests, review recommended/requested, resume needed | docs-only, trivial config, verification fits in closure | `tdd-execute` |
-| `review.md` | user explicitly requests review | otherwise no file | `review` |
+| `execution.md` | TDD required, code / behavior change, plan deviation, failed/retried tests, material review_risk, resume needed | docs-only, trivial config, verification fits in closure | `tdd-execute` |
 | `closure.md` | case docs exist and task ends or pauses / blocks / cancels | no case docs one-shot task | `doc-sync-close` |
 
-`grill` 不在 Artifact Policy 中。它只输出对话内容，不写 case artifact。
+`review` 和 `grill` 不在 Artifact Policy 中。它们只输出对话内容，不写 case artifact。
 
 ### 3.7 Handoff 写入规则
 
@@ -358,14 +351,14 @@ closure.md
 - 用户要求稍后继续、交给别人、交给另一个 agent 或另一个会话。
 - 计划已确认但不立刻执行。
 - 执行已开始但未完成。
-- 等待 review、用户确认或外部依赖。
-- 任务进入 Paused、Blocked、Needs Changes。
+- 等待用户确认或外部依赖。
+- 任务进入 Paused、Blocked。
 - 高风险或跨模块任务需要恢复摘要。
 ```
 
-### 3.8 Review 建议机制
+### 3.8 Review Risk 信号
 
-`review` 不自动执行，但 agent 可以在以下情况建议 review：
+`review` 不自动执行。阶段 skill 只记录 `review_risk` 信号，供 `docloom-workflow` 在状态摘要和路由判断中消费：
 
 ```text
 - risk_level = high
@@ -380,12 +373,16 @@ closure.md
 输出格式：
 
 ```md
-## Review Recommendation
+## Review Risk
 
-- Recommended: Yes / No
-- Reason:
+- Level: low / medium / high
+- Reasons:
+  - ...
+- Evidence:
   - ...
 ```
+
+`review_risk` 不是 review 授权，也不是 workflow gate。是否运行 `review` 只能来自用户明确请求。
 
 ### 3.9 异常收尾状态
 
@@ -566,7 +563,6 @@ git diff --name-only
    - plan.md
    - execution.md
    - handoff.md
-   - review.md，如存在
    - closure.md，如存在
 6. 检查 git status 和 git diff。
 7. 判断下一步 workflow state。
@@ -713,7 +709,6 @@ docs/
       plan.md
       execution.md
       handoff.md
-      review.md
       closure.md
 
   derived/
@@ -780,7 +775,7 @@ docs/
 ```text
 - case lifecycle
 - 文档治理固定规则
-- review / confirmation gate
+- review boundary / confirmation gate
 - 任务状态流转
 ```
 
@@ -1260,7 +1255,7 @@ related_docs: []
 
 public automatic entry / thin router。
 
-它负责识别用户意图、读取最小 workspace 和 case 状态、延迟创建 case、维护 Artifact Policy，并路由到具体阶段 skill。它不生成详细计划、不执行代码、不自动 review，也不维护中心任务索引。`grill` 是流程无关通用辅助 skill，不属于本入口的路由范围。
+它负责识别用户意图、读取最小 workspace 和 case 状态、延迟创建 case、维护 Artifact Policy，并路由到具体阶段 skill。它不生成详细计划、不执行代码、不自动 review，也不维护中心任务索引。`review` 和 `grill` 是流程无关通用辅助 skill，不属于 Artifact Policy。
 
 ## 负责什么
 
@@ -1274,6 +1269,7 @@ public automatic entry / thin router。
 - 执行 status-only 查询。
 - 判定本 case 的 Artifact Policy。
 - 根据状态和用户意图路由到 setup-doc-governance、context-authority、plan-confirm、tdd-execute、doc-sync-close，或显式触发的 review。
+- 消费 `review_risk` 信号，并在状态摘要中暴露风险。
 ```
 
 ## 不是做什么
@@ -1286,6 +1282,7 @@ public automatic entry / thin router。
 - 不因为存在 approved plan 就自动执行。
 - 不默认运行 context-authority。
 - 不自动触发 review。
+- 不因为 `review_risk` 自动运行 review。
 - 不拥有或路由 `grill`。
 - 不静默修复 case_state.yaml 与 Markdown 的冲突。
 ```
@@ -1694,7 +1691,6 @@ planned
 
 ## Source of Detailed History
 - execution.md
-- review.md
 - closure.md
 ````
 
@@ -1837,7 +1833,7 @@ Update Execution Docs
 - 存在代码或行为变化。
 - 出现计划偏离。
 - 测试失败、重试或需要记录失败原因。
-- 建议或请求 review。
+- 存在 material review_risk。
 - 任务可能需要恢复。
 ```
 
@@ -1895,13 +1891,12 @@ Yes / No
 ## Remaining Issues
 - ...
 
-## Review Recommendation
-- Recommended: Yes / No
-- Reason:
+## Review Risk
+- Level: low / medium / high
+- Reasons:
   - ...
-
-## Ready for Review
-Yes / No
+- Evidence:
+  - ...
 
 ## Checkpoints / Commits
 | Commit | Scope | Verification |
@@ -1952,9 +1947,9 @@ executing
 
 ## 定位
 
-用户手动触发 / 可选 Review Skill。agent 不自动执行 review，但可以基于风险输出 review recommendation。
+用户手动触发的通用辅助 Skill，用于只读、对话式证据审查。
 
-不作为默认流程强制步骤。
+`review` 不作为 workflow 阶段，不进入 Artifact Policy，不生成持久化审查文件，不修改状态，不写 proposal，不输出路由。
 
 ## 触发条件
 
@@ -1965,63 +1960,61 @@ review 一下
 让子 agent review
 做一次 code review
 检查一下这次实现
+评审这个设计文档
+检查这个方案有没有问题
 ```
 
 ## 负责什么
 
 ```text
-- 检查实现是否符合计划。
-- 检查测试覆盖是否充分。
-- 检查是否破坏权威文档。
-- 检查架构、安全、维护性问题。
-- 检查是否有不必要的范围扩大。
-- 输出 blocking / non-blocking 问题。
-- 如果需要返工，回到 tdd-execute。
-- 如果通过，进入 doc-sync-close。
+- 审查指定设计文档、方案、diff、测试、文档变更或 case evidence。
+- 按最小相关证据读取目标对象、引用来源、authority / ADR / contract、必要代码和测试。
+- 使用 Fact Authority Order 发现事实冲突。
+- 输出 assessment、evidence reviewed、findings 和 evidence gaps。
+- 对 Critical / Important / Minor 按影响等级分级。
+- 给出 finding 的 required correction，但不输出流程下一步。
 ```
 
-## 输出：`docs/cases/<case-id>/review.md`
+## 对话输出
 
 ```md
-# Review Report
-
 ## Scope
-...
 
-## Inputs Reviewed
-- plan.md
-- execution.md
-- git diff
-- test results
-- authority docs
+## Review Maturity
+Draft / In-progress / Completed
 
-## Blocking Issues
-- ...
+## Evidence Reviewed
+| Source | Why Included | Trust / Freshness |
+|---|---|---|
 
-## Non-blocking Suggestions
-- ...
+## Evidence Not Reviewed
+| Source | Reason | Impact |
+|---|---|---|
 
-## Test Coverage Notes
-- ...
+## Assessment
+No material issue found / Material issues found / Insufficient evidence
 
-## Documentation Notes
-- ...
+## Findings
 
-## Architecture / Security Notes
-- ...
+### Critical
 
-## Verdict
-Approved / Needs Changes
+### Important
+
+### Minor
+
+## Evidence Gaps
 ```
 
 ## 规则
 
 ```text
 - review 只在用户要求时执行。
-- agent 可以建议 review，但不能把建议等同于用户授权。
-- review 发现 blocking issue 后，必须回到 tdd-execute。
-- review 通过后可以进入 doc-sync-close。
+- review 默认直接输出审查结果，只有无法开始时才问一个最小澄清问题。
+- review 可以使用子 agent，但子 agent 只返回 findings。
+- review 不产物、不改状态、不路由、不写 proposal、不修改文件。
 ```
+
+详细规则以 `docs/design/skills/review-design.md` 为 SSOT。
 
 ---
 
@@ -2147,8 +2140,8 @@ skills/
 
   review/
     SKILL.md
-    templates/
-      review.md
+    references/
+      review-rubric.md
 
   doc-sync-close/
     SKILL.md
@@ -2185,7 +2178,6 @@ docs/
       plan.md
       execution.md       # conditional
       handoff.md         # only when a future resume point exists
-      review.md          # only when user explicitly requests review
       closure.md
 
   derived/
@@ -2216,7 +2208,7 @@ docs/
 5. 读取 case_state.yaml。
 6. 如存在且需要恢复，读取 handoff.md。
 7. 读取 plan.md。
-8. 如存在，读取 execution.md / review.md / closure.md。
+8. 如存在，读取 execution.md / closure.md。
 9. 检查 git status 和 diff。
 10. 判断下一步。
 ```
@@ -2271,10 +2263,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
   -> 可以跳过 tdd-execute，直接进入相应编辑或 doc-sync-close。
 
 如果 execution.md 存在或 git 状态显示 case 范围内有执行中改动，且 closure.md 不存在
-  -> executing / reviewing / doc_syncing。
-
-如果 review.md 存在且 verdict = Needs Changes
-  -> 回到 tdd-execute。
+  -> executing / doc_syncing。
 
 如果 closure.md 存在
   -> done / done with caveats / blocked / cancelled / superseded / paused / abandoned。
@@ -2299,6 +2288,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 - docloom-workflow 是 public automatic entry 和 thin router；用户显式点名 skill 时尊重用户点名。
 - docloom-workflow 拥有 case_id 生成和延迟 case 创建职责。
 - docloom-workflow 持有 Artifact Policy；阶段 skill 按 policy 写自己的产物。
+- docloom-workflow 消费 review_risk 信号；review_risk 不是 review 授权，也不是 workflow gate。
 - branch/worktree 是推荐任务定位机制，不是强制前置条件。
 - agent 不应擅自创建 branch 或 worktree，除非用户明确要求或确认。
 - case docs 可以由 branch 推导，也可以由用户指定；新 case 由 `docloom-workflow` 在进入持久化 case workflow 时创建。
@@ -2318,8 +2308,8 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 - 执行偏离计划，必须记录。
 - 严重偏离计划，必须重新确认。
 - 实际 stage / commit 只有 plan 或用户明确要求时执行；提交必须按原子边界组织。
+- review 是通用手动辅助 skill，不进入 Artifact Policy；只由用户明确请求触发，只读对话输出，不产物、不改状态、不路由。
 - grill 是通用手动辅助 skill，不进入 workflow 路由或 Artifact Policy。
-- review 只由用户手动触发或明确要求；agent 可以基于风险建议 review。
 - 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 - closure_status 必须明确：Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned。
 - Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
@@ -2331,7 +2321,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 
 这套工作流可以概括为：
 
-> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case 并应用 Artifact Policy；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认、TDD 纪律、轻量 adaptive execution 和授权原子提交边界的开发闭环；`review` 作为用户手动触发的 workflow 审查 Skill，可由 agent 基于风险建议；`grill` 作为流程无关的通用手动挑战 Skill，只通过对话压力测试主张。
+> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case、应用 Artifact Policy 并消费 `review_risk` 信号；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认、TDD 纪律、轻量 adaptive execution 和授权原子提交边界的开发闭环；`review` 作为用户手动触发的只读对话审查 Skill，不产物、不改状态、不路由；`grill` 作为流程无关的通用手动挑战 Skill，只通过对话压力测试主张。
 
 
 ---
@@ -2380,9 +2370,9 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 ### P3：质量增强
 
 ```text
-1. review.md
-2. review_recommendation
-3. 高风险任务强制建议 review
+1. conversation-only review skill
+2. review_risk signals consumed by docloom-workflow
+3. high-risk focused review checks
 4. 通用 grill skill 的交互规则
 ```
 

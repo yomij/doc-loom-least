@@ -342,7 +342,6 @@ case_state.yaml
 plan.md
 handoff.md
 execution.md
-review.md
 closure.md
 ```
 
