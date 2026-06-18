@@ -1,24 +1,29 @@
 # grill Skill 详细设计
 
-> 来源：`docs/design/document-driven-workflow-skills-final.md`
+> 来源：`docs/reference/skills/grill-me/SKILL.md` 与本仓库 grill 设计评审决策
 >
-> 目标：定义 `grill` 如何对需求、上下文、计划、架构、测试策略和文档影响做手动压力测试，并输出可执行的挑战报告。
+> 目标：定义 `grill` 作为通用、流程无关、用户手动触发的挑战 / 拷问 skill。它只通过对话压力测试主张和决策，不生成中间产物，不修改文件，不承担 Doc Loom workflow 阶段职责。
 
 ---
 
 ## 1. 定位
 
-`grill` 是用户手动触发的拷问 / 压力测试 skill。
+`grill` 是通用手动挑战 skill。
 
-它不属于默认主流程，不自动运行。它只挑战和暴露问题，不执行实现、不改代码、不自动修改计划。
+它用于压力测试任何需求、计划、架构、实现思路、测试策略、文档变更想法、产品判断或其他待决主张。它不属于 Doc Loom workflow 的流程阶段，不由 `docloom-workflow` 路由，不进入 Artifact Policy。
 
 核心规则：
 
 ```text
 grill 只能由用户手动触发。
-grill 后如果计划变化，必须回到 plan-confirm。
-每次只问一个问题；如果问题可由代码或文档回答，先探索项目而不是问用户。
+grill 只挑战和澄清，不生成中间产物，不修改任何文件。
+grill 不输出流程 verdict，不指定 workflow next owner。
+提问阶段一次只问一个问题。
+每个决策问题必须给出推荐答案，并说明成立条件。
+如果问题可由代码或文档回答，先探索项目，而不是问用户。
 ```
+
+`grill` 的结果只存在于对话中。后续流程如果需要使用这些结果，应由对应流程自己吸收。例如 `plan-confirm` 可以把用户明确确认的讨论决策写入 `plan.md` 的 `## Decisions`；最终 authority 文档变更由收尾或治理流程处理，不由 `grill` 处理。
 
 ---
 
@@ -27,7 +32,7 @@ grill 后如果计划变化，必须回到 plan-confirm。
 ```yaml
 ---
 name: grill
-description: Challenge and stress-test a requirement, context brief, implementation plan, architecture proposal, test strategy, or documentation update. Use only when the user explicitly asks to grill, challenge, pressure-test, scrutinize, or aggressively review assumptions before proceeding.
+description: Interactively challenge and stress-test a requirement, plan, architecture proposal, implementation idea, test strategy, documentation change, or other claim. Use only when the user explicitly asks to grill, challenge, pressure-test, scrutinize, or aggressively question assumptions. Ask one question at a time, provide a recommended answer with conditions, verify facts from code or docs when possible, and do not create artifacts or modify files.
 ---
 ```
 
@@ -48,78 +53,93 @@ description: Challenge and stress-test a requirement, context brief, implementat
 
 - 风险等级是 high。
 - agent 觉得计划不完整。
-- `tdd-execute` 建议 review。
+- review 或执行阶段发现风险。
+- workflow 路由表匹配某个状态。
 
-高风险时可以建议用户触发 `grill`，但不能擅自执行。
+高风险时 agent 可以建议用户触发 `grill`，但不能擅自执行。
 
 ---
 
 ## 4. 可 Grill 对象
 
+`grill` 是流程无关工具，可以挑战任意清晰对象，包括：
+
 - 用户需求。
-- `Context & Authority Brief`。
-- `plan.md`。
+- 计划草案或已确认计划。
 - 架构方案。
-- 文档更新方案。
+- 实现策略。
 - 测试策略。
-- Authority 事实变更 proposal。
+- 文档更新想法。
+- 产品判断。
+- 权衡取舍。
+- 用户在当前对话中提出的主张。
 
 如果用户没有明确对象：
 
-- 优先 grill 当前 `plan.md`。
-- 如果没有 plan，grill 当前需求和 context brief。
+- 先用 1 个澄清问题确认要挑战什么。
+- 不凭空选择 workflow 阶段或 case artifact。
 
 ---
 
 ## 5. 输入
 
-- 用户指定的 grill 目标。
-- 用户本轮需求。
-- `context-authority-brief.md`，如果存在。
-- `plan.md`，如果存在。
-- 相关 authority 文档。
-- 相关代码和测试，必要时读取。
+最小输入是用户指定的 grill 对象和当前对话上下文。
+
+可按需读取：
+
+- 用户明确指定的文档。
+- 当前项目中与问题直接相关的代码、测试或文档。
+- 相关参考材料。
+
+读取规则：
+
+- 先基于目标对象形成问题。
+- 如果问题属于事实问题，且可以由代码或文档回答，先查证再回答。
+- 如果问题属于决策问题，才问用户。
+- 读取材料只服务于回答当前问题，不进入流程状态，不生成 artifact。
 
 ---
 
 ## 6. 输出
 
-有 case docs 时写入：
+`grill` 只在对话中输出，不写文件。
+
+禁止输出：
 
 ```text
 docs/cases/<case-id>/grill.md
+Grill Report
+Proceed / Revise Plan / Blocked
+workflow next owner
+artifact path
+stage transition
 ```
 
-没有 case docs 时直接在对话中输出报告。
-
-模板：
+提问阶段格式：
 
 ```md
-# Grill Report
+## Question N
 
-## Target
+<one question>
 
-## Current Claim
+Recommended answer:
+<clear recommendation, with conditions>
 
-## Ambiguities
-
-## Hidden Assumptions
-
-## Edge Cases
-
-## Possible Regressions
-
-## Missing Tests
-
-## Documentation Risks
-
-## Questions for User
-
-## Suggested Plan Changes
-
-## Verdict
-Proceed / Revise Plan / Blocked
+Why this matters:
+<impact>
 ```
+
+收束阶段格式：
+
+```md
+## Confirmed Decisions
+
+## Open Questions
+
+## Risks / Weak Assumptions
+```
+
+收束不是报告，不承诺落盘，不自动进入任何流程动作。
 
 ---
 
@@ -128,214 +148,164 @@ Proceed / Revise Plan / Blocked
 ```text
 grill/
   SKILL.md
-  templates/
-    grill-report.md
   references/
     challenge-prompts.md
 ```
+
+不提供 `templates/grill-report.md`。`challenge-prompts.md` 只能作为内部提问参考，不能定义必填维度、固定章节或报告模板。
 
 ---
 
 ## 8. 核心工作流
 
-### Step 1. Identify Target
+### Step 1. Restate Target
 
-确认 grill 对象：
+先用 1-3 句话中性复述：
 
-```text
-Requirement
-Context Brief
-Plan
-Architecture
-Test Strategy
-Documentation Update
-Authority Change
-```
+- 正在挑战什么对象。
+- 当前主张是什么。
+- 已知边界是什么。
 
-如果对象不存在：
+如果对象不明，只问一个澄清问题。
 
-- 不凭空假设。
-- 先说明缺少对象，并基于可用输入做轻量 grill。
+### Step 2. Choose Highest-Leverage Question
 
-### Step 2. Restate Current Claim
+自由选择当前最关键问题。
 
-先中性复述：
+不要机械覆盖固定清单。可以在内部参考目标、非目标、成功标准、证据、边界条件、失败模式、测试 / 验证和文档影响等方向，但对外不要求固定维度。
 
-- 当前方案想达成什么。
-- 依赖哪些证据。
-- 会影响哪些边界。
-- 当前计划假设了什么。
+### Step 3. Separate Fact From Decision
 
-避免上来直接反驳导致误解目标。
+事实问题：
 
-### Step 3. Challenge Requirements
+- 先查代码、测试或文档。
+- 能查到就给结论和依据。
+- 查不到就说明证据缺口。
 
-检查：
+决策问题：
 
-- 用户问题是否清楚。
-- 成功标准是否可验证。
-- 非目标是否明确。
-- 是否存在未说出的兼容性约束。
-- 是否有时间、成本、依赖团队、合规限制。
+- 一次只问一个。
+- 给明确推荐答案。
+- 推荐必须带成立条件。
+- 如果条件变化，说明替代推荐。
 
-提问方式：
-
-- 一次只问一个问题。
-- 每个问题都给出推荐答案和理由。
-- 如果存在分支决策，沿决策树逐一走完，不把多个未决点揉成一团。
-
-### Step 4. Challenge Plan
-
-检查：
-
-- 是否解决根因，而不是症状。
-- 是否范围过大或过小。
-- 是否可回滚。
-- 是否有计划漂移风险。
-- 风险等级是否被低估。
-- 文件影响是否遗漏。
-
-### Step 5. Challenge Testing Strategy
-
-检查：
-
-- 是否覆盖失败路径。
-- 是否覆盖边界条件。
-- 是否只测 happy path。
-- 是否过度依赖实现细节。
-- TDD exception 是否合理。
-- 替代验证是否足够。
-
-### Step 6. Challenge Documentation Impact
-
-检查：
-
-- 是否需要 authority 更新。
-- 用户本轮新事实是否被错误当作 accepted。
-- L3 是否可能与 authority 冲突。
-- historical docs 是否被误当作当前事实。
-- doc sync 是否遗漏验收或风险记录。
-
-### Step 7. Challenge Architecture and Security
-
-检查：
-
-- 是否引入不必要抽象。
-- 是否改变 public contract。
-- 是否有隐式数据迁移。
-- 是否影响权限、安全、认证、计费、隐私。
-- 是否缺少 rollback / observability。
-
-### Step 8. Produce Verdict
-
-三种 verdict：
+推荐答案格式：
 
 ```text
-Proceed
-  没有阻塞问题，可以继续；可带非阻塞建议。
-
-Revise Plan
-  计划应改版，必须回到 plan-confirm。
-
-Blocked
-  缺少关键事实或用户决策，不能继续。
+Recommended answer: choose A if X holds. If Y is true, choose B instead.
 ```
+
+### Step 4. Walk The Decision Tree
+
+沿设计树逐个解决依赖决策。
+
+用户可以用简短回答确认，例如：
+
+```text
+是
+按推荐
+继续
+```
+
+如果短答无歧义，视为确认当前推荐答案，并继续下一个最高杠杆问题。如果有歧义，只问一个澄清问题。
+
+### Step 5. Handle Insufficient Facts
+
+如果事实基础不足：
+
+- 先说明缺少哪些事实。
+- 只问一个最关键澄清问题。
+- 不把 `grill` 变成需求采集、上下文补全或文档治理流程。
+
+### Step 6. Close When Converged
+
+结束条件：
+
+- 用户要求结束或总结。
+- agent 判断关键分支已经收敛。
+
+结束时输出轻量收束：
+
+- `Confirmed Decisions`
+- `Open Questions`
+- `Risks / Weak Assumptions`
+
+不自动进入计划、执行、review、收尾或治理。
 
 ---
 
-## 9. 问题分级
+## 9. 高风险规则
 
-每个关键问题建议包含：
+高风险领域包括：
 
-```text
-- Severity: blocking | non-blocking
-- Problem:
-- Evidence:
-- Impact:
-- Recommendation:
-```
+- 安全。
+- 权限。
+- 认证 / 授权。
+- 隐私。
+- 计费。
+- 数据删除。
+- public API / CLI / schema / config contract。
+- 高影响架构边界。
 
-输出应聚焦高价值问题，不罗列低价值噪音。
+在高风险领域：
 
-## 9.5 交互模式
-
-`grill` 可以有两种输出模式：
-
-```text
-interactive
-  连续问用户问题，直到关键分支收敛。
-
-report
-  直接输出一次性 Grill Report。
-```
-
-默认：
-
-- 用户说“grill 我”“拷问我”时，用 interactive。
-- 用户说“出一份 grill report”或异步审查时，用 report。
-
-Interactive 每轮格式：
-
-```md
-## Question N
-
-<one question>
-
-Recommended answer:
-<recommended answer>
-
-Why this matters:
-<impact>
-```
-
-当所有 blocking 分支收敛后，再写 `grill.md` 总结。
+- 推荐答案必须降低确定性。
+- 必须明确证据来源和未验证点。
+- 用户短答只确认当前讨论取舍，不等于长期事实授权。
+- 不把未验证结论写成事实。
 
 ---
 
-## 10. Gate
+## 10. 与 Doc Loom Workflow 的关系
 
+`grill` 是通用辅助 skill，不是 Doc Loom workflow 阶段。
+
+边界：
+
+- 不由 `docloom-workflow` 路由。
+- 不进入 Artifact Policy。
+- 不写 `grill.md`。
+- 不更新 `case_state.yaml`。
 - 不改 `plan.md`。
-- 不执行实现。
-- 不修改代码。
-- 不把建议自动当作计划变化。
-- 如果 verdict 是 `Revise Plan` 或 `Blocked`，不能继续 `tdd-execute`。
-- 如果 grill 后计划变化，必须回到 `plan-confirm` 并重新确认。
+- 不改 authority 文档。
+- 不提出 workflow verdict。
+- 不指定 next owner。
+
+后续流程可以消费用户确认过的讨论决策，但消费动作属于后续流程：
+
+- `plan-confirm` 可以把用户明确确认的决策写入 `plan.md` 的 `## Decisions`。
+- `review` 可以检查实现、测试和文档是否遵守 `plan.md ## Decisions`。
+- `doc-sync-close` 可以判断哪些 decision 需要进入 authority proposal。
 
 ---
 
-## 11. 验收标准
+## 11. Gate
 
-- 报告能指出最关键的歧义、假设和测试缺口。
-- 每个 blocking 问题都有影响和建议。
-- verdict 明确。
-- 没有把低价值问题堆成噪音。
-- 如果建议改计划，明确说明需要回到 `plan-confirm`。
+- 用户未明确要求，不执行 `grill`。
+- 不生成中间产物。
+- 不修改任何文件。
+- 不输出固定报告模板。
+- 不输出流程 verdict。
+- 不把推荐答案自动当作用户决策。
+- 不把用户短答升级为长期 authority。
+- 不把可查证事实问题推给用户。
+- 不把事实不足的场景扩展成 discovery workflow。
 
 ---
 
-## 12. 失败与恢复
+## 12. 验收标准
 
-如果输入材料不足：
-
-- 明确列出缺失材料。
-- 基于现有材料给条件性 grill。
-- 不输出过度确定结论。
-
-如果用户只想要轻量挑战：
-
-- 输出 3 到 5 个最高价值问题。
-- 不强行套完整模板。
-
-如果 grill 发现 authority / 代码冲突：
-
-- 标记为 blocking。
-- 建议回到 `context-authority` 或 `setup-doc-governance`。
+- 每轮只问一个问题。
+- 每个决策问题都有推荐答案和成立条件。
+- 可由代码或文档回答的问题已先查证。
+- 用户确认的决策与未确认建议区分清楚。
+- 高风险推荐明确证据和未验证点。
+- 结束时只输出流程无关的轻量收束。
+- 没有写文件、没有 artifact、没有 workflow verdict。
 
 ---
 
 ## 13. 参考资料
 
 - [grill-me/SKILL.md](../../reference/skills/grill-me/SKILL.md)
-- [writing-plans/SKILL.md](../../reference/skills/writing-plans/SKILL.md)
-- [AI Coding 文档治理中的知识识别、分层流转、晋升与降级机制](<../../reference/docs/AI Coding 文档治理中的知识识别、分层流转、晋升与降级机制.md>)
 - [AI Coding 文档治理原则](<../../reference/docs/AI Coding 文档治理原则.md>)

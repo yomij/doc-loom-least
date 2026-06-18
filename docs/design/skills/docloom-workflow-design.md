@@ -1,6 +1,6 @@
 # docloom-workflow Skill 详细设计
 
-> 来源：`docs/design/document-driven-workflow-skills-final.md` 与 plan-confirm grill 决策。
+> 来源：`docs/design/document-driven-workflow-skills-final.md`。
 >
 > 目标：定义 `docloom-workflow` 作为 Doc Loom Least 的公开自动入口、轻量路由器、case identity owner 和 Artifact Policy owner。
 
@@ -29,7 +29,7 @@ When intent is ambiguous, status-only is the safe fallback.
 ```yaml
 ---
 name: docloom-workflow
-description: Public automatic entry for Doc Loom Least. Use as the default entry when a user asks for a docs-first change workflow but does not explicitly invoke a specific Doc Loom skill. Resolves current case status, routes to setup-doc-governance, context-authority, plan-confirm, tdd-execute, doc-sync-close, or explicitly requested grill/review, owns delayed case creation and case_id generation, and applies the global Artifact Policy without becoming a heavy orchestrator.
+description: Public automatic entry for Doc Loom Least. Use as the default entry when a user asks for a docs-first change workflow but does not explicitly invoke a specific Doc Loom skill. Resolves current case status, routes to setup-doc-governance, context-authority, plan-confirm, tdd-execute, doc-sync-close, or explicitly requested review, owns delayed case creation and case_id generation, and applies the global Artifact Policy without becoming a heavy orchestrator.
 ---
 ```
 
@@ -48,8 +48,9 @@ description: Public automatic entry for Doc Loom Least. Use as the default entry
 
 不应该替代：
 
-- 用户显式触发 `grill`、`review`、`setup-doc-governance`、`context-authority`、`plan-confirm`、`tdd-execute`、`doc-sync-close`。
+- 用户显式触发 `review`、`setup-doc-governance`、`context-authority`、`plan-confirm`、`tdd-execute`、`doc-sync-close`。
 - 普通一次性问答、解释或局部编辑，除非用户明确要求进入 Doc Loom workflow。
+- 用户显式触发流程无关的通用辅助 skill，例如 `grill`。
 
 显式 skill 调用优先：
 
@@ -126,7 +127,8 @@ workflow-route.md
 - 不维护中心任务索引。
 - 不替代 plan-confirm 写计划。
 - 不替代 tdd-execute 执行代码或测试。
-- 不自动执行 grill 或 review。
+- 不自动执行 review。
+- 不拥有或路由流程无关的通用辅助 skill，例如 `grill`。
 - 不因为存在 approved plan 就自动执行。
 ```
 
@@ -302,10 +304,11 @@ If case_state.yaml conflicts with plan/execution/review/closure markdown:
 | `handoff.md` | future resume point exists | continuous same-session flow | current stage skill |
 | `execution.md` | TDD required, code / behavior change, plan deviation, failed/retried tests, review recommended/requested, resume needed | docs-only, trivial config, verification fits in closure | `tdd-execute` |
 | `review.md` | user explicitly requests review | otherwise no file | `review` |
-| `grill.md` | user explicitly triggers grill and case docs exist | otherwise conversation only | `grill` |
 | `closure.md` | case docs exist and task ends or pauses / blocks / cancels | no case docs one-shot task | `doc-sync-close` |
 
 `case_state.yaml` 只记录本 case 的 artifact decisions，不复制完整 policy。
+
+`grill` 不在 Artifact Policy 中；它只输出对话内容，不写 case artifact。
 
 示例：
 
@@ -342,7 +345,6 @@ The current stage skill writes the handoff content because it knows the next ste
 | 用户明确要求初始化、整理、重建文档治理 | `setup-doc-governance` |
 | `context-authority` verdict = `run_setup_doc_governance` | `setup-doc-governance` |
 | 高风险 authority / workflow / public contract 缺失且无法安全计划 | `setup-doc-governance` 或 `needs_user_decision` |
-| 用户显式要求 grill / 拷问 / challenge / stress-test | `grill` |
 | 用户显式要求 review / code review / docs review / test review | `review` |
 | 用户要求状态、下一步、能否继续，且未授权修改 | `status-only` |
 | 需要恢复 case、判断权威、处理冲突或计划前 context gate | `context-authority` |
@@ -360,7 +362,7 @@ approved plan + user asks to continue/execute -> route to tdd-execute
 approved plan alone -> status summary, no execution
 ```
 
-`grill` 和 `review` 保持手动属性。高风险时可以建议，但不能自动触发。
+`review` 保持手动属性。高风险时可以建议，但不能自动触发。`grill` 是流程无关的通用手动辅助 skill，不属于本路由表。
 
 ---
 
@@ -369,7 +371,8 @@ approved plan alone -> status summary, no execution
 - 不因用户进入入口 skill 就创建 case。
 - 不因存在 approved plan 就自动执行。
 - 不默认运行 `context-authority`。
-- 不自动触发 `grill` 或 `review`。
+- 不自动触发 `review`。
+- 不拥有或路由 `grill`。
 - 不在 status-only 中写文件。
 - 不静默修复 `case_state.yaml` 与 Markdown 冲突。
 - 不写 `base_commit`；`plan-confirm` 在计划确认时写。

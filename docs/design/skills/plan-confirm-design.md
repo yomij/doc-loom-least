@@ -30,7 +30,7 @@ writing-plans 只作为计划质量规则参考，不继承其运行路径、wor
 ```yaml
 ---
 name: plan-confirm
-description: Create and confirm an implementation plan before execution in a document-driven workflow. Use after docloom-workflow has established case_id and case_docs, and after context-authority when a context gate is needed. Produces plan.md with risk level, TDD strategy, documentation impact, plan_version, approved_plan_hash, base_commit, and explicit user confirmation before tdd-execute.
+description: Create and confirm an implementation plan before execution in a document-driven workflow. Use after docloom-workflow has established case_id and case_docs, and after context-authority when a context gate is needed. Produces plan.md with decisions, risk level, TDD strategy, documentation impact, plan_version, base_commit, and explicit user confirmation before tdd-execute.
 ---
 ```
 
@@ -42,13 +42,12 @@ description: Create and confirm an implementation plan before execution in a doc
 
 - 已完成 `context-authority`，需要写实施计划。
 - 用户要求“先出计划”或“写 plan.md”。
-- `grill` 后计划需要改版。
-- `tdd-execute` 发现 plan hash 不匹配，需要重新确认。
+- 用户确认的讨论决策需要写入或修改计划。
+- `tdd-execute` 发现计划状态、版本或确认记录不一致，需要重新确认。
 - 用户修改了任务目标、范围、风险或测试策略。
 
 不应该触发：
 
-- 用户明确要求拷问计划。此时使用 `grill`。
 - 用户已经确认计划并要求执行。此时使用 `tdd-execute`。
 - 任务已完成，需要收尾。此时使用 `doc-sync-close`。
 
@@ -64,7 +63,7 @@ description: Create and confirm an implementation plan before execution in a doc
 - `docloom-workflow` 确认的 `case_id` 和 `case_docs`。
 - `case_state.yaml`，如果已经创建。
 - 已有 `plan.md`，如果是修改计划。
-- 已有 `grill.md`，如果计划来自 grill 反馈。
+- 用户明确确认的讨论决策，如果本次计划需要吸收。
 - Context Sources / route verdict，如果 `context-authority` 已生成。
 
 ---
@@ -90,7 +89,7 @@ docs/cases/<case-id>/handoff.md    # 仅当存在未来恢复点
 用户确认后：
 
 - `plan.md` 的 `status` 改为 `approved`。
-- 写入 `approved_by`、`approved_at`、`approved_plan_hash`。
+- 写入 `approved_by`、`approved_at` 和 `Confirmation Log`。
 - `case_state.yaml` 的 `phase` 改为 `planned`。
 
 ---
@@ -105,7 +104,6 @@ plan-confirm/
     handoff.md
   references/
     shared-protocol.md
-    plan-hash.md
 ```
 
 ---
@@ -179,8 +177,6 @@ status: draft
 risk_level: medium
 approved_by:
 approved_at:
-approved_plan_hash:
-hash_basis: plan-body-v1
 base_commit:
 ---
 ```
@@ -195,41 +191,25 @@ base_commit:
 | `risk_level` | `low` / `medium` / `high` |
 | `approved_by` | 确认者，通常记录为 `user` |
 | `approved_at` | 用户确认时间 |
-| `approved_plan_hash` | 用户确认的计划内容哈希 |
-| `hash_basis` | 哈希计算口径 |
 | `base_commit` | 计划确认时的代码基线 |
 
 ---
 
-## 10. Approved Plan Hash
+## 10. Plan Version Confirmation
 
-为避免“写入 hash 后 hash 又变化”，哈希只覆盖审批载荷。
+`plan_version` 是用户确认计划的语义版本。
 
-推荐算法：
-
-```text
-1. 从 plan.md 取 approval payload。
-2. approval payload 包含正文中从 `# Implementation Plan` 到 `## Documentation Impact` 结束的内容。
-3. approval payload 不包含 YAML frontmatter、`## Confirmation Log`、`approved_at`、`approved_by`、`approved_plan_hash`。
-4. 对行尾统一为 LF。
-5. 去掉每行末尾空白。
-6. 保留标题、表格和列表顺序。
-7. 计算 SHA-256 hex digest。
-```
-
-伪代码：
+确认规则：
 
 ```text
-payload = normalize(markdown_body_between_implementation_plan_and_documentation_impact)
-approved_plan_hash = sha256(utf8(payload)).hexdigest()
+1. 用户确认时，记录当前 plan_version、approved_by、approved_at 和 base_commit。
+2. Confirmation Log 必须说明用户确认的是哪个 plan_version。
+3. tdd-execute 执行前必须读取当前 approved plan_version。
+4. 如果计划发生实质变化，必须递增 plan_version、回到 draft 并重新确认。
+5. 非实质编辑只能修正文档表达、补 Confirmation Log 或更新执行记录，不改变已确认计划含义。
 ```
 
-规则：
-
-- 用户确认后写入 hash。
-- `tdd-execute` 执行前重新计算 hash。
-- hash 不匹配时，不得继续执行。
-- 只有修复非审批载荷内容，如补充 `Confirmation Log`，不需要递增版本。
+计划确认依赖人类可读的版本、状态、确认记录和 git baseline。
 
 ---
 
@@ -454,8 +434,6 @@ status: draft
 risk_level:
 approved_by:
 approved_at:
-approved_plan_hash:
-hash_basis: plan-body-v1
 base_commit:
 ---
 
@@ -464,6 +442,10 @@ base_commit:
 ## Goal
 
 ## Non-goals
+
+## Decisions
+| Decision | Source | Scope | Rationale |
+|---|---|---|---|
 
 ## Assumptions
 
@@ -532,7 +514,6 @@ High risk 必须明确确认，不能把沉默当作确认。
 
 用户确认后：
 
-- 计算 `approved_plan_hash`。
 - 更新 frontmatter。
 - 更新 `Confirmation Log`。
 - 更新 `case_state.yaml`。
@@ -543,6 +524,7 @@ High risk 必须明确确认，不能把沉默当作确认。
 计划实质变化包括：
 
 - 目标变化。
+- 用户确认的决策变化。
 - 文件范围变化。
 - 测试策略变化。
 - 风险等级变化。
@@ -553,7 +535,6 @@ High risk 必须明确确认，不能把沉默当作确认。
 
 - `plan_version += 1`。
 - status 回到 `draft`。
-- 清空 `approved_plan_hash`。
 - 重新确认。
 
 ---
@@ -611,16 +592,17 @@ last_updated:
 - 有阻塞冲突，不写执行计划。
 - 没有用户确认，不进入 `tdd-execute`。
 - 计划变化后必须递增 `plan_version` 并重新确认。
-- `approved_plan_hash` 与当前计划审批载荷不一致，不准执行。
-- `grill` 后计划变化，必须回到 `plan-confirm`。
+- 当前 `plan_version` 未被确认，或 `status` 不是 `approved`，不准执行。
+- 用户确认的讨论决策改变计划时，必须更新 `## Decisions`、递增 `plan_version` 并重新确认。
 
 ---
 
 ## 18. 验收标准
 
 - `plan.md` 可独立说明任务目标、范围、风险和测试策略。
+- `plan.md` 的 `## Decisions` 只包含用户明确确认的决策，不包含未确认建议。
 - `plan.md` 包含 `plan_version`、`risk_level`、`base_commit`。
-- 用户确认后包含 `approved_plan_hash`。
+- 用户确认后包含 `approved_by`、`approved_at` 和 `Confirmation Log`。
 - 如果存在未来恢复点，`handoff.md` 能让执行阶段直接接续。
 - `case_state.yaml` 与当前 phase 一致，且不复制 `plan.md` 的权威字段。
 - 高风险计划有明确用户确认记录。
@@ -640,10 +622,10 @@ last_updated:
 - 记录 unavailable reason。
 - 不因此阻塞纯文档或低风险任务。
 
-如果 hash 计算口径不清：
+如果是否属于计划实质变化不清：
 
-- 固定使用 `hash_basis: plan-body-v1`。
-- 在 plan 中写明审批载荷范围。
+- 默认按实质变化处理。
+- 递增 `plan_version`，回到 `draft`，重新确认。
 
 ---
 

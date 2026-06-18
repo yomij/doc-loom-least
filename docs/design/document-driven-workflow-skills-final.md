@@ -16,7 +16,7 @@
 1. 新增 docloom-workflow 作为 public automatic entry，但保持 thin router，不做重型 orchestrator。
 2. setup-doc-governance 使用单一固定流程，通过 `scope: current-case | docs-only | full-repo` 控制扫描范围。
 3. TDD 是默认纪律，但允许记录化例外，避免纯文档、配置、Spike、紧急修复被流程卡死。
-4. plan-confirm 增加 risk_level、plan_version、approved_plan_hash、base_commit，确保确认对象可追溯。
+4. plan-confirm 增加 risk_level、plan_version、base_commit 和 `## Decisions`，确保确认对象可追溯。
 5. case_state.yaml 瘦身为机器可读状态缓存，不复制 plan.md 的权威字段。
 6. review 仍默认不自动执行，但 agent 可以基于风险建议 review。
 7. closure 状态补充 Cancelled / Superseded / Paused / Abandoned，覆盖真实任务中断场景。
@@ -30,17 +30,18 @@
 
 ## 1. 最终 Skill 列表
 
-最终拆解为 **1 个入口 Skill + 5 个主流程 Skill + 2 个手动可选 Skill**。其中 `docloom-workflow` 是公开自动入口和轻量路由器；`setup-doc-governance` 使用固定治理标准和一次确认流程；`review` 仍以手动触发为主，但允许 agent 基于风险给出 review 建议：
+最终拆解为 **1 个入口 Skill + 5 个主流程 Skill + 1 个手动可选 Workflow Skill + 1 个通用辅助 Skill**。其中 `docloom-workflow` 是公开自动入口和轻量路由器；`setup-doc-governance` 使用固定治理标准和一次确认流程；`review` 仍以手动触发为主，但允许 agent 基于风险给出 review 建议；`grill` 是流程无关的通用手动挑战 skill，不属于 Doc Loom workflow 阶段：
 
 ```text
 docloom-workflow       # public automatic entry / thin router
 setup-doc-governance
 context-authority
 plan-confirm
-grill                 # 手动触发
 tdd-execute
 review                # 手动触发 / 可选
 doc-sync-close
+
+grill                 # 通用手动辅助，不进入 workflow 路由或 Artifact Policy
 ```
 
 | Skill | 类型 | 默认执行 | 负责什么 |
@@ -49,17 +50,17 @@ doc-sync-close
 | `setup-doc-governance` | 初始化 / 周期性治理 | 否 | 以固定分层标准从历史文档、当前文档、代码和测试中抽取事实，写出 `GOVERNANCE_PLAN.md`，经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新 |
 | `context-authority` | 主流程 | 按需 | 在需要计划前上下文 gate、恢复任务、权威判断或冲突判断时，读取最小相关上下文并输出路由 verdict |
 | `plan-confirm` | 主流程 | 是 | 生成计划、标记风险等级、绑定计划版本、等待用户确认、落计划文档 |
-| `grill` | 手动可选 | 否 | 拷问需求、计划、测试策略、架构方案、文档影响 |
 | `tdd-execute` | 主流程 | 是 | 按确认后的计划做 TDD 执行、测试、质量检查、执行记录；必要时记录 TDD 例外 |
 | `review` | 手动可选 / 可建议 | 否 | 子 agent review / code review / 测试审查 / 文档审查；高风险任务可由 agent 建议触发 |
 | `doc-sync-close` | 主流程 | 是 | 文档同步、权威文档更新确认、任务关闭 |
+| `grill` | 通用辅助 | 否 | 用户显式触发时，通过对话逐问挑战任意主张；不写文件、不输出流程 verdict、不进入 Artifact Policy |
 
 本版新增的跨 Skill 机制：
 
 ```text
 risk_level             low | medium | high
 plan_version           每次计划变更递增
-approved_plan_hash     用户确认的计划内容哈希
+plan_decisions         用户明确确认并写入 plan.md 的执行约束
 base_commit            计划确认时的代码基线
 tdd_applicability      是否适合严格 TDD
 case_state.yaml        机器可读任务状态
@@ -125,29 +126,21 @@ tdd-execute
 doc-sync-close
 ```
 
-### 2.3 手动可选流程
+### 2.3 通用手动辅助
 
-#### 用户手动发起 grill
+`grill` 可以由用户在任意时刻显式触发，用于通过对话挑战当前主张、需求、计划、架构、测试策略或文档想法。
 
-```text
-context-authority 之后
-  ↓
-grill 需求 / 上下文 / 约束
-  ↓
-plan-confirm
-```
-
-或者：
+它不是 Doc Loom workflow 阶段：
 
 ```text
-plan-confirm 之后
-  ↓
-grill 计划
-  ↓
-修改计划
-  ↓
-用户确认
+- 不由 docloom-workflow 路由。
+- 不进入 Artifact Policy。
+- 不生成 grill.md。
+- 不修改 plan.md、case_state.yaml 或 authority 文档。
+- 不输出流程 verdict 或 next owner。
 ```
+
+如果用户在 `grill` 讨论中明确确认了会影响执行的决策，后续 `plan-confirm` 可以把这些决策写入 `plan.md` 的 `## Decisions`。最终 authority 文档变更由 `doc-sync-close` 或文档治理流程处理。
 
 #### 用户手动发起 review
 
@@ -181,12 +174,12 @@ review
 9. 默认没有用户确认计划，不准执行；Doc Loom Least v1 不支持 low-risk auto execution。
 10. TDD 是默认纪律；无法先写失败测试时，必须记录 TDD exception 和替代验证方式。
 11. 执行偏离计划，必须记录；严重偏离，必须重新确认。
-12. plan-confirm 必须绑定 plan_version、approved_plan_hash 和 base_commit。
+12. plan-confirm 必须绑定 plan_version 和 base_commit。
 13. case_state.yaml 是瘦身状态缓存，不是唯一真相。
 14. docloom-workflow 持有 Artifact Policy，各阶段 skill 负责写自己的产物。
 15. Authority 更新必须通过 `GOVERNANCE_PLAN.md` 一次确认；未确认原始材料不得写入 authority。
 16. 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
-17. grill 只能由用户手动触发。
+17. grill 是流程无关的通用手动辅助 skill，不进入 Artifact Policy，不由 workflow 路由，不写文件。
 18. review 只能由用户手动触发或明确要求；agent 可以基于风险建议 review。
 19. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
 ```
@@ -263,7 +256,6 @@ status: draft | approved
 risk_level: low | medium | high
 approved_by:
 approved_at:
-approved_plan_hash:
 base_commit:
 ---
 ```
@@ -272,7 +264,8 @@ base_commit:
 
 ```text
 - 每次计划内容实质变化，plan_version 必须递增。
-- 用户确认后，记录 approved_plan_hash。
+- 用户确认的执行决策变化属于计划内容实质变化。
+- 用户确认后，记录 approved_by、approved_at 和 Confirmation Log。
 - tdd-execute 必须引用被确认的 plan_version。
 - 如果 plan.md 被修改但未重新确认，不得继续执行。
 - 如果 base_commit 后出现大量无关 diff，必须重新评估上下文。
@@ -307,7 +300,7 @@ artifacts:
 - Markdown 文档仍是人类可读主记录。
 - case_state.yaml 是机器可读状态缓存。
 - case_state.yaml 只记录本 case 的状态和产物决策，不复制完整 Artifact Policy。
-- risk_level、base_commit、approved_plan_hash 默认属于 plan.md。
+- risk_level、base_commit 默认属于 plan.md。
 - 如果 case_state.yaml 与 Markdown 冲突，必须报告并以 Markdown + git 状态重新推导。
 ```
 
@@ -323,8 +316,9 @@ artifacts:
 | `handoff.md` | future resume point exists | continuous same-session flow | current stage skill |
 | `execution.md` | TDD required, code / behavior change, plan deviation, failed/retried tests, review recommended/requested, resume needed | docs-only, trivial config, verification fits in closure | `tdd-execute` |
 | `review.md` | user explicitly requests review | otherwise no file | `review` |
-| `grill.md` | user explicitly triggers grill and case docs exist | otherwise conversation only | `grill` |
 | `closure.md` | case docs exist and task ends or pauses / blocks / cancels | no case docs one-shot task | `doc-sync-close` |
+
+`grill` 不在 Artifact Policy 中。它只输出对话内容，不写 case artifact。
 
 ### 3.7 Handoff 写入规则
 
@@ -705,7 +699,6 @@ docs/
       plan.md
       execution.md
       handoff.md
-      grill.md
       review.md
       closure.md
 
@@ -1253,7 +1246,7 @@ related_docs: []
 
 public automatic entry / thin router。
 
-它负责识别用户意图、读取最小 workspace 和 case 状态、延迟创建 case、维护 Artifact Policy，并路由到具体阶段 skill。它不生成详细计划、不执行代码、不自动 review / grill，也不维护中心任务索引。
+它负责识别用户意图、读取最小 workspace 和 case 状态、延迟创建 case、维护 Artifact Policy，并路由到具体阶段 skill。它不生成详细计划、不执行代码、不自动 review，也不维护中心任务索引。`grill` 是流程无关通用辅助 skill，不属于本入口的路由范围。
 
 ## 负责什么
 
@@ -1266,7 +1259,7 @@ public automatic entry / thin router。
 - 延迟创建 docs/cases/<case-id>/ 和最小 case_state.yaml。
 - 执行 status-only 查询。
 - 判定本 case 的 Artifact Policy。
-- 根据状态和用户意图路由到 setup-doc-governance、context-authority、plan-confirm、tdd-execute、doc-sync-close，或显式触发的 grill/review。
+- 根据状态和用户意图路由到 setup-doc-governance、context-authority、plan-confirm、tdd-execute、doc-sync-close，或显式触发的 review。
 ```
 
 ## 不是做什么
@@ -1278,7 +1271,8 @@ public automatic entry / thin router。
 - 不生成 workflow.md / route.md。
 - 不因为存在 approved plan 就自动执行。
 - 不默认运行 context-authority。
-- 不自动触发 grill 或 review。
+- 不自动触发 review。
+- 不拥有或路由 `grill`。
 - 不静默修复 case_state.yaml 与 Markdown 的冲突。
 ```
 
@@ -1310,7 +1304,6 @@ docs/cases/<case-id>/case_state.yaml
 - 进入持久化开发计划且 context 足够 -> plan-confirm。
 - approved plan + 用户明确要求执行 / 继续 -> tdd-execute。
 - 用户要求收尾 / 同步文档 / closure -> doc-sync-close。
-- 用户显式要求 grill -> grill。
 - 用户显式要求 review -> review。
 - 意图不清 -> status-only + 一个澄清问题。
 ```
@@ -1567,8 +1560,9 @@ blocked_by_authority_conflict
 ```text
 - 基于 context-authority 的结果生成计划。
 - 标记 risk_level。
-- 维护 plan_version、approved_plan_hash、base_commit。
+- 维护 plan_version 和 base_commit。
 - 明确目标和非目标。
+- 记录用户明确确认的执行决策。
 - 明确假设。
 - 明确 TDD 顺序或 TDD exception。
 - 明确文件影响。
@@ -1577,15 +1571,13 @@ blocked_by_authority_conflict
 - 标记哪些权威文档更新需要用户确认。
 - 等待用户确认。
 - 确认前写入 `status: draft` 的 plan.md。
-- 用户确认后更新 approval metadata、approved_plan_hash、Confirmation Log 和 case_state.yaml。
+- 用户确认后更新 approval metadata、Confirmation Log 和 case_state.yaml。
 - 只有存在未来恢复点时才写 handoff.md。
 ```
 
 ## 注意
 
-`plan-confirm` 不内置 grill。
-
-如果用户要求拷问、挑战、压力测试，应切换到 `grill` Skill。
+`plan-confirm` 不内置 `grill`。如果用户在独立讨论中明确确认了会影响执行的决策，`plan-confirm` 负责把这些决策写入 `plan.md` 的 `## Decisions`。
 
 ## 输出计划：`docs/cases/<case-id>/plan.md`
 
@@ -1597,7 +1589,6 @@ status: draft | approved
 risk_level: low | medium | high
 approved_by:
 approved_at:
-approved_plan_hash:
 base_commit:
 ---
 
@@ -1608,6 +1599,10 @@ base_commit:
 
 ## Non-goals
 ...
+
+## Decisions
+| Decision | Source | Scope | Rationale |
+|---|---|---|---|
 
 ## Assumptions
 ...
@@ -1654,7 +1649,6 @@ Reason:
 ## Confirmation Log
 - User approved plan_version:
 - User approved at:
-- approved_plan_hash:
 ```
 
 ## 条件输出接续摘要：`docs/cases/<case-id>/handoff.md`
@@ -1705,8 +1699,8 @@ last_updated:
 ```text
 没有用户确认，不进入 tdd-execute。
 计划变化后，plan_version 必须递增，并重新确认。
-approved_plan_hash 与当前 plan 内容不一致时，不准执行。
-如果 grill 后计划变化，必须回到 plan-confirm。
+当前 plan_version 未被确认，或 status 不是 approved，不准执行。
+如果用户确认的讨论决策改变目标、非目标、文件范围、测试策略、风险等级、TDD exception 或文档影响，必须更新 `plan.md ## Decisions` 并重新确认计划。
 ```
 
 ---
@@ -1715,9 +1709,9 @@ approved_plan_hash 与当前 plan 内容不一致时，不准执行。
 
 ## 定位
 
-用户手动触发的拷问 / 压力测试 Skill。
+通用、流程无关、用户手动触发的挑战 / 拷问 Skill。
 
-它不属于默认主流程。
+它不属于 Doc Loom workflow 阶段，不由 `docloom-workflow` 路由，不进入 Artifact Policy。
 
 ## 触发条件
 
@@ -1733,67 +1727,43 @@ grill 一下
 ## 可以 grill 的对象
 
 ```text
-- 需求
-- 上下文结论
-- 实施计划
-- 架构方案
-- 文档更新方案
-- 测试策略
+- 任意需求、计划、架构、实现思路、测试策略、文档想法或产品判断。
+- 用户在当前对话中提出的任何待决主张。
 ```
 
 ## 负责什么
 
 ```text
-- 找需求歧义。
-- 找隐藏假设。
-- 找边界条件。
-- 找反例。
-- 找可能回归。
-- 找计划漏洞。
-- 找测试遗漏。
-- 找文档和代码冲突。
-- 输出必须澄清的问题和可接受假设。
+- 先中性复述正在挑战的目标、主张和边界。
+- 沿设计树逐个解决最高杠杆问题。
+- 对事实问题先查代码、测试或文档。
+- 对决策问题一次只问一个，并给出带成立条件的推荐答案。
+- 在关键分支收敛或用户要求结束时，输出轻量收束。
 ```
 
-## 输出：`docs/cases/<case-id>/grill.md` 或直接输出报告
+## 输出
 
-```md
-# Grill Report
+只输出对话内容，不写文件。
 
-## Target
-Requirement / Plan / Architecture / Test Strategy / Doc Update
+提问阶段每轮只输出一个问题、推荐答案和影响说明。结束时只输出：
 
-## Ambiguities
-- ...
-
-## Hidden Assumptions
-- ...
-
-## Edge Cases
-- ...
-
-## Possible Regressions
-- ...
-
-## Missing Tests
-- ...
-
-## Questions for User
-1. ...
-
-## Suggested Plan Changes
-- ...
-
-## Verdict
-Proceed / Revise Plan / Blocked
+```text
+Confirmed Decisions
+Open Questions
+Risks / Weak Assumptions
 ```
+
+不输出 `Grill Report`、workflow verdict、next owner 或 artifact path。
 
 ## 规则
 
 ```text
 - grill 只负责挑战，不负责执行。
-- grill 不自动修改 plan。
-- grill 之后如果计划变化，必须回到 plan-confirm。
+- grill 不修改任何文件。
+- grill 不生成中间产物。
+- grill 不把推荐答案自动当作用户决策。
+- 用户明确确认的讨论决策可由后续 plan-confirm 写入 plan.md 的 ## Decisions。
+- 最终 authority 文档变更由 doc-sync-close 或文档治理流程处理。
 ```
 
 ---
@@ -1810,7 +1780,7 @@ TDD 执行和质量检查 Skill。
 
 ```text
 - 根据已确认 plan.md 执行。
-- 校验 plan_version 和 approved_plan_hash。
+- 校验 plan_version、approval metadata 和 base_commit。
 - 默认先写失败测试。
 - 如果不适用 TDD，记录 TDD exception 和替代验证。
 - 确认测试失败原因正确。
@@ -1859,7 +1829,6 @@ Update Execution Docs
 
 ## Plan Reference
 - plan_version:
-- approved_plan_hash:
 - base_commit:
 
 ## Plan Followed
@@ -1941,7 +1910,7 @@ executing
 
 ```text
 没有用户确认的 plan，不准执行。
-approved_plan_hash 不匹配，不准执行。
+当前 plan_version 未被确认，不准执行。
 默认没有失败测试，不准实现；如果不适用 TDD，必须记录 TDD exception 和替代验证。
 执行偏离计划，必须记录。
 严重偏离计划，必须回到 plan-confirm。
@@ -2137,8 +2106,8 @@ skills/
 
   grill/
     SKILL.md
-    templates/
-      grill-report.md
+    references/
+      challenge-prompts.md
 
   tdd-execute/
     SKILL.md
@@ -2186,7 +2155,6 @@ docs/
       plan.md
       execution.md       # conditional
       handoff.md         # only when a future resume point exists
-      grill.md           # only when user explicitly triggers grill
       review.md          # only when user explicitly requests review
       closure.md
 
@@ -2309,7 +2277,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 - 默认没有失败测试，不准实现；不适用 TDD 时必须记录 TDD exception 和替代验证。
 - 执行偏离计划，必须记录。
 - 严重偏离计划，必须重新确认。
-- grill 只由用户手动触发。
+- grill 是通用手动辅助 skill，不进入 workflow 路由或 Artifact Policy。
 - review 只由用户手动触发或明确要求；agent 可以基于风险建议 review。
 - 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 - closure_status 必须明确：Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned。
@@ -2322,7 +2290,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 
 这套工作流可以概括为：
 
-> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case 并应用 Artifact Policy；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认和 TDD 纪律的开发闭环；`grill` 和 `review` 作为用户手动触发的质量增强 Skill，review 可由 agent 基于风险建议。
+> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case 并应用 Artifact Policy；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认和 TDD 纪律的开发闭环；`review` 作为用户手动触发的 workflow 审查 Skill，可由 agent 基于风险建议；`grill` 作为流程无关的通用手动挑战 Skill，只通过对话压力测试主张。
 
 
 ---
@@ -2372,10 +2340,10 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 ### P3：质量增强
 
 ```text
-1. grill.md
-2. review.md
-3. review_recommendation
-4. 高风险任务强制建议 review
+1. review.md
+2. review_recommendation
+3. 高风险任务强制建议 review
+4. 通用 grill skill 的交互规则
 ```
 
 目标：在关键任务上提高质量，而不是让所有任务都变重。

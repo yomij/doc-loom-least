@@ -27,7 +27,7 @@
 ```yaml
 ---
 name: tdd-execute
-description: Execute an approved document-driven implementation plan using TDD discipline. Use only after plan-confirm has produced an approved plan with plan_version, approved_plan_hash, risk_level, and base_commit. Handles red-green-refactor, TDD exceptions, implementation, quality checks, execution.md, handoff.md, case_state.yaml updates, deviations, and review recommendations.
+description: Execute an approved document-driven implementation plan using TDD discipline. Use only after plan-confirm has produced an approved plan with plan_version, risk_level, and base_commit. Handles red-green-refactor, TDD exceptions, implementation, quality checks, execution.md, handoff.md, case_state.yaml updates, deviations, and review recommendations.
 ---
 ```
 
@@ -44,7 +44,7 @@ description: Execute an approved document-driven implementation plan using TDD d
 不应该触发：
 
 - `plan.md` 未确认。
-- `approved_plan_hash` 不存在或不匹配。
+- `plan_version` 未确认，或 `status` 不是 `approved`。
 - 用户只是要求 review。此时使用 `review`。
 - 用户只是要求收尾。此时使用 `doc-sync-close`。
 
@@ -100,18 +100,11 @@ tdd-execute/
 
 - `plan.md` 存在。
 - `status: approved`。
-- `approved_plan_hash` 存在。
-- 重新计算计划审批载荷 hash 并匹配。
+- `plan_version` 存在。
+- `approved_by`、`approved_at` 和 `Confirmation Log` 存在，并引用当前 `plan_version`。
 - 当前任务未 closed。
 - 当前工作区与 `base_commit` 差异可解释。
 - TDD 适用性已声明。
-
-hash 口径：
-
-```text
-approval payload 包含正文中从 `# Implementation Plan` 到 `## Documentation Impact` 结束的内容。
-不包含 frontmatter、Confirmation Log、approved_at、approved_by、approved_plan_hash。
-```
 
 如果任一校验失败：
 
@@ -269,7 +262,6 @@ TDD Required: Yes
 
 ## Plan Reference
 - plan_version:
-- approved_plan_hash:
 - base_commit:
 
 ## Plan Followed
@@ -424,7 +416,7 @@ phase: doc_syncing
 ## 15. Gate
 
 - 没有 approved plan，不执行。
-- hash 不匹配，不执行。
+- 当前 `plan_version` 未被确认，不执行。
 - TDD required 但未写失败测试，不实现。
 - 新测试如果第一次运行就通过，必须重写测试或说明已有行为已经满足，并回到计划判断。
 - 测试失败原因不是预期原因，不进入实现。

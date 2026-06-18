@@ -68,7 +68,6 @@ description: Review completed or in-progress work in the document-driven workflo
 
 - `execution.md`，如果 Artifact Policy 生成了执行报告。
 - `context-authority-brief.md`。
-- `grill.md`。
 - `closure.md` 中的验证证据，如果 review 发生在收尾后。
 - 已有 `review.md`。
 
@@ -196,6 +195,7 @@ git diff <base>..<head>
 检查：
 
 - 是否实现了 acceptance criteria。
+- 是否遵守 `plan.md ## Decisions` 中用户确认的决策。
 - 是否修改了未计划文件。
 - 是否绕过 TDD。
 - 是否存在未记录偏离。
@@ -210,6 +210,7 @@ git diff <base>..<head>
 - 是否覆盖边界条件。
 - 是否只验证实现细节。
 - 是否能防回归。
+- 是否覆盖关键用户决策对应的行为或风险。
 - TDD exception 的替代验证是否足够。
 - 命令结果是否真实记录。
 
@@ -345,6 +346,7 @@ Needs Changes
 除了代码审查，必须检查：
 
 - 是否有用户可见行为变化但未更新 acceptance criteria 或测试。
+- 是否有 `plan.md ## Decisions` 中的长期或契约相关决策未进入文档影响审查。
 - 是否有 API/schema/错误码变化但未更新 contract / changelog / examples。
 - 是否有新知识被直接写入 authority，但缺少 evidence 或必要确认。
 - 是否有局部经验被错误提升为全局规则。

@@ -54,6 +54,7 @@ description: Close a document-driven workflow case by syncing docs and writing c
 ## 4. 输入
 
 - `plan.md`。
+- `plan.md ## Decisions`，用于判断用户确认的执行决策是否需要晋升为 authority proposal。
 - `execution.md`。
 - `review.md`，如果存在。
 - 测试结果。
@@ -211,6 +212,7 @@ Evidence 可以是：
 6. 哪些知识需要让后续 Agent 知道？
 7. 是否有可复现 bug 应转成 regression test？
 8. 是否有固定操作应转成 runbook、hook 或 automation？
+9. `plan.md ## Decisions` 中哪些是一次性任务取舍，哪些改变长期事实、workflow policy、public contract、agent behavior 或 authority docs？
 ```
 
 输出知识处理建议：
@@ -225,6 +227,7 @@ Evidence 可以是：
 
 - 候选知识先写 closure proposal 或 `GOVERNANCE_PLAN.md` follow-up。
 - 不直接改 authority。
+- `plan.md ## Decisions` 不是自动晋升来源；只把长期、契约、workflow、agent policy 或 authority 相关决策列入 proposal。
 - 可复现 bug 优先晋升为测试。
 - 固定重复操作优先晋升为 automation / runbook。
 - 只适用于本任务的一次性经验留在 L2 closure，不晋升。
@@ -269,6 +272,7 @@ Evidence 可以是：
 - 用户确认后可以更新 authority，并在 closure 记录确认。
 - 用户不确认时记录 caveat。
 - Authority 更新 proposal 必须带 evidence、source_of_truth；高风险 authority 还必须带 owner 和 last_verified。
+- 来自 `plan.md ## Decisions` 的 proposal 必须标明该 decision 的任务作用域和为什么需要晋升为长期权威。
 
 ### Step 6.5. Lifecycle Transitions
 
@@ -323,6 +327,10 @@ last_updated: 2026-06-17T00:00:00+08:00
 ## Knowledge Changes
 | Knowledge | Type | Scope | Evidence | Suggested Action | Target |
 |---|---|---|---|---|---|
+
+## Decisions Reviewed
+| Decision | Scope | Closure Handling |
+|---|---|---|
 
 ## Authority Docs Requiring Approval
 | Doc | Reason | Proposed Change |
