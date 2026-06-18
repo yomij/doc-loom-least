@@ -353,7 +353,7 @@ approved_at:
 ---
 ```
 
-不需要 hash。`plan_version` 足够表达计划实质变化后需要重新确认。
+`plan_version` 表达计划实质变化后需要重新确认。
 
 推荐结构：
 

@@ -275,7 +275,6 @@ artifacts:
 ```text
 risk_level
 base_commit
-approved_plan_hash
 ```
 
 这些字段属于 `plan.md`。只有某个下游自动化确实需要缓存时，才可作为派生缓存加入，并且 Markdown 冲突时以 Markdown + git 重新推导。

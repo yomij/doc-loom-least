@@ -965,7 +965,7 @@ approved_at:
 ---
 ```
 
-不需要 hash。计划内容实质变化时递增 `plan_version` 并重新确认。
+计划内容实质变化时递增 `plan_version` 并重新确认。
 
 ### 7.5 Phase 5：One Confirmation / 一次确认
 
@@ -2273,7 +2273,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 - L4 历史文档默认不能作为当前事实。
 - 没有 context，不准计划。
 - 默认没有用户确认计划，不准执行；Doc Loom Least v1 不支持低风险自动执行。
-- plan-confirm 必须维护 plan_version、approved_plan_hash、base_commit。
+- plan-confirm 必须维护 plan_version 和 base_commit。
 - 默认没有失败测试，不准实现；不适用 TDD 时必须记录 TDD exception 和替代验证。
 - 执行偏离计划，必须记录。
 - 严重偏离计划，必须重新确认。
@@ -2316,11 +2316,10 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 
 ```text
 1. plan_version
-2. approved_plan_hash
-3. base_commit
-4. risk_level
-5. conditional handoff.md
-6. conditional execution.md
+2. base_commit
+3. risk_level
+4. conditional handoff.md
+5. conditional execution.md
 ```
 
 目标：降低 agent 续跑、多人协作和计划漂移风险。
