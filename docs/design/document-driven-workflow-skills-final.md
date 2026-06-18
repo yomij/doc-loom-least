@@ -176,7 +176,7 @@ doc-sync-close
 12. plan-confirm 必须绑定 plan_version 和 base_commit。
 13. case_state.yaml 是瘦身状态缓存，不是唯一真相。
 14. docloom-workflow 持有 Artifact Policy，各阶段 skill 负责写自己的产物。
-15. Authority 更新必须通过 `GOVERNANCE_PLAN.md` 一次确认；未确认原始材料不得写入 authority。
+15. Authority 更新必须用户确认；窄 authority patch 可由 `doc-sync-close` 在 explicit confirmation 后执行，结构性、高风险或冲突型 authority 更新必须通过 `GOVERNANCE_PLAN.md` 一次确认；未确认原始材料不得写入 authority。
 16. 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 17. grill 是流程无关的通用手动辅助 skill，不进入 Artifact Policy，不由 workflow 路由，不写文件。
 18. review 只能由用户手动触发或明确要求；它是只读对话审查，不产物、不改状态、不路由。
@@ -342,7 +342,7 @@ execution.md
 closure.md
   - 保存最终结果。
   - 有 case docs 的任务结束、中断、取消、替代时必须写。
-  - 正文按最新结果维护，底部保留极简 History；默认不创建编号 closure 目录。
+  - 正文按最新结果维护，保留 Follow-up Updates、Confirmation Log 和极简 History；默认不创建编号 closure 目录。
 ```
 
 未来恢复点包括：
@@ -1240,7 +1240,7 @@ related_docs: []
 - 如果 historical docs 看起来相关，只能作为证据或历史上下文。
 - 没有 metadata 的文档默认 unclassified，降低信任等级。
 - 用户本轮提供的新事实作为 pending fact 高于 L2 / L3，但不能压过 active authority、当前代码、当前测试或已接受 ADR。
-- 只影响当前任务的新事实进入任务计划确认；改变长期产品事实、workflow policy、authority docs、public contract 或 agent behavior 的新事实进入 `GOVERNANCE_PLAN.md` 或 authority update proposal。
+- 只影响当前任务的新事实进入任务计划确认；改变长期产品事实、workflow policy、authority docs、public contract 或 agent behavior 的新事实进入 `GOVERNANCE_PLAN.md`、authority update proposal，或由 `doc-sync-close` 在 explicit confirmation 后执行 narrow authority patch。
 ```
 
 ---
@@ -2030,10 +2030,10 @@ No material issue found / Material issues found / Insufficient evidence
 
 ```text
 - 根据执行过程更新 L2 任务文档。
-- 更新安全的 L3 派生文档。
+- 更新安全的 mechanical L3 派生文档。
 - 识别需要更新的 authority 文档。
-- 对 authority 只生成 proposed change。
-- 等待用户确认后才更新 authority。
+- 对 authority 默认只生成 proposed change。
+- 等待用户明确确认后，才可执行 narrow authority patch；结构性、高风险或冲突型 authority 更新进入 `GOVERNANCE_PLAN.md`。
 - 生成任务完成报告。
 - 写入 closure.md。
 - 标记任务完成。
@@ -2061,9 +2061,21 @@ No material issue found / Material issues found / Insufficient evidence
 ## Docs Updated
 - ...
 
-## Authority Docs Requiring Approval
-| Doc | Reason | Proposed Change |
-|---|---|---|
+## Findings Disposition
+| Finding | Severity | Affects Acceptance | Disposition | Evidence |
+|---|---|---:|---|---|
+
+## Authority Changes
+| Doc | Status | Proposed / Applied Change | Evidence | Risk | Next |
+|---|---|---|---|---|---|
+
+## Follow-up Updates
+| When | Scope | Evidence | Effect on Final Status |
+|---|---|---|---|
+
+## Confirmation Log
+| When | Confirmed By | Scope | Confirmation |
+|---|---|---|---|
 
 ## Remaining Risks
 - ...
@@ -2078,9 +2090,9 @@ Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
 ## 文档更新规则
 
 ```text
-L1 Authority   只生成 proposed change 或 governance follow-up，必须用户确认
+L1 Authority   默认 proposal；explicit confirmation 后可执行 narrow patch；结构性治理进 GOVERNANCE_PLAN.md
 L2 Operational 可以自动更新
-L3 Derived     可以自动更新，但必须可追溯
+L3 Derived     仅 mechanical derived sync 可自动更新，且必须可追溯
 L4 Historical  默认不改
 L5 Scratch     可清理或转正
 ```
@@ -2088,9 +2100,9 @@ L5 Scratch     可清理或转正
 ## 关键 Gate
 
 ```text
-Authority 文档更新必须用户确认。
+Authority 文档更新必须用户确认；`doc-sync-close` 只可执行 explicit confirmation 后的 narrow authority patch。
 有 case docs 的任务结束必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
-如果 acceptance criteria 未满足，不能标记 Done，只能 Done with Caveats、Blocked、Cancelled、Superseded、Paused 或 Abandoned。
+如果 acceptance criteria 未满足，不能标记 Done；`not_met` 默认 Blocked / Paused / Cancelled / Superseded，`partially_met` 或 `not_verified` 只有在用户明确接受剩余项或证据缺口时才能 Done with Caveats。
 ```
 
 ---
@@ -2294,7 +2306,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 - case docs 可以由 branch 推导，也可以由用户指定；新 case 由 `docloom-workflow` 在进入持久化 case workflow 时创建。
 - 所有任务过程文档都属于 L2 Operational。
 - case docs 创建后维护瘦身 case_state.yaml，作为机器可读状态缓存。
-- Authority 更新必须用户确认。
+- Authority 更新必须用户确认；`doc-sync-close` 只可执行 explicit confirmation 后的 narrow patch。
 - 用户本轮新事实不能静默写入 authority。
 - L4 历史文档默认不能作为当前事实。
 - 没有 context，不准计划。
@@ -2312,6 +2324,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 - grill 是通用手动辅助 skill，不进入 workflow 路由或 Artifact Policy。
 - 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 - closure_status 必须明确：Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned。
+- `closure.md` 是收尾真相记录，`case_state.yaml` 是状态缓存；收尾时 phase 统一为 `closed`，具体结果写入 closure_status。
 - Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
 ```
 
