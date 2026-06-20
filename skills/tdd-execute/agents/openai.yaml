@@ -1,0 +1,4 @@
+interface:
+  display_name: "TDD Execute"
+  short_description: "Execute approved Doc Loom plans with TDD"
+  default_prompt: "Use $tdd-execute to execute the approved case plan with TDD discipline."

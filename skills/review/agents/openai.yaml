@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review"
+  short_description: "Read-only evidence review"
+  default_prompt: "Use $review to review this design, diff, test set, or case evidence."

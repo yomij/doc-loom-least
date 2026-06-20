@@ -1,0 +1,4 @@
+interface:
+  display_name: "Doc Loom Workflow"
+  short_description: "Route Doc Loom cases and status"
+  default_prompt: "Use $docloom-workflow to continue this document-driven workflow case."

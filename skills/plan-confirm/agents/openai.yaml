@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Confirm"
+  short_description: "Write and confirm Doc Loom plans"
+  default_prompt: "Use $plan-confirm to write and confirm the implementation plan."
