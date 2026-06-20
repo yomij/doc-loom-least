@@ -29,6 +29,12 @@ Verify:
 - `plan_version` exists.
 - `approved_by`, `approved_at`, and `Confirmation Log` refer to the current
   `plan_version`.
+- The case is not in an unrecoverable closed status. `Done` may resume only for
+  a small same-source follow-up that preserves closure history and records an
+  amendment or follow-up. `Paused`, `Blocked`, and `Done with Caveats` may
+  resume only when the user asks and the resume condition is satisfied.
+  `Cancelled`, `Superseded`, and `Abandoned` default to a new case or
+  reconfirmation.
 - `TDD Applicability` is declared.
 - `Goal`, `Non-goals`, `Decisions`, and `Acceptance Criteria` are clear.
 - Workspace changes relative to `base_commit` are explainable, including
@@ -44,16 +50,20 @@ the only issue is missing state cache or same-turn approval writeback.
 
 1. Review the plan critically for executable steps, valid commands, test
    strategy, non-goals, and acceptance criteria.
-2. Red: write or identify the failing test, run the minimal command, and verify
+2. Update `case_state.yaml` to `phase: executing` before implementation starts,
+   unless the only work is preflight or approval writeback.
+3. Red: write or identify the failing test, run the minimal command, and verify
    the failure reason is expected.
-3. Green: write minimal implementation and run the target test.
-4. Refactor: only planned or necessary refactors; run related tests after each.
-5. Quality check with planned or obvious low-risk read-only commands.
-6. Update execution docs and plan checkbox progress.
-7. Update handoff only when a future resume point exists.
-8. Record `review_risk` as a signal only.
-9. Check every acceptance criterion.
-10. Stage or commit only when the plan or user explicitly authorizes it.
+4. Green: write minimal implementation and run the target test.
+5. Refactor: only planned or necessary refactors; run related tests after each.
+6. Quality check with planned or obvious low-risk read-only commands.
+7. Update execution docs and plan checkbox progress.
+8. Update handoff only when a future resume point exists.
+9. Record `review_risk` as a signal only.
+10. Check every acceptance criterion.
+11. When execution work is complete and closure is the next owner, update
+    `case_state.yaml` to `phase: doc_syncing`.
+12. Stage or commit only when the plan or user explicitly authorizes it.
 
 ## TDD Rules
 
@@ -131,6 +141,38 @@ proposal, or serious plan deviation.
 
 Do not trigger `review`; only the user can request it.
 
+## State Update
+
+`case_state.yaml` is a routing cache. Keep Markdown execution evidence as the
+truth record and update the cache only for phase and routing signals.
+
+When implementation starts:
+
+```yaml
+phase: executing
+closure_status: open
+```
+
+When implementation and acceptance checks are complete and docs sync or closure
+is next:
+
+```yaml
+phase: doc_syncing
+closure_status: open
+```
+
+When review risk affects routing or closure judgment:
+
+```yaml
+phase: executing
+review_risk: high
+```
+
+`review_risk` records only `low`, `medium`, or `high`. Reasons stay in
+`execution.md` or closure evidence. If `case_state.yaml` update fails, do not
+roll back completed implementation, but record the failure and do not claim the
+workflow is fully synced.
+
 ## Commits
 
 Default: do not stage or commit.
@@ -143,6 +185,8 @@ in `execution.md`.
 
 - No approved plan, no execution.
 - Unconfirmed current `plan_version`, no execution.
+- Unrecoverable closed case status, no execution without a new case or explicit
+  reconfirmation.
 - TDD required but no observed expected Red, no implementation.
 - Unexpected Red failure, no implementation.
 - TDD exception without alternative verification, no execution.

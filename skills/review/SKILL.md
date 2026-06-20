@@ -98,6 +98,18 @@ For documentation governance:
 - Are unconfirmed facts incorrectly promoted?
 - Is `source_of_truth` missing or wrong?
 
+For high-risk targets, when in scope:
+
+- Security, auth, permission, privacy, billing, and data deletion claims must be
+  supported by direct evidence or reported as findings/evidence gaps.
+- Public API, CLI, schema, config contract, and migration changes must be
+  checked against active authority, ADRs, contracts, code, and tests.
+- Workflow and agent-policy changes must be checked for confirmation,
+  authority impact, and whether unconfirmed facts are being treated as current
+  policy.
+- Missing key evidence in these areas should usually be `Insufficient evidence`
+  or an Important/Critical finding, not a passing assessment.
+
 ## Output Contract
 
 Use this structure:

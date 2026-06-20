@@ -47,6 +47,11 @@ Do not mark `Done` when acceptance criteria are unmet or unverified. High
 `review_risk` does not automatically block closure if evidence is sufficient;
 record residual risk instead.
 
+If Artifact Policy requires `execution.md` and it is missing, do not mark the
+case `Done` directly. First recover execution evidence, or record an evidence
+gap in `closure.md` and choose `Done with Caveats` or `Blocked` according to how
+much the missing evidence affects acceptance.
+
 ## Workflow
 
 1. Determine closure status from acceptance evidence, user instruction, and
@@ -73,6 +78,15 @@ record residual risk instead.
 | Any `partially_met` | Not `Done` unless user accepts the remainder as follow-up; then use `Done with Caveats`. |
 | Any `not_met` | Usually `Blocked`, `Paused`, `Cancelled`, or `Superseded`; only user goal change can allow caveated closure. |
 | `out_of_scope` | Does not block closure, but explain why it is out of scope. |
+
+Required execution evidence:
+
+- If `execution.md` exists, use it as execution evidence.
+- If Artifact Policy required `execution.md` but it is absent, record an
+  evidence gap and do not use unqualified `Done`.
+- If Artifact Policy did not require `execution.md`, closure may carry the full
+  verification evidence itself.
+- Missing non-required `execution.md` does not automatically downgrade closure.
 
 ## Knowledge Changes
 
@@ -122,6 +136,8 @@ workflow fully synced.
 - User-provided Critical or Important findings that affect acceptance cannot be
   ignored.
 - High `review_risk` with insufficient evidence cannot be unqualified `Done`.
+- Missing `execution.md` required by Artifact Policy cannot be unqualified
+  `Done`.
 - Case docs that end, pause, block, cancel, or supersede must get `closure.md`.
 - Do not update `case_state.yaml` to closed before closure is written.
 - Do not modify plan semantics; at most append a closure link or short note.

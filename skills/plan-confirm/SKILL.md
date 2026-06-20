@@ -34,10 +34,12 @@ If `case_id` or case docs are missing, stop with
 6. Write bite-sized implementation tasks with exact files, commands, expected
    results, and acceptance criteria.
 7. Write `docs/cases/<case-id>/plan.md` as `status: draft`.
-8. Self-review for coverage, placeholders, name consistency, buildability, and
+8. Update `case_state.yaml` to `phase: waiting_for_plan_confirmation` with the
+   current `plan_version`.
+9. Self-review for coverage, placeholders, name consistency, buildability, and
    TDD integrity.
-9. Ask for user confirmation. High risk requires explicit confirmation.
-10. After confirmation, update `plan.md`, `case_state.yaml`, and `handoff.md`
+10. Ask for user confirmation. High risk requires explicit confirmation.
+11. After confirmation, update `plan.md`, `case_state.yaml`, and `handoff.md`
     when a future resume point exists.
 
 ## Plan Rules
@@ -107,6 +109,13 @@ regression.
 
 `plan_version` is the semantic version of the user-confirmed plan.
 
+On draft write:
+
+- Set `case_state.yaml` phase to `waiting_for_plan_confirmation`.
+- Record the draft `plan_version`.
+- Keep `closure_status: open`.
+- Do not set approval fields.
+
 On confirmation:
 
 - Record current `plan_version`.
@@ -148,6 +157,8 @@ Do not inherit:
 - No context, no plan.
 - No `case_id` or case docs, no plan.
 - Blocking conflict means no execution plan.
+- Draft plans awaiting user approval must set `case_state.yaml` phase to
+  `waiting_for_plan_confirmation`.
 - No user confirmation, no `tdd-execute`.
 - Current `plan_version` must be approved before execution.
 - Discussion decisions that change execution constraints must enter
