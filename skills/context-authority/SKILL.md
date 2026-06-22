@@ -11,7 +11,7 @@ conflicts.
 
 Read when trigger condition is met:
 
-- `../_shared/references/shared-protocol.md`` when: resolving case identity order,
+- `../_shared/references/shared-protocol.md` when: resolving case identity order,
   checking fact authority order, checking closure status set, checking artifact
   policy, or checking execution instruction order.
 - `references/context-resolution.md` when: classifying case intent, resolving

@@ -1,7 +1,11 @@
 <!--
-Minimal variant: for low-risk cases with no authority changes, omit:
-Knowledge Changes, Decisions Reviewed, Findings Disposition, Authority Changes,
-Lifecycle Changes Proposed. Keep: Summary, Acceptance Criteria Status, Final Status.
+Required core: Summary, Acceptance Criteria Status, Tests, Remaining Risks,
+Follow-ups, Final Status.
+
+Triggered sections: include Code Changes, Docs Updated, Knowledge Changes,
+Decisions Reviewed, Findings Disposition, Authority Changes, Lifecycle Changes
+Proposed, Follow-up Updates, Confirmation Log, or History only when they have
+content. Do not keep empty headings.
 -->
 # Closure Report
 
@@ -12,52 +16,10 @@ Lifecycle Changes Proposed. Keep: Summary, Acceptance Criteria Status, Final Sta
 | Criteria | Status | Evidence |
 |---|---|---|
 
-## Code Changes
-
 ## Tests
 
 | Command | Result | Notes |
 |---|---|---|
-
-## Docs Updated
-
-| Doc | Layer | Change Type | Evidence | Auto Updated |
-|---|---|---|---|---|
-
-## Knowledge Changes
-
-| Knowledge | Type | Scope | Evidence | Suggested Action | Target |
-|---|---|---|---|---|---|
-
-## Decisions Reviewed
-
-| Decision | Scope | Closure Handling |
-|---|---|---|
-
-## Findings Disposition
-
-| Finding | Severity | Affects Acceptance | Disposition | Evidence |
-|---|---|---:|---|---|
-
-## Authority Changes
-
-| Doc | Status | Proposed / Applied Change | Evidence | Risk | Next |
-|---|---|---|---|---|---|
-
-## Lifecycle Changes Proposed
-
-| Doc | From | To | Reason | Requires Approval |
-|---|---|---|---|---|
-
-## Follow-up Updates
-
-| When | Scope | Evidence | Effect on Final Status |
-|---|---|---|---|
-
-## Confirmation Log
-
-| When | Confirmed By | Scope | Confirmation |
-|---|---|---|---|
 
 ## Remaining Risks
 
@@ -67,7 +29,9 @@ Lifecycle Changes Proposed. Keep: Summary, Acceptance Criteria Status, Final Sta
 
 Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
 
-## History
+## Optional Section Menu
 
-| When | Previous Status | Reason Updated |
-|---|---|---|
+Add only the sections needed for this case: Code Changes, Docs Updated,
+Knowledge Changes, Decisions Reviewed, Findings Disposition, Authority Changes,
+Lifecycle Changes Proposed, Follow-up Updates, Confirmation Log, or History.
+Remove this menu after choosing sections.

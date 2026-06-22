@@ -9,7 +9,7 @@ Use the minimum path that safely resolves the current request. Route; do not
 replace stage skills.
 
 Read shared rules first when routing or creating case state:
-`../_shared/references/shared-protocol.md``.
+`../_shared/references/shared-protocol.md`.
 
 ## Start
 
@@ -50,7 +50,7 @@ the order in the shared protocol.
 
 Create minimal case docs only when:
 
-- Routing into `plan-confirm`.
+- Routing into `plan-confirm` after context is gathered or explicitly skipped.
 - The user explicitly asks to start a persistent case.
 - A `context-authority-brief.md` must be persisted for high risk, conflict,
   resume, multi-agent, or cross-session continuity.
@@ -62,6 +62,10 @@ Minimal creation:
 docs/cases/<case-id>/
 docs/cases/<case-id>/case_state.yaml
 ```
+
+Use `templates/case_state.yaml` for the initial case state. It contains the
+minimum routing fields: `case_id`, `phase`, `case_docs`, `closure_status`,
+`closure_path`, `last_updated`.
 
 Do not create case docs for status queries, explanation-only requests, one-shot
 context checks, explicit skills that do not need persistence, or global
@@ -75,8 +79,8 @@ governance setup that is not tied to a case.
 | `context-authority` verdict is `run_setup_doc_governance` | `setup-doc-governance` |
 | User explicitly asks for review or code/docs/test/design review | `review` |
 | User asks for status or intent is ambiguous | `status-only` |
-| Need resume, authority decision, conflict handling, or pre-plan context gate | `context-authority` |
-| Persistent development plan requested and context is enough | `plan-confirm` |
+| Need resume, authority decision, conflict handling, high-risk work, or persistent pre-plan context gate | `context-authority` |
+| Persistent low-risk plan requested and inline context or skipped-context reason is enough | `plan-confirm` |
 | Approved plan exists and user explicitly asks to execute or continue | `tdd-execute` |
 | User asks to sync docs, close, write closure, or execution is complete | `doc-sync-close` |
 | Multiple case candidates and no safe assumption | `status-only` with `needs_case_selection` |
@@ -121,10 +125,13 @@ in `closure.md`.
 
 - Do not create a case just because the entry skill ran. → Output: "Status-only mode. No case created."
 - Do not execute just because an approved plan exists. → Output: "Approved plan exists but execution requires explicit user request."
-- Do not run `context-authority` by default.
+- Do not run `context-authority` for status, explanation-only, or clearly
+  low-risk one-step work.
+- Do not enter `plan-confirm` for persistent work without a context summary,
+  context brief, or explicit low-risk skipped-context reason.
 - Do not auto-trigger `review`, even when `review_risk` is high.
 - Do not route or own `grill`. → Output: "grill is a conversation-only skill. User must explicitly invoke it."
 - Do not write files in status-only mode.
 - Do not silently repair state cache conflicts.
-- Do not write `base_commit`.
+- Do not write `base_commit` or `risk_level`; these belong to `plan.md` frontmatter.
 - Do not call a CLI backend.

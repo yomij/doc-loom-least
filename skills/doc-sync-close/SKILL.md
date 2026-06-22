@@ -10,7 +10,7 @@ abandon an existing Doc Loom case.
 
 Read when trigger condition is met:
 
-- `../_shared/references/shared-protocol.md`` when: writing closure_status, checking
+- `../_shared/references/shared-protocol.md` when: writing closure_status, checking
   artifact policy, or resolving authority order.
 - `references/doc-update-rules.md` when: any L1 authority doc may change, L3
   derived docs need sync, or writing the authority change table.
@@ -23,7 +23,7 @@ Read when trigger condition is met:
 - Test and verification results.
 - Current diff.
 - `review_risk` from execution or user context.
-- User-provided findings, if any.
+- User-provided findings, including pasted `review` output, if any.
 - Related authority and L3 docs.
 - `case_state.yaml`.
 - `GOVERNANCE_PLAN.md` only when checking existing blocked decisions or
@@ -34,7 +34,7 @@ without case docs, route back to `docloom-workflow` for minimal case identity.
 
 ## Closure Status
 
-Use the closure status set from `references/shared-protocol.md`.
+Use the closure status set from `../_shared/references/shared-protocol.md`.
 
 Additional guidance:
 - `Done`: all acceptance criteria verified as met.

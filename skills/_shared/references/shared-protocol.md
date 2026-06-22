@@ -103,6 +103,8 @@ identity.
 truth. Markdown artifacts are evidence truth.
 
 Initial fields: case_id, phase, case_docs, closure_status, last_updated.
+Optional routing fields: closure_path, current_plan_version, review_risk,
+next_skill, route_reason, required_input.
 
 Phase updates are owned by the writing skill:
 - `waiting_for_plan_confirmation`, `planned`: plan-confirm
@@ -110,8 +112,9 @@ Phase updates are owned by the writing skill:
 - `doc_syncing`: tdd-execute or doc-sync-close
 - `closed`: doc-sync-close
 
-Do not cache `base_commit` or `risk_level` by default. These belong to
-`plan.md` unless a downstream automation has a clear need for derived cache.
+Do not cache `base_commit` or `risk_level` in `case_state.yaml` by default.
+These belong to `plan.md` frontmatter. Do not store detailed evidence in
+`case_state.yaml`; evidence belongs in Markdown artifacts.
 
 When case_state.yaml conflicts with Markdown:
 - Report `state_cache_conflict`.
@@ -154,8 +157,43 @@ When a skill cannot proceed and routes to another skill, output:
 
 `Route: <skill-name>. Reason: <brief reason>. Required input: <what the next skill needs>.`
 
-This is a text contract, not an invocation. The user or next session reads the
-line and invokes the target skill explicitly.
+This is a text contract, not a route artifact. In the same session, an agent may
+continue to the next natural stage only when the user clearly confirmed or asked
+to continue and the target skill's required inputs are already available.
+
+Never auto-continue to `review`, `grill`, or `setup-doc-governance`; those need
+explicit user intent.
+
+## Confirmation Semantics
+
+High-risk confirmations must identify the object being approved. Prefer:
+`Approve plan vN` or `Confirm authority patch for <doc>: <change>`.
+
+Short answers such as `yes`, `ok`, or `continue` confirm only the immediate
+conversation recommendation. They do not approve high-risk execution, create
+long-term authority, or confirm a narrow authority patch unless the referenced
+object is unambiguous in the current turn.
+
+A narrow authority patch requires confirmation of the concrete document and
+change. A broad instruction such as "sync docs" is not enough.
+
+Confirmed discussion decisions remain task-scoped until they are recorded in
+`plan.md`, `GOVERNANCE_PLAN.md`, or `closure.md`.
+
+## Case State Conflicts
+
+When `case_state.yaml` conflicts with Markdown artifacts, derive phase from the
+smallest reliable signal:
+
+1. `closure.md` exists -> `closed`.
+2. `execution.md` exists and acceptance checks are complete -> `doc_syncing`.
+3. `execution.md` exists -> `executing`.
+4. `plan.md` has `status: approved` -> `planned`.
+5. `plan.md` has `status: draft` -> `waiting_for_plan_confirmation`.
+6. No clear signal -> `needs_user_decision`.
+
+Report `state_cache_conflict`. Do not silently overwrite `case_state.yaml`; the
+owning skill may update it only after deriving the correct phase.
 
 ## Git Degraded Mode
 
@@ -172,10 +210,10 @@ When `git_available: false`:
 ## Session State Carry
 
 When a skill reads case_state.yaml and produces output that the next skill
-consumes, include these fields in the output: phase, closure_status, case_id.
-The next skill may use these from the prior output instead of re-reading
-case_state.yaml, unless the trigger condition requires a fresh read
-(resuming after a break, detecting a possible state change).
+consumes, include these fields in the output: phase, closure_status, case_id,
+and any next_skill, route_reason, or required_input values. The next skill may
+use these from the prior output instead of re-reading case_state.yaml, unless a
+fresh read is required by resume, dirty workspace, or possible state change.
 
 ## Case Creation Boundary
 
@@ -210,6 +248,20 @@ When expected directory paths do not exist:
 Do not block progress solely because a directory does not exist. Block only
 when missing governance would cause authority conflict, public contract
 violation, or safety issue.
+
+## Case Resume
+
+On cross-session resume, read `handoff.md` first when present, then the minimum
+artifact required by phase: `plan.md` for `planned`, `execution.md` for
+`executing` or `doc_syncing`, and `closure.md` for closed-but-resumable cases.
+
+Re-run `context-authority` only when authority, governance, code, or external
+dependencies may have changed, or when the case is high risk, conflict-related,
+or resumed after a break. Skip it for same-session mechanical continuation.
+
+When writing `handoff.md`, include current phase, last completed step, next
+step, resume condition, known issues, and source artifacts. Stale non-closed
+cases are advisory only; report staleness, but do not auto-close or block on it.
 
 ## Git And Commands
 

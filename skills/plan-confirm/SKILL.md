@@ -10,7 +10,7 @@ Create the execution plan and get user confirmation before `tdd-execute`.
 
 Read when trigger condition is met:
 
-- `../_shared/references/shared-protocol.md`` when: writing case_state.yaml phase update,
+- `../_shared/references/shared-protocol.md` when: writing case_state.yaml phase update,
   checking artifact policy, or checking execution instruction order.
 - `references/risk-levels.md` when: classifying risk level, writing
   plan_confirmation_policy, or deciding TDD applicability exception based on
@@ -20,8 +20,9 @@ Read when trigger condition is met:
 
 - Current user request.
 - `case_id` and `docs/cases/<case-id>/` from `docloom-workflow`.
-- Context summary or `context-authority-brief.md`.
-- Route verdict and context sources.
+- Context summary, `context-authority-brief.md`, or explicit low-risk
+  skipped-context reason.
+- Route verdict and context sources when `context-authority` ran.
 - Current git baseline.
 - Relevant authority docs.
 - Existing `plan.md` when revising a plan.
@@ -32,7 +33,8 @@ If `case_id` or case docs are missing, stop with
 
 ## Workflow
 
-1. Validate context. No context, no plan.
+1. Validate context or the explicit low-risk skipped-context reason. No context
+   and no skip reason means no plan.
 2. Confirm case id, case docs, and run mode: `isolated`, `branch`, or `inline`.
 3. Classify risk: `low`, `medium`, or `high`.
 4. Decide TDD applicability.
@@ -44,7 +46,8 @@ If `case_id` or case docs are missing, stop with
    current `plan_version`.
 9. Self-review for coverage, placeholders, name consistency, buildability, and
    TDD integrity.
-10. Ask for user confirmation. High risk requires explicit confirmation.
+10. Ask for user confirmation. High risk requires explicit confirmation tied
+    to the current `plan_version`.
 11. After confirmation, update `plan.md`, `case_state.yaml`, and `handoff.md`
     when a future resume point exists.
 
@@ -64,19 +67,21 @@ base_commit:
 ---
 ```
 
-Plan content must include:
+Plan core content must include:
 
 - Goal and non-goals.
-- Decisions confirmed by the user.
-- Assumptions and context sources.
+- Context summary, context brief link, or skipped-context reason.
 - Workspace baseline.
 - Risk level and reason.
 - TDD applicability and strategy or confirmed exception.
-- File structure and files to change.
-- Tests to add or update.
+- Files to change.
 - Acceptance criteria.
-- Documentation impact.
+- Tasks with exact paths, commands, and expected results.
 - Confirmation log.
+
+Include triggered sections only when they have content: confirmed decisions,
+non-obvious assumptions, detailed TDD plan, adaptive execution, plan amendments,
+tests to add or update, risks, or documentation impact.
 
 Use `templates/plan.md` as the shape.
 
@@ -84,8 +89,9 @@ Use `templates/plan.md` as the shape.
 
 Default: TDD Required: Yes.
 
-Allowed exception categories and format: the executing skill defines these.
-Plan must record: TDD Required (Yes/No), Reason if No, Alternative Verification.
+Allowed exception categories are defined in `tdd-execute/references/tdd-exceptions.md`.
+Plan must record: TDD Required (Yes/No), Reason if No, Alternative Verification. When
+declaring TDD Required: No, cite the specific category from tdd-exceptions.md.
 
 Do not manufacture meaningless failing tests for behavior-preserving refactors.
 Use characterization or existing behavior lock, refactor, then verify no
@@ -109,7 +115,8 @@ On confirmation:
 - Set `approved_at`.
 - Record `base_commit` or an unavailable reason.
 - Add a Confirmation Log entry.
-- Set `case_state.yaml` phase to `planned`.
+- Set `case_state.yaml` phase to `planned` and `current_plan_version` to the
+  approved version.
 
 Material plan changes require:
 
@@ -129,12 +136,14 @@ Clear file responsibilities. TDD for behavior changes unless exception is confir
 
 ## Gates
 
-- No context, no plan. → Output: "Missing context. Route: context-authority."
+- No context and no skipped-context reason, no plan. → Output: "Missing context. Route: context-authority."
 - No `case_id` or case docs, no plan. → Output: "Missing case identity. Route: docloom-workflow for case initialization."
 - Blocking conflict means no execution plan. → Output: "Blocking conflict. Route: context-authority."
 - Draft plans awaiting user approval must set `case_state.yaml` phase to
   `waiting_for_plan_confirmation`.
 - No user confirmation, no `tdd-execute`. → Output: "Plan requires confirmation. Present plan to user and await explicit approval."
+- High-risk confirmation must identify the current `plan_version`; ambiguous
+  short confirmation is not enough.
 - Current `plan_version` must be approved before execution.
 - Discussion decisions that change execution constraints must enter
   `## Decisions` and be confirmed.

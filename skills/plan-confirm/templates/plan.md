@@ -1,8 +1,10 @@
 <!--
-Minimal variant: for low-risk narrow-scope cases, omit sections that would
-be empty: Assumptions, TDD Plan, Adaptive Execution, Plan Amendments, Risks.
-Keep: Goal, Non-goals, Decisions, Risk Level, TDD Applicability, File Structure,
-Acceptance Criteria, Tasks.
+Required core: Goal, Non-goals, Context, Workspace Baseline, Risk Level,
+TDD Applicability, Files to Change, Acceptance Criteria, Tasks, Confirmation Log.
+
+Triggered sections: include Decisions, Assumptions, TDD Plan, Adaptive Execution,
+Plan Amendments, Tests, Risks, or Documentation Impact only when they have
+content. Do not keep empty headings.
 -->
 ---
 case_id:
@@ -20,21 +22,11 @@ base_commit:
 
 ## Non-goals
 
-## Decisions
+## Context
 
-| Decision | Source | Scope | Rationale |
-|---|---|---|---|
-
-## Assumptions
-
-## Context Summary
-
-## Context Sources
-
-- Context Brief:
+- Summary / Brief:
 - Route Verdict:
-- Included Authority Docs:
-- Excluded Docs and Reasons:
+- Skipped Context Reason:
 
 ## Workspace Baseline
 
@@ -50,36 +42,12 @@ base_commit:
 - If No, Reason:
 - Alternative Verification:
 
-## TDD Plan
-
-## Adaptive Execution
-
-- Enabled:
-- Scope:
-  - Low-risk same-goal amendments only.
-
-## Plan Amendments
-
-| When | Change | Reason | User Confirmation | Impact |
-|---|---|---|---|---|
-
-## File Structure
-
 ## Files to Change
-
-## Tests to Add / Update
 
 ## Acceptance Criteria
 
 | Criteria | Verification |
 |---|---|
-
-## Risks
-
-## Documentation Impact
-
-| Doc | Layer | Change Needed | Requires Confirmation |
-|---|---|---|---|
 
 ## Tasks
 
@@ -104,3 +72,9 @@ base_commit:
 
 | When | Confirmed By | Plan Version | Confirmation |
 |---|---|---|---|
+
+## Optional Section Menu
+
+Add only the sections needed for this case: Decisions, Assumptions, TDD Plan,
+Adaptive Execution, Plan Amendments, Tests to Add / Update, Risks, or
+Documentation Impact. Remove this menu after choosing sections.

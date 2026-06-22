@@ -18,7 +18,7 @@ Record intent and why it was chosen in the brief or inline context summary.
 
 ## Case Resolution Order
 
-Follow the case identity resolution order in `references/shared-protocol.md`.
+Follow the case identity resolution order in `../../_shared/references/shared-protocol.md`.
 
 Resume-from-closed guidance:
 - `Done`/`Cancelled`/`Superseded`/`Abandoned`: do not resume by default.

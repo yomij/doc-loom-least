@@ -11,6 +11,9 @@ code review, docs review, test review, design review, or similar.
 Do not create files, update state, route workflow, close a case, or write
 authority/governance proposals.
 
+If the user later provides review findings to `doc-sync-close`, closure may
+consume them as user-provided findings. `review` itself still writes no state.
+
 ## Resolve Target
 
 If the user specifies an object, review that object.
@@ -53,7 +56,7 @@ workflow block.
 
 ## Fact Authority
 
-Follow the fact authority order in `references/shared-protocol.md`.
+Follow the fact authority order in `../_shared/references/shared-protocol.md`.
 
 Historical, derived, and scratch docs are not current facts by default.
 

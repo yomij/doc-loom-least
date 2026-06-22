@@ -11,7 +11,7 @@ Historical docs are evidence. Authority docs are confirmed source of truth.
 
 Read when trigger condition is met:
 
-- `../_shared/references/shared-protocol.md`` when: checking execution instruction order,
+- `../_shared/references/shared-protocol.md` when: checking execution instruction order,
   fact authority order, risk levels, or artifact policy.
 - `references/layering-and-routing.md` when: writing authority structure, index
   rules, bridge rules, or archive rules.
@@ -31,6 +31,10 @@ Use one fixed workflow. Scope controls scanning breadth:
 Default to `docs-only`. Escalate to `full-repo` only when authority claims need
 code/test verification or the user explicitly asks to use code/tests as
 evidence. Never modify code, tests, build scripts, or runtime behavior.
+
+Use a bounded scan by default: docs entry points, existing governance and
+authority docs, ADRs, and explicitly relevant historical docs. Do not scan the
+whole repository unless `full-repo` is selected.
 
 ## Outputs
 

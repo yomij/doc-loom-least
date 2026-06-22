@@ -1,6 +1,11 @@
 <!--
-Minimal variant: for TDD-required trivial changes, omit: Deviations,
-Remaining Issues. Keep: Plan Reference, TDD Log, Acceptance Criteria Status.
+Required core: Plan Reference, Changes Made, TDD Applicability,
+Acceptance Criteria Status, Commands Run.
+
+Triggered sections: include TDD Log when TDD is required, Deviations when plan
+changed, Review Risk when medium/high or material, Checkpoints / Commits when
+staging or committing happened, History when updating an existing report.
+Do not keep empty headings.
 -->
 # Execution Report
 
@@ -18,24 +23,6 @@ Yes / No
 
 ## TDD Applicability
 
-## TDD Log
-
-### Red
-
-- Test added:
-- Expected failure:
-- Actual failure:
-
-### Green
-
-- Implementation:
-- Passing result:
-
-### Refactor
-
-- Refactor summary:
-- Verification:
-
 ## Acceptance Criteria Status
 
 | Criteria | Status | Evidence |
@@ -46,24 +33,8 @@ Yes / No
 | Command | Result | Notes |
 |---|---|---|
 
-## Deviations
+## Optional Section Menu
 
-## Remaining Issues
-
-## Review Risk
-
-- Level: low / medium / high
-- Reasons:
-  - 
-- Evidence:
-  - 
-
-## Checkpoints / Commits
-
-| Commit | Scope | Verification |
-|---|---|---|
-
-## History
-
-| When | Previous Status | Reason Updated |
-|---|---|---|
+Add only the sections needed for this case: TDD Log, Deviations, Remaining
+Issues, Review Risk, Checkpoints / Commits, or History. Remove this menu after
+choosing sections.
