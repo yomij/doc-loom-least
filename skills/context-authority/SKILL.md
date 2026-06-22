@@ -109,11 +109,11 @@ assumption and risk.
 
 ## Gates
 
-- No context, no plan. → Output: "Missing context. Route: context-authority for context gathering."
-- Do not enter `plan-confirm` with a blocking conflict. → Output: "Blocking conflict detected. Route: context-authority with conflict details for resolution."
-- Do not create a case id or case docs. → Output: "Case creation is owned by docloom-workflow. Route: docloom-workflow for case initialization."
+- No context, no plan. → Route: context-authority. Reason: missing context for planning. Required input: user request.
+- Do not enter `plan-confirm` with a blocking conflict. → Route: context-authority. Reason: blocking conflict detected. Required input: conflict details for resolution.
+- Do not create a case id or case docs. → Route: docloom-workflow. Reason: case creation owned by docloom-workflow. Required input: user request for case initialization.
 - Do not modify code, tests, authority, governance plan, case plan, execution,
   closure, or review artifacts.
 - Do not use archived, superseded, needs-refresh, derived, or scratch docs as
   current facts unless the user explicitly asks for history.
-- If sources are only low-authority or stale, mark the result as risk or block. → Output: "Only low-authority or stale sources found. Mark as proceed_to_plan_with_risk or needs_user_decision."
+- If sources are only low-authority or stale, mark the result as risk or block. → Route: context-authority. Reason: only low-authority or stale sources found. Required input: user decision on risk acceptance or governance setup.

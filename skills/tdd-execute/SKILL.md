@@ -210,14 +210,14 @@ in `execution.md`.
 
 ## Gates
 
-- No approved plan, no execution. → Output: "No approved plan found. Route: plan-confirm."
-- Unconfirmed current `plan_version`, no execution. → Output: "Plan version unconfirmed. Route: plan-confirm for confirmation."
+- No approved plan, no execution. → Route: plan-confirm. Reason: no approved plan found. Required input: user request for plan creation.
+- Unconfirmed current `plan_version`, no execution. → Route: plan-confirm. Reason: plan version unconfirmed. Required input: user explicit approval of current plan_version.
 - Unrecoverable closed case status, no execution without a new case or explicit
   reconfirmation.
 - TDD required but no observed expected Red, no implementation.
 - Unexpected Red failure, no implementation.
-- TDD exception without alternative verification, no execution. → Output: "TDD exception lacks alternative verification. Stop and ask user for verification approach."
-- Serious plan deviation, stop. → Output: "Plan deviation exceeds adaptive scope. Route: plan-confirm for amendment."
+- TDD exception without alternative verification, no execution. → Route: tdd-execute. Reason: TDD exception lacks alternative verification. Required input: user-specified verification approach.
+- Serious plan deviation, stop. → Route: plan-confirm. Reason: plan deviation exceeds adaptive scope. Required input: plan amendment.
 - Touching non-goals or violating decisions, stop.
 - Do not modify authority docs.
 - Do not modify scripts, dependencies, lockfiles, CI, or test command config

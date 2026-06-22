@@ -113,7 +113,9 @@ On confirmation:
 - Record current `plan_version`.
 - Set `approved_by: user`.
 - Set `approved_at`.
-- Record `base_commit` or an unavailable reason.
+- Record `base_commit` or an unavailable reason (when `git_available: false`,
+  leave `base_commit` empty and record `git_available: false` as the reason;
+  this is acceptable and does not block plan creation).
 - Add a Confirmation Log entry.
 - Set `case_state.yaml` phase to `planned` and `current_plan_version` to the
   approved version.
@@ -136,12 +138,12 @@ Clear file responsibilities. TDD for behavior changes unless exception is confir
 
 ## Gates
 
-- No context and no skipped-context reason, no plan. → Output: "Missing context. Route: context-authority."
-- No `case_id` or case docs, no plan. → Output: "Missing case identity. Route: docloom-workflow for case initialization."
-- Blocking conflict means no execution plan. → Output: "Blocking conflict. Route: context-authority."
+- No context and no skipped-context reason, no plan. → Route: context-authority. Reason: missing context. Required input: user request and workspace state.
+- No `case_id` or case docs, no plan. → Route: docloom-workflow. Reason: missing case identity. Required input: user request for case initialization.
+- Blocking conflict means no execution plan. → Route: context-authority. Reason: blocking conflict. Required input: conflict details for resolution.
 - Draft plans awaiting user approval must set `case_state.yaml` phase to
   `waiting_for_plan_confirmation`.
-- No user confirmation, no `tdd-execute`. → Output: "Plan requires confirmation. Present plan to user and await explicit approval."
+- No user confirmation, no `tdd-execute`. → Route: plan-confirm. Reason: plan requires confirmation. Required input: user explicit approval of current plan_version.
 - High-risk confirmation must identify the current `plan_version`; ambiguous
   short confirmation is not enough.
 - Current `plan_version` must be approved before execution.

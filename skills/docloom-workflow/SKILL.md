@@ -73,21 +73,30 @@ governance setup that is not tied to a case.
 
 ## Route Table
 
-| Condition | Route |
-|---|---|
-| User asks to initialize, rebuild, organize, bridge, archive, or repair docs governance | `setup-doc-governance` |
-| `context-authority` verdict is `run_setup_doc_governance` | `setup-doc-governance` |
-| User explicitly asks for review or code/docs/test/design review | `review` |
-| User asks for status or intent is ambiguous | `status-only` |
-| Need resume, authority decision, conflict handling, high-risk work, or persistent pre-plan context gate | `context-authority` |
-| Persistent low-risk plan requested and inline context or skipped-context reason is enough | `plan-confirm` |
-| Approved plan exists and user explicitly asks to execute or continue | `tdd-execute` |
-| User asks to sync docs, close, write closure, or execution is complete | `doc-sync-close` |
-| Multiple case candidates and no safe assumption | `status-only` with `needs_case_selection` |
+Evaluate in order. First matching condition wins. Explicit skill invocation
+overrides all conditions below.
+
+| # | Condition | Route |
+|---:|---|---|
+| 1 | User asks to initialize, rebuild, organize, bridge, archive, or repair docs governance | `setup-doc-governance` |
+| 2 | `context-authority` verdict is `run_setup_doc_governance` | `setup-doc-governance` |
+| 3 | User explicitly asks for review or code/docs/test/design review | `review` |
+| 4 | Multiple case candidates and no safe assumption | `status-only` with `needs_case_selection` |
+| 5 | User asks for status or intent is ambiguous | `status-only` |
+| 6 | Need resume, authority decision, conflict handling, or high-risk work | `context-authority` |
+| 7 | Low-risk, ≤ 3 files, ≤ 20 lines diff, no conflict, no cross-session need — fast-path conditions all hold | `plan-confirm` (fast-path) |
+| 8 | Persistent work needing a context gate but not yet high-risk enough for full context-authority | `context-authority` |
+| 9 | Persistent work with inline context or skipped-context reason | `plan-confirm` |
+| 10 | Approved plan exists and user explicitly asks to execute or continue | `tdd-execute` |
+| 11 | User asks to sync docs, close, write closure, or execution is complete | `doc-sync-close` |
 
 Explicit skill invocation wins. If a user names a Doc Loom skill, honor that
 skill unless its gate routes back to `docloom-workflow` or another required
 owner.
+
+For fast-path (row 7): `plan-confirm` writes a minimal plan with
+`approved_by: fast-path` and no task-level TDD breakdown. See
+`../_shared/references/shared-protocol.md` → Fast-Path.
 
 ## Artifact Policy
 
@@ -123,14 +132,14 @@ in `closure.md`.
 
 ## Gates
 
-- Do not create a case just because the entry skill ran. → Output: "Status-only mode. No case created."
-- Do not execute just because an approved plan exists. → Output: "Approved plan exists but execution requires explicit user request."
+- Do not create a case just because the entry skill ran. → Route: docloom-workflow. Reason: status-only. Required input: user intent.
+- Do not execute just because an approved plan exists. → Route: docloom-workflow. Reason: execution requires explicit user request. Required input: user intent.
 - Do not run `context-authority` for status, explanation-only, or clearly
   low-risk one-step work.
 - Do not enter `plan-confirm` for persistent work without a context summary,
   context brief, or explicit low-risk skipped-context reason.
-- Do not auto-trigger `review`, even when `review_risk` is high.
-- Do not route or own `grill`. → Output: "grill is a conversation-only skill. User must explicitly invoke it."
+- Do not auto-trigger `review`, even when `review_risk` is high. → Route: docloom-workflow. Reason: review requires explicit user request. Required input: user intent.
+- Do not route or own `grill`. → Route: docloom-workflow. Reason: grill is conversation-only, requires explicit invocation. Required input: user intent.
 - Do not write files in status-only mode.
 - Do not silently repair state cache conflicts.
 - Do not write `base_commit` or `risk_level`; these belong to `plan.md` frontmatter.

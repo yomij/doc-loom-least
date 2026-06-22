@@ -137,8 +137,8 @@ When applying:
 ## Gates
 
 - Without a specified scope, use `docs-only`; do not block.
-- Do not apply changes before user confirmation. → Output: "Governance plan written as proposed. Present plan to user and await confirmation."
-- Do not create empty authority sections. → Output: "No confirmed facts for this section. Skip section creation."
+- Do not apply changes before user confirmation. → Route: setup-doc-governance. Reason: governance plan written as proposed, awaiting confirmation. Required input: user explicit approval of governance plan.
+- Do not create empty authority sections. → Route: setup-doc-governance. Reason: no confirmed facts for this section. Required input: confirmed facts or decision to skip section creation.
 - Do not write unconfirmed raw material into authority.
 - Do not modify code, tests, build scripts, or runtime behavior.
 - Do not make bridge files carry old facts.

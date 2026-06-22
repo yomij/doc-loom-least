@@ -2,9 +2,16 @@
 Required core: Goal, Non-goals, Context, Workspace Baseline, Risk Level,
 TDD Applicability, Files to Change, Acceptance Criteria, Tasks, Confirmation Log.
 
-Triggered sections: include Decisions, Assumptions, TDD Plan, Adaptive Execution,
-Plan Amendments, Tests, Risks, or Documentation Impact only when they have
-content. Do not keep empty headings.
+Triggered sections: include each only when it has content.
+- Decisions: Include when user-confirmed or plan-relevant decisions exist.
+- Assumptions: Include when non-obvious assumptions affect the plan.
+- TDD Plan: Include when TDD Required: Yes and task-level detail is needed.
+- Adaptive Execution: Include when the plan or user allows same-goal amendments.
+- Plan Amendments: Include when a previously approved plan was amended.
+- Tests: Include when tests need a dedicated list beyond Tasks.
+- Risks: Include when residual risks exist beyond risk level classification.
+- Documentation Impact: Include when the plan changes authority, governance, or L3 docs.
+Do not keep empty headings.
 -->
 ---
 case_id:

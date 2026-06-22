@@ -36,6 +36,24 @@
   self-contained Plan Quality Standard.
 - Removed 8 openai.yaml files (no functional purpose, violates Skill Runtime
   Boundary).
+- Added Fast-Path section to shared-protocol.md (low-risk, small-change
+  shortcut that skips context-authority and simplifies plan/execution/closure).
+- Added fast-path route (row 7) to docloom-workflow Route Table with priority
+  ordering.
+- Upgraded next_skill, route_reason, required_input from optional to required
+  routing fields in shared-protocol.md (must be written when routing occurs).
+- Reordered docloom-workflow Route Table to priority-sorted numbered list.
+- Unified all Gate fallback outputs across 8 SKILL.md files to Route Output
+  format (Route: <skill>. Reason: <…>. Required input: <…>).
+- Replaced "Do not create X, Y, Z" negative enumeration in shared-protocol
+  Artifact Policy with positive principle: "Only create artifacts listed in
+  the Artifact Policy table."
+- Added conditional anchoring examples for execution.md (3 required, 3 skipped).
+- Added staleness threshold (7 days) and resume re-validation rule to
+  shared-protocol Case Resume.
+- Allowed empty base_commit with git_available: false reason in plan-confirm.
+- Replaced generic "triggered sections" in templates (plan.md, execution.md,
+  closure.md) with per-section trigger conditions in HTML comments.
 
 ### Added
 - plan-confirm/references/risk-levels.md (new file).

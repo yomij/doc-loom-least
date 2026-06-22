@@ -125,13 +125,13 @@ its resolution in `closure.md`.
 
 ## Gates
 
-- Authority update requires user confirmation. → Output: "Authority change requires explicit user confirmation. Present proposed change to user."
-- Unmet acceptance criteria cannot be `Done`. → Output: "Acceptance criteria not met. Use Done with Caveats, Blocked, or ask user to adjust criteria."
+- Authority update requires user confirmation. → Route: doc-sync-close. Reason: authority change requires explicit user confirmation. Required input: user confirmation of concrete document and change.
+- Unmet acceptance criteria cannot be `Done`. → Route: doc-sync-close. Reason: acceptance criteria not met. Required input: user decision — adjust criteria, accept caveats, or block.
 - User-provided Critical or Important findings that affect acceptance cannot be
   ignored.
 - High `review_risk` with insufficient evidence cannot be unqualified `Done`.
 - Missing `execution.md` required by Artifact Policy cannot be unqualified
-  `Done`. → Output: "Execution evidence missing. Record evidence gap. Use Done with Caveats or Blocked."
+  `Done`. → Route: doc-sync-close. Reason: execution evidence missing. Required input: evidence gap record, user decision on Done with Caveats or Blocked.
 - Case docs that end, pause, block, cancel, or supersede must get `closure.md`.
 - Do not update `case_state.yaml` to closed before closure is written.
 - Do not modify plan semantics; at most append a closure link or short note.

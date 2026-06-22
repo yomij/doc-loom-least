@@ -176,8 +176,8 @@ keep this output contract. Subagent findings do not become workflow state.
 
 ## Gates
 
-- User must explicitly request review. → Output: "Review requires explicit user request. Ask: 'Would you like me to review this?'"
-- Do not write files. → Output: "Review is read-only. Report findings inline."
+- User must explicitly request review. → Route: review. Reason: review requires explicit user request. Required input: user review intent.
+- Do not write files. → Route: review. Reason: review is read-only. Required input: review target, findings reported inline.
 - Do not modify code, docs, state, or artifacts.
 - Do not output workflow route, next owner, ready-to-close, or closure verdict.
 - Do not write authority proposal or governance follow-up.

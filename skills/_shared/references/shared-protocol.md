@@ -103,8 +103,14 @@ identity.
 truth. Markdown artifacts are evidence truth.
 
 Initial fields: case_id, phase, case_docs, closure_status, last_updated.
-Optional routing fields: closure_path, current_plan_version, review_risk,
-next_skill, route_reason, required_input.
+Optional routing fields: closure_path, current_plan_version, review_risk.
+
+Required routing fields (write when routing occurs): next_skill,
+route_reason, required_input. These must be written to `case_state.yaml`
+whenever a skill produces a route decision. The next skill may use these
+from prior output instead of re-reading `case_state.yaml` in the same
+session, unless a fresh read is required by resume, dirty workspace, or
+possible state change.
 
 Phase updates are owned by the writing skill:
 - `waiting_for_plan_confirmation`, `planned`: plan-confirm
@@ -131,10 +137,20 @@ When case_state.yaml conflicts with Markdown:
 | `plan.md` | Case enters `plan-confirm` | No persistent case workflow | `plan-confirm` |
 | `handoff.md` | A future resume point exists | Same-session continuous flow | Current stage skill |
 | `execution.md` | TDD required, code or behavior change, plan deviation, failed or retried tests, material review risk, resume needed | Docs-only, trivial config, verification fits in closure | `tdd-execute` |
-| `closure.md` | Case docs exist and task ends, pauses, blocks, cancels, or is superseded | No case docs one-shot task | `doc-sync-close` |
 
-Do not create `workflow.md`, `route.md`, `workflow-route.md`, `review.md`, or
-`grill.md` by default.
+Conditional anchoring for `execution.md`:
+- Required: adding a new CLI endpoint (behavior change, TDD), refactoring a
+  module with test coverage changes (code change), fixing a failing CI build
+  (failed tests).
+- Skipped: updating a README typo (docs-only), changing a log level in a
+  config file (trivial config), adding a comment in code (verification fits
+  in closure).
+
+Only create artifacts listed in the Artifact Policy table. Do not invent new
+artifact types unless the user explicitly requests one or a governance plan
+approves one.
+
+| `closure.md` | Case docs exist and task ends, pauses, blocks, cancels, or is superseded | No case docs one-shot task | `doc-sync-close` |
 
 ## Closure Status
 
@@ -233,6 +249,35 @@ Do not create a case when:
 - The user asks for status only.
 - A conversation-only skill (review, grill) is active.
 
+## Fast-Path
+
+When **all** of the following hold, a persistent case may skip most stages and
+artifacts and proceed directly to execution with inline closure:
+
+- Risk is `low` (documentation, local copy, non-critical tests, or
+  behavior-preserving refactor).
+- Estimated change is small (≤ 3 files, ≤ 20 lines diff).
+- No authority, governance, public contract, security, auth, privacy, billing,
+  or data deletion conflict.
+- No cross-session, multi-agent, or resume continuity requirement.
+
+Fast-path execution:
+
+1. `docloom-workflow` creates minimal case docs (`case_state.yaml` only).
+2. `plan-confirm` is skipped. Record the inline plan as a single
+   `plan.md` entry with `status: approved`, `risk_level: low`,
+   `plan_version: 1`, `approved_by: fast-path`, `approved_at`,
+   and a brief goal, non-goals, acceptance criteria, and files list — no
+   task-level TDD breakdown.
+3. `tdd-execute` runs. TDD exceptions for low-risk changes apply by default;
+   use characterization or build check as alternative verification when
+   the change is trivial. `execution.md` may be skipped; record the change
+   summary inline in `closure.md`.
+4. `doc-sync-close` writes `closure.md` and updates `case_state.yaml` to
+   `closed`.
+
+When any fast-path condition fails, fall back to the full pipeline.
+
 ## Small Project Degradation
 
 When expected directory paths do not exist:
@@ -262,6 +307,16 @@ or resumed after a break. Skip it for same-session mechanical continuation.
 When writing `handoff.md`, include current phase, last completed step, next
 step, resume condition, known issues, and source artifacts. Stale non-closed
 cases are advisory only; report staleness, but do not auto-close or block on it.
+
+Staleness threshold: when `last_updated` in `case_state.yaml` is more than 7
+days ago, report "case stale (N days since last update)" and ask the user to
+confirm whether to continue, adjust the goal, or close the case.
+
+Resume re-validation: before proceeding from the last completed step, verify
+that the step's output still holds (tests still pass, files still exist,
+workspace matches `base_commit` or explains deviation). If re-validation fails,
+report the mismatch and route to the appropriate skill rather than trusting
+handoff.md declarations blindly.
 
 ## Git And Commands
 

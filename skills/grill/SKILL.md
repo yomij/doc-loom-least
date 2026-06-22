@@ -84,7 +84,7 @@ For high-risk recommendations:
 
 ## Gates
 
-- User must explicitly ask for grilling. → Output: "Grill requires explicit user request. Ask: 'Would you like me to challenge this?'"
+- User must explicitly ask for grilling. → Route: grill. Reason: grill requires explicit user request. Required input: user intent to challenge a specific claim.
 - Ask one question at a time.
 - Verify answerable facts before asking the user.
 - Do not generate `grill.md`, a report artifact, route, next owner, or closure
