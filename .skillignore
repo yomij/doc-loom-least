@@ -1,0 +1,4 @@
+# Only publish the canonical Doc Loom Least skills.
+docs/reference/skills
+docs/reference/skills/*
+docs/reference/skills/**

@@ -113,7 +113,31 @@ docloom-workflow
 
 本仓库提供的是 skill 源文件，不是可执行程序。每个 skill 目录都包含一个 `SKILL.md`，并可包含 `templates/`、`references/` 和 `agents/`。
 
-在支持 Agent Skills 的环境中，将 `skills/` 下需要的目录复制或链接到对应的 skills 目录后，通过 skill 名称调用。例如：
+推荐使用 `skillshare` 安装和更新：
+
+```bash
+skillshare install github.com/yomij/doc-loom-least --track --json
+skillshare sync
+```
+
+私有仓库可使用 SSH：
+
+```bash
+skillshare install git@github.com:yomij/doc-loom-least.git --track --json
+skillshare sync
+```
+
+更新：
+
+```bash
+skillshare check
+skillshare update --all --diff
+skillshare sync
+```
+
+更完整的安装、项目级安装和验证说明见 [INSTALL.md](INSTALL.md)。
+
+在支持 Agent Skills 但不使用 `skillshare` 的环境中，也可以将 `skills/` 下需要的目录复制或链接到对应的 skills 目录后，通过 skill 名称调用。例如：
 
 ```text
 用 docloom-workflow 继续当前 case。
