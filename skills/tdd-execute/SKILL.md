@@ -8,8 +8,12 @@ description: Execute an approved persistent Doc Loom case plan using TDD discipl
 Execute an approved persistent Doc Loom case plan. Ordinary one-shot coding
 tasks and simple document edits do not automatically enter this skill.
 
-Read shared rules when needed: `../_shared/references/shared-protocol.md`.
-Read TDD exception guidance when needed: `references/tdd-exceptions.md`.
+Read when trigger condition is met:
+
+- `../_shared/references/shared-protocol.md`` when: updating case_state.yaml phase,
+  checking artifact policy, or resolving authority order.
+- `references/tdd-exceptions.md` when: the plan declares TDD Required: No, or
+  execution encounters a situation that may require an exception amendment.
 
 ## Preflight
 
@@ -135,16 +139,39 @@ semantics, acceptance criteria, TDD strategy, Decisions, or file scope.
 
 Record `review_risk` as data, not a recommendation or workflow gate.
 
-Use `low`, `medium`, or `high`. High risk can come from public API, security,
-auth, privacy, billing, data model/migration, insufficient coverage, authority
-proposal, or serious plan deviation.
+Use `low`, `medium`, or `high`. Anchoring:
+- `low`: local change, no public contract, tests pass. Example: refactor an
+  internal helper function.
+- `medium`: new internal feature, moderate scope, main paths covered. Example:
+  add an internal data processing step.
+- `high`: public API change, security, auth, privacy, billing, data
+  model/migration, insufficient coverage, authority proposal, or serious plan
+  deviation. Example: change a public endpoint's response schema.
 
 Do not trigger `review`; only the user can request it.
 
+## Review Risk Lifecycle
+
+Write review_risk in case_state.yaml when:
+- Implementation touches public API, security, auth, billing, privacy, data
+  deletion, or schema migration.
+- Test coverage is insufficient for the change scope.
+- A material plan deviation occurred.
+- Authority proposal is pending.
+
+Update review_risk when:
+- Additional implementation increases or decreases the risk scope.
+- New evidence resolves a previous risk concern (e.g., tests now cover the gap).
+
+Do not clear review_risk to `low` during execution unless all original high-risk
+conditions are resolved with evidence. The closure skill consumes the final
+value.
+
 ## State Update
 
-`case_state.yaml` is a routing cache. Keep Markdown execution evidence as the
-truth record and update the cache only for phase and routing signals.
+`case_state.yaml` is a routing signal. Phase is routing truth; Markdown execution
+evidence is evidence truth. Update the routing signal only for phase and routing
+signals.
 
 When implementation starts:
 
@@ -183,14 +210,14 @@ in `execution.md`.
 
 ## Gates
 
-- No approved plan, no execution.
-- Unconfirmed current `plan_version`, no execution.
+- No approved plan, no execution. → Output: "No approved plan found. Route: plan-confirm."
+- Unconfirmed current `plan_version`, no execution. → Output: "Plan version unconfirmed. Route: plan-confirm for confirmation."
 - Unrecoverable closed case status, no execution without a new case or explicit
   reconfirmation.
 - TDD required but no observed expected Red, no implementation.
 - Unexpected Red failure, no implementation.
-- TDD exception without alternative verification, no execution.
-- Serious plan deviation, stop.
+- TDD exception without alternative verification, no execution. → Output: "TDD exception lacks alternative verification. Stop and ask user for verification approach."
+- Serious plan deviation, stop. → Output: "Plan deviation exceeds adaptive scope. Route: plan-confirm for amendment."
 - Touching non-goals or violating decisions, stop.
 - Do not modify authority docs.
 - Do not modify scripts, dependencies, lockfiles, CI, or test command config

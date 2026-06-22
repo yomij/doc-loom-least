@@ -18,12 +18,12 @@ Record intent and why it was chosen in the brief or inline context summary.
 
 ## Case Resolution Order
 
-1. User-specified case id, case docs, branch, or worktree.
-2. Current worktree plus case branch.
-3. Current branch.
-4. Existing clear case docs.
-5. Proposed slug for `docloom-workflow`.
-6. If ambiguous, ask for confirmation.
+Follow the case identity resolution order in `references/shared-protocol.md`.
+
+Resume-from-closed guidance:
+- `Done`/`Cancelled`/`Superseded`/`Abandoned`: do not resume by default.
+- `Paused`/`Blocked`/`Done with Caveats`: may resume when the user asks and
+  the resume condition is satisfied.
 
 Recommended branch shape:
 

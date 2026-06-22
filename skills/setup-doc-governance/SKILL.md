@@ -9,11 +9,14 @@ Initialize, rebuild, or periodically clean a project's documentation governance.
 Historical docs are evidence. Authority docs are confirmed source of truth.
 `GOVERNANCE_PLAN.md` is the single default approval surface.
 
-Read when needed:
+Read when trigger condition is met:
 
-- Shared protocol: `../_shared/references/shared-protocol.md`
-- Layering and routing: `references/layering-and-routing.md`
-- Verdict rules: `references/verdicts.md`
+- `../_shared/references/shared-protocol.md`` when: checking execution instruction order,
+  fact authority order, risk levels, or artifact policy.
+- `references/layering-and-routing.md` when: writing authority structure, index
+  rules, bridge rules, or archive rules.
+- `references/verdicts.md` when: routing files or facts, writing decision
+  tables, or deciding block conditions.
 
 ## Scope
 
@@ -130,8 +133,8 @@ When applying:
 ## Gates
 
 - Without a specified scope, use `docs-only`; do not block.
-- Do not apply changes before user confirmation.
-- Do not create empty authority sections.
+- Do not apply changes before user confirmation. → Output: "Governance plan written as proposed. Present plan to user and await confirmation."
+- Do not create empty authority sections. → Output: "No confirmed facts for this section. Skip section creation."
 - Do not write unconfirmed raw material into authority.
 - Do not modify code, tests, build scripts, or runtime behavior.
 - Do not make bridge files carry old facts.

@@ -9,7 +9,7 @@ Use the minimum path that safely resolves the current request. Route; do not
 replace stage skills.
 
 Read shared rules first when routing or creating case state:
-`../_shared/references/shared-protocol.md`.
+`../_shared/references/shared-protocol.md``.
 
 ## Start
 
@@ -119,11 +119,11 @@ in `closure.md`.
 
 ## Gates
 
-- Do not create a case just because the entry skill ran.
-- Do not execute just because an approved plan exists.
+- Do not create a case just because the entry skill ran. → Output: "Status-only mode. No case created."
+- Do not execute just because an approved plan exists. → Output: "Approved plan exists but execution requires explicit user request."
 - Do not run `context-authority` by default.
 - Do not auto-trigger `review`, even when `review_risk` is high.
-- Do not route or own `grill`.
+- Do not route or own `grill`. → Output: "grill is a conversation-only skill. User must explicitly invoke it."
 - Do not write files in status-only mode.
 - Do not silently repair state cache conflicts.
 - Do not write `base_commit`.

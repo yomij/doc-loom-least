@@ -9,11 +9,15 @@ Gather the smallest relevant context needed before planning. Do not write an
 implementation plan, modify code, create case identity, or resolve authority
 conflicts.
 
-Read when needed:
+Read when trigger condition is met:
 
-- Shared protocol: `../_shared/references/shared-protocol.md`
-- Context resolution: `references/context-resolution.md`
-- Retrieval routing: `references/retrieval-routing.md`
+- `../_shared/references/shared-protocol.md`` when: resolving case identity order,
+  checking fact authority order, checking closure status set, checking artifact
+  policy, or checking execution instruction order.
+- `references/context-resolution.md` when: classifying case intent, resolving
+  case identity, or deciding run mode.
+- `references/retrieval-routing.md` when: deciding which governance docs to
+  read, filtering authority sources, or writing context source notes.
 
 ## Start
 
@@ -105,11 +109,11 @@ assumption and risk.
 
 ## Gates
 
-- No context, no plan.
-- Do not enter `plan-confirm` with a blocking conflict.
-- Do not create a case id or case docs.
+- No context, no plan. → Output: "Missing context. Route: context-authority for context gathering."
+- Do not enter `plan-confirm` with a blocking conflict. → Output: "Blocking conflict detected. Route: context-authority with conflict details for resolution."
+- Do not create a case id or case docs. → Output: "Case creation is owned by docloom-workflow. Route: docloom-workflow for case initialization."
 - Do not modify code, tests, authority, governance plan, case plan, execution,
   closure, or review artifacts.
 - Do not use archived, superseded, needs-refresh, derived, or scratch docs as
   current facts unless the user explicitly asks for history.
-- If sources are only low-authority or stale, mark the result as risk or block.
+- If sources are only low-authority or stale, mark the result as risk or block. → Output: "Only low-authority or stale sources found. Mark as proceed_to_plan_with_risk or needs_user_decision."

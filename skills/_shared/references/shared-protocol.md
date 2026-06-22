@@ -1,19 +1,25 @@
 # Doc Loom Shared Protocol
 
+Protocol version: 1
+
 Use this reference when a Doc Loom skill needs global workflow rules. Stage
 skills own their own outputs; this file only defines shared vocabulary and
 cross-skill constraints.
 
-## Constitutional Anchor
+## Design Guardrails
 
-Doc Loom Least is governed by `docs/adr/ADR-0000-constitution.md` when this
-repository maintains its own documents. Apply the minimum path that resolves
-the governance failure. Do not add workflow stages, artifacts, indexes, or
-control files only to make the process look complete.
+These skills follow Doc Loom Least's design guardrails: use the minimum path
+that resolves the governance failure, avoid complex pipeline mechanics, and
+keep workflow documents readable and semantic.
 
-## V1 Boundary
+When installed into another project, obey that project's own user instructions,
+agent instructions, ADRs, authority docs, production code, and tests. This
+protocol only defines how Doc Loom skills coordinate their own workflow; it
+does not replace the target project's source of truth.
 
-Doc Loom Least v1 is a document and skill workflow.
+## Skill Runtime Boundary
+
+Distributed Doc Loom skills are a document-and-skill workflow.
 
 Do not:
 
@@ -74,24 +80,7 @@ Use this order to decide what is currently true:
 Generated views can be consumed, but they cannot override their source of
 truth. Historical material is evidence, not current authority.
 
-## Risk Levels
-
-| Level | Meaning |
-|---|---|
-| `low` | Documentation, local copy, non-critical tests, or behavior-preserving refactor. |
-| `medium` | Normal feature work, local behavior change, internal API, or local data flow change. |
-| `high` | Security, auth, permission, billing, privacy, data deletion, public API, schema migration, destructive architecture boundary, or L1 critical fact. |
-
-Plan confirmation policy:
-
-```yaml
-plan_confirmation_policy:
-  low_risk_changes: require_confirmation
-  medium_risk_changes: require_confirmation
-  high_risk_changes: require_explicit_confirmation
-```
-
-Doc Loom Least v1 does not support automatic execution for low-risk changes.
+Risk levels and confirmation policy: see `plan-confirm/references/risk-levels.md`.
 
 ## Case Identity
 
@@ -110,54 +99,23 @@ identity.
 
 ## case_state.yaml
 
-`case_state.yaml` is a thin machine-readable state cache. It is not the source
-of truth.
+`case_state.yaml` is a routing signal. Phase and closure_status are routing
+truth. Markdown artifacts are evidence truth.
 
-Initial shape:
+Initial fields: case_id, phase, case_docs, closure_status, last_updated.
 
-```yaml
-case_id: 20260618-short-slug
-phase: context_resolving
-case_docs: docs/cases/20260618-short-slug
-closure_status: open
-last_updated: 2026-06-18T00:00:00+08:00
-```
-
-Allowed phase-oriented updates:
-
-```yaml
-phase: waiting_for_plan_confirmation
-plan_version: 1
-```
-
-```yaml
-phase: planned
-plan_version: 1
-```
-
-```yaml
-phase: executing
-review_risk: high
-```
-
-```yaml
-phase: doc_syncing
-closure_status: open
-```
-
-```yaml
-phase: closed
-closure_status: Done with Caveats
-closure_path: docs/cases/<case-id>/closure.md
-```
+Phase updates are owned by the writing skill:
+- `waiting_for_plan_confirmation`, `planned`: plan-confirm
+- `executing`: tdd-execute
+- `doc_syncing`: tdd-execute or doc-sync-close
+- `closed`: doc-sync-close
 
 Do not cache `base_commit` or `risk_level` by default. These belong to
 `plan.md` unless a downstream automation has a clear need for derived cache.
 
-If `case_state.yaml` conflicts with Markdown case artifacts:
-
+When case_state.yaml conflicts with Markdown:
 - Report `state_cache_conflict`.
-- Derive current phase from Markdown plus git state.
+- Derive phase from Markdown plus git state.
 - Route based on the derived phase.
 - Do not silently overwrite the cache.
 
@@ -189,6 +147,69 @@ Final status must be exactly one of:
 
 Unmet acceptance criteria cannot be marked `Done`. Missing review conversation
 is not by itself a closure blocker.
+
+## Route Output
+
+When a skill cannot proceed and routes to another skill, output:
+
+`Route: <skill-name>. Reason: <brief reason>. Required input: <what the next skill needs>.`
+
+This is a text contract, not an invocation. The user or next session reads the
+line and invokes the target skill explicitly.
+
+## Git Degraded Mode
+
+When `git_available: false`:
+
+- Available: read/write Markdown artifacts, read authority/governance docs,
+  update case_state.yaml, perform review and grill conversation.
+- Skipped: base_commit (leave empty with reason), branch/worktree operations
+  (use inline mode only), git diff (ask user for changed files), commit/stage
+  (record "commit deferred: git unavailable").
+- User-provided manual information (changed file list, commit hash) is pending
+  evidence, not verified git state.
+
+## Session State Carry
+
+When a skill reads case_state.yaml and produces output that the next skill
+consumes, include these fields in the output: phase, closure_status, case_id.
+The next skill may use these from the prior output instead of re-reading
+case_state.yaml, unless the trigger condition requires a fresh read
+(resuming after a break, detecting a possible state change).
+
+## Case Creation Boundary
+
+Create a case when:
+
+- The user asks for a persistent workflow ("plan this", "execute the plan",
+  "start a case").
+- Risk is medium or high and execution will modify code, tests, or public
+  contracts.
+- Context authority brief must persist for multi-session or multi-agent use.
+- The user explicitly requests case docs.
+
+Do not create a case when:
+
+- The task is a one-shot explanation, question, or review.
+- The task is a low-risk local edit (typo, comment, local config).
+- The user asks for status only.
+- A conversation-only skill (review, grill) is active.
+
+## Small Project Degradation
+
+When expected directory paths do not exist:
+
+- `docs/authority/` missing: proceed with `proceed_to_plan_with_risk`.
+  context-authority records "no authority docs found".
+  plan-confirm records "authority: none, default risk: medium".
+- `docs/governance/` missing: route to `setup-doc-governance` if the task
+  involves authority, public contract, or high-risk decisions.
+  Otherwise proceed with `proceed_to_plan_with_risk`.
+- `docs/cases/` missing: docloom-workflow creates it on first case creation.
+
+Do not block progress solely because a directory does not exist. Block only
+when missing governance would cause authority conflict, public contract
+violation, or safety issue.
 
 ## Git And Commands
 

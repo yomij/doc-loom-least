@@ -45,25 +45,15 @@ Read the smallest relevant evidence:
 - Code/tests relevant to the target claim.
 - User-provided command output or runtime evidence.
 
-`case_state.yaml` is not read by default because it is a cache. Read it only
-when the review target is state consistency.
+`case_state.yaml` is a routing signal, not evidence. Read it only when the
+review target is state consistency.
 
 If evidence is missing, report an evidence gap rather than converting it into a
 workflow block.
 
 ## Fact Authority
 
-Use this order for fact conflicts:
-
-1. Active authority docs.
-2. Current production code.
-3. Current tests.
-4. Accepted ADR, migration, or release note.
-5. User-provided new information as pending fact.
-6. L2 operational docs.
-7. L3 derived docs.
-8. L4 historical docs.
-9. L5 scratch docs.
+Follow the fact authority order in `references/shared-protocol.md`.
 
 Historical, derived, and scratch docs are not current facts by default.
 
@@ -162,6 +152,16 @@ Each finding must be locatable and verifiable:
 - Required correction:
 ```
 
+Severity anchoring:
+- Critical: security vulnerability, data loss path, auth bypass, public
+  contract violation with no workaround. Example: API endpoint allows
+  unauthenticated data deletion.
+- Important: significant logic error, missing error handling, test gap for
+  public contract, authority fact treated as derived. Example: a public API
+  endpoint lacks error handling for malformed input.
+- Minor: cosmetic issue, naming inconsistency, stale link, redundant code.
+  Example: a doc references a moved file path.
+
 `Required correction` describes the condition for resolving the issue. It must
 not assign workflow next owner or route.
 
@@ -173,8 +173,8 @@ keep this output contract. Subagent findings do not become workflow state.
 
 ## Gates
 
-- User must explicitly request review.
-- Do not write files.
+- User must explicitly request review. → Output: "Review requires explicit user request. Ask: 'Would you like me to review this?'"
+- Do not write files. → Output: "Review is read-only. Report findings inline."
 - Do not modify code, docs, state, or artifacts.
 - Do not output workflow route, next owner, ready-to-close, or closure verdict.
 - Do not write authority proposal or governance follow-up.

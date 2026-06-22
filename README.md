@@ -171,4 +171,4 @@ skillshare sync
 
 ## 许可证
 
-本仓库当前未声明许可证。
+[MIT License](LICENSE)。

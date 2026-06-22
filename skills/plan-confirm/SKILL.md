@@ -8,7 +8,13 @@ description: Create and confirm an implementation plan before execution in a doc
 Create the execution plan and get user confirmation before `tdd-execute`.
 `plan-confirm` consumes case identity; it does not create a case id or case docs.
 
-Read shared rules when needed: `../_shared/references/shared-protocol.md`.
+Read when trigger condition is met:
+
+- `../_shared/references/shared-protocol.md`` when: writing case_state.yaml phase update,
+  checking artifact policy, or checking execution instruction order.
+- `references/risk-levels.md` when: classifying risk level, writing
+  plan_confirmation_policy, or deciding TDD applicability exception based on
+  risk.
 
 ## Required Inputs
 
@@ -76,30 +82,10 @@ Use `templates/plan.md` as the shape.
 
 ## TDD Applicability
 
-Default:
+Default: TDD Required: Yes.
 
-```text
-TDD Required: Yes
-```
-
-Allowed exceptions include pure documentation, configuration, build script
-repair, telemetry, UI copy, dead code deletion, exploratory spike, urgent
-hotfix, or environment work that cannot be reliably automated.
-
-Exception format:
-
-```md
-## TDD Applicability
-
-- TDD Required: No
-- If No, Reason:
-- Alternative Verification:
-  - manual check
-  - snapshot check
-  - build check
-  - smoke test
-  - reviewer confirmation
-```
+Allowed exception categories and format: the executing skill defines these.
+Plan must record: TDD Required (Yes/No), Reason if No, Alternative Verification.
 
 Do not manufacture meaningless failing tests for behavior-preserving refactors.
 Use characterization or existing behavior lock, refactor, then verify no
@@ -136,30 +122,19 @@ Material changes include goal, decisions, file scope, test strategy, risk level,
 authority impact, TDD exception, public contract, or file responsibility
 changes. Checkbox/status edits do not change plan semantics.
 
-## writing-plans Boundary
+## Plan Quality Standard
 
-Use `writing-plans` as a quality reference only:
-
-- Exact paths, commands, and expected results.
-- No placeholders.
-- Clear file responsibilities.
-- TDD for behavior changes unless exception is confirmed.
-
-Do not inherit:
-
-- `docs/superpowers/plans/**`.
-- Dedicated worktree as a hard prerequisite.
-- Subagent-driven vs inline execution choice.
-- `superpowers:executing-plans` as the execution entry.
+Plans must include: exact paths, commands, and expected results. No placeholders.
+Clear file responsibilities. TDD for behavior changes unless exception is confirmed.
 
 ## Gates
 
-- No context, no plan.
-- No `case_id` or case docs, no plan.
-- Blocking conflict means no execution plan.
+- No context, no plan. → Output: "Missing context. Route: context-authority."
+- No `case_id` or case docs, no plan. → Output: "Missing case identity. Route: docloom-workflow for case initialization."
+- Blocking conflict means no execution plan. → Output: "Blocking conflict. Route: context-authority."
 - Draft plans awaiting user approval must set `case_state.yaml` phase to
   `waiting_for_plan_confirmation`.
-- No user confirmation, no `tdd-execute`.
+- No user confirmation, no `tdd-execute`. → Output: "Plan requires confirmation. Present plan to user and await explicit approval."
 - Current `plan_version` must be approved before execution.
 - Discussion decisions that change execution constraints must enter
   `## Decisions` and be confirmed.

@@ -1,3 +1,8 @@
+<!--
+Minimal variant: for low-risk cases with no authority changes, omit:
+Knowledge Changes, Decisions Reviewed, Findings Disposition, Authority Changes,
+Lifecycle Changes Proposed. Keep: Summary, Acceptance Criteria Status, Final Status.
+-->
 # Closure Report
 
 ## Summary

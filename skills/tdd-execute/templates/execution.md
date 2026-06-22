@@ -1,3 +1,7 @@
+<!--
+Minimal variant: for TDD-required trivial changes, omit: Deviations,
+Remaining Issues. Keep: Plan Reference, TDD Log, Acceptance Criteria Status.
+-->
 # Execution Report
 
 ## Plan Reference

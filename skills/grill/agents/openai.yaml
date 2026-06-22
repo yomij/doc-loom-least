@@ -1,4 +1,0 @@
-interface:
-  display_name: "Grill"
-  short_description: "Pressure-test plans and assumptions"
-  default_prompt: "Use $grill to pressure-test this plan or assumption."

@@ -8,9 +8,12 @@ description: Close an existing document-driven workflow case by syncing docs and
 Synchronize task documents and close, pause, block, cancel, supersede, or
 abandon an existing Doc Loom case.
 
-Read shared rules when needed: `../_shared/references/shared-protocol.md`.
-Read document update rules when authority or L3 docs may change:
-`references/doc-update-rules.md`.
+Read when trigger condition is met:
+
+- `../_shared/references/shared-protocol.md`` when: writing closure_status, checking
+  artifact policy, or resolving authority order.
+- `references/doc-update-rules.md` when: any L1 authority doc may change, L3
+  derived docs need sync, or writing the authority change table.
 
 ## Inputs
 
@@ -31,26 +34,13 @@ without case docs, route back to `docloom-workflow` for minimal case identity.
 
 ## Closure Status
 
-Use exactly one:
+Use the closure status set from `references/shared-protocol.md`.
 
-| Status | Meaning |
-|---|---|
-| `Done` | All acceptance criteria are met. |
-| `Done with Caveats` | Main goal is complete with residual risk or follow-up. |
-| `Blocked` | Dependency, permission, information, or verification prevents progress. |
-| `Cancelled` | User or project decided to cancel. |
-| `Superseded` | Another task or approach replaces this one. |
-| `Paused` | Temporarily stopped and may resume later. |
-| `Abandoned` | Not expected to resume directly. |
-
-Do not mark `Done` when acceptance criteria are unmet or unverified. High
-`review_risk` does not automatically block closure if evidence is sufficient;
-record residual risk instead.
-
-If Artifact Policy requires `execution.md` and it is missing, do not mark the
-case `Done` directly. First recover execution evidence, or record an evidence
-gap in `closure.md` and choose `Done with Caveats` or `Blocked` according to how
-much the missing evidence affects acceptance.
+Additional guidance:
+- `Done`: all acceptance criteria verified as met.
+- `Done with Caveats`: main goal complete, residual risk or follow-up remains.
+- `Blocked`/`Cancelled`/`Superseded`/`Paused`/`Abandoned`: see shared-protocol
+  meanings. Record the specific reason in `closure.md`.
 
 ## Workflow
 
@@ -129,15 +119,19 @@ last_updated: 2026-06-17T00:00:00+08:00
 If state update fails, `closure.md` remains the truth record, but do not claim
 workflow fully synced.
 
+review_risk is consumed at closure. Do not change it during closure unless new
+closure-process evidence changes the assessment. Record the consumed value and
+its resolution in `closure.md`.
+
 ## Gates
 
-- Authority update requires user confirmation.
-- Unmet acceptance criteria cannot be `Done`.
+- Authority update requires user confirmation. → Output: "Authority change requires explicit user confirmation. Present proposed change to user."
+- Unmet acceptance criteria cannot be `Done`. → Output: "Acceptance criteria not met. Use Done with Caveats, Blocked, or ask user to adjust criteria."
 - User-provided Critical or Important findings that affect acceptance cannot be
   ignored.
 - High `review_risk` with insufficient evidence cannot be unqualified `Done`.
 - Missing `execution.md` required by Artifact Policy cannot be unqualified
-  `Done`.
+  `Done`. → Output: "Execution evidence missing. Record evidence gap. Use Done with Caveats or Blocked."
 - Case docs that end, pause, block, cancel, or supersede must get `closure.md`.
 - Do not update `case_state.yaml` to closed before closure is written.
 - Do not modify plan semantics; at most append a closure link or short note.

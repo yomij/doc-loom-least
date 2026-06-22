@@ -1,4 +1,0 @@
-interface:
-  display_name: "Context Authority"
-  short_description: "Resolve context and authority before planning"
-  default_prompt: "Use $context-authority to determine the authoritative context before planning."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Doc Sync Close"
-  short_description: "Sync docs and close workflow cases"
-  default_prompt: "Use $doc-sync-close to sync documents and close this workflow case."

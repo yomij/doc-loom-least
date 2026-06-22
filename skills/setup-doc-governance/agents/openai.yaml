@@ -1,4 +1,0 @@
-interface:
-  display_name: "Setup Doc Governance"
-  short_description: "Rebuild docs governance and authority"
-  default_prompt: "Use $setup-doc-governance to organize this project documentation governance."

@@ -1,3 +1,9 @@
+<!--
+Minimal variant: for low-risk narrow-scope cases, omit sections that would
+be empty: Assumptions, TDD Plan, Adaptive Execution, Plan Amendments, Risks.
+Keep: Goal, Non-goals, Decisions, Risk Level, TDD Applicability, File Structure,
+Acceptance Criteria, Tasks.
+-->
 ---
 case_id:
 plan_version: 1
