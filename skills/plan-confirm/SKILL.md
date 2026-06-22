@@ -10,7 +10,7 @@ Create the execution plan and get user confirmation before `tdd-execute`.
 
 Read when trigger condition is met:
 
-- `../_shared/references/shared-protocol.md` when: writing case_state.yaml phase update,
+- `references/shared-protocol.md` when: writing case_state.yaml phase update,
   checking artifact policy, or checking execution instruction order.
 - `references/risk-levels.md` when: classifying risk level, writing
   plan_confirmation_policy, or deciding TDD applicability exception based on

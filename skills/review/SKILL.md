@@ -56,7 +56,7 @@ workflow block.
 
 ## Fact Authority
 
-Follow the fact authority order in `../_shared/references/shared-protocol.md`.
+Follow the fact authority order in `references/shared-protocol.md`.
 
 Historical, derived, and scratch docs are not current facts by default.
 

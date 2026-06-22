@@ -11,7 +11,7 @@ Historical docs are evidence. Authority docs are confirmed source of truth.
 
 Read when trigger condition is met:
 
-- `../_shared/references/shared-protocol.md` when: checking execution instruction order,
+- `references/shared-protocol.md` when: checking execution instruction order,
   fact authority order, risk levels, or artifact policy.
 - `references/layering-and-routing.md` when: writing authority structure, index
   rules, bridge rules, or archive rules.

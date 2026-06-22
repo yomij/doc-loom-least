@@ -9,7 +9,7 @@ Use the minimum path that safely resolves the current request. Route; do not
 replace stage skills.
 
 Read shared rules first when routing or creating case state:
-`../_shared/references/shared-protocol.md`.
+`references/shared-protocol.md`.
 
 ## Start
 
@@ -96,7 +96,7 @@ owner.
 
 For fast-path (row 7): `plan-confirm` writes a minimal plan with
 `approved_by: fast-path` and no task-level TDD breakdown. See
-`../_shared/references/shared-protocol.md` → Fast-Path.
+`references/shared-protocol.md` → Fast-Path.
 
 ## Artifact Policy
 

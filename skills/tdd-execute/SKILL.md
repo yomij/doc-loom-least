@@ -10,7 +10,7 @@ tasks and simple document edits do not automatically enter this skill.
 
 Read when trigger condition is met:
 
-- `../_shared/references/shared-protocol.md` when: updating case_state.yaml phase,
+- `references/shared-protocol.md` when: updating case_state.yaml phase,
   checking artifact policy, or resolving authority order.
 - `references/tdd-exceptions.md` when: the plan declares TDD Required: No, or
   execution encounters a situation that may require an exception amendment.
