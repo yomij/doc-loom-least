@@ -1,6 +1,6 @@
 ---
 name: grill
-description: Interactively challenge and stress-test a requirement, plan, architecture proposal, implementation idea, test strategy, documentation change, or other claim. Use only when the user explicitly asks to grill, challenge, pressure-test, scrutinize, or aggressively question assumptions. Ask one question at a time, provide a recommended answer with conditions, verify facts from code or docs when possible, and do not create artifacts or modify files.
+description: Interactively pressure-test a claim. Use only when the user explicitly asks to grill, challenge, scrutinize, or question assumptions.
 ---
 
 # grill
@@ -72,22 +72,21 @@ explicitly confirmed decisions in their own artifacts.
 ## High-Risk Topics
 
 High risk includes security, auth, permission, privacy, billing, data deletion,
-public API, CLI, schema, config contract, and high-impact architecture
-boundaries.
+public API, CLI, schema, config contract, migration, ADR-protected architecture
+boundaries, and workflow or agent policy change.
 
 For high-risk recommendations:
 
-- Lower certainty.
-- State evidence sources and unverified points.
-- Treat short user answers as current discussion decisions only.
-- Do not phrase unverified conclusions as facts.
+- Lower certainty; state evidence sources and unverified points.
+- Treat short user answers as current discussion decisions only, and do not
+  phrase unverified conclusions as facts.
 
 ## Gates
 
-- User must explicitly ask for grilling. → Route: grill. Reason: grill requires explicit user request. Required input: user intent to challenge a specific claim.
+- User must explicitly ask for grilling.
 - Ask one question at a time.
 - Verify answerable facts before asking the user.
-- Do not generate `grill.md`, a report artifact, route, next owner, or closure
-  verdict.
-- Do not modify files.
+- Do not generate `grill.md`, report artifacts, routes, next owners, or closure
+  verdicts.
+- Do not modify files or state.
 - Do not turn recommendations into user decisions without confirmation.
