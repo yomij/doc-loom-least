@@ -42,7 +42,7 @@ Question format:
 
 <one question>
 
-Recommended answer:
+Recommended:
 <clear recommendation, with conditions>
 
 Why this matters:
@@ -86,7 +86,5 @@ For high-risk recommendations:
 - User must explicitly ask for grilling.
 - Ask one question at a time.
 - Verify answerable facts before asking the user.
-- Do not generate `grill.md`, report artifacts, routes, next owners, or closure
-  verdicts.
 - Do not modify files or state.
 - Do not turn recommendations into user decisions without confirmation.
