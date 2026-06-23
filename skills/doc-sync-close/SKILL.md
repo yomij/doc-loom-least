@@ -24,9 +24,7 @@ Read when trigger condition is met:
 - Related authority and L3 docs.
 - `case_state.yaml`.
 - Governance plans only when checking existing blocked decisions or recording
-  governance follow-up. Case-scoped governance uses
-  `docs/cases/<case-id>/governance-plan.md`; repository governance uses
-  `docs/governance/YYYY-MM-DD-<slug>.md`.
+  governance follow-up. See `references/doc-update-rules.md` for path conventions.
 
 Per shared protocol Case Identity, this skill consumes existing case identity.
 If the user asks for documented closure without case docs, route back to
@@ -133,5 +131,5 @@ its resolution in `closure.md`.
 - Case docs that end, pause, block, cancel, or supersede must get `closure.md`.
 - Do not update `case_state.yaml` to closed before closure is written.
 - Do not modify plan semantics; at most append a closure link or short note.
-- Do not modify code, tests, dependencies, scripts, lockfiles, CI, or acceptance
-  criteria to make closure pass.
+- Do not modify code, tests, dependencies, scripts, lockfiles, CI, acceptance
+  criteria, or plan semantics to make closure pass.

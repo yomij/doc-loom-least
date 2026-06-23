@@ -22,7 +22,7 @@ All conditions must hold:
 - No file movement, archive, or bridge is involved.
 - No conflict fact, unresolved High-Risk Topic decision, or lifecycle migration
   is involved.
-- User confirms the concrete patch, not a broad "sync docs" instruction.
+- User confirms the concrete patch per shared-protocol → Confirmation Semantics.
 
 If any condition fails, write an authority proposal or governance follow-up
 instead.
