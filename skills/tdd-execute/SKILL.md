@@ -33,12 +33,8 @@ Verify:
 - `plan_version` exists.
 - `approved_by`, `approved_at`, and `Confirmation Log` refer to the current
   `plan_version`.
-- The case is not in an unrecoverable closed status. `Done` may resume only for
-  a small same-source follow-up that preserves closure history and records an
-  amendment or follow-up. `Paused`, `Blocked`, and `Done with Caveats` may
-  resume only when the user asks and the resume condition is satisfied.
-  `Cancelled`, `Superseded`, and `Abandoned` default to a new case or
-  reconfirmation.
+- The case is not in an unrecoverable closed status; see shared-protocol.md →
+  Case Resume for resumable statuses.
 - `TDD Applicability` is declared.
 - `Goal`, `Non-goals`, `Decisions`, and `Acceptance Criteria` are clear.
 - Workspace changes relative to `base_commit` are explainable, including
@@ -135,23 +131,18 @@ semantics, acceptance criteria, TDD strategy, Decisions, or file scope.
 
 ## Review Risk
 
-Record `review_risk` as data, not a recommendation or workflow gate. Use
-`low`, `medium`, or `high`.
+Record `review_risk` as data, not a recommendation or workflow gate.
 
-| Value | Use when |
-|---|---|
-| `low` | Local change, no public contract, tests pass. |
-| `medium` | New internal feature, moderate scope, main paths covered. |
-| `high` | High-Risk Topic, insufficient coverage, authority proposal, or serious plan deviation. |
+| Value | When to set | Meaning |
+|---|---|---|
+| `low` | Local change, no public contract, tests pass. | Low risk. |
+| `medium` | New internal feature, moderate scope, main paths covered. | Medium risk. |
+| `high` | Implementation touches a High-Risk Topic, coverage insufficient, material plan deviation, or authority proposal pending. | High risk. |
 
-Write or update `review_risk` in `case_state.yaml` when implementation touches a
-High-Risk Topic, coverage is insufficient, a material plan deviation occurred,
-an authority proposal is pending, scope changes, or new evidence resolves a
-previous risk concern.
-
-Do not clear `review_risk` to `low` during execution unless all original
-high-risk conditions are resolved with evidence. The closure skill consumes the
-final value. Do not trigger `review`; only the user can request it.
+Update when scope changes or new evidence resolves a previous concern. Do not
+clear to `low` unless all original high-risk conditions are resolved with
+evidence. The closure skill consumes the final value. Do not trigger `review`;
+only the user can request it.
 
 ## State Update
 
