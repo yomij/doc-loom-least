@@ -15,7 +15,7 @@
 核心规则：
 
 ```text
-Authority 文档更新必须用户确认；窄 patch 可由本 skill 执行，结构性治理进入 `GOVERNANCE_PLAN.md`。
+Authority 文档更新必须用户确认；窄 patch 可由本 skill 执行，结构性治理进入治理计划。
 有 case docs 的任务结束或中断都必须写 closure.md。
 结项时必须识别新知识，但不能把未验证知识静默晋升为长期权威。
 `closure.md` 是收尾真相记录，`case_state.yaml` 只是状态缓存。
@@ -64,7 +64,7 @@ description: Close an existing document-driven workflow case by syncing docs and
 - 相关 authority / L3 文档。
 - 用户关于收尾状态的指令。
 - `case_state.yaml`，如果 case docs 存在。
-- 可选：`docs/governance/GOVERNANCE_PLAN.md`，用于查看已有 blocked decisions 或登记治理 follow-up。
+- 可选：相关治理计划，用于查看已有 blocked decisions 或登记治理 follow-up。
 
 `doc-sync-close` 不创建 case id 或 case docs。没有 case docs 但用户要求建档收尾时，先回到 `docloom-workflow` 创建最小 case identity，再进入本 skill。
 
@@ -89,14 +89,14 @@ docs/cases/<case-id>/handoff.md    # Paused / Blocked / 需要未来恢复时
 
 ```text
 docs/derived/**
-docs/README.md 或 docs/DOC_INDEX.md
+docs/README.md
 ```
 
 Authority 处理：
 
 - 默认只生成 proposed change。
 - 用户明确确认 narrow patch 后才可修改已有 authority 文档。
-- 结构性、高风险、冲突型或新 authority 区域相关变更进入 `GOVERNANCE_PLAN.md` 或新 case。
+- 结构性、高风险、冲突型或新 authority 区域相关变更进入治理计划或新 case。
 - 如果用户未确认，也可以 closure 为 `Done with Caveats` 或 `Paused`，视任务状态而定。
 
 ---
@@ -176,14 +176,14 @@ L1 narrow patch 必须同时满足：
 - 不涉及冲突事实、高风险 owner 裁决或生命周期迁移。
 - 用户确认的是具体 patch，不是泛泛“同步一下”。
 
-不满足 narrow patch 条件时，`doc-sync-close` 只写 closure proposal / governance follow-up，实际 authority 更新交给 `setup-doc-governance` 的 `GOVERNANCE_PLAN.md` 或新 case。
+不满足 narrow patch 条件时，`doc-sync-close` 只写 closure proposal / governance follow-up，实际 authority 更新交给 `setup-doc-governance` 的治理计划或新 case。
 
 L3 自动更新仅限 mechanical derived sync：
 
 - 来源可追溯。
 - 不改变长期事实。
 - 不与 authority 冲突。
-- README / DOC_INDEX 的链接、路径、状态入口。
+- README 的链接、路径、状态入口。
 - troubleshooting 中新增已验证、可复现的短条目。
 - examples 中修正已随代码变化的命令、路径或参数。
 - getting-started / dev-guide 中同步已确认 contract 的机械引用。
@@ -294,7 +294,7 @@ none
 
 规则：
 
-- `authority_candidate`：长期事实、contract、workflow policy、agent behavior、ADR 影响；写 proposal、`GOVERNANCE_PLAN.md` follow-up 或 narrow patch。
+- `authority_candidate`：长期事实、contract、workflow policy、agent behavior、ADR 影响；写 proposal、治理计划 follow-up 或 narrow patch。
 - `regression_candidate`：可复现 bug 或边界；优先转测试 follow-up。
 - `runbook_candidate`：重复操作、恢复步骤、维护动作；写 proposal，不自动写 authority。
 - `derived_sync`：机械同步到 L3 的入口、示例或 troubleshooting。

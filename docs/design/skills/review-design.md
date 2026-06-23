@@ -132,7 +132,7 @@ Assessment: Material issues found.
 | code diff | git diff、相关实现、相关测试、相关 authority / contract | plan / execution，如果用户要求审 case 符合度 |
 | tests only | 测试文件、相关实现、测试命令或结果 | 计划、验收标准、TDD 证据 |
 | docs only | 目标文档、上游 authority、相关索引 / ADR | 历史材料，只作为 evidence 并标记低权威 |
-| documentation governance | constitution、GOVERNANCE_PLAN、authority / archive / index 相关文档 | 代码 / 测试，仅用于验证事实 |
+| documentation governance | constitution、governance plan、authority / archive / index 相关文档 | 代码 / 测试，仅用于验证事实 |
 | case evidence | 用户指定的 plan / execution / closure / diff / 测试结果 | case_state.yaml 仅在对象就是状态一致性时读取 |
 
 `case_state.yaml` 默认不读，因为它是状态缓存，不是真相源。

@@ -4,7 +4,7 @@
 >
 > 关键理念：历史文档不是直接被继续维护的对象，而是用于抽取事实的证据库；`setup-doc-governance` 的目标是用固定分层标准生成一份可确认的治理计划，再执行整合、迁移、桥接、归档和按需 authority 重建。
 
-> 本版状态：已吸收评审优化意见，重点增强了固定治理标准、单一治理计划、风险分级、TDD 例外、计划确认版本绑定、机器可读任务状态、异常收尾状态和 authority 按需创建规则。
+> 本版状态：已吸收评审优化意见，重点增强了固定治理标准、独立治理批次计划、风险分级、TDD 例外、计划确认版本绑定、机器可读任务状态、异常收尾状态和 authority 按需创建规则。
 
 ---
 
@@ -21,7 +21,7 @@
 6. review 是用户显式触发的只读、对话式证据审查能力，不自动执行、不产物、不路由；风险只通过 `review_risk` 信号暴露给 `docloom-workflow`。
 7. closure 状态补充 Cancelled / Superseded / Paused / Abandoned，覆盖真实任务中断场景。
 8. Authority Order 拆分为 Execution Instruction Order 和 Fact Authority Order，避免把用户临时指令误写为长期事实。
-9. setup-doc-governance 使用 `GOVERNANCE_PLAN.md` 作为唯一默认中间产物，文件级和事实级都用 `promote / merge / bridge / archive / block` verdict。
+9. setup-doc-governance 使用治理计划作为每个独立治理批次的确认产物，文件级和事实级都用 `promote / merge / bridge / archive / block` verdict。
 10. 产物生成改为 Artifact Policy：handoff、context brief、execution 等按条件生成，不再每阶段固定铺满文件。
 11. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`，只操作文档产物。
 12. `tdd-execute` 只服务持久化 case workflow；普通一次性 coding 和简单纯文档任务不强制进入。
@@ -50,7 +50,7 @@ grill                 # 通用手动辅助，不进入 workflow 路由或 Artifa
 | Skill | 类型 | 默认执行 | 负责什么 |
 |---|---|---:|---|
 | `docloom-workflow` | 入口 / 路由 | 是 | 作为 public automatic entry，读取最小 workspace / case 状态，延迟创建 case，维护 Artifact Policy，并路由到具体 skill；不替代具体 skill、不自动执行 |
-| `setup-doc-governance` | 初始化 / 周期性治理 | 否 | 以固定分层标准从历史文档、当前文档、代码和测试中抽取事实，写出 `GOVERNANCE_PLAN.md`，经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新 |
+| `setup-doc-governance` | 初始化 / 周期性治理 | 否 | 以固定分层标准从历史文档、当前文档、代码和测试中抽取事实，写出治理计划，经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新 |
 | `context-authority` | 主流程 | 按需 | 在需要计划前上下文 gate、恢复任务、权威判断或冲突判断时，读取最小相关上下文并输出路由 verdict |
 | `plan-confirm` | 主流程 | 是 | 生成计划、标记风险等级、绑定计划版本、等待用户确认、落计划文档 |
 | `tdd-execute` | 主流程 | 条件 | 按确认后的持久化 case 计划做 TDD 执行、测试、质量检查、执行记录；必要时记录 TDD 例外、Plan Amendments 和授权的原子提交 |
@@ -91,7 +91,7 @@ setup-doc-governance
   ↓
 抽取事实并按固定分层标准路由
   ↓
-生成 GOVERNANCE_PLAN.md
+生成治理计划
   ↓
 用户一次确认治理决策表
   ↓
@@ -176,7 +176,7 @@ doc-sync-close
 12. plan-confirm 必须绑定 plan_version 和 base_commit。
 13. case_state.yaml 是瘦身状态缓存，不是唯一真相。
 14. docloom-workflow 持有 Artifact Policy，各阶段 skill 负责写自己的产物。
-15. Authority 更新必须用户确认；窄 authority patch 可由 `doc-sync-close` 在 explicit confirmation 后执行，结构性、高风险或冲突型 authority 更新必须通过 `GOVERNANCE_PLAN.md` 一次确认；未确认原始材料不得写入 authority。
+15. Authority 更新必须用户确认；窄 authority patch 可由 `doc-sync-close` 在 explicit confirmation 后执行，结构性、高风险或冲突型 authority 更新必须通过治理计划一次确认；未确认原始材料不得写入 authority。
 16. 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 17. grill 是流程无关的通用手动辅助 skill，不进入 Artifact Policy，不由 workflow 路由，不写文件。
 18. review 只能由用户手动触发或明确要求；它是只读对话审查，不产物、不改状态、不路由。
@@ -615,7 +615,7 @@ Governance plan = one approval surface
 ```text
 从历史材料中抽取仍然有效的事实
 按固定分层标准为文件和事实给出 verdict
-生成 GOVERNANCE_PLAN.md 作为唯一默认中间产物
+生成治理计划作为每个独立治理批次的确认产物
 用户一次确认后执行整合、迁移、桥接、归档和 authority 更新
 把未确认原始材料留在 case evidence 或 archive
 把当前事实写入按需创建的 authority 文档
@@ -658,7 +658,7 @@ docs/
   README.md 或 DOC_INDEX.md
 
   governance/
-    GOVERNANCE_PLAN.md
+    YYYY-MM-DD-<slug>.md
 
   authority/
     README.md
@@ -826,7 +826,7 @@ full-repo
 
 扫描并列出范围内的历史文档、当前文档、入口索引和 evidence。`full-repo` 可以额外读取相关代码和测试。
 
-盘点结果不生成独立 inventory 产物，而是写入 `GOVERNANCE_PLAN.md` 的决策表。
+盘点结果不生成独立 inventory 产物，而是写入治理计划的决策表。
 
 ```md
 ## File Routing Decisions
@@ -924,9 +924,9 @@ block
 - 高影响架构边界调整
 ```
 
-### 7.4 Phase 4：GOVERNANCE_PLAN / 治理计划
+### 7.4 Phase 4：Governance Plan / 治理计划
 
-`docs/governance/GOVERNANCE_PLAN.md` 是唯一默认中间产物，也是用户一次确认的对象。
+`docs/governance/YYYY-MM-DD-<slug>.md` 是每个独立仓库级治理批次的确认产物，也是用户一次确认的对象。case 相关治理使用 `docs/cases/<case-id>/governance-plan.md`。
 
 ```md
 # Governance Plan
@@ -969,6 +969,7 @@ block
 status: proposed | approved | applied | applied_with_blocks | blocked
 plan_version: 1
 scope: current-case | docs-only | full-repo
+governance_batch: YYYY-MM-DD-<slug>
 approved_by:
 approved_at:
 ---
@@ -978,7 +979,7 @@ approved_at:
 
 ### 7.5 Phase 5：One Confirmation / 一次确认
 
-写入 `GOVERNANCE_PLAN.md` 后，未获用户确认不得执行文件移动、bridge、archive 或 authority 更新。
+写入治理计划后，未获用户确认不得执行文件移动、bridge、archive 或 authority 更新。
 
 用户确认后，agent 执行所有无依赖的非 `block` 项。允许 `block` 项存在并跳过执行；与 blocked 事实有依赖的非 block 变更也必须跳过。
 
@@ -1001,7 +1002,7 @@ blocked              治理计划整体无法执行
 - 移动归档 historical / superseded / raw 材料。
 - 保留需要追溯的 case evidence。
 - 更新入口索引。
-- 在 GOVERNANCE_PLAN.md 写回 Applied Result。
+- 在治理计划写回 Applied Result。
 ```
 
 Authority 文档最小 frontmatter：
@@ -1043,7 +1044,7 @@ docs/README.md 或 docs/DOC_INDEX.md
 
 ```text
 - authority 入口
-- governance plan 入口
+- 治理计划入口
 - case evidence 入口，如存在
 - archive 入口，如存在
 - derived / generated 文档不是 source of truth
@@ -1130,7 +1131,7 @@ docs/archive/
 - 默认不能作为当前依据。
 - 只能作为历史参考。
 - 引用时必须标记 historical。
-- 如果发现仍然有效，需要重新抽取事实并进入 `GOVERNANCE_PLAN.md` 确认。
+- 如果发现仍然有效，需要重新抽取事实并进入治理计划确认。
 ```
 
 ### L5：Scratch / 草稿文档
@@ -1197,7 +1198,7 @@ related_docs: []
 ```text
 1. 用户本轮明确指令
 2. 已确认 plan.md
-3. 已确认 GOVERNANCE_PLAN.md，如当前任务是文档治理
+3. 已确认治理计划，如当前任务是文档治理
 4. Workflow Protocol
 5. Active authority docs
 6. 当前生产代码
@@ -1240,7 +1241,7 @@ related_docs: []
 - 如果 historical docs 看起来相关，只能作为证据或历史上下文。
 - 没有 metadata 的文档默认 unclassified，降低信任等级。
 - 用户本轮提供的新事实作为 pending fact 高于 L2 / L3，但不能压过 active authority、当前代码、当前测试或已接受 ADR。
-- 只影响当前任务的新事实进入任务计划确认；改变长期产品事实、workflow policy、authority docs、public contract 或 agent behavior 的新事实进入 `GOVERNANCE_PLAN.md`、authority update proposal，或由 `doc-sync-close` 在 explicit confirmation 后执行 narrow authority patch。
+- 只影响当前任务的新事实进入任务计划确认；改变长期产品事实、workflow policy、authority docs、public contract 或 agent behavior 的新事实进入治理计划、authority update proposal，或由 `doc-sync-close` 在 explicit confirmation 后执行 narrow authority patch。
 ```
 
 ---
@@ -1329,7 +1330,7 @@ docs/cases/<case-id>/case_state.yaml
 
 项目初始化 / 周期性治理 Skill。
 
-它的任务不是维护旧文档结构，而是从历史材料、当前文档、必要的代码和测试证据中抽取事实，写出 `GOVERNANCE_PLAN.md`，经用户一次确认后执行文档整合、迁移、桥接、归档和按需 authority 更新。
+它的任务不是维护旧文档结构，而是从历史材料、当前文档、必要的代码和测试证据中抽取事实，写出治理计划，经用户一次确认后执行文档整合、迁移、桥接、归档和按需 authority 更新。
 
 ## 负责什么
 
@@ -1338,7 +1339,7 @@ docs/cases/<case-id>/case_state.yaml
 - 盘点历史文档、当前文档、入口索引和必要的代码 / 测试证据。
 - 从历史材料和证据中抽取事实。
 - 使用固定分层标准和 `promote / merge / bridge / archive / block` verdict 路由文件和事实。
-- 生成 `docs/governance/GOVERNANCE_PLAN.md`。
+- 生成 `docs/governance/YYYY-MM-DD-<slug>.md`。
 - 等待用户一次确认治理决策表。
 - 执行无依赖的非 block 项。
 - 按需创建 `docs/authority/**` 文档。
@@ -1360,7 +1361,7 @@ docs/cases/<case-id>/case_state.yaml
 ## 核心产物
 
 ```text
-docs/governance/GOVERNANCE_PLAN.md
+docs/governance/YYYY-MM-DD-<slug>.md
 docs/authority/README.md
 docs/authority/**                       # 按需
 docs/cases/<case-id>/evidence/**        # 按需
@@ -1379,7 +1380,7 @@ docs/governance/AUTHORITY_REBUILD_PLAN.md
 docs/governance/CONTEXT_PACK_POLICY.md
 ```
 
-## 输出建议：`docs/governance/GOVERNANCE_PLAN.md`
+## 输出建议：`docs/governance/YYYY-MM-DD-<slug>.md`
 
 ```md
 # Governance Plan
@@ -1437,7 +1438,7 @@ docs/governance/CONTEXT_PACK_POLICY.md
 - 不替用户自动决定高影响权威事实。
 - 不创建空 authority 子区或占位文档。
 - 未确认原始材料不得写入 authority。
-- 冲突事实必须进入 GOVERNANCE_PLAN.md 的 blocked decisions。
+- 冲突事实必须进入治理计划的 blocked decisions。
 ```
 
 ---
@@ -1457,7 +1458,7 @@ docs/governance/CONTEXT_PACK_POLICY.md
 - 尝试读取当前 branch / worktree。
 - 根据 case Context Resolution Order 解析已有 case，或提出 proposed_case_slug。
 - 按任务意图读取已有任务文档、入口索引、active authority、相关代码和测试。
-- 仅在任务涉及文档治理、authority 变更、workflow / agent policy、public contract、高风险冲突或 blocked decision 时读取 `docs/governance/GOVERNANCE_PLAN.md`。
+- 仅在任务涉及文档治理、authority 变更、workflow / agent policy、public contract、高风险冲突或 blocked decision 时读取 `docs/governance/YYYY-MM-DD-<slug>.md`。
 - 识别并分级 authority / code / tests / case docs 冲突。
 - 标记不确定点和风险。
 - 输出 route verdict，给 `plan-confirm` 判断是否能计划。
@@ -1481,7 +1482,7 @@ git status --short
 - 当前 branch
 - docs/README.md 或 docs/DOC_INDEX.md
 - docs/authority/ 中相关 active authority
-- docs/governance/GOVERNANCE_PLAN.md，仅在相关时
+- docs/governance/YYYY-MM-DD-<slug>.md，仅在相关时
 - 相关代码和测试，按 intent 决定
 - 已有 case docs，仅在已有 case 或恢复任务时
 ```
@@ -1550,7 +1551,7 @@ blocked_by_authority_conflict
 - 不写实现计划。
 - 不改代码。
 - 不创建 branch、worktree 或 case docs。
-- 不修改 authority、GOVERNANCE_PLAN、plan、execution、review 或 closure。
+- 不修改 authority、governance plan、plan、execution、review 或 closure。
 - 不自动解决权威冲突。
 - 默认不落盘；条件满足时才写 context brief。
 ```
@@ -2033,7 +2034,7 @@ No material issue found / Material issues found / Insufficient evidence
 - 更新安全的 mechanical L3 派生文档。
 - 识别需要更新的 authority 文档。
 - 对 authority 默认只生成 proposed change。
-- 等待用户明确确认后，才可执行 narrow authority patch；结构性、高风险或冲突型 authority 更新进入 `GOVERNANCE_PLAN.md`。
+- 等待用户明确确认后，才可执行 narrow authority patch；结构性、高风险或冲突型 authority 更新进入治理计划。
 - 生成任务完成报告。
 - 写入 closure.md。
 - 标记任务完成。
@@ -2090,7 +2091,7 @@ Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
 ## 文档更新规则
 
 ```text
-L1 Authority   默认 proposal；explicit confirmation 后可执行 narrow patch；结构性治理进 GOVERNANCE_PLAN.md
+L1 Authority   默认 proposal；explicit confirmation 后可执行 narrow patch；结构性治理进治理计划
 L2 Operational 可以自动更新
 L3 Derived     仅 mechanical derived sync 可自动更新，且必须可追溯
 L4 Historical  默认不改
@@ -2170,7 +2171,7 @@ docs/
   README.md 或 DOC_INDEX.md
 
   governance/
-    GOVERNANCE_PLAN.md
+    YYYY-MM-DD-<slug>.md
 
   authority/
     README.md
@@ -2292,7 +2293,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 
 ```text
 - 历史文档是证据，不是默认权威。
-- setup-doc-governance 使用固定分层标准、单一 GOVERNANCE_PLAN.md 和一次用户确认。
+- setup-doc-governance 使用固定分层标准、独立治理批次计划和一次用户确认。
 - setup-doc-governance 通过 scope 控制范围：current-case / docs-only / full-repo。
 - docs/authority/ 是按需创建的当前事实源集合，不创建空目录或占位文档。
 - 未确认原始材料进入 docs/cases/<case-id>/evidence/ 或 archive，不进入 authority。
@@ -2334,7 +2335,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 
 这套工作流可以概括为：
 
-> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case、应用 Artifact Policy 并消费 `review_risk` 信号；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成 `GOVERNANCE_PLAN.md` 并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认、TDD 纪律、轻量 adaptive execution 和授权原子提交边界的开发闭环；`review` 作为用户手动触发的只读对话审查 Skill，不产物、不改状态、不路由；`grill` 作为流程无关的通用手动挑战 Skill，只通过对话压力测试主张。
+> 用 `docloom-workflow` 作为 public automatic entry 和 thin router，按最小路径解析状态、延迟创建 case、应用 Artifact Policy 并消费 `review_risk` 信号；用 `setup-doc-governance` 以固定分层标准和 `scope: current-case | docs-only | full-repo` 从历史文档、当前文档以及必要的代码 / 测试证据中抽取事实，生成治理计划并经用户一次确认后执行整合、迁移、桥接、归档和按需 authority 更新；在需要上下文 gate 时用 `context-authority` 定位当前工作和权威来源；用 `plan-confirm → tdd-execute → doc-sync-close` 完成带版本确认、TDD 纪律、轻量 adaptive execution 和授权原子提交边界的开发闭环；`review` 作为用户手动触发的只读对话审查 Skill，不产物、不改状态、不路由；`grill` 作为流程无关的通用手动挑战 Skill，只通过对话压力测试主张。
 
 
 ---
@@ -2346,7 +2347,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 ### P0：必须先落地
 
 ```text
-1. docs/governance/GOVERNANCE_PLAN.md
+1. docs/governance/YYYY-MM-DD-<slug>.md
 2. docs/authority/README.md
 3. docs/README.md 或 docs/DOC_INDEX.md
 4. docs/cases/<case-id>/plan.md

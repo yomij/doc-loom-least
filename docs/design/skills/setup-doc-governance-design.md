@@ -24,7 +24,7 @@ Governance plan = one approval surface
 
 - 用固定分层标准判断每份文档和每条事实的去向。
 - 从历史文档和代码 / 测试证据中抽取事实，而不是迁移整篇旧文档。
-- 以 `GOVERNANCE_PLAN.md` 作为唯一默认中间产物。
+- 每个独立治理批次使用独立治理计划文件。
 - 用户一次确认治理计划后，agent 再执行文档修改、移动、桥接和归档。
 - `docs/authority/` 采用按需模块化结构，不创建空目录或占位文档。
 - `setup-doc-governance` 只治理文档，不修改代码、测试、构建脚本或运行行为。
@@ -51,7 +51,7 @@ description: Set up or rebuild documentation governance for a project. Use when 
 - 用户要求“把历史文档治理成权威文档”。
 - 用户要求从旧文档、当前文档、代码或测试中抽取事实。
 - 用户要求迁移、整合、桥接、废弃、归档文档。
-- 用户要求生成或执行 `GOVERNANCE_PLAN.md`。
+- 用户要求生成或执行治理计划。
 - 用户要求修复文档入口、索引或 authority 结构。
 
 不应该触发：
@@ -103,7 +103,7 @@ If no scope is specified, use docs-only.
 Escalate to full-repo only when authority claims require code/test verification or the user explicitly asks to use code/tests as evidence.
 ```
 
-`full-repo` 仍然只读代码和测试。发现代码或测试需要修改时，只能在 `GOVERNANCE_PLAN.md` 中记录 follow-up。
+`full-repo` 仍然只读代码和测试。发现代码或测试需要修改时，只能在本次治理计划中记录 follow-up。
 
 ---
 
@@ -112,12 +112,13 @@ Escalate to full-repo only when authority claims require code/test verification 
 默认输出收敛为：
 
 ```text
-docs/governance/GOVERNANCE_PLAN.md
+docs/governance/YYYY-MM-DD-<slug>.md        # 独立仓库级治理批次
+docs/cases/<case-id>/governance-plan.md     # 与 active case 绑定的治理批次
 docs/authority/README.md
 docs/authority/**                       # 按需创建
 docs/cases/<case-id>/evidence/**        # 按需创建
 docs/archive/**                         # 按需创建
-docs/README.md 或 docs/DOC_INDEX.md      # 入口索引，按项目现状选择
+docs/README.md                            # 入口索引
 bridge files                            # 按需创建
 ```
 
@@ -145,7 +146,6 @@ setup-doc-governance/
     authority-README.md
     authority-doc.md
     bridge.md
-    DOC_INDEX.md
   references/
     shared-protocol.md
     layering-and-routing.md
@@ -164,7 +164,7 @@ setup-doc-governance/
 |---|---|---|---|
 | L1 | Authority | `docs/authority/` | 已确认、可复用、会约束后续 agent 的当前事实 |
 | L2 | Case / Operational | `docs/cases/<case-id>/` | 当前任务过程、计划、evidence、执行和收尾记录 |
-| L3 | Derived / Index | `docs/README.md`、`docs/DOC_INDEX.md`、README、guide | 入口、导航、派生说明，不作为源事实 |
+| L3 | Derived / Index | `docs/README.md`、README、guide | 入口、导航、派生说明，不作为源事实 |
 | L4 | Archive / Historical | `docs/archive/` | 历史、废弃、被取代材料，默认不作为当前事实 |
 | L5 | Scratch | `docs/scratch/` 或 case notes | 草稿、临时笔记、未验证推断 |
 
@@ -285,7 +285,7 @@ docs/cases/<case-id>/evidence/
 规则：
 
 - 未确认接口文档、初始设计文档、旧讨论记录都是 evidence，不能进入 authority。
-- `GOVERNANCE_PLAN.md` 可以引用 evidence，并对抽取出的事实给出 verdict。
+- 治理计划可以引用 evidence，并对抽取出的事实给出 verdict。
 - 用户确认后，只把确认后的事实写入 `docs/authority/**`。
 - 原始材料本身不迁入 authority。
 - case evidence 不设固定 TTL，由治理计划中的 verdict 决定保留、归档、桥接或删除。
@@ -337,9 +337,21 @@ block
 
 ---
 
-## 12. GOVERNANCE_PLAN.md
+## 12. Governance Plan
 
-`docs/governance/GOVERNANCE_PLAN.md` 是唯一默认中间产物，也是用户一次确认的对象。执行后同一个文件写回结果，不新增 `GOVERNANCE_RESULT.md`。
+治理计划是用户一次确认的对象。每个独立治理批次使用独立计划文件；执行后同一个批次文件写回结果，不新增 `GOVERNANCE_RESULT.md`。
+
+路径规则：
+
+```text
+case 相关治理:
+  docs/cases/<case-id>/governance-plan.md
+
+其他仓库级治理:
+  docs/governance/YYYY-MM-DD-<slug>.md
+```
+
+旧路径 `docs/governance/GOVERNANCE_PLAN.md` 只作为 legacy context 读取，不再作为新治理批次写入目标。
 
 Frontmatter：
 
@@ -348,6 +360,7 @@ Frontmatter：
 status: proposed | approved | applied | applied_with_blocks | blocked
 plan_version: 1
 scope: current-case | docs-only | full-repo
+governance_batch: YYYY-MM-DD-<slug>
 approved_by:
 approved_at:
 ---
@@ -470,7 +483,7 @@ last_verified:
 
 ```text
 1. 用户本轮明确指令
-2. 已确认 GOVERNANCE_PLAN.md
+2. 已确认的本批次治理计划
 3. 本 skill 的固定治理规则
 4. Active authority docs
 5. 当前生产代码
@@ -490,7 +503,7 @@ last_verified:
 2. 当前生产代码
 3. 当前测试
 4. 已接受 ADR / migration / release note
-5. 用户本轮新信息，默认需要进入 GOVERNANCE_PLAN 确认
+5. 用户本轮新信息，默认需要进入治理计划确认
 6. case docs / evidence
 7. derived / index docs
 8. archive / historical docs
@@ -566,7 +579,7 @@ tests/**
 package/config/schema/API files
 ```
 
-盘点目标不是生成独立 inventory 产物，而是为 `GOVERNANCE_PLAN.md` 的决策表提供依据。
+盘点目标不是生成独立 inventory 产物，而是为治理计划的决策表提供依据。
 
 ### Step 3. Extract Facts
 
@@ -609,12 +622,13 @@ evidence
 - 是否只剩历史价值。
 - 是否冲突、高风险或证据不足，需要 block。
 
-### Step 5. Write GOVERNANCE_PLAN.md
+### Step 5. Write Governance Plan
 
 写入或更新：
 
 ```text
-docs/governance/GOVERNANCE_PLAN.md
+docs/cases/<case-id>/governance-plan.md
+docs/governance/YYYY-MM-DD-<slug>.md
 ```
 
 状态为：
@@ -627,7 +641,7 @@ status: proposed
 
 ### Step 6. One User Confirmation
 
-用户确认 `GOVERNANCE_PLAN.md` 后：
+用户确认本批次治理计划后：
 
 ```yaml
 status: approved
@@ -658,7 +672,7 @@ approved_at: <timestamp>
 
 ### Step 8. Write Applied Result
 
-在同一个 `GOVERNANCE_PLAN.md` 写回：
+在同一个治理计划文件写回：
 
 - 实际创建、更新、移动、桥接、归档的文件。
 - 跳过的 blocked 项。
@@ -717,14 +731,14 @@ docs/archive/
 规则：
 
 - 如果项目已有 `docs/README.md`，优先更新它。
-- 如果项目没有文档入口，创建 `docs/DOC_INDEX.md`。
+- 如果项目没有文档入口，创建 `docs/README.md`。
 - 索引只回答“从哪里进入当前文档体系”。
 - 索引不要求列出每一个叶子文档。
 
 索引必须能路由到：
 
 - authority 入口。
-- governance plan。
+- 治理计划。
 - case evidence，如存在。
 - archive 入口，如存在。
 - derived / generated 文档说明。
@@ -786,7 +800,7 @@ Cursor / Windsurf rules
 - 只把高频、稳定、跨任务都需要的规则放入 always-on 指令。
 - 多步骤流程应进入 skill。
 - 路径局部规则应进入 path-specific rule，不进入全局 AGENTS。
-- Prompt / workflow / agent policy 变更必须进入 `GOVERNANCE_PLAN.md` 并经用户确认。
+- Prompt / workflow / agent policy 变更必须进入治理计划并经用户确认。
 - 生成的 adapter 文件是派生视图，不是源事实。
 
 ---
@@ -794,8 +808,9 @@ Cursor / Windsurf rules
 ## 21. Gate
 
 - 无 `scope` 时使用默认 `docs-only`，不再阻塞。
-- 写入 `GOVERNANCE_PLAN.md` 后，未获用户确认不得执行文件修改、移动、桥接、归档或 authority 更新。
-- 用户一次确认的是 `GOVERNANCE_PLAN.md` 的治理决策表。
+- 写入治理计划后，未获用户确认不得执行文件修改、移动、桥接、归档或 authority 更新。
+- 用户一次确认的是本批次治理计划的治理决策表。
+- 不得把新的独立治理批次写入已有计划文件；目标路径已存在且不是同一 `governance_batch` 时，必须换唯一 slug 或询问用户。
 - 有 `block` 项时，允许执行无依赖的非 block 项。
 - 与 blocked 事实有依赖的变更必须跳过。
 - 高影响事实必须 `block` 或明确等待用户确认。
@@ -810,8 +825,8 @@ Cursor / Windsurf rules
 
 ## 22. 验收标准
 
-- `docs/governance/GOVERNANCE_PLAN.md` 存在，且包含 scope、plan_version、文件级决策表、事实级决策表、blocked 项和确认记录。
-- `GOVERNANCE_PLAN.md` 是唯一默认中间产物；不存在默认生成的 `FACT_REGISTRY.md`、`KNOWLEDGE_CARDS.md`、`CONFLICT_REPORT.md`、`AUTHORITY_REBUILD_PLAN.md`、`CONTEXT_PACK_POLICY.md`。
+- 本批次治理计划存在，且包含 scope、governance_batch、plan_version、文件级决策表、事实级决策表、blocked 项和确认记录。
+- 不存在默认生成的 `FACT_REGISTRY.md`、`KNOWLEDGE_CARDS.md`、`CONFLICT_REPORT.md`、`AUTHORITY_REBUILD_PLAN.md`、`CONTEXT_PACK_POLICY.md`。
 - `docs/authority/README.md` 存在，并能路由到按需创建的 authority 子区。
 - 没有空 authority 子目录或占位文档。
 - 未确认原始材料位于 `docs/cases/<case-id>/evidence/` 或 archive，不进入 authority。
@@ -819,8 +834,8 @@ Cursor / Windsurf rules
 - 高风险 authority 文档包含 `owner` 和 `last_verified`。
 - 旧入口只在有误读风险时 bridge，bridge 文件薄且指向当前 authority 或 archive。
 - 历史 / superseded 材料进入 `docs/archive/**`，不再默认作为当前事实。
-- 入口索引能路由到 authority、governance plan、case evidence 和 archive。
-- 执行结果写回同一个 `GOVERNANCE_PLAN.md`。
+- 入口索引能路由到 authority、治理计划、case evidence 和 archive。
+- 执行结果写回同一个治理计划文件。
 - 有 block 项时，状态为 `applied_with_blocks`，且 blocked 项保留待用户裁决。
 
 ---
@@ -831,7 +846,7 @@ Cursor / Windsurf rules
 
 - 缩小 `scope`。
 - 先治理当前 case 或关键 docs 入口。
-- 在 `GOVERNANCE_PLAN.md` 中记录 deferred sources。
+- 在治理计划中记录 deferred sources。
 
 如果代码和历史文档冲突：
 
@@ -852,7 +867,7 @@ Cursor / Windsurf rules
 如果不是 git 仓库：
 
 - 继续治理。
-- 在 `GOVERNANCE_PLAN.md` 记录 `version_control: unavailable`。
+- 在治理计划中记录 `version_control: unavailable`。
 
 ---
 
