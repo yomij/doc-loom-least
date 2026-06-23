@@ -1,6 +1,6 @@
 ---
 name: setup-doc-governance
-description: Set up or rebuild documentation governance for a project. Use when the user asks to initialize docs governance, organize project docs, rebuild authority docs, classify historical docs, extract facts from existing docs/code/tests, create or update a governance plan, migrate docs, bridge old entries, archive superseded docs, or repair the documentation index.
+description: Set up or rebuild documentation governance for a project. Use when the user asks to initialize, organize, rebuild, or repair docs governance.
 ---
 
 # setup-doc-governance
@@ -17,6 +17,8 @@ Read when trigger condition is met:
   rules, bridge rules, or archive rules.
 - `references/verdicts.md` when: routing files or facts, writing decision
   tables, or deciding block conditions.
+- `../doc-sync-close/references/doc-update-rules.md` when: checking authority
+  lifecycle status values.
 
 ## Scope
 
@@ -55,9 +57,8 @@ Do not write a new independent governance batch into a prior plan file.
 If `docs/governance/GOVERNANCE_PLAN.md` exists from an older design, read it
 as legacy context only; write new batches to the date-named path.
 
-Do not generate default `FACT_REGISTRY.md`, `KNOWLEDGE_CARDS.md`,
-`CONFLICT_REPORT.md`, `AUTHORITY_REBUILD_PLAN.md`, or
-`CONTEXT_PACK_POLICY.md`.
+Do not invent artifact types outside the shared Artifact Policy or a confirmed
+governance plan.
 
 ## Workflow
 
@@ -74,6 +75,7 @@ Do not generate default `FACT_REGISTRY.md`, `KNOWLEDGE_CARDS.md`,
 6. Stop for one user confirmation of the plan.
 7. After confirmation, set `status: approved` and apply non-blocked decisions.
 8. Write applied result back into the same governance plan.
+9. Update the docs entry index after applying decisions.
 
 The first plan write is not permission to move, archive, bridge, or update
 authority docs.
@@ -103,7 +105,8 @@ superseded_by: []
 ---
 ```
 
-Allowed `status`: `active`, `draft`, `superseded`, `archived`.
+Allowed status values: see `../doc-sync-close/references/doc-update-rules.md`
+-> Lifecycle Status.
 High-risk authority docs must include `owner` and `last_verified`.
 
 Unconfirmed raw material belongs in case evidence or archive, not authority.
@@ -147,11 +150,9 @@ When applying:
 ## Gates
 
 - Without a specified scope, use `docs-only`; do not block.
-- Do not apply changes before user confirmation. → Route: setup-doc-governance. Reason: governance plan written as proposed, awaiting confirmation. Required input: user explicit approval of governance plan.
+- Do not apply changes before user confirmation -> wait for user input.
 - Do not write a new independent batch into an existing plan file. If the target path already exists, choose a unique slug or stop and ask.
-- Do not create empty authority sections. → Route: setup-doc-governance. Reason: no confirmed facts for this section. Required input: confirmed facts or decision to skip section creation.
 - Do not write unconfirmed raw material into authority.
 - Do not modify code, tests, build scripts, or runtime behavior.
 - Do not make bridge files carry old facts.
 - Do not treat evidence, archive, derived, or generated docs as current facts.
-- Update the docs entry index after applying decisions.

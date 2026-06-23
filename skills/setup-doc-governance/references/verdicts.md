@@ -41,15 +41,13 @@ modified by this skill.
 Code plus tests can override historical docs for low-risk internal
 implementation details when:
 
-- The topic is not public contract, safety, auth, privacy, billing, data
-  deletion, or ADR-protected architecture.
+- The topic is not a High-Risk Topic.
 - The historical doc is not active authority.
 - Code and tests agree.
 
 Use `block` when:
 
-- Public API, CLI, schema, config, safety, auth, permission, privacy, billing,
-  or data deletion is involved.
+- A High-Risk Topic is involved.
 - An ADR defines the boundary.
 - A user or owner recently confirmed the fact.
 - Code and tests disagree.
@@ -57,23 +55,4 @@ Use `block` when:
 
 ## Plan Tables
 
-File decisions:
-
-```md
-| Source | Current Role | Verdict | Target | Reason | Requires Confirmation |
-|---|---|---|---|---|---|
-```
-
-Fact decisions:
-
-```md
-| Fact | Source | Type | Verdict | Target Authority Doc | Evidence | Risk |
-|---|---|---|---|---|---|---|
-```
-
-Blocked decisions:
-
-```md
-| Topic | Sources | Why Blocked | Needed Decision |
-|---|---|---|---|
-```
+Use the table structures in `../templates/GOVERNANCE_PLAN.md`.
