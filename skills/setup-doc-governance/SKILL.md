@@ -109,10 +109,6 @@ Allowed status values: see `../doc-sync-close/references/doc-update-rules.md`
 -> Lifecycle Status.
 High-risk authority docs must include `owner` and `last_verified`.
 
-Unconfirmed raw material belongs in case evidence or archive, not authority.
-User-provided new facts enter the governance plan for confirmation; they do not
-silently become authority.
-
 ## Confirmation And Application
 
 Governance plan frontmatter:
