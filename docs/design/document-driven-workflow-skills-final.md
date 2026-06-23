@@ -655,7 +655,7 @@ Do not create empty authority folders or placeholder documents.
 
 ```text
 docs/
-  README.md 或 DOC_INDEX.md
+  README.md
 
   governance/
     YYYY-MM-DD-<slug>.md
@@ -1037,7 +1037,7 @@ superseded_by: []
 执行后必须更新入口索引：
 
 ```text
-docs/README.md 或 docs/DOC_INDEX.md
+docs/README.md
 ```
 
 并明确：
@@ -1366,7 +1366,7 @@ docs/authority/README.md
 docs/authority/**                       # 按需
 docs/cases/<case-id>/evidence/**        # 按需
 docs/archive/**                         # 按需
-docs/README.md 或 docs/DOC_INDEX.md      # 入口索引
+docs/README.md      # 入口索引
 bridge files                            # 按需
 ```
 
@@ -1410,7 +1410,7 @@ docs/governance/CONTEXT_PACK_POLICY.md
 
 ## 输出建议：入口索引
 
-优先更新既有 `docs/README.md`；没有入口时创建 `docs/DOC_INDEX.md`。
+优先更新既有 `docs/README.md`。
 
 索引只做路由，不列出每一个叶子文档：
 
@@ -1480,7 +1480,7 @@ git status --short
 - 用户需求
 - 当前 workspace
 - 当前 branch
-- docs/README.md 或 docs/DOC_INDEX.md
+- docs/README.md
 - docs/authority/ 中相关 active authority
 - docs/governance/YYYY-MM-DD-<slug>.md，仅在相关时
 - 相关代码和测试，按 intent 决定
@@ -2126,7 +2126,6 @@ skills/
       authority-README.md
       authority-doc.md
       bridge.md
-      DOC_INDEX.md
 
   context-authority/
     SKILL.md
@@ -2168,7 +2167,7 @@ skills/
 
 ```text
 docs/
-  README.md 或 DOC_INDEX.md
+  README.md
 
   governance/
     YYYY-MM-DD-<slug>.md
@@ -2349,7 +2348,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 ```text
 1. docs/governance/YYYY-MM-DD-<slug>.md
 2. docs/authority/README.md
-3. docs/README.md 或 docs/DOC_INDEX.md
+3. docs/README.md
 4. docs/cases/<case-id>/plan.md
 5. docs/cases/<case-id>/case_state.yaml
 6. docs/cases/<case-id>/closure.md
