@@ -66,9 +66,8 @@ Use `templates/case_state.yaml` for the initial case state. It contains the
 minimum routing fields: `case_id`, `phase`, `case_docs`, `closure_status`,
 `closure_path`, `last_updated`.
 
-Do not create case docs for status queries, explanation-only requests, one-shot
-context checks, explicit skills that do not need persistence, or global
-governance setup that is not tied to a case.
+Do not create case docs for the conditions listed in `references/shared-protocol.md` ->
+Case Creation Boundary.
 
 ## Route Table
 
