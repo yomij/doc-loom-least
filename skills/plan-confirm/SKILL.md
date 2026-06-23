@@ -92,9 +92,8 @@ Allowed exception categories are defined in `tdd-execute/references/tdd-exceptio
 Plan must record: TDD Required (Yes/No), Reason if No, Alternative Verification. When
 declaring TDD Required: No, cite the specific category from tdd-exceptions.md.
 
-Do not manufacture meaningless failing tests for behavior-preserving refactors.
-Use characterization or existing behavior lock, refactor, then verify no
-regression.
+For behavior-preserving refactors, see `tdd-execute/references/tdd-exceptions.md`
+for the characterization workflow.
 
 ## Version And Confirmation
 
