@@ -1,12 +1,12 @@
 ---
 name: context-authority
-description: Gather minimal task context and resolve authority sources before planning. Use before plan-confirm when a case needs a context gate, when resuming a case, when deciding which docs/code/tests are authoritative, or when checking conflicts between user requests, authority docs, code, tests, governance decisions, and case docs.
+description: Gather minimal context and resolve authority before planning. Use before plan-confirm when a case needs a context gate, on resume, or when authority conflicts may affect the plan.
 ---
 
 # context-authority
 
-Gather the smallest relevant context needed before planning. Do not write an
-implementation plan, modify code, create case identity, or resolve authority
+Read the smallest relevant context before planning. Do not write an
+implementation plan, modify files, create case identity, or resolve authority
 conflicts.
 
 Read when trigger condition is met:
@@ -21,7 +21,8 @@ Read when trigger condition is met:
 
 ## Start
 
-Run the minimal workspace checks:
+If `docloom-workflow` already ran workspace checks in this session, reuse that
+output. Otherwise run the minimal workspace checks:
 
 ```bash
 git rev-parse --show-toplevel
@@ -95,9 +96,7 @@ Output exactly one:
 
 Blocking conflicts include:
 
-- Public API, CLI, schema, or config contract conflict.
-- Security, auth, permission, privacy, billing, or data deletion conflict.
-- ADR-protected architecture boundary conflict.
+- Any High-Risk Topic conflict; see `references/shared-protocol.md`.
 - Recently owner-confirmed fact conflict.
 - Code and tests disagree.
 - Test coverage is missing and impact is high.
@@ -109,11 +108,11 @@ assumption and risk.
 
 ## Gates
 
-- No context, no plan. → Route: context-authority. Reason: missing context for planning. Required input: user request.
-- Do not enter `plan-confirm` with a blocking conflict. → Route: context-authority. Reason: blocking conflict detected. Required input: conflict details for resolution.
+- No context, no plan; output `needs_user_decision` or `needs_case_selection`.
+- Do not enter `plan-confirm` with a blocking conflict.
 - Do not create a case id or case docs. → Route: docloom-workflow. Reason: case creation owned by docloom-workflow. Required input: user request for case initialization.
-- Do not modify code, tests, authority, governance plan, case plan, execution,
-  closure, or review artifacts.
+- Read-only; do not modify any file.
 - Do not use archived, superseded, needs-refresh, derived, or scratch docs as
   current facts unless the user explicitly asks for history.
-- If sources are only low-authority or stale, mark the result as risk or block. → Route: context-authority. Reason: only low-authority or stale sources found. Required input: user decision on risk acceptance or governance setup.
+- If sources are only low-authority or stale, mark the result as risk or block;
+  do not present them as sufficient context.
