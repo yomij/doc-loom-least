@@ -1,12 +1,9 @@
 ---
 name: doc-sync-close
-description: Close an existing document-driven workflow case by syncing docs and writing closure. Use after execution, or when a case is blocked, cancelled, paused, superseded, abandoned, or otherwise ending. Updates L2 case docs, safe mechanical L3 derived docs, proposes authority changes or applies explicitly confirmed narrow authority patches, records tests, acceptance criteria, findings, review_risk, evidence gaps, confirmations, follow-ups, writes closure.md, and sets closure_status.
+description: Sync docs and close a Doc Loom case. Use after execution, or when a case is blocked, cancelled, paused, superseded, or abandoned.
 ---
 
 # doc-sync-close
-
-Synchronize task documents and close, pause, block, cancel, supersede, or
-abandon an existing Doc Loom case.
 
 Read when trigger condition is met:
 
@@ -31,18 +28,18 @@ Read when trigger condition is met:
   `docs/cases/<case-id>/governance-plan.md`; repository governance uses
   `docs/governance/YYYY-MM-DD-<slug>.md`.
 
-Do not create case id or case docs. If the user asks for documented closure
-without case docs, route back to `docloom-workflow` for minimal case identity.
+Per shared protocol Case Identity, this skill consumes existing case identity.
+If the user asks for documented closure without case docs, route back to
+`docloom-workflow` for minimal case identity.
 
 ## Closure Status
 
 Use the closure status set from `references/shared-protocol.md`.
 
-Additional guidance:
+Key distinctions:
 - `Done`: all acceptance criteria verified as met.
 - `Done with Caveats`: main goal complete, residual risk or follow-up remains.
-- `Blocked`/`Cancelled`/`Superseded`/`Paused`/`Abandoned`: see shared-protocol
-  meanings. Record the specific reason in `closure.md`.
+- For other statuses, record the specific reason in `closure.md`.
 
 ## Workflow
 
@@ -59,7 +56,7 @@ Additional guidance:
 8. Write `closure.md`.
 9. After `closure.md` is written and checked, update `case_state.yaml`.
 10. Write `handoff.md` only for `Paused`, `Blocked`, or another future resume
-    point.
+    point. Use `templates/handoff.md`.
 
 ## Acceptance Mapping
 
@@ -91,9 +88,8 @@ Classify possible knowledge changes as:
 - `case_local`
 - `none`
 
-Do not silently promote knowledge into authority. Reproducible bugs usually
-become test follow-ups. Repeated operations usually become runbook or automation
-proposals. One-off case learning stays in closure.
+Do not silently promote knowledge into authority. Classify the knowledge change
+and record the authority proposal, follow-up, derived sync, or case-local note.
 
 ## Authority Handling
 
@@ -127,13 +123,13 @@ its resolution in `closure.md`.
 
 ## Gates
 
-- Authority update requires user confirmation. → Route: doc-sync-close. Reason: authority change requires explicit user confirmation. Required input: user confirmation of concrete document and change.
-- Unmet acceptance criteria cannot be `Done`. → Route: doc-sync-close. Reason: acceptance criteria not met. Required input: user decision — adjust criteria, accept caveats, or block.
+- Authority update requires concrete user confirmation -> wait for user input.
+- Unmet acceptance criteria cannot be `Done` -> wait for user input.
 - User-provided Critical or Important findings that affect acceptance cannot be
   ignored.
 - High `review_risk` with insufficient evidence cannot be unqualified `Done`.
 - Missing `execution.md` required by Artifact Policy cannot be unqualified
-  `Done`. → Route: doc-sync-close. Reason: execution evidence missing. Required input: evidence gap record, user decision on Done with Caveats or Blocked.
+  `Done` -> wait for user input.
 - Case docs that end, pause, block, cancel, or supersede must get `closure.md`.
 - Do not update `case_state.yaml` to closed before closure is written.
 - Do not modify plan semantics; at most append a closure link or short note.

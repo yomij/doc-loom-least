@@ -20,8 +20,8 @@ All conditions must hold:
   confirmation.
 - No new authority area is created.
 - No file movement, archive, or bridge is involved.
-- No conflict fact, high-risk owner decision, or lifecycle migration is
-  involved.
+- No conflict fact, unresolved High-Risk Topic decision, or lifecycle migration
+  is involved.
 - User confirms the concrete patch, not a broad "sync docs" instruction.
 
 If any condition fails, write an authority proposal or governance follow-up
