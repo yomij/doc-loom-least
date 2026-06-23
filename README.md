@@ -55,7 +55,7 @@ Doc Loom Least v1 明确不做这些事：
 | Skill | 类型 | 作用 |
 |---|---|---|
 | `docloom-workflow` | 入口 / 轻量路由 | 解析当前任务和 case 状态，延迟创建 case，路由到具体阶段 skill。 |
-| `setup-doc-governance` | 治理初始化 / 周期治理 | 扫描文档，抽取事实，生成 `GOVERNANCE_PLAN.md`，经确认后整合、桥接、归档或更新 authority。 |
+| `setup-doc-governance` | 治理初始化 / 周期治理 | 扫描文档，抽取事实，为每个独立治理批次生成独立治理计划，经确认后整合、桥接、归档或更新 authority。 |
 | `context-authority` | 主流程 | 在计划前读取最小必要上下文，判断事实来源、冲突和路由 verdict。 |
 | `plan-confirm` | 主流程 | 生成带风险等级、TDD 策略、版本和基线的计划，并等待用户确认。 |
 | `tdd-execute` | 主流程 | 按已确认计划执行 Red-Green-Refactor 或记录 TDD exception 与替代验证。 |
@@ -78,14 +78,17 @@ Doc Loom Least v1 明确不做这些事：
 ```text
 setup-doc-governance
   -> 选择 scope: current-case | docs-only | full-repo
+  -> 解析治理计划路径
   -> 盘点文档和入口
   -> 抽取事实与证据
-  -> 生成 GOVERNANCE_PLAN.md
+  -> 生成独立治理计划
   -> 用户确认
   -> 执行非 blocked 的治理决策
 ```
 
 默认 scope 是 `docs-only`。只有用户明确要求，或 authority claim 需要代码 / 测试证据时，才升级到 `full-repo`。
+
+每个独立治理批次使用独立计划文件。case 相关治理写入 `docs/cases/<case-id>/governance-plan.md`；其他仓库级治理写入 `docs/governance/YYYY-MM-DD-<slug>.md`。旧路径 `docs/governance/GOVERNANCE_PLAN.md` 只作为 legacy context 读取，不再作为新批次写入目标。
 
 ### 持久化开发 case
 

@@ -1,7 +1,7 @@
 ---
 title: Governance Plan Batch Lifecycle Proposal
 type: proposal
-status: proposed
+status: implemented
 created: 2026-06-23
 tags:
   - doc-governance
@@ -115,16 +115,17 @@ Update `setup-doc-governance` so it applies these gates:
 - Small inline decisions must still list file-level and fact-level decisions
   before confirmation.
 
-## Files To Update Later
+## Applied Files
 
-This proposal intentionally does not change runtime skill behavior yet.
-
-When approved, update:
+This proposal is implemented by updating:
 
 - `skills/setup-doc-governance/SKILL.md`
 - `skills/setup-doc-governance/templates/GOVERNANCE_PLAN.md`
 - `skills/context-authority/references/retrieval-routing.md`
 - `skills/_shared/references/shared-protocol.md`
+- `skills/doc-sync-close/SKILL.md`
+- `README.md`
+- `docs/design/skills/setup-doc-governance-design.md`
 
 ## Acceptance Criteria
 
