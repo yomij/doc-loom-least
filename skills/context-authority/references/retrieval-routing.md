@@ -33,8 +33,7 @@ Exclude:
 - `status: superseded`
 - `source_of_truth: generated` as a fact source
 
-Generated docs can be consumed as views only. `needs_refresh` is a proposal
-reason, not a frontmatter status.
+Generated docs can be consumed as views only.
 
 ## Case Docs
 
