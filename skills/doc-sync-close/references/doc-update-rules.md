@@ -32,7 +32,7 @@ instead.
 Allowed when source is traceable, no long-term fact changes, no authority
 conflict:
 
-- README or DOC_INDEX links, paths, and status entries.
+- README links, paths, and status entries.
 - Troubleshooting with a verified reproducible short entry.
 - Examples with commands, paths, or parameters changed by code.
 - Getting-started/dev-guide references to confirmed contracts.

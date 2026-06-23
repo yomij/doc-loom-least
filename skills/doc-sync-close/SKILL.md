@@ -26,8 +26,10 @@ Read when trigger condition is met:
 - User-provided findings, including pasted `review` output, if any.
 - Related authority and L3 docs.
 - `case_state.yaml`.
-- `GOVERNANCE_PLAN.md` only when checking existing blocked decisions or
-  recording governance follow-up.
+- Governance plans only when checking existing blocked decisions or recording
+  governance follow-up. Case-scoped governance uses
+  `docs/cases/<case-id>/governance-plan.md`; repository governance uses
+  `docs/governance/YYYY-MM-DD-<slug>.md`.
 
 Do not create case id or case docs. If the user asks for documented closure
 without case docs, route back to `docloom-workflow` for minimal case identity.
@@ -101,7 +103,7 @@ Apply an authority patch only when the user explicitly confirms a narrow patch
 and all conditions in `references/doc-update-rules.md` are satisfied.
 
 Structural, high-risk, conflict-heavy, new authority-area, bridge/archive, or
-lifecycle changes go to `GOVERNANCE_PLAN.md` or a new case.
+lifecycle changes go to a new governance batch or a new case.
 
 ## State Update
 

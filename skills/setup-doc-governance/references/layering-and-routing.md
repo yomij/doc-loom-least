@@ -6,7 +6,7 @@
 |---|---|---|---|
 | L1 | Authority | `docs/authority/` | Confirmed reusable current facts that constrain later agents. |
 | L2 | Case / Operational | `docs/cases/<case-id>/` | Current task process, plan, evidence, execution, closure. |
-| L3 | Derived / Index | `docs/README.md`, `docs/DOC_INDEX.md`, README, guides | Entry points, navigation, derived explanations. Not source facts. |
+| L3 | Derived / Index | `docs/README.md`, README, guides | Entry points, navigation, derived explanations. Not source facts. |
 | L4 | Archive / Historical | `docs/archive/` | Historical, superseded, or replaced material. Not current by default. |
 | L5 | Scratch | `docs/scratch/` or case notes | Drafts, temporary notes, unverified inference. |
 
@@ -37,7 +37,6 @@ large amounts of domain fact.
 After applying governance decisions, update the docs entry index:
 
 - Prefer existing `docs/README.md`.
-- Create `docs/DOC_INDEX.md` only when no docs entry exists.
 - Link to authority, governance plan, case evidence if present, archive if
   present, and derived/generated view notes.
 - State that authority is the current fact entry.
