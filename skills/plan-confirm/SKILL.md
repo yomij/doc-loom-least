@@ -1,11 +1,10 @@
 ---
 name: plan-confirm
-description: Create and confirm an implementation plan before execution in a document-driven workflow. Use after docloom-workflow has established case_id and case_docs, and after context-authority when a context gate is needed. Produces plan.md with decisions, risk level, TDD strategy, optional adaptive execution policy, documentation impact, plan_version, base_commit, and explicit user confirmation before tdd-execute.
+description: Create and confirm an implementation plan before execution. Use after case identity exists and context is gathered or explicitly skipped.
 ---
 
 # plan-confirm
 
-Create the execution plan and get user confirmation before `tdd-execute`.
 `plan-confirm` consumes case identity; it does not create a case id or case docs.
 
 Read when trigger condition is met:
@@ -49,7 +48,7 @@ If `case_id` or case docs are missing, stop with
 10. Ask for user confirmation. High risk requires explicit confirmation tied
     to the current `plan_version`.
 11. After confirmation, update `plan.md`, `case_state.yaml`, and `handoff.md`
-    when a future resume point exists.
+    when a future resume point exists. Use `templates/handoff.md`.
 
 ## Plan Rules
 
@@ -76,7 +75,7 @@ Plan core content must include:
 - TDD applicability and strategy or confirmed exception.
 - Files to change.
 - Acceptance criteria.
-- Tasks with exact paths, commands, and expected results.
+- Tasks with exact paths, commands, expected results, and no placeholders.
 - Confirmation log.
 
 Include triggered sections only when they have content: confirmed decisions,
@@ -101,49 +100,29 @@ regression.
 
 `plan_version` is the semantic version of the user-confirmed plan.
 
-On draft write:
+| Event | `plan.md` status | `case_state.yaml` phase | Approval fields |
+|---|---|---|---|
+| Draft written | `draft` | `waiting_for_plan_confirmation` | Empty |
+| User confirms current version | `approved` | `planned` | `approved_by: user`, `approved_at`, `base_commit` |
+| Material change | `draft` | `waiting_for_plan_confirmation` | Cleared or no longer current |
 
-- Set `case_state.yaml` phase to `waiting_for_plan_confirmation`.
-- Record the draft `plan_version`.
-- Keep `closure_status: open`.
-- Do not set approval fields.
+On confirmation, add a Confirmation Log entry and record `base_commit` or an
+unavailable reason. When `git_available: false`, leave `base_commit` empty and
+record the reason; this does not block plan creation.
 
-On confirmation:
-
-- Record current `plan_version`.
-- Set `approved_by: user`.
-- Set `approved_at`.
-- Record `base_commit` or an unavailable reason (when `git_available: false`,
-  leave `base_commit` empty and record `git_available: false` as the reason;
-  this is acceptable and does not block plan creation).
-- Add a Confirmation Log entry.
-- Set `case_state.yaml` phase to `planned` and `current_plan_version` to the
-  approved version.
-
-Material plan changes require:
-
-- Increment `plan_version`.
-- Reset `status: draft`.
-- Clear approval fields or make them no longer current.
-- Ask for confirmation again.
+Material plan changes require incrementing `plan_version` and asking for
+confirmation again.
 
 Material changes include goal, decisions, file scope, test strategy, risk level,
 authority impact, TDD exception, public contract, or file responsibility
 changes. Checkbox/status edits do not change plan semantics.
-
-## Plan Quality Standard
-
-Plans must include: exact paths, commands, and expected results. No placeholders.
-Clear file responsibilities. TDD for behavior changes unless exception is confirmed.
 
 ## Gates
 
 - No context and no skipped-context reason, no plan. → Route: context-authority. Reason: missing context. Required input: user request and workspace state.
 - No `case_id` or case docs, no plan. → Route: docloom-workflow. Reason: missing case identity. Required input: user request for case initialization.
 - Blocking conflict means no execution plan. → Route: context-authority. Reason: blocking conflict. Required input: conflict details for resolution.
-- Draft plans awaiting user approval must set `case_state.yaml` phase to
-  `waiting_for_plan_confirmation`.
-- No user confirmation, no `tdd-execute`. → Route: plan-confirm. Reason: plan requires confirmation. Required input: user explicit approval of current plan_version.
+- No user confirmation, no `tdd-execute` -> wait for user input.
 - High-risk confirmation must identify the current `plan_version`; ambiguous
   short confirmation is not enough.
 - Current `plan_version` must be approved before execution.
