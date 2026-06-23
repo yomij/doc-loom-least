@@ -1,12 +1,11 @@
 ---
 name: docloom-workflow
-description: Public automatic entry for Doc Loom Least. Use as the default entry when a user asks for a docs-first change workflow but does not explicitly invoke a specific Doc Loom skill. Resolves current case status, routes to setup-doc-governance, context-authority, plan-confirm, tdd-execute, doc-sync-close, or explicitly requested conversation-only review, owns delayed case creation and case_id generation, consumes review_risk signals, and applies the global Artifact Policy without becoming a heavy orchestrator.
+description: Default entry for Doc Loom Least. Use when a user asks for a docs-first workflow but does not name a specific skill.
 ---
 
 # docloom-workflow
 
-Use the minimum path that safely resolves the current request. Route; do not
-replace stage skills.
+Route to the owning skill; do not replace stage skills.
 
 Read shared rules first when routing or creating case state:
 `references/shared-protocol.md`.
@@ -83,12 +82,11 @@ overrides all conditions below.
 | 3 | User explicitly asks for review or code/docs/test/design review | `review` |
 | 4 | Multiple case candidates and no safe assumption | `status-only` with `needs_case_selection` |
 | 5 | User asks for status or intent is ambiguous | `status-only` |
-| 6 | Need resume, authority decision, conflict handling, or high-risk work | `context-authority` |
+| 6 | Persistent work needing a context gate: resume, authority, conflict, or High-Risk Topic | `context-authority` |
 | 7 | Low-risk, ≤ 3 files, ≤ 20 lines diff, no conflict, no cross-session need — fast-path conditions all hold | `plan-confirm` (fast-path) |
-| 8 | Persistent work needing a context gate but not yet high-risk enough for full context-authority | `context-authority` |
-| 9 | Persistent work with inline context or skipped-context reason | `plan-confirm` |
-| 10 | Approved plan exists and user explicitly asks to execute or continue | `tdd-execute` |
-| 11 | User asks to sync docs, close, write closure, or execution is complete | `doc-sync-close` |
+| 8 | Persistent work with inline context or skipped-context reason | `plan-confirm` |
+| 9 | Approved plan exists and user explicitly asks to execute or continue | `tdd-execute` |
+| 10 | User asks to sync docs, close, write closure, or execution is complete | `doc-sync-close` |
 
 Explicit skill invocation wins. If a user names a Doc Loom skill, honor that
 skill unless its gate routes back to `docloom-workflow` or another required
@@ -132,14 +130,15 @@ in `closure.md`.
 
 ## Gates
 
-- Do not create a case just because the entry skill ran. → Route: docloom-workflow. Reason: status-only. Required input: user intent.
-- Do not execute just because an approved plan exists. → Route: docloom-workflow. Reason: execution requires explicit user request. Required input: user intent.
+- Do not create a case just because the entry skill ran; status-only remains
+  read-only.
+- Approved plan without an execution request -> wait for user input.
 - Do not run `context-authority` for status, explanation-only, or clearly
   low-risk one-step work.
 - Do not enter `plan-confirm` for persistent work without a context summary,
   context brief, or explicit low-risk skipped-context reason.
-- Do not auto-trigger `review`, even when `review_risk` is high. → Route: docloom-workflow. Reason: review requires explicit user request. Required input: user intent.
-- Do not route or own `grill`. → Route: docloom-workflow. Reason: grill is conversation-only, requires explicit invocation. Required input: user intent.
+- Do not auto-trigger `review`, even when `review_risk` is high.
+- Do not route or own `grill`; it requires explicit invocation.
 - Do not write files in status-only mode.
 - Do not silently repair state cache conflicts.
 - Do not write `base_commit` or `risk_level`; these belong to `plan.md` frontmatter.
