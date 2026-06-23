@@ -7,7 +7,7 @@ description: Set up or rebuild documentation governance for a project. Use when 
 
 Initialize, rebuild, or periodically clean a project's documentation governance.
 Historical docs are evidence. Authority docs are confirmed source of truth.
-`GOVERNANCE_PLAN.md` is the single default approval surface.
+Each independent governance batch gets its own plan file.
 
 Read when trigger condition is met:
 
@@ -41,14 +41,19 @@ whole repository unless `full-repo` is selected.
 Default:
 
 ```text
-docs/governance/GOVERNANCE_PLAN.md
+docs/governance/YYYY-MM-DD-<slug>.md   # independent governance batch
+docs/cases/<case-id>/governance-plan.md  # governance tied to an active case
 docs/authority/README.md
 docs/authority/**                 # only sections with confirmed facts
 docs/cases/<case-id>/evidence/**  # when case evidence is needed
 docs/archive/**                   # when archival is applied
-docs/README.md or docs/DOC_INDEX.md
+docs/README.md
 bridge files                      # only when old entries are likely to mislead
 ```
+
+Do not write a new independent governance batch into a prior plan file.
+If `docs/governance/GOVERNANCE_PLAN.md` exists from an older design, read it
+as legacy context only; write new batches to the date-named path.
 
 Do not generate default `FACT_REGISTRY.md`, `KNOWLEDGE_CARDS.md`,
 `CONFLICT_REPORT.md`, `AUTHORITY_REBUILD_PLAN.md`, or
@@ -56,12 +61,16 @@ Do not generate default `FACT_REGISTRY.md`, `KNOWLEDGE_CARDS.md`,
 
 ## Workflow
 
-1. Resolve scope.
+1. Resolve scope and plan path.
+   - If a case is active and governance is tied to that case:
+     `docs/cases/<case-id>/governance-plan.md`.
+   - Otherwise: `docs/governance/YYYY-MM-DD-<slug>.md`.
+   - If the target path already exists, choose a unique slug or stop and ask.
 2. Inventory relevant docs and entries.
 3. Extract facts as statement, source, evidence, scope, and risk.
 4. Route files and facts with `promote`, `merge`, `bridge`, `archive`, or
    `block`.
-5. Write `docs/governance/GOVERNANCE_PLAN.md` with `status: proposed`.
+5. Write the governance plan with `status: proposed`.
 6. Stop for one user confirmation of the plan.
 7. After confirmation, set `status: approved` and apply non-blocked decisions.
 8. Write applied result back into the same governance plan.
@@ -103,13 +112,14 @@ silently become authority.
 
 ## Confirmation And Application
 
-`GOVERNANCE_PLAN.md` frontmatter:
+Governance plan frontmatter:
 
 ```yaml
 ---
 status: proposed
 plan_version: 1
 scope: docs-only
+governance_batch: YYYY-MM-DD-short-slug
 approved_by:
 approved_at:
 ---
@@ -138,6 +148,7 @@ When applying:
 
 - Without a specified scope, use `docs-only`; do not block.
 - Do not apply changes before user confirmation. → Route: setup-doc-governance. Reason: governance plan written as proposed, awaiting confirmation. Required input: user explicit approval of governance plan.
+- Do not write a new independent batch into an existing plan file. If the target path already exists, choose a unique slug or stop and ask.
 - Do not create empty authority sections. → Route: setup-doc-governance. Reason: no confirmed facts for this section. Required input: confirmed facts or decision to skip section creation.
 - Do not write unconfirmed raw material into authority.
 - Do not modify code, tests, build scripts, or runtime behavior.

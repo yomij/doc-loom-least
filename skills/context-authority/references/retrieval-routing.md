@@ -4,10 +4,10 @@ Read by relevance. Do not build a full context pack.
 
 ## Governance Docs
 
-Read `docs/README.md` or `docs/DOC_INDEX.md` when a docs entry or authority
+Read `docs/README.md` when a docs entry or authority
 route is needed.
 
-Read `docs/governance/GOVERNANCE_PLAN.md` only when the task involves:
+Read governance plan files when the task involves:
 
 - Documentation governance.
 - Authority update.
@@ -16,6 +16,14 @@ Read `docs/governance/GOVERNANCE_PLAN.md` only when the task involves:
 - High risk.
 - User-provided new facts that may touch blocked decisions.
 - Missing authority or conflict that requires blocked-decision context.
+
+If a case is active, read `docs/cases/<case-id>/governance-plan.md`.
+Otherwise read the most recent `docs/governance/*.md` with
+`status: approved` or `status: applied_with_blocks`.
+If blocked-decision context is needed, also read any
+`applied_with_blocks` plan.
+If `docs/governance/GOVERNANCE_PLAN.md` exists from an older design, read it
+as legacy context only.
 
 If governance or authority is missing:
 

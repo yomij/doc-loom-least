@@ -50,7 +50,7 @@ case artifacts, route workflow, or update state.
 Use this order to decide how to execute the current task:
 
 1. User instructions in the current turn.
-2. An approved `GOVERNANCE_PLAN.md`, if this is a governance task.
+2. An approved governance plan, if this is a governance task.
 3. The active Doc Loom skill rules.
 4. Active authority docs.
 5. Current production code.
@@ -194,7 +194,7 @@ A narrow authority patch requires confirmation of the concrete document and
 change. A broad instruction such as "sync docs" is not enough.
 
 Confirmed discussion decisions remain task-scoped until they are recorded in
-`plan.md`, `GOVERNANCE_PLAN.md`, or `closure.md`.
+`plan.md`, a governance plan, or `closure.md`.
 
 ## Case State Conflicts
 

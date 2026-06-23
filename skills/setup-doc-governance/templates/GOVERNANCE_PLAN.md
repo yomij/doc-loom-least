@@ -2,6 +2,7 @@
 status: proposed
 plan_version: 1
 scope: docs-only
+governance_batch: YYYY-MM-DD-short-slug
 approved_by:
 approved_at:
 ---
