@@ -6,29 +6,6 @@ Use this reference when a Doc Loom skill needs global workflow rules. Stage
 skills own their own outputs; this file only defines shared vocabulary and
 cross-skill constraints.
 
-## Design Guardrails
-
-These skills follow Doc Loom Least's design guardrails: use the minimum path
-that resolves the governance failure, avoid complex pipeline mechanics, and
-keep workflow documents readable and semantic.
-
-When installed into another project, obey that project's own user instructions,
-agent instructions, ADRs, authority docs, production code, and tests. This
-protocol only defines how Doc Loom skills coordinate their own workflow; it
-does not replace the target project's source of truth.
-
-## Skill Runtime Boundary
-
-Distributed Doc Loom skills are a document-and-skill workflow.
-
-Do not:
-
-- Depend on a CLI backend.
-- Call `.agents/doc-loom/bin/doc-loom`.
-- Create or maintain `.agents/doc-loom` control files.
-- Add setup runtime, adapters, central task indexes, or route artifacts.
-- Replace stage skills from the entry skill.
-
 ## Skill Ownership
 
 | Area | Owner |
@@ -82,6 +59,12 @@ truth. Historical material is evidence, not current authority.
 
 Risk levels and confirmation policy: see `plan-confirm/references/risk-levels.md`.
 
+## High-Risk Topics
+
+High-risk topics: security, auth, permission, privacy, billing, data deletion,
+public API, CLI, schema, config contract, migration, ADR-protected architecture
+boundaries, and workflow or agent policy change.
+
 ## Case Identity
 
 Case id resolution order:
@@ -122,11 +105,18 @@ Do not cache `base_commit` or `risk_level` in `case_state.yaml` by default.
 These belong to `plan.md` frontmatter. Do not store detailed evidence in
 `case_state.yaml`; evidence belongs in Markdown artifacts.
 
-When case_state.yaml conflicts with Markdown:
+When `case_state.yaml` conflicts with Markdown artifacts:
 - Report `state_cache_conflict`.
-- Derive phase from Markdown plus git state.
+- Derive phase from the smallest reliable signal:
+  1. `closure.md` exists -> `closed`.
+  2. `execution.md` exists and acceptance checks are complete -> `doc_syncing`.
+  3. `execution.md` exists -> `executing`.
+  4. `plan.md` has `status: approved` -> `planned`.
+  5. `plan.md` has `status: draft` -> `waiting_for_plan_confirmation`.
+  6. No clear signal -> `needs_user_decision`.
 - Route based on the derived phase.
-- Do not silently overwrite the cache.
+- Do not silently overwrite the cache; the owning skill may update it only after
+  deriving the correct phase.
 
 ## Artifact Policy
 
@@ -137,20 +127,11 @@ When case_state.yaml conflicts with Markdown:
 | `plan.md` | Case enters `plan-confirm` | No persistent case workflow | `plan-confirm` |
 | `handoff.md` | A future resume point exists | Same-session continuous flow | Current stage skill |
 | `execution.md` | TDD required, code or behavior change, plan deviation, failed or retried tests, material review risk, resume needed | Docs-only, trivial config, verification fits in closure | `tdd-execute` |
-
-Conditional anchoring for `execution.md`:
-- Required: adding a new CLI endpoint (behavior change, TDD), refactoring a
-  module with test coverage changes (code change), fixing a failing CI build
-  (failed tests).
-- Skipped: updating a README typo (docs-only), changing a log level in a
-  config file (trivial config), adding a comment in code (verification fits
-  in closure).
+| `closure.md` | Case docs exist and task ends, pauses, blocks, cancels, or is superseded | No case docs one-shot task | `doc-sync-close` |
 
 Only create artifacts listed in the Artifact Policy table. Do not invent new
 artifact types unless the user explicitly requests one or a governance plan
 approves one.
-
-| `closure.md` | Case docs exist and task ends, pauses, blocks, cancels, or is superseded | No case docs one-shot task | `doc-sync-close` |
 
 ## Closure Status
 
@@ -196,40 +177,24 @@ change. A broad instruction such as "sync docs" is not enough.
 Confirmed discussion decisions remain task-scoped until they are recorded in
 `plan.md`, a governance plan, or `closure.md`.
 
-## Case State Conflicts
-
-When `case_state.yaml` conflicts with Markdown artifacts, derive phase from the
-smallest reliable signal:
-
-1. `closure.md` exists -> `closed`.
-2. `execution.md` exists and acceptance checks are complete -> `doc_syncing`.
-3. `execution.md` exists -> `executing`.
-4. `plan.md` has `status: approved` -> `planned`.
-5. `plan.md` has `status: draft` -> `waiting_for_plan_confirmation`.
-6. No clear signal -> `needs_user_decision`.
-
-Report `state_cache_conflict`. Do not silently overwrite `case_state.yaml`; the
-owning skill may update it only after deriving the correct phase.
-
 ## Git Degraded Mode
 
-When `git_available: false`:
+When `git_available: false`, continue document work and review/grill
+conversation. Skip `base_commit`, branch/worktree operations, git diff, and
+commit/stage; record the reason or "commit deferred: git unavailable". Manual
+changed-file or commit information from the user is pending evidence, not
+verified git state.
 
-- Available: read/write Markdown artifacts, read authority/governance docs,
-  update case_state.yaml, perform review and grill conversation.
-- Skipped: base_commit (leave empty with reason), branch/worktree operations
-  (use inline mode only), git diff (ask user for changed files), commit/stage
-  (record "commit deferred: git unavailable").
-- User-provided manual information (changed file list, commit hash) is pending
-  evidence, not verified git state.
+## Run Modes
 
-## Session State Carry
+| Mode | New branch | New worktree | Use when |
+|---|---:|---:|---|
+| `isolated` | Yes | Yes | Large, parallel, or high-risk tasks |
+| `branch` | Yes | No | Normal development task |
+| `inline` | No | No | Small task, existing branch, temporary work |
 
-When a skill reads case_state.yaml and produces output that the next skill
-consumes, include these fields in the output: phase, closure_status, case_id,
-and any next_skill, route_reason, or required_input values. The next skill may
-use these from the prior output instead of re-reading case_state.yaml, unless a
-fresh read is required by resume, dirty workspace, or possible state change.
+Skills may identify run mode. Branch and worktree creation still follow project
+instructions and user confirmation rules.
 
 ## Case Creation Boundary
 
@@ -257,8 +222,7 @@ artifacts and proceed directly to execution with inline closure:
 - Risk is `low` (documentation, local copy, non-critical tests, or
   behavior-preserving refactor).
 - Estimated change is small (≤ 3 files, ≤ 20 lines diff).
-- No authority, governance, public contract, security, auth, privacy, billing,
-  or data deletion conflict.
+- No conflict in any High-Risk Topic.
 - No cross-session, multi-agent, or resume continuity requirement.
 
 Fast-path execution:
@@ -280,43 +244,26 @@ When any fast-path condition fails, fall back to the full pipeline.
 
 ## Small Project Degradation
 
-When expected directory paths do not exist:
-
-- `docs/authority/` missing: proceed with `proceed_to_plan_with_risk`.
-  context-authority records "no authority docs found".
-  plan-confirm records "authority: none, default risk: medium".
-- `docs/governance/` missing: route to `setup-doc-governance` if the task
-  involves authority, public contract, or high-risk decisions.
-  Otherwise proceed with `proceed_to_plan_with_risk`.
-- `docs/cases/` missing: docloom-workflow creates it on first case creation.
-
-Do not block progress solely because a directory does not exist. Block only
-when missing governance would cause authority conflict, public contract
-violation, or safety issue.
+When expected directory paths do not exist, do not block solely for absence.
+`docs/cases/` is created on first case creation. Missing authority may proceed
+with `proceed_to_plan_with_risk`; record "no authority docs found" and
+"authority: none, default risk: medium". Missing governance routes to
+`setup-doc-governance` only for authority, public contract, or High-Risk Topic
+work; otherwise proceed with risk.
 
 ## Case Resume
 
 On cross-session resume, read `handoff.md` first when present, then the minimum
-artifact required by phase: `plan.md` for `planned`, `execution.md` for
-`executing` or `doc_syncing`, and `closure.md` for closed-but-resumable cases.
-
-Re-run `context-authority` only when authority, governance, code, or external
-dependencies may have changed, or when the case is high risk, conflict-related,
-or resumed after a break. Skip it for same-session mechanical continuation.
+artifact for the phase: `plan.md`, `execution.md`, or `closure.md` for
+closed-but-resumable cases. Re-run `context-authority` only when authority,
+governance, code, or external dependencies may have changed, or when the case is
+high risk, conflict-related, or resumed after a break.
 
 When writing `handoff.md`, include current phase, last completed step, next
-step, resume condition, known issues, and source artifacts. Stale non-closed
-cases are advisory only; report staleness, but do not auto-close or block on it.
-
-Staleness threshold: when `last_updated` in `case_state.yaml` is more than 7
-days ago, report "case stale (N days since last update)" and ask the user to
-confirm whether to continue, adjust the goal, or close the case.
-
-Resume re-validation: before proceeding from the last completed step, verify
-that the step's output still holds (tests still pass, files still exist,
-workspace matches `base_commit` or explains deviation). If re-validation fails,
-report the mismatch and route to the appropriate skill rather than trusting
-handoff.md declarations blindly.
+step, resume condition, known issues, and source artifacts. When `last_updated`
+is more than 7 days old, report staleness and ask whether to continue, adjust,
+or close. Before proceeding, verify the last completed step still holds; on
+mismatch, report and route rather than trusting handoff declarations blindly.
 
 ## Git And Commands
 
