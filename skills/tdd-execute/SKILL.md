@@ -1,12 +1,12 @@
 ---
 name: tdd-execute
-description: Execute an approved persistent Doc Loom case plan using TDD discipline. Use only after plan-confirm has produced an approved plan with plan_version, risk_level, and base_commit, or after a minimal approval writeback in the same turn. Handles red-green-refactor, TDD exceptions, adaptive execution amendments, implementation, quality checks, execution evidence, handoff, case_state.yaml updates, deviations, review_risk signals, and authorized atomic commits.
+description: Execute an approved Doc Loom case plan using TDD discipline. Use only after plan-confirm has produced an approved plan.
 ---
 
 # tdd-execute
 
-Execute an approved persistent Doc Loom case plan. Ordinary one-shot coding
-tasks and simple document edits do not automatically enter this skill.
+Ordinary one-shot coding tasks and simple document edits do not automatically
+enter this skill.
 
 Read when trigger condition is met:
 
@@ -62,7 +62,8 @@ the only issue is missing state cache or same-turn approval writeback.
 5. Refactor: only planned or necessary refactors; run related tests after each.
 6. Quality check with planned or obvious low-risk read-only commands.
 7. Update execution docs and plan checkbox progress.
-8. Update handoff only when a future resume point exists.
+8. Update handoff only when a future resume point exists. Use
+   `templates/handoff.md`.
 9. Record `review_risk` as a signal only.
 10. Check every acceptance criterion.
 11. When execution work is complete and closure is the next owner, update
@@ -83,13 +84,10 @@ Allowed Red sources:
 - An existing failing test that directly maps to current acceptance criteria and
   is not unrelated baseline or flaky failure.
 
-Avoid testing anti-patterns:
-
-- Do not assert that a mock exists as proof of behavior.
-- Do not add production test-only methods.
-- Do not mock dependencies without understanding side effects.
-- Mock responses must match real structures.
-- Prefer realistic integration tests when mocks exceed the behavior under test.
+Avoid testing anti-patterns: do not assert mock existence as behavior, do not
+add production test-only methods, do not mock dependencies without understanding
+side effects, and keep mock responses aligned with real structures. Prefer
+realistic integration tests when mocks exceed the behavior under test.
 
 ## TDD Exceptions
 
@@ -137,41 +135,28 @@ semantics, acceptance criteria, TDD strategy, Decisions, or file scope.
 
 ## Review Risk
 
-Record `review_risk` as data, not a recommendation or workflow gate.
+Record `review_risk` as data, not a recommendation or workflow gate. Use
+`low`, `medium`, or `high`.
 
-Use `low`, `medium`, or `high`. Anchoring:
-- `low`: local change, no public contract, tests pass. Example: refactor an
-  internal helper function.
-- `medium`: new internal feature, moderate scope, main paths covered. Example:
-  add an internal data processing step.
-- `high`: public API change, security, auth, privacy, billing, data
-  model/migration, insufficient coverage, authority proposal, or serious plan
-  deviation. Example: change a public endpoint's response schema.
+| Value | Use when |
+|---|---|
+| `low` | Local change, no public contract, tests pass. |
+| `medium` | New internal feature, moderate scope, main paths covered. |
+| `high` | High-Risk Topic, insufficient coverage, authority proposal, or serious plan deviation. |
 
-Do not trigger `review`; only the user can request it.
+Write or update `review_risk` in `case_state.yaml` when implementation touches a
+High-Risk Topic, coverage is insufficient, a material plan deviation occurred,
+an authority proposal is pending, scope changes, or new evidence resolves a
+previous risk concern.
 
-## Review Risk Lifecycle
-
-Write review_risk in case_state.yaml when:
-- Implementation touches public API, security, auth, billing, privacy, data
-  deletion, or schema migration.
-- Test coverage is insufficient for the change scope.
-- A material plan deviation occurred.
-- Authority proposal is pending.
-
-Update review_risk when:
-- Additional implementation increases or decreases the risk scope.
-- New evidence resolves a previous risk concern (e.g., tests now cover the gap).
-
-Do not clear review_risk to `low` during execution unless all original high-risk
-conditions are resolved with evidence. The closure skill consumes the final
-value.
+Do not clear `review_risk` to `low` during execution unless all original
+high-risk conditions are resolved with evidence. The closure skill consumes the
+final value. Do not trigger `review`; only the user can request it.
 
 ## State Update
 
-`case_state.yaml` is a routing signal. Phase is routing truth; Markdown execution
-evidence is evidence truth. Update the routing signal only for phase and routing
-signals.
+Update `case_state.yaml` only for phase and routing signals. Markdown execution
+evidence is evidence truth.
 
 When implementation starts:
 
@@ -214,9 +199,9 @@ in `execution.md`.
 - Unconfirmed current `plan_version`, no execution. → Route: plan-confirm. Reason: plan version unconfirmed. Required input: user explicit approval of current plan_version.
 - Unrecoverable closed case status, no execution without a new case or explicit
   reconfirmation.
-- TDD required but no observed expected Red, no implementation.
-- Unexpected Red failure, no implementation.
-- TDD exception without alternative verification, no execution. → Route: tdd-execute. Reason: TDD exception lacks alternative verification. Required input: user-specified verification approach.
+- TDD required but no observed expected Red, or unexpected Red failure, no
+  implementation.
+- TDD exception without alternative verification -> wait for user input.
 - Serious plan deviation, stop. → Route: plan-confirm. Reason: plan deviation exceeds adaptive scope. Required input: plan amendment.
 - Touching non-goals or violating decisions, stop.
 - Do not modify authority docs.
