@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review a specified design document, proposal, code diff, test set, documentation change, or Doc Loom case evidence when the user explicitly asks for review. Performs read-only, conversation-only evidence review; reports assessment, findings, and evidence gaps; does not create artifacts, modify files, update status, write proposals, or route workflow.
+description: Read-only evidence review of a design doc, proposal, code diff, test set, documentation change, or case evidence. Use only when the user explicitly asks for review.
 ---
 
 # review
@@ -58,50 +58,24 @@ workflow block.
 
 Follow the fact authority order in `references/shared-protocol.md`.
 
-Historical, derived, and scratch docs are not current facts by default.
-
 ## Review Checks
 
-For any target:
+Core checks: claim clarity, evidence support, stated assumptions/non-goals,
+verifiable success criteria, appropriate fact sources, and no draft/derived/
+archive/scratch material treated as authority.
 
-- Is the target claim clear?
-- Does evidence support the conclusion?
-- Are assumptions and non-goals stated?
-- Are success criteria verifiable?
-- Are fact sources appropriate?
-- Are draft, derived, archive, or scratch materials being treated as authority?
+Type-specific checks:
+- Code/diff: requirement or plan match, scope control, edge/error handling, and
+  no authority, contract, ADR, or public API violation.
+- Tests/TDD: behavior and failure-path coverage, no mock/implementation-detail
+  testing, realistic mock structures, and command evidence matching TDD claims.
+- Documentation governance: authority, case evidence, derived, archive, and
+  scratch separated; no unconfirmed promotion; `source_of_truth` correct.
 
-For code/diff:
-
-- Does it match the explicit requirement or plan?
-- Is scope expanded?
-- Are edge cases and errors handled?
-- Does it violate authority, contract, ADR, or public API constraints?
-
-For tests/TDD:
-
-- Do tests cover behavior, failure paths, and boundaries?
-- Do they avoid testing mocks or implementation details?
-- Do mock responses match real structures?
-- Does TDD evidence match command results?
-
-For documentation governance:
-
-- Are authority, case evidence, derived, archive, and scratch separated?
-- Are unconfirmed facts incorrectly promoted?
-- Is `source_of_truth` missing or wrong?
-
-For high-risk targets, when in scope:
-
-- Security, auth, permission, privacy, billing, and data deletion claims must be
-  supported by direct evidence or reported as findings/evidence gaps.
-- Public API, CLI, schema, config contract, and migration changes must be
-  checked against active authority, ADRs, contracts, code, and tests.
-- Workflow and agent-policy changes must be checked for confirmation,
-  authority impact, and whether unconfirmed facts are being treated as current
-  policy.
-- Missing key evidence in these areas should usually be `Insufficient evidence`
-  or an Important/Critical finding, not a passing assessment.
+For high-risk targets, check direct evidence for relevant High-Risk Topics from
+`references/shared-protocol.md`. Missing key evidence in these areas should
+usually be `Insufficient evidence` or an Important/Critical finding, not a
+passing assessment.
 
 ## Output Contract
 
@@ -176,9 +150,8 @@ keep this output contract. Subagent findings do not become workflow state.
 
 ## Gates
 
-- User must explicitly request review. → Route: review. Reason: review requires explicit user request. Required input: user review intent.
-- Do not write files. → Route: review. Reason: review is read-only. Required input: review target, findings reported inline.
-- Do not modify code, docs, state, or artifacts.
-- Do not output workflow route, next owner, ready-to-close, or closure verdict.
-- Do not write authority proposal or governance follow-up.
+- User must explicitly request review.
+- Read-only; do not write files or modify code, docs, state, or artifacts.
+- Do not output workflow route, next owner, ready-to-close, closure verdict,
+  authority proposal, or governance follow-up.
 - Do not package missing evidence as passing.
