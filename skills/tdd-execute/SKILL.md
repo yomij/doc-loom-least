@@ -133,11 +133,11 @@ semantics, acceptance criteria, TDD strategy, Decisions, or file scope.
 
 Record `review_risk` as data, not a recommendation or workflow gate.
 
-| Value | When to set | Meaning |
-|---|---|---|
-| `low` | Local change, no public contract, tests pass. | Low risk. |
-| `medium` | New internal feature, moderate scope, main paths covered. | Medium risk. |
-| `high` | Implementation touches a High-Risk Topic, coverage insufficient, material plan deviation, or authority proposal pending. | High risk. |
+| Value | When to set |
+|---|---|
+| `low` | Local change, no public contract, tests pass. |
+| `medium` | New internal feature, moderate scope, main paths covered. |
+| `high` | Implementation touches a High-Risk Topic, coverage insufficient, material plan deviation, or authority proposal pending. |
 
 Update when scope changes or new evidence resolves a previous concern. Do not
 clear to `low` unless all original high-risk conditions are resolved with
@@ -147,7 +147,7 @@ only the user can request it.
 ## State Update
 
 Update `case_state.yaml` only for phase and routing signals. Markdown execution
-evidence is evidence truth.
+evidence is evidence truth. Set `closure_status: open` on phase entry.
 
 When implementation starts:
 
@@ -167,8 +167,7 @@ closure_status: open
 When review risk affects routing or closure judgment:
 
 ```yaml
-phase: executing
-review_risk: high
+review_risk: high   # low | medium | high
 ```
 
 `review_risk` records only `low`, `medium`, or `high`. Reasons stay in

@@ -32,11 +32,9 @@ Use one fixed workflow. Scope controls scanning breadth:
 
 Default to `docs-only`. Escalate to `full-repo` only when authority claims need
 code/test verification or the user explicitly asks to use code/tests as
-evidence. Never modify code, tests, build scripts, or runtime behavior.
-
-Use a bounded scan by default: docs entry points, existing governance and
-authority docs, ADRs, and explicitly relevant historical docs. Do not scan the
-whole repository unless `full-repo` is selected.
+evidence. Never modify code, tests, build scripts, or runtime behavior. Bounded
+scan only: docs entry points, governance/authority docs, ADRs, explicitly
+relevant historical docs — never the whole repository unless `full-repo`.
 
 ## Outputs
 
@@ -67,7 +65,11 @@ governance plan.
      `docs/cases/<case-id>/governance-plan.md`.
    - Otherwise: `docs/governance/YYYY-MM-DD-<slug>.md`.
    - If the target path already exists, choose a unique slug or stop and ask.
-2. Inventory relevant docs and entries.
+2. Inventory relevant docs and entries: scan docs entry points, `README*`,
+   root Markdown, ADR directories, governance/authority docs, and explicitly
+   relevant historical docs; grep frontmatter `status`/`authority`/
+   `source_of_truth`, then list with path + one-line current-vs-historical
+   verdict.
 3. Extract facts as statement, source, evidence, scope, and risk.
 4. Route files and facts with `promote`, `merge`, `bridge`, `archive`, or
    `block`.

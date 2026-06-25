@@ -216,57 +216,48 @@ Do not create a case when:
 
 ## Fast-Path
 
-When **all** of the following hold, a persistent case may skip most stages and
-artifacts and proceed directly to execution with inline closure:
+When **all** hold, a persistent case may skip most stages/artifacts and go
+straight to execution with inline closure:
 
-- Risk is `low` (documentation, local copy, non-critical tests, or
-  behavior-preserving refactor).
-- Estimated change is small (≤ 3 files, ≤ 20 lines diff).
-- No conflict in any High-Risk Topic.
-- No cross-session, multi-agent, or resume continuity requirement.
+- Risk `low` (docs, local copy, non-critical tests, behavior-preserving
+  refactor).
+- Small change (≤ 3 files, ≤ 20 lines diff).
+- No High-Risk Topic conflict.
+- No cross-session, multi-agent, or resume continuity need.
 
-Fast-path execution:
+Steps: `docloom-workflow` creates `case_state.yaml` only → `plan-confirm`
+skipped (write a single `plan.md` entry: `status: approved`, `risk_level: low`,
+`plan_version: 1`, `approved_by: fast-path`, `approved_at`, brief goal/non-goals/
+acceptance/files; no task-level TDD breakdown) → `tdd-execute` runs (TDD
+exception applies by default; characterization/build check for trivial changes;
+`execution.md` optional, summary inline in `closure.md`) → `doc-sync-close`
+writes `closure.md`, sets `case_state.yaml` `closed`.
 
-1. `docloom-workflow` creates minimal case docs (`case_state.yaml` only).
-2. `plan-confirm` is skipped. Record the inline plan as a single
-   `plan.md` entry with `status: approved`, `risk_level: low`,
-   `plan_version: 1`, `approved_by: fast-path`, `approved_at`,
-   and a brief goal, non-goals, acceptance criteria, and files list — no
-   task-level TDD breakdown.
-3. `tdd-execute` runs. TDD exceptions for low-risk changes apply by default;
-   use characterization or build check as alternative verification when
-   the change is trivial. `execution.md` may be skipped; record the change
-   summary inline in `closure.md`.
-4. `doc-sync-close` writes `closure.md` and updates `case_state.yaml` to
-   `closed`.
-
-When any fast-path condition fails, fall back to the full pipeline.
+Any condition failing → full pipeline.
 
 ## Small Project Degradation
 
-When expected directory paths do not exist, do not block solely for absence.
-`docs/cases/` is created on first case creation. Missing authority may proceed
-with `proceed_to_plan_with_risk`; record "no authority docs found" and
+Missing paths do not block. `docs/cases/` is created on first case. Missing
+authority → `proceed_to_plan_with_risk`, record "no authority docs found" /
 "authority: none, default risk: medium". Missing governance routes to
 `setup-doc-governance` only for authority, public contract, or High-Risk Topic
 work; otherwise proceed with risk.
 
 ## Case Resume
 
-On cross-session resume, read `handoff.md` first when present, then the minimum
-artifact for the phase: `plan.md`, `execution.md`, or `closure.md` for
-closed-but-resumable cases. Re-run `context-authority` only when authority,
-governance, code, or external dependencies may have changed, or when the case is
-high risk, conflict-related, or resumed after a break.
+On cross-session resume: read `handoff.md` first if present, then the minimum
+phase artifact (`plan.md` / `execution.md` / `closure.md`). Re-run
+`context-authority` only when authority, governance, code, or external deps may
+have changed, or the case is high risk, conflict-related, or resumed after a
+break.
 
-When writing `handoff.md`, include current phase, last completed step, next
-step, resume condition, known issues, and source artifacts. When `last_updated`
-is more than 7 days old, report staleness and ask whether to continue, adjust,
-or close. Before proceeding, verify the last completed step still holds; on
-mismatch, report and route rather than trusting handoff declarations blindly.
+`handoff.md` includes: phase, last completed step, next step, resume condition,
+known issues, source artifacts. If `last_updated` > 7 days, report staleness
+and ask continue/adjust/close. Before proceeding, verify the last completed
+step still holds; on mismatch, report and route rather than trusting handoff.
 
 ## Git And Commands
 
-Read project-local instructions before running commands. Obey package manager,
-shell wrapper, and editing constraints. If git is unavailable, continue with
-document work and record `git_available: false`; do not invent a base commit.
+Read project-local instructions before running commands; obey package manager,
+shell wrapper, and editing constraints. If git unavailable, continue document
+work, record `git_available: false`; do not invent a base commit.
