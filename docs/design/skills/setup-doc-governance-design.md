@@ -143,9 +143,6 @@ setup-doc-governance/
   SKILL.md
   templates/
     GOVERNANCE_PLAN.md
-    authority-README.md
-    authority-doc.md
-    bridge.md
   references/
     shared-protocol.md
     layering-and-routing.md

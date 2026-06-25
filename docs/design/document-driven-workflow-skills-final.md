@@ -2122,15 +2122,11 @@ skills/
     SKILL.md
     templates/
       GOVERNANCE_PLAN.md
-      authority-README.md
-      authority-doc.md
-      bridge.md
 
   context-authority/
     SKILL.md
     templates/
       context-authority-brief.md
-      context-sources.md
 
   plan-confirm/
     SKILL.md

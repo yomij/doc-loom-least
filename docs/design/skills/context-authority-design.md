@@ -163,7 +163,6 @@ context-authority/
   SKILL.md
   templates/
     context-authority-brief.md
-    context-sources.md
   references/
     shared-protocol.md
     context-resolution.md
