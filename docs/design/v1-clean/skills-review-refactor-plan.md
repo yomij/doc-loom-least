@@ -256,7 +256,7 @@ If governance or authority is missing:
 
 ```markdown
 Do not:
-- Depend on a CLI backend, `.agents/doc-loom` control files, or central task indexes.
+- Depend on a CLI backend or central task indexes.
 - Replace stage skills from the entry skill.
 ```
 

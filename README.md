@@ -1,136 +1,140 @@
 # Doc Loom Least
 
-Doc Loom Least 是一套文档驱动的 AI Coding 工作流。
+[中文版](README_CN.md)
 
-它的目标不是提供复杂平台、CLI 后端或重型流水线，而是用最小的一组 Agent Skills 和 Markdown 产物，帮助 AI Coding 任务在开始、计划、执行和收尾时明确三件事：
+> A minimal, document-driven workflow for AI-assisted coding — no CLI backend, no heavy pipeline, just skills and Markdown.
 
-- 当前应该相信哪些事实。
-- 当前应该生成或更新哪些文档。
-- 哪些决策必须先让用户确认。
+Doc Loom Least helps you and your AI coding agent stay aligned on three questions throughout any task:
 
-## 核心原则
+- **What facts should we trust right now?**
+- **What documents should we create or update?**
+- **Which decisions need human confirmation first?**
 
-本仓库的最高规则是 [ADR-0000 Constitution](docs/adr/ADR-0000-constitution.md)。
+It does this with a small set of Agent Skills and lightweight Markdown artifacts — nothing more.
 
-- **最小路径**：用最窄的 contract、artifact、checker 或 skill 解决真实治理问题。
-- **不要变成复杂流水线产品**：Doc Loom Least v1 是文档和 skill workflow，不依赖 CLI backend。
-- **人类语义优先**：文档、workflow、prompt 和解释必须清晰、可读、可理解。
-- **历史文档是证据，不是默认权威**：未确认的历史材料不能直接变成当前事实。
+## Why Doc Loom Least?
 
-## 当前边界
+AI coding agents are powerful but forgetful. They drift from context, skip confirmation on risky changes, and leave behind no record of what happened or why.
 
-Doc Loom Least v1 明确不做这些事：
+Doc Loom Least solves this with the smallest possible mechanism: a set of skills that gate key moments (planning, execution, closure) and a shared protocol that keeps facts, case state, and artifacts consistent across sessions.
 
-- 不依赖 CLI backend。
-- 不调用 `.agents/doc-loom/bin/doc-loom`。
-- 不创建或维护 `.agents/doc-loom` control files。
-- 不把入口 skill 做成重型 orchestrator。
-- 不自动触发 review，也不把 `review_risk` 当作 review 授权。
+It is **not** a platform, a CLI tool, or a pipeline product. It's a workflow you install as skills and invoke in conversation.
 
-普通一次性文档修改和低风险局部修改可以走最小路径；只有进入持久化 case workflow 时，才需要创建 case docs、计划、执行记录和 closure。
+## Principles
 
-## 仓库结构
+These are non-negotiable, drawn from the [Constitution](docs/adr/ADR-0000-constitution.md):
 
-```text
+| Principle | What it means |
+|---|---|
+| **Enter through the minimum path** | Use the narrowest contract, artifact, or skill that solves the real problem. No ceremony for ceremony's sake. |
+| **Don't become a complex pipeline** | Doc Loom Least is a workflow, not a product. No CLI backend, no heavy orchestration. |
+| **Human-semantic design** | Every document, prompt, and output must be readable, understandable, and beautiful. Meaning over mechanics. |
+
+## What v1 Does NOT Do
+
+These boundaries keep the project minimal by design:
+
+- No CLI backend or daemon
+- No heavy orchestrator skill
+- No automatic review triggers — reviews are always manual
+- No treating `review_risk` as review authorization
+
+Simple doc edits and low-risk local changes take the minimum path. Only persistent development work enters the full case workflow with plans, execution records, and closure.
+
+## Skills
+
+| Skill | Role |
+|---|---|
+| `docloom-workflow` | Entry point & lightweight router — parses task state and routes to the right stage skill |
+| `setup-doc-governance` | Governance init & maintenance — scans docs, extracts facts, produces governance plans |
+| `context-authority` | Fact authority gate — reads minimal context, resolves conflicts, issues routing verdict |
+| `plan-confirm` | Planning gate — generates plans with risk levels, TDD strategy, and waits for your approval |
+| `tdd-execute` | Execution gate — Red-Green-Refactor cycle with evidence, or recorded TDD exceptions |
+| `doc-sync-close` | Closure gate — syncs docs, records acceptance, risks, and follow-ups |
+| `review` | Manual read-only review of designs, diffs, tests, docs, or case evidence |
+| `grill` | Manual interactive stress-test of requirements, designs, or claims |
+
+## Repository Structure
+
+```
 .
-├── AGENTS.md                         # 本仓库的 Agent 工作约束
+├── INSTALL.md                 # Installation guide
+├── CHANGELOG.md               # Version history
 ├── docs/
-│   ├── adr/                          # 根本原则和决策记录
-│   ├── design/                       # Doc Loom Least 与各 skill 的设计文档
-│   └── reference/                    # 外部/历史参考材料，默认不是当前权威
+│   ├── adr/                   # Constitution & architectural decisions
+│   ├── design/                # Design docs for Doc Loom Least & its skills
+│   └── reference/             # External/historical reference (not current authority)
 └── skills/
-    ├── _shared/                      # 跨 skill 共享协议
-    ├── docloom-workflow/             # 入口与轻量路由
-    ├── setup-doc-governance/         # 文档治理初始化与重建
-    ├── context-authority/            # 上下文与权威来源判断
-    ├── plan-confirm/                 # 计划生成与用户确认
-    ├── tdd-execute/                  # 已确认计划的 TDD 执行
-    ├── doc-sync-close/               # 文档同步与 case 收尾
-    ├── review/                       # 手动触发的只读证据审查
-    └── grill/                        # 手动触发的交互式压力测试
+    ├── _shared/               # Cross-skill shared protocol
+    ├── docloom-workflow/      # Entry & routing
+    ├── setup-doc-governance/  # Governance init & rebuild
+    ├── context-authority/     # Context & authority resolution
+    ├── plan-confirm/          # Plan generation & confirmation
+    ├── tdd-execute/           # TDD execution
+    ├── doc-sync-close/        # Doc sync & case closure
+    ├── review/                # Manual review
+    └── grill/                 # Manual stress-test
 ```
 
-## Skill 列表
+## Typical Usage
 
-| Skill | 类型 | 作用 |
-|---|---|---|
-| `docloom-workflow` | 入口 / 轻量路由 | 解析当前任务和 case 状态，延迟创建 case，路由到具体阶段 skill。 |
-| `setup-doc-governance` | 治理初始化 / 周期治理 | 扫描文档，抽取事实，为每个独立治理批次生成独立治理计划，经确认后整合、桥接、归档或更新 authority。 |
-| `context-authority` | 主流程 | 在计划前读取最小必要上下文，判断事实来源、冲突和路由 verdict。 |
-| `plan-confirm` | 主流程 | 生成带风险等级、TDD 策略、版本和基线的计划，并等待用户确认。 |
-| `tdd-execute` | 主流程 | 按已确认计划执行 Red-Green-Refactor 或记录 TDD exception 与替代验证。 |
-| `doc-sync-close` | 主流程 | 同步任务文档，记录验收、风险、后续项和 closure status。 |
-| `review` | 手动辅助 | 用户明确要求时，只读审查设计、diff、测试、文档或 case evidence。 |
-| `grill` | 手动辅助 | 用户明确要求时，通过对话压力测试需求、方案、架构或文档主张。 |
+### Quick doc edits (no case needed)
 
-## 典型使用路径
+For one-off, low-risk documentation changes — read the [Constitution](docs/adr/ADR-0000-constitution.md), then edit the target doc. No case, no plan, no execution record.
 
-### 一次性低风险文档任务
+### Document governance
 
-读取 `AGENTS.md` 和 `docs/adr/ADR-0000-constitution.md`，再按最小路径修改目标文档。
+When you need to organize, rebuild, archive, or repair the doc system:
 
-这类任务通常不需要创建 case、不需要 `plan.md`，也不需要 `execution.md`。
-
-### 文档治理
-
-当需要整理、重建、归档或修复文档体系时，使用：
-
-```text
+```
 setup-doc-governance
-  -> 选择 scope: current-case | docs-only | full-repo
-  -> 解析治理计划路径
-  -> 盘点文档和入口
-  -> 抽取事实与证据
-  -> 生成独立治理计划
-  -> 用户确认
-  -> 执行非 blocked 的治理决策
+  → choose scope: current-case | docs-only | full-repo
+  → inventory docs & entry points
+  → extract facts & evidence
+  → generate governance plan
+  → confirm with you
+  → execute unblocked decisions
 ```
 
-默认 scope 是 `docs-only`。只有用户明确要求，或 authority claim 需要代码 / 测试证据时，才升级到 `full-repo`。
+Default scope is `docs-only`. Only escalate to `full-repo` when authority claims need code or test evidence.
 
-每个独立治理批次使用独立计划文件。case 相关治理写入 `docs/cases/<case-id>/governance-plan.md`；其他仓库级治理写入 `docs/governance/YYYY-MM-DD-<slug>.md`。旧路径 `docs/governance/GOVERNANCE_PLAN.md` 只作为 legacy context 读取，不再作为新批次写入目标。
+### Persistent development case
 
-### 持久化开发 case
+For tasks that need planning, execution, acceptance, and a closure record:
 
-需要计划、执行、验收和收尾记录的开发任务使用：
-
-```text
+```
 docloom-workflow
-  -> context-authority（需要上下文 gate 时）
-  -> plan-confirm
-  -> 用户确认计划
-  -> tdd-execute
-  -> doc-sync-close
+  → context-authority (when context gate is needed)
+  → plan-confirm
+  → you approve the plan
+  → tdd-execute
+  → doc-sync-close
 ```
 
-`docloom-workflow` 只做入口和路由，不替代阶段 skill。`plan-confirm` 负责计划与确认，`tdd-execute` 负责执行证据，`doc-sync-close` 负责收尾。
+`docloom-workflow` only routes — it never replaces a stage skill.
 
-### 手动审查和压力测试
+### Manual review & stress-test
 
-`review` 和 `grill` 只在用户明确要求时使用：
+Use `review` and `grill` only when you explicitly ask:
 
-- `review` 输出 assessment、findings 和 evidence gaps，不写文件、不改状态。
-- `grill` 逐问挑战当前主张，不生成 artifact、不进入 workflow route。
+- `review` — read-only assessment with findings and evidence gaps. No files written, no state changed.
+- `grill` — interactive challenge of claims, one question at a time. No artifacts, no workflow routing.
 
-## 使用方式
+## Installation
 
-本仓库提供的是 skill 源文件，不是可执行程序。每个 skill 目录都包含一个 `SKILL.md`，并可包含 `templates/`、`references/` 和 `agents/`。
-
-推荐使用 `skillshare` 安装和更新：
+Doc Loom Least is distributed as Agent Skills. Install with [`skillshare`](https://github.com/anthropics/skillshare):
 
 ```bash
+# Public repo
 skillshare install github.com/yomij/doc-loom-least --track --json
 skillshare sync
-```
 
-私有仓库可使用 SSH：
-
-```bash
+# Private repo (SSH)
 skillshare install git@github.com:yomij/doc-loom-least.git --track --json
 skillshare sync
 ```
 
-更新：
+Update:
 
 ```bash
 skillshare check
@@ -138,40 +142,33 @@ skillshare update --all --diff
 skillshare sync
 ```
 
-更完整的安装、项目级安装和验证说明见 [INSTALL.md](INSTALL.md)。
+For project-scoped installation and detailed verification steps, see [INSTALL.md](INSTALL.md).
 
-在支持 Agent Skills 但不使用 `skillshare` 的环境中，也可以将 `skills/` 下需要的目录复制或链接到对应的 skills 目录后，通过 skill 名称调用。例如：
+In environments that support Agent Skills without `skillshare`, copy or symlink the desired skill directories from `skills/` into your skills directory and invoke them by name:
 
-```text
-用 docloom-workflow 继续当前 case。
-用 setup-doc-governance 整理 docs-only 范围的文档治理。
-用 review 审查这个计划。
-用 grill 压力测试这个 API 设计。
+```
+Use docloom-workflow to continue the current case.
+Use setup-doc-governance to organize docs-only governance.
+Use review to audit this plan.
+Use grill to stress-test this API design.
 ```
 
-本仓库当前没有运行时依赖安装步骤。若后续任务需要安装依赖，请遵守 `AGENTS.md`：
+## Fact Authority Order
 
-- JavaScript / Node 依赖优先使用 `pnpm`。
-- Python 包管理和虚拟环境始终使用 `uv`。
+When maintaining this repo's own documentation, facts are resolved in this order:
 
-## 文档维护规则
+1. Active authority docs
+2. Current production code
+3. Current tests
+4. Accepted ADRs, migrations, or release notes
+5. New user-provided information (as pending facts)
+6. L2 operational case docs
+7. L3 derived or index docs
+8. L4 archive or historical docs
+9. L5 scratch docs
 
-维护本仓库文档时，先读取 [ADR-0000 Constitution](docs/adr/ADR-0000-constitution.md)。
+`README.md` is the project entry point and navigation doc — not the highest authority. If it conflicts with the constitution, active authority, or current skill/design docs, fix the README, not the other way around.
 
-默认事实权威顺序：
+## License
 
-1. Active authority docs。
-2. Current production code。
-3. Current tests。
-4. Accepted ADR、migration 或 release note。
-5. 当前用户提供的新信息，作为 pending fact。
-6. L2 operational case docs。
-7. L3 derived 或 index docs。
-8. L4 archive 或 historical docs。
-9. L5 scratch docs。
-
-`README.md` 是项目入口和导航文档，不是最高权威。若 README 与 constitution、active authority、当前 skill 或设计文档冲突，应修正 README，而不是用 README 覆盖上游事实。
-
-## 许可证
-
-[MIT License](LICENSE)。
+[MIT](LICENSE)

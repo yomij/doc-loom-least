@@ -90,5 +90,5 @@ docs/authority/agent/policy.md
 docs/authority/agent/adapters.md
 ```
 
-Adapter files such as `AGENTS.md`, `CLAUDE.md`, or editor-specific instruction
-files are derived views unless the project explicitly defines otherwise.
+Adapter files such as `CLAUDE.md` or editor-specific instruction files are
+derived views unless the project explicitly defines otherwise.

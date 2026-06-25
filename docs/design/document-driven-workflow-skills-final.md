@@ -23,7 +23,7 @@
 8. Authority Order 拆分为 Execution Instruction Order 和 Fact Authority Order，避免把用户临时指令误写为长期事实。
 9. setup-doc-governance 使用治理计划作为每个独立治理批次的确认产物，文件级和事实级都用 `promote / merge / bridge / archive / block` verdict。
 10. 产物生成改为 Artifact Policy：handoff、context brief、execution 等按条件生成，不再每阶段固定铺满文件。
-11. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`，只操作文档产物。
+11. Doc Loom Least v1 不依赖 CLI backend，只操作文档产物。
 12. `tdd-execute` 只服务持久化 case workflow；普通一次性 coding 和简单纯文档任务不强制进入。
 13. 执行阶段支持轻量 adaptive execution，用 `plan.md ## Plan Amendments` 记录同目标小改，避免额外审批产物。
 14. 执行结果应按可原子提交的边界组织；实际 stage / commit 只有在 plan 或用户明确要求时执行。
@@ -183,7 +183,7 @@ doc-sync-close
 19. `tdd-execute` 只适用于持久化 case workflow；普通一次性 coding 和简单纯文档修改不强制进入。
 20. 执行阶段可以更新 `plan.md` checkbox / status 和轻量 `Plan Amendments`，但不能静默改变计划语义。
 21. 执行应保持改动可原子提交；实际 stage / commit 需要 plan 或用户明确授权。
-22. Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
+22. Doc Loom Least v1 不依赖 CLI backend。
 ```
 
 ### 3.2 风险等级与计划确认策略
@@ -1262,7 +1262,7 @@ public automatic entry / thin router。
 
 ```text
 - 作为默认公开入口；用户显式点名 skill 时尊重用户点名。
-- 读取目标仓库 AGENTS.md 作为本地工作约束，但不从中引入 CLI backend 架构。
+- 读取目标仓库本地工作约束，但不从中引入 CLI backend 架构。
 - 固定读取最小 git 状态：root、branch、status。
 - 按需读取 git diff --name-only。
 - 解析现有 case 或生成正式 case_id。
@@ -1277,8 +1277,6 @@ public automatic entry / thin router。
 
 ```text
 - 不依赖 CLI backend。
-- 不调用 `.agents/doc-loom/bin/doc-loom`。
-- 不创建 `.agents/doc-loom` control zone。
 - 不生成 workflow.md / route.md。
 - 不因为存在 approved plan 就自动执行。
 - 不默认运行 context-authority。
@@ -2326,7 +2324,7 @@ docs/cases/<case-id>/handoff.md（仅当存在未来恢复点）
 - 有 case docs 的任务结束或中断必须写 closure.md；无 case docs 的一次性任务不强制补 closure。
 - closure_status 必须明确：Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned。
 - `closure.md` 是收尾真相记录，`case_state.yaml` 是状态缓存；收尾时 phase 统一为 `closed`，具体结果写入 closure_status。
-- Doc Loom Least v1 不依赖 CLI backend，不调用 `.agents/doc-loom/bin/doc-loom`。
+- Doc Loom Least v1 不依赖 CLI backend。
 ```
 
 ---

@@ -97,7 +97,7 @@ skill-specific constraints.
 - Do not create case id or case docs (owned by `docloom-workflow`).
 - Do not modify code, tests, dependencies, scripts, lockfiles, or CI
   unless the skill explicitly authorizes it.
-- Do not call a CLI backend or `.agents/doc-loom/bin/doc-loom`.
+- Do not call a CLI backend.
 - Do not auto-continue to `review`, `grill`, or `setup-doc-governance`;
   those need explicit user intent.
 - Do not silently promote unconfirmed facts into authority.

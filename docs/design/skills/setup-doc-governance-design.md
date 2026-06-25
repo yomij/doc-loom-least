@@ -70,7 +70,7 @@ description: Set up or rebuild documentation governance for a project. Use when 
 - 当前 workspace。
 - 用户指定或默认的治理范围 `scope`。
 - 现有 `docs/`、README、ADR、任务文档、历史文档。
-- 项目约束文件，例如 `AGENTS.md`。
+- 项目约束文件。
 
 可选输入：
 
@@ -568,7 +568,6 @@ docs/**
 README*
 adr/**
 *.md
-AGENTS.md
 ```
 
 `full-repo` 可额外读取相关：
@@ -788,7 +787,6 @@ docs/authority/agent/adapters.md
 适配输出可以包括：
 
 ```text
-AGENTS.md
 CLAUDE.md
 .github/copilot-instructions.md
 .github/instructions/*.instructions.md

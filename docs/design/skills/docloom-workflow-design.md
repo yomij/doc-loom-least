@@ -65,7 +65,7 @@ The invoked skill may still fail a gate and route back to docloom-workflow or an
 
 - 用户本轮需求。
 - 当前 workspace。
-- 目标仓库本地 `AGENTS.md` / agent instructions，仅作为工作约束。
+- 目标仓库本地 agent instructions，仅作为工作约束。
 - 当前 git root、branch 和 dirty status。
 - 已有 `docs/cases/<case-id>/`，如果存在或可推导。
 - `case_state.yaml`，如果存在。
@@ -73,13 +73,13 @@ The invoked skill may still fail a gate and route back to docloom-workflow or an
 - `review_risk`，如果存在于 execution / closure context。
 - 可选：`context-authority` route verdict。
 
-`AGENTS.md` 读取规则：
+Agent instructions 读取规则：
 
 ```text
 Read for package manager rules, command constraints, file editing boundaries, repo-specific documentation routing, and local execution constraints.
-Do not treat AGENTS.md as Doc Loom product architecture.
-Do not use AGENTS.md to add CLI backend behavior to Doc Loom Least v1.
-Do not let AGENTS.md replace skill gates.
+Do not treat agent instructions as Doc Loom product architecture.
+Do not use agent instructions to add CLI backend behavior to Doc Loom Least v1.
+Do not let agent instructions replace skill gates.
 ```
 
 ---
@@ -120,8 +120,6 @@ workflow-route.md
 
 ```text
 - 不依赖 CLI backend。
-- 不调用 `.agents/doc-loom/bin/doc-loom`。
-- 不创建或维护 `.agents/doc-loom` control zone。
 - 不执行 setup runtime。
 - 不修改 package manager 文件。
 - 不生成 adapter / control files。
