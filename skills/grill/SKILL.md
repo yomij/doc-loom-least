@@ -32,26 +32,29 @@ Separate fact from decision:
 
 - Fact question: check code, tests, or docs first when possible. Report evidence
   or evidence gap.
-- Decision question: ask one question, give a recommended answer, and state the
-  conditions that make it valid.
+- Decision question: ask one sharp question, give 2-3 meaningful options, and
+  recommend one with a short reason. Include conditions inline when they matter.
+
+From Question 2 onward, start by restating the previous choice in one sentence.
 
 Question format:
 
 ```md
-## Question N
+Previous: Q<N-1> = <user choice>. This means <one-sentence restatement>.
 
-<one question>
+Q<N>: <one sharp question>
 
-Recommended:
-<clear recommendation, with conditions>
+A. <option>
+B. <option>
+C. <option>
 
-Why this matters:
-<impact>
+Recommended: <A/B/C>, because <one short reason; include a condition or
+alternative only if needed>.
 ```
 
-Short answers such as "yes", "use the recommendation", or "continue" confirm
-the current recommendation only when unambiguous. They do not become long-term
-authority facts.
+Short answers such as "yes", "use the recommendation", or "continue" confirm the
+current recommendation only when unambiguous. A/B/C answers confirm that option.
+They do not become long-term authority facts.
 
 ## Converge
 
@@ -59,11 +62,14 @@ Walk the decision tree until the user ends or the key branches have converged.
 Then output a light close:
 
 ```md
-## Confirmed Decisions
+Confirmed:
+- <decision>
 
-## Open Questions
+Open:
+- <question>
 
-## Risks / Weak Assumptions
+Risks:
+- <weak assumption>
 ```
 
 Do not promise to write these into a file. Later workflow skills may consume

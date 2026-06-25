@@ -19,7 +19,9 @@ grill 只能由用户手动触发。
 grill 只挑战和澄清，不生成中间产物，不修改任何文件。
 grill 不输出流程 verdict，不指定 workflow next owner。
 提问阶段一次只问一个问题。
-每个决策问题必须给出推荐答案，并说明成立条件。
+每个决策问题必须给出 2-3 个真实选项，并推荐一个。
+推荐理由保持一句话；成立条件并入推荐理由。
+从第二问开始，先用一句话复述上一问结果。
 如果问题可由代码或文档回答，先探索项目，而不是问用户。
 ```
 
@@ -32,7 +34,7 @@ grill 不输出流程 verdict，不指定 workflow next owner。
 ```yaml
 ---
 name: grill
-description: Interactively challenge and stress-test a requirement, plan, architecture proposal, implementation idea, test strategy, documentation change, or other claim. Use only when the user explicitly asks to grill, challenge, pressure-test, scrutinize, or aggressively question assumptions. Ask one question at a time, provide a recommended answer with conditions, verify facts from code or docs when possible, and do not create artifacts or modify files.
+description: Interactively challenge and stress-test a requirement, plan, architecture proposal, implementation idea, test strategy, documentation change, or other claim. Use only when the user explicitly asks to grill, challenge, pressure-test, scrutinize, or aggressively question assumptions. Ask one question at a time, provide 2-3 options with a concise recommendation, verify facts from code or docs when possible, and do not create artifacts or modify files.
 ---
 ```
 
@@ -118,25 +120,30 @@ stage transition
 提问阶段格式：
 
 ```md
-## Question N
+已选：Q<N-1> = <用户选择>。这意味着 <一句复述>。
 
-<one question>
+Q<N>：<一个尖锐问题>
 
-Recommended answer:
-<clear recommendation, with conditions>
+A. <选项>
+B. <选项>
+C. <选项>
 
-Why this matters:
-<impact>
+推荐：<A/B/C>，因为 <一句理由；必要时包含成立条件或替代选择>。
 ```
+
+第一问省略 `已选` 行。
 
 收束阶段格式：
 
 ```md
-## Confirmed Decisions
+确认：
+- <决策>
 
-## Open Questions
+未决：
+- <问题>
 
-## Risks / Weak Assumptions
+风险：
+- <弱假设>
 ```
 
 收束不是报告，不承诺落盘，不自动进入任何流程动作。
@@ -185,19 +192,26 @@ grill/
 决策问题：
 
 - 一次只问一个。
-- 给明确推荐答案。
-- 推荐必须带成立条件。
-- 如果条件变化，说明替代推荐。
+- 给 2-3 个真实选项。
+- 推荐一个选项。
+- 推荐理由只写一句话；成立条件并入理由。
+- 如果条件变化，直接在推荐理由里给替代选择。
 
 推荐答案格式：
 
 ```text
-Recommended answer: choose A if X holds. If Y is true, choose B instead.
+推荐：A，因为它最小且可回滚；如果这是 public API，再选 B。
 ```
 
 ### Step 4. Walk The Decision Tree
 
 沿设计树逐个解决依赖决策。
+
+从第二问开始，先用一句话复述上一问结果：
+
+```text
+已选：Q1 = A。这意味着先保持最小改动，把扩展点留到证据出现后再加。
+```
 
 用户可以用简短回答确认，例如：
 
@@ -226,9 +240,9 @@ Recommended answer: choose A if X holds. If Y is true, choose B instead.
 
 结束时输出轻量收束：
 
-- `Confirmed Decisions`
-- `Open Questions`
-- `Risks / Weak Assumptions`
+- `确认`
+- `未决`
+- `风险`
 
 不自动进入计划、执行、review、收尾或治理。
 
@@ -296,7 +310,8 @@ Recommended answer: choose A if X holds. If Y is true, choose B instead.
 ## 12. 验收标准
 
 - 每轮只问一个问题。
-- 每个决策问题都有推荐答案和成立条件。
+- 每个决策问题都有 2-3 个真实选项和一句话推荐理由。
+- 从第二问开始复述上一问结果。
 - 可由代码或文档回答的问题已先查证。
 - 用户确认的决策与未确认建议区分清楚。
 - 高风险推荐明确证据和未验证点。
