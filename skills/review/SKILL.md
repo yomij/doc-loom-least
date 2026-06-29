@@ -1,12 +1,16 @@
 ---
 name: review
-description: Read-only evidence review of a design doc, proposal, code diff, test set, documentation change, or case evidence. Use only when the user explicitly asks for review.
+description: Read-only evidence review of a design doc, proposal, code diff, test set, documentation change, or case evidence. Use only when the user explicitly asks for review. When the user asks for over-engineering, simplification, deletion, redundancy, YAGNI, or ponytail-style review, run complexity-only mode.
 ---
 
 # review
 
 Perform read-only evidence review only when the user explicitly asks for review,
 code review, docs review, test review, design review, or similar.
+
+When the user explicitly asks for over-engineering, simplification, deletion,
+redundancy, YAGNI, or ponytail-style review, run `Complexity-only` mode inside
+this skill. This is mode selection, not workflow routing.
 
 Do not create files, update state, route workflow, close a case, or write
 authority/governance proposals.
@@ -27,9 +31,26 @@ If no object is specified:
 
 Do not default to reading the whole repo or all docs.
 
+## Review Mode
+
+Use one mode:
+
+- `Standard`: default for ordinary review, code review, docs review, test
+  review, design review, or "check this" requests.
+- `Complexity-only`: use only when the user explicitly asks for
+  over-engineering, simplification, deletion, redundancy, YAGNI, or
+  ponytail-style review.
+- `Dual-pass`: use only when the user asks for both normal review and
+  complexity review.
+
+`Complexity-only` is not a correctness, security, performance, or coverage
+review. If the user only asks for complexity, do not report those issues as
+findings; mention that a Standard review is needed if they want that scope.
+
 ## Review Maturity
 
-State one maturity:
+For `Standard` and `Dual-pass`, state one maturity. For `Complexity-only`, omit
+maturity unless it affects whether something is over-designed.
 
 - `Draft`: review requirements, assumptions, boundaries, facts, and design
   coherence.
@@ -72,10 +93,14 @@ Type-specific checks:
 - Documentation governance: authority, case evidence, derived, archive, and
   scratch separated; no unconfirmed promotion; `source_of_truth` correct.
 
-For high-risk targets, check direct evidence for relevant High-Risk Topics from
-`references/shared-protocol.md`. Missing key evidence in these areas should
-usually be `Insufficient evidence` or an Important/Critical finding, not a
-passing assessment.
+For `Complexity-only`, read `references/complexity-only.md` and use only that
+scope, tags, exemptions, and output contract. For `Dual-pass`, use it only for
+the final complexity section.
+
+For `Standard` and `Dual-pass` high-risk targets, check direct evidence for
+relevant High-Risk Topics from `references/shared-protocol.md`. Missing key
+evidence in these areas should usually be `Insufficient evidence` or an
+Important/Critical finding, not a passing assessment.
 
 ## Output Contract
 
@@ -155,3 +180,5 @@ keep this output contract. Subagent findings do not become workflow state.
 - Do not output workflow route, next owner, ready-to-close, closure verdict,
   authority proposal, or governance follow-up.
 - Do not package missing evidence as passing.
+- `Complexity-only` does not replace Standard review for correctness, security,
+  performance, test credibility, or High-Risk Topics.
