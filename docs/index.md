@@ -9,6 +9,7 @@ This index routes current Doc Loom Least documentation. Historical and reference
 | Source-of-truth map | [SSOT Map](ssot-map.md) |
 | Project overview | [README](../README.md), [README_CN](../README_CN.md) |
 | Installation | [INSTALL](../INSTALL.md) |
+| Development standards | [Git Commit Standard](standards/git-commit-standard.md) |
 | Current workflow design | [Workflow And Design](share/workflow-and-design.md) |
 | Skill designs | [docs/design/skills](design/skills/) |
 | Historical and external references | [docs/reference](reference/) |
