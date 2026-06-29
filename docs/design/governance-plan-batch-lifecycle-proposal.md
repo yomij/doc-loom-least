@@ -119,13 +119,13 @@ Update `setup-doc-governance` so it applies these gates:
 
 This proposal is implemented by updating:
 
-- `skills/setup-doc-governance/SKILL.md`
-- `skills/setup-doc-governance/templates/GOVERNANCE_PLAN.md`
-- `skills/context-authority/references/retrieval-routing.md`
+- `skills/governance/setup-doc-governance/SKILL.md`
+- `skills/governance/setup-doc-governance/templates/GOVERNANCE_PLAN.md`
+- `skills/development/context-authority/references/retrieval-routing.md`
 - `skills/_shared/references/shared-protocol.md`
-- `skills/doc-sync-close/SKILL.md`
+- `skills/development/doc-sync-close/SKILL.md`
 - `README.md`
-- `docs/design/skills/setup-doc-governance-design.md`
+- `docs/design/skills/governance/setup-doc-governance-design.md`
 
 ## Acceptance Criteria
 

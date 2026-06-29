@@ -2,9 +2,9 @@
 
 [中文版](README_CN.md)
 
-> A minimal, document-driven workflow for AI-assisted coding — no CLI backend, no heavy pipeline, just skills and Markdown.
+> A minimal, document-driven personal product workflow substrate. The current slice is AI-assisted development: no CLI backend, no heavy pipeline, just skills and Markdown.
 
-Doc Loom Least helps you and your AI coding agent stay aligned on three questions throughout any task:
+Doc Loom Least helps you and your AI agent stay aligned on three questions throughout a workflow:
 
 - **What facts should we trust right now?**
 - **What documents should we create or update?**
@@ -14,11 +14,11 @@ It does this with a small set of Agent Skills and lightweight Markdown artifacts
 
 ## Why Doc Loom Least?
 
-AI coding agents are powerful but forgetful. They drift from context, skip confirmation on risky changes, and leave behind no record of what happened or why.
+AI agents are powerful but forgetful. In development work, they drift from context, skip confirmation on risky changes, and leave behind no record of what happened or why.
 
-Doc Loom Least solves this with the smallest possible mechanism: a set of skills that gate key moments (planning, execution, closure) and a shared protocol that keeps facts, case state, and artifacts consistent across sessions.
+Doc Loom Least currently solves this for development work with the smallest possible mechanism: a set of skills that gate key moments (planning, execution, closure) and a shared protocol that keeps facts, case state, and artifacts consistent across sessions.
 
-It is **not** a platform, a CLI tool, or a pipeline product. It's a workflow you install as skills and invoke in conversation.
+Its broader direction is a personal product workflow substrate that can later carry product, research, design, release, and operations flows. In that sense it is a repo-native, skill-based platform, not a CLI tool, daemon, app backend, or pipeline product.
 
 ## Principles
 
@@ -29,6 +29,10 @@ These are non-negotiable, drawn from the [Constitution](docs/adr/ADR-0000-consti
 | **Enter through the minimum path** | Use the narrowest contract, artifact, or skill that solves the real problem. No ceremony for ceremony's sake. |
 | **Don't become a complex pipeline** | Doc Loom Least is a workflow, not a product. No CLI backend, no heavy orchestration. |
 | **Human-semantic design** | Every document, prompt, and output must be readable, understandable, and beautiful. Meaning over mechanics. |
+
+## Lifecycle Scope
+
+The current supported lifecycle domain is **development**. Future domains such as product, research, and design should enter only as narrow skills with clear workflow boundaries. Empty roadmap directories and speculative stages are intentionally avoided.
 
 ## What v1 Does NOT Do
 
@@ -61,19 +65,17 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 ├── INSTALL.md                 # Installation guide
 ├── CHANGELOG.md               # Version history
 ├── docs/
+│   ├── index.md               # Documentation routing index
+│   ├── ssot-map.md            # Source-of-truth map
 │   ├── adr/                   # Constitution & architectural decisions
 │   ├── design/                # Design docs for Doc Loom Least & its skills
 │   └── reference/             # External/historical reference (not current authority)
 └── skills/
+    ├── README.md              # Skill grouping map
     ├── _shared/               # Cross-skill shared protocol
-    ├── docloom-workflow/      # Entry & routing
-    ├── setup-doc-governance/  # Governance init & rebuild
-    ├── context-authority/     # Context & authority resolution
-    ├── plan-confirm/          # Plan generation & confirmation
-    ├── tdd-execute/           # TDD execution
-    ├── doc-sync-close/        # Doc sync & case closure
-    ├── review/                # Manual review
-    └── grill/                 # Manual stress-test
+    ├── development/           # Current development flow skills
+    ├── governance/            # Documentation governance skills
+    └── assessment/            # Manual review and challenge helpers
 ```
 
 ## Typical Usage
@@ -144,7 +146,7 @@ skillshare sync
 
 For project-scoped installation and detailed verification steps, see [INSTALL.md](INSTALL.md).
 
-In environments that support Agent Skills without `skillshare`, copy or symlink the desired skill directories from `skills/` into your skills directory and invoke them by name:
+In environments that support Agent Skills without `skillshare`, copy or symlink the desired directories that contain `SKILL.md` from the grouped `skills/` tree into your skills directory and invoke them by name:
 
 ```
 Use docloom-workflow to continue the current case.

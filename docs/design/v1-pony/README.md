@@ -320,7 +320,7 @@ unless they contain real plan content.
 
 Template adjustment:
 
-In `skills/plan-confirm/templates/plan.md`, add a short prompt under
+In `skills/development/plan-confirm/templates/plan.md`, add a short prompt under
 `## Non-goals`:
 
 ```md
@@ -636,15 +636,15 @@ After:
 Implement in this order:
 
 1. Update `skills/_shared/references/shared-protocol.md`.
-2. Update `skills/docloom-workflow/SKILL.md`.
-3. Update `skills/plan-confirm/SKILL.md`.
-4. Update `skills/tdd-execute/SKILL.md`.
-5. Update `skills/context-authority/SKILL.md`.
-6. Update `skills/doc-sync-close/SKILL.md`.
-7. Update `skills/setup-doc-governance/SKILL.md`.
-8. Update `skills/review/SKILL.md` and
-   `skills/review/references/complexity-only.md` only if needed.
-9. Update `skills/grill/SKILL.md` with the one minimum-path question rule.
+2. Update `skills/development/docloom-workflow/SKILL.md`.
+3. Update `skills/development/plan-confirm/SKILL.md`.
+4. Update `skills/development/tdd-execute/SKILL.md`.
+5. Update `skills/development/context-authority/SKILL.md`.
+6. Update `skills/development/doc-sync-close/SKILL.md`.
+7. Update `skills/governance/setup-doc-governance/SKILL.md`.
+8. Update `skills/assessment/review/SKILL.md` and
+   `skills/assessment/review/references/complexity-only.md` only if needed.
+9. Update `skills/assessment/grill/SKILL.md` with the one minimum-path question rule.
 10. Apply the two small template prompts if accepted.
 
 Rationale:
@@ -793,17 +793,17 @@ Expected file changes:
 
 ```text
 skills/_shared/references/shared-protocol.md
-skills/docloom-workflow/SKILL.md
-skills/context-authority/SKILL.md
-skills/plan-confirm/SKILL.md
-skills/plan-confirm/templates/plan.md
-skills/tdd-execute/SKILL.md
-skills/tdd-execute/templates/execution.md
-skills/doc-sync-close/SKILL.md
-skills/setup-doc-governance/SKILL.md
-skills/review/SKILL.md
-skills/review/references/complexity-only.md
-skills/grill/SKILL.md
+skills/development/docloom-workflow/SKILL.md
+skills/development/context-authority/SKILL.md
+skills/development/plan-confirm/SKILL.md
+skills/development/plan-confirm/templates/plan.md
+skills/development/tdd-execute/SKILL.md
+skills/development/tdd-execute/templates/execution.md
+skills/development/doc-sync-close/SKILL.md
+skills/governance/setup-doc-governance/SKILL.md
+skills/assessment/review/SKILL.md
+skills/assessment/review/references/complexity-only.md
+skills/assessment/grill/SKILL.md
 ```
 
 Expected non-changes:

@@ -35,9 +35,9 @@ skillshare sync
 ```
 
 `--json` makes the install non-interactive and installs all discoverable skills.
-This repository uses `.skillignore` so only the canonical skills under
-`skills/` are published; reference materials under `docs/reference/skills/` are
-not published or synced to targets.
+This repository uses `.skillignore` so only the canonical skills under the
+grouped `skills/` tree are published; reference materials under
+`docs/reference/skills/` are not published or synced to targets.
 
 ## Install Into A Project
 
@@ -90,7 +90,7 @@ Run the security audit on this repository's skill source:
 skillshare audit ./skills --format json
 ```
 
-Expected canonical skills:
+Expected canonical skill frontmatter names:
 
 - `docloom-workflow`
 - `setup-doc-governance`
@@ -100,6 +100,14 @@ Expected canonical skills:
 - `doc-sync-close`
 - `review`
 - `grill`
+
+Current source paths:
+
+| Group | Skills |
+|---|---|
+| `skills/development/` | `docloom-workflow`, `context-authority`, `plan-confirm`, `tdd-execute`, `doc-sync-close` |
+| `skills/governance/` | `setup-doc-governance` |
+| `skills/assessment/` | `review`, `grill` |
 
 ## Sync Mode
 
@@ -120,9 +128,9 @@ skillshare sync --force
 ```
 
 Doc Loom Least keeps the source of truth for shared workflow rules at
-`skills/_shared/references/shared-protocol.md`. Each skill that needs those
-rules exposes `references/shared-protocol.md` as a relative symlink to that
-source. In `merge` mode, the symlink remains connected to the tracked
+`skills/_shared/references/shared-protocol.md`. Each grouped skill that needs
+those rules exposes `references/shared-protocol.md` as a relative symlink to
+that source. In `merge` mode, the symlink remains connected to the tracked
 repository. In `copy` mode, `skillshare` copies the symlink target as a real
 file into each copied skill, so the reference remains readable even when the
 target does not support symlinks.

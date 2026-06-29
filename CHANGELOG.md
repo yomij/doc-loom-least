@@ -3,6 +3,10 @@
 ## Unreleased
 
 ### Changed
+- Repositioned Doc Loom Least as a repo-native personal product workflow
+  substrate whose current supported lifecycle domain is development.
+- Grouped canonical skills under `skills/development/`, `skills/governance/`,
+  and `skills/assessment/` while keeping invocation names stable.
 - Replaced "cache not truth" framing with "routing signal" hierarchy for
   case_state.yaml in shared-protocol and tdd-execute/review.
 - Replaced "Read when needed" with explicit trigger conditions in 5 skill
@@ -14,7 +18,7 @@
 - Removed duplicated fact authority order from review/SKILL.md; replaced with
   reference to shared-protocol.
 - Moved risk levels and plan confirmation policy from shared-protocol to
-  plan-confirm/references/risk-levels.md with anchoring examples.
+  development/plan-confirm/references/risk-levels.md with anchoring examples.
 - Removed duplicated case identity resolution from
   context-authority/references/context-resolution.md; replaced with reference
   to shared-protocol plus resume guidance.
@@ -56,7 +60,9 @@
   closure.md) with per-section trigger conditions in HTML comments.
 
 ### Added
-- plan-confirm/references/risk-levels.md (new file).
+- Added ADR-0001 for lifecycle scope and skill grouping.
+- Added docs index, SSOT map, and skills layout map.
+- development/plan-confirm/references/risk-levels.md (new file).
 
 ## v1 (2026-06-18)
 

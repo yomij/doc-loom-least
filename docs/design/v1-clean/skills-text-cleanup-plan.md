@@ -155,9 +155,9 @@ a `phase:` placeholder. Each skill that writes a handoff references this
 template.
 
 Remove:
-- `skills/plan-confirm/templates/handoff.md`
-- `skills/tdd-execute/templates/handoff.md`
-- `skills/doc-sync-close/templates/handoff.md`
+- `skills/development/plan-confirm/templates/handoff.md`
+- `skills/development/tdd-execute/templates/handoff.md`
+- `skills/development/doc-sync-close/templates/handoff.md`
 
 Create:
 - `skills/_shared/templates/handoff.md`

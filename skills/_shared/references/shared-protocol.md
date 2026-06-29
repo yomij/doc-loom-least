@@ -57,7 +57,7 @@ Use this order to decide what is currently true:
 Generated views can be consumed, but they cannot override their source of
 truth. Historical material is evidence, not current authority.
 
-Risk levels and confirmation policy: see `plan-confirm/references/risk-levels.md`.
+Risk levels and confirmation policy: see `development/plan-confirm/references/risk-levels.md`.
 
 ## High-Risk Topics
 

@@ -91,7 +91,7 @@ The skill set is coherent, but several text patterns increase context cost:
 | `context-authority/references/*` | Context intent and retrieval routing only |
 | `setup-doc-governance/references/*` | Governance layering, verdicts, authority routing |
 | `doc-sync-close/references/doc-update-rules.md` | Closure-time doc update and narrow authority patch rules |
-| `tdd-execute/references/tdd-exceptions.md` | TDD exception categories and alternative verification |
+| `development/tdd-execute/references/tdd-exceptions.md` | TDD exception categories and alternative verification |
 | `templates/` | Output shape only, not policy |
 
 ## Phase 0: Baseline Inventory
@@ -163,23 +163,23 @@ Delete or compress body openers that merely restate the new description:
 
 | File | Action |
 |---|---|
-| `skills/docloom-workflow/SKILL.md` | Keep "Route; do not replace stage skills." Remove broad restatement. |
-| `skills/context-authority/SKILL.md` | Remove "Gather the smallest relevant context needed before planning." Keep read-only boundary. |
-| `skills/plan-confirm/SKILL.md` | Remove "Create the execution plan and get user confirmation..." Keep case identity boundary. |
-| `skills/tdd-execute/SKILL.md` | Remove "Execute an approved persistent Doc Loom case plan." Keep one-shot exclusion. |
-| `skills/doc-sync-close/SKILL.md` | Remove the close-state restatement. |
-| `skills/review/SKILL.md` | Keep explicit manual trigger and read-only boundary because this is the key safety rule. |
-| `skills/grill/SKILL.md` | Keep explicit manual trigger because this is the key safety rule. |
-| `skills/setup-doc-governance/SKILL.md` | Keep the authority-vs-history distinction because it is semantic, not duplicate filler. |
+| `skills/development/docloom-workflow/SKILL.md` | Keep "Route; do not replace stage skills." Remove broad restatement. |
+| `skills/development/context-authority/SKILL.md` | Remove "Gather the smallest relevant context needed before planning." Keep read-only boundary. |
+| `skills/development/plan-confirm/SKILL.md` | Remove "Create the execution plan and get user confirmation..." Keep case identity boundary. |
+| `skills/development/tdd-execute/SKILL.md` | Remove "Execute an approved persistent Doc Loom case plan." Keep one-shot exclusion. |
+| `skills/development/doc-sync-close/SKILL.md` | Remove the close-state restatement. |
+| `skills/assessment/review/SKILL.md` | Keep explicit manual trigger and read-only boundary because this is the key safety rule. |
+| `skills/assessment/grill/SKILL.md` | Keep explicit manual trigger because this is the key safety rule. |
+| `skills/governance/setup-doc-governance/SKILL.md` | Keep the authority-vs-history distinction because it is semantic, not duplicate filler. |
 
 Verification:
 
 ```bash
-rtk sed -n '1,30p' skills/docloom-workflow/SKILL.md
-rtk sed -n '1,30p' skills/context-authority/SKILL.md
-rtk sed -n '1,30p' skills/plan-confirm/SKILL.md
-rtk sed -n '1,30p' skills/tdd-execute/SKILL.md
-rtk sed -n '1,30p' skills/doc-sync-close/SKILL.md
+rtk sed -n '1,30p' skills/development/docloom-workflow/SKILL.md
+rtk sed -n '1,30p' skills/development/context-authority/SKILL.md
+rtk sed -n '1,30p' skills/development/plan-confirm/SKILL.md
+rtk sed -n '1,30p' skills/development/tdd-execute/SKILL.md
+rtk sed -n '1,30p' skills/development/doc-sync-close/SKILL.md
 ```
 
 Expected result: each body starts with unique operating guidance, not a
@@ -253,11 +253,11 @@ Use the shared protocol canonical list when the skill already reads
 
 | File | Action |
 |---|---|
-| `skills/context-authority/SKILL.md` | Replace the inline high-risk conflict list with a reference to `shared-protocol.md -> High-Risk Topics`; keep code/tests disagreement and missing coverage bullets if they are stage-specific. |
-| `skills/review/SKILL.md` | Replace repeated topic list with `High-Risk Topics`; keep the review-specific evidence requirement. |
-| `skills/grill/SKILL.md` | Replace `## High-Risk Topics` list with a reference to `High-Risk Topics`; keep lower-certainty and evidence-source guidance. |
-| `skills/setup-doc-governance/references/verdicts.md` | Keep a local list if this file is used independently, but match the exact shared wording. |
-| `skills/doc-sync-close/references/doc-update-rules.md` | Replace high-risk wording in narrow patch conditions with a reference to `High-Risk Topics`. |
+| `skills/development/context-authority/SKILL.md` | Replace the inline high-risk conflict list with a reference to `shared-protocol.md -> High-Risk Topics`; keep code/tests disagreement and missing coverage bullets if they are stage-specific. |
+| `skills/assessment/review/SKILL.md` | Replace repeated topic list with `High-Risk Topics`; keep the review-specific evidence requirement. |
+| `skills/assessment/grill/SKILL.md` | Replace `## High-Risk Topics` list with a reference to `High-Risk Topics`; keep lower-certainty and evidence-source guidance. |
+| `skills/governance/setup-doc-governance/references/verdicts.md` | Keep a local list if this file is used independently, but match the exact shared wording. |
+| `skills/development/doc-sync-close/references/doc-update-rules.md` | Replace high-risk wording in narrow patch conditions with a reference to `High-Risk Topics`. |
 
 Verification:
 
@@ -306,32 +306,32 @@ Purpose: remove stage-specific redundancy that is not solved by shared protocol.
 
 Changes:
 
-1. `skills/docloom-workflow/SKILL.md`
+1. `skills/development/docloom-workflow/SKILL.md`
    - Merge Route Table rows that both route to `context-authority`.
    - Keep fast-path rules by reference to shared protocol.
 
-2. `skills/context-authority/references/context-resolution.md`
+2. `skills/development/context-authority/references/context-resolution.md`
    - Delete duplicate resume-from-closed guidance.
    - Keep one reference to shared protocol case identity and closure status.
 
-3. `skills/context-authority/references/retrieval-routing.md`
+3. `skills/development/context-authority/references/retrieval-routing.md`
    - Convert governance plan reading rules into a short priority list.
    - Keep missing-governance outcomes.
 
-4. `skills/plan-confirm/SKILL.md`
+4. `skills/development/plan-confirm/SKILL.md`
    - Replace long version and confirmation prose with a state-transition table.
    - Keep material-change definition.
 
-5. `skills/tdd-execute/SKILL.md`
+5. `skills/development/tdd-execute/SKILL.md`
    - Merge `Review Risk` and `Review Risk Lifecycle` into one compact section.
    - Compress testing anti-pattern bullets into two sentences.
    - Keep Red/Green/Refactor evidence requirements intact.
 
-6. `skills/doc-sync-close/SKILL.md`
+6. `skills/development/doc-sync-close/SKILL.md`
    - Delete examples under Knowledge Changes.
    - Keep the classification list and authority handling rule.
 
-7. `skills/setup-doc-governance/SKILL.md`
+7. `skills/governance/setup-doc-governance/SKILL.md`
    - Replace the negative artifact-name list with a reference to Artifact Policy.
    - Keep confirmation-before-apply semantics.
 
@@ -354,8 +354,8 @@ Steps:
 1. Compare existing handoff templates:
 
    ```bash
-   rtk diff -u skills/plan-confirm/templates/handoff.md skills/tdd-execute/templates/handoff.md
-   rtk diff -u skills/tdd-execute/templates/handoff.md skills/doc-sync-close/templates/handoff.md
+   rtk diff -u skills/development/plan-confirm/templates/handoff.md skills/development/tdd-execute/templates/handoff.md
+   rtk diff -u skills/development/tdd-execute/templates/handoff.md skills/development/doc-sync-close/templates/handoff.md
    ```
 
 2. If differences are only headings or phase labels, create:

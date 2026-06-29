@@ -60,9 +60,9 @@ Several proposed changes need correction before execution:
 |---|---|
 | `skills/*/SKILL.md` | Trigger boundary, stage workflow, stage-owned Gates, output contract |
 | `skills/_shared/references/shared-protocol.md` | Cross-skill ownership, priority orders, case state, artifact policy, confirmation semantics, high-risk vocabulary |
-| `skills/context-authority/references/*` | Context intent, retrieval routing, source filtering |
-| `skills/doc-sync-close/references/doc-update-rules.md` | Closure-time document update and authority patch rules |
-| `skills/setup-doc-governance/references/*` | Governance layering, verdicts, authority routing |
+| `skills/development/context-authority/references/*` | Context intent, retrieval routing, source filtering |
+| `skills/development/doc-sync-close/references/doc-update-rules.md` | Closure-time document update and authority patch rules |
+| `skills/governance/setup-doc-governance/references/*` | Governance layering, verdicts, authority routing |
 | `skills/*/templates/*` | Output skeletons only, not policy |
 
 ## File-by-File Rationale
@@ -100,7 +100,7 @@ Do not execute:
 - Do not split shared protocol in v1 clean.
   Reason: text-only cleanup should be verified before adding reference topology.
 
-### `skills/docloom-workflow/SKILL.md`
+### `skills/development/docloom-workflow/SKILL.md`
 
 Execute:
 
@@ -125,7 +125,7 @@ Preserve:
 - No automatic execution, review, or grill.
 - No `base_commit` or `risk_level` writes from this skill.
 
-### `skills/context-authority/SKILL.md`
+### `skills/development/context-authority/SKILL.md`
 
 Execute:
 
@@ -146,7 +146,7 @@ Preserve:
 - It must not write implementation plans or modify artifacts.
 - It must output a route verdict, not a plan.
 
-### `skills/plan-confirm/SKILL.md`
+### `skills/development/plan-confirm/SKILL.md`
 
 Execute:
 
@@ -168,7 +168,7 @@ Preserve:
 - No execution without user confirmation of the current `plan_version`.
 - Material plan changes reset approval.
 
-### `skills/tdd-execute/SKILL.md`
+### `skills/development/tdd-execute/SKILL.md`
 
 Execute:
 
@@ -192,7 +192,7 @@ Preserve:
 - Non-goals, authority docs, dependencies, lockfiles, CI, scripts, and test
   command config remain protected unless authorized.
 
-### `skills/doc-sync-close/SKILL.md`
+### `skills/development/doc-sync-close/SKILL.md`
 
 Execute:
 
@@ -214,7 +214,7 @@ Preserve:
 - Closure must not modify code/tests/dependencies/scripts/lockfiles/CI or
   acceptance criteria to make closure pass.
 
-### `skills/review/SKILL.md`
+### `skills/assessment/review/SKILL.md`
 
 Execute:
 
@@ -234,7 +234,7 @@ Preserve:
 - Smallest relevant evidence selection.
 - Findings must be locatable and verifiable.
 
-### `skills/grill/SKILL.md`
+### `skills/assessment/grill/SKILL.md`
 
 Execute with adjustment:
 
@@ -252,7 +252,7 @@ Execute with adjustment:
 - Tighten Gates to explicit grill request, one-question-at-a-time, verify facts
   when answerable, no file/artifact changes, and no unconfirmed decisions.
 
-### `skills/setup-doc-governance/SKILL.md`
+### `skills/governance/setup-doc-governance/SKILL.md`
 
 Execute:
 
@@ -277,7 +277,7 @@ Preserve:
 - No new governance batch into an existing plan file.
 - Bridges must not carry old facts.
 
-### `skills/context-authority/references/context-resolution.md`
+### `skills/development/context-authority/references/context-resolution.md`
 
 Execute:
 
@@ -294,7 +294,7 @@ Preserve:
 - Intent classification.
 - Context-authority does not create branches, worktrees, or case docs.
 
-### `skills/context-authority/references/retrieval-routing.md`
+### `skills/development/context-authority/references/retrieval-routing.md`
 
 Execute:
 
@@ -309,7 +309,7 @@ Preserve:
   user decision when governance is missing.
 - Every included source needs `why_included`.
 
-### `skills/doc-sync-close/references/doc-update-rules.md`
+### `skills/development/doc-sync-close/references/doc-update-rules.md`
 
 Execute:
 
@@ -323,7 +323,7 @@ Preserve:
   no new authority area, no movement/archive/bridge, no lifecycle migration, and
   concrete user confirmation.
 
-### `skills/setup-doc-governance/references/verdicts.md`
+### `skills/governance/setup-doc-governance/references/verdicts.md`
 
 Execute:
 
@@ -340,7 +340,7 @@ Preserve:
 - Code/tests can override historical docs only for low-risk internal details
   when active authority is not involved and tests agree.
 
-### `skills/setup-doc-governance/references/layering-and-routing.md`
+### `skills/governance/setup-doc-governance/references/layering-and-routing.md`
 
 Execute:
 
@@ -368,9 +368,9 @@ Reason: the existing templates are mostly the same skeleton, but
 
 Do not execute the deletion by default:
 
-- Keep `skills/docloom-workflow/templates/case_state.yaml` as the initial case
+- Keep `skills/development/docloom-workflow/templates/case_state.yaml` as the initial case
   state template.
-- Keep `skills/doc-sync-close/templates/case_state.yaml` unless its four-field
+- Keep `skills/development/doc-sync-close/templates/case_state.yaml` unless its four-field
   close-state shape is moved into `doc-sync-close/SKILL.md` or shared protocol.
 
 Reason: these templates serve different moments: initial case creation versus
@@ -419,11 +419,11 @@ Conflicts headings are gone; both priority-order headings still exist.
 
   ```bash
   rtk rg -n "^description:" skills/*/SKILL.md
-  rtk sed -n '1,25p' skills/docloom-workflow/SKILL.md
-  rtk sed -n '1,25p' skills/context-authority/SKILL.md
-  rtk sed -n '1,25p' skills/plan-confirm/SKILL.md
-  rtk sed -n '1,25p' skills/tdd-execute/SKILL.md
-  rtk sed -n '1,25p' skills/doc-sync-close/SKILL.md
+  rtk sed -n '1,25p' skills/development/docloom-workflow/SKILL.md
+  rtk sed -n '1,25p' skills/development/context-authority/SKILL.md
+  rtk sed -n '1,25p' skills/development/plan-confirm/SKILL.md
+  rtk sed -n '1,25p' skills/development/tdd-execute/SKILL.md
+  rtk sed -n '1,25p' skills/development/doc-sync-close/SKILL.md
   ```
 
 Expected: descriptions are concise; bodies begin with operating guidance, not

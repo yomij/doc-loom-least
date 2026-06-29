@@ -1318,7 +1318,7 @@ docs/cases/<case-id>/case_state.yaml
 - 意图不清 -> status-only + 一个澄清问题。
 ```
 
-详见 `docs/design/skills/docloom-workflow-design.md`。
+详见 `docs/design/skills/development/docloom-workflow-design.md`。
 
 ---
 
@@ -2014,7 +2014,7 @@ No material issue found / Material issues found / Insufficient evidence
 - review 不产物、不改状态、不路由、不写 proposal、不修改文件。
 ```
 
-详细规则以 `docs/design/skills/review-design.md` 为 SSOT。
+详细规则以 `docs/design/skills/assessment/review-design.md` 为 SSOT。
 
 ---
 

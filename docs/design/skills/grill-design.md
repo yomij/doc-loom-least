@@ -1,6 +1,6 @@
 # grill Skill 详细设计
 
-> 来源：`docs/reference/skills/grill-me/SKILL.md` 与本仓库 grill 设计评审决策
+> 来源：`docs/reference/skills/assessment/grill-me/SKILL.md` 与本仓库 grill 设计评审决策
 >
 > 目标：定义 `grill` 作为通用、流程无关、用户手动触发的挑战 / 拷问 skill。它只通过对话压力测试主张和决策，不生成中间产物，不修改文件，不承担 Doc Loom workflow 阶段职责。
 
@@ -322,5 +322,5 @@ grill/
 
 ## 13. 参考资料
 
-- [grill-me/SKILL.md](../../reference/skills/grill-me/SKILL.md)
+- [grill-me/SKILL.md](../../reference/skills/assessment/grill-me/SKILL.md)
 - [AI Coding 文档治理原则](<../../reference/docs/AI Coding 文档治理原则.md>)
