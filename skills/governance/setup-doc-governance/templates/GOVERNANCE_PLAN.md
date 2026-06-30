@@ -11,8 +11,6 @@ approved_at:
 
 ## Scope
 
-## Layering Standard
-
 ## Authority Structure To Create
 
 ## File Routing Decisions
@@ -49,11 +47,6 @@ approved_at:
 
 | Follow-up | Reason | Suggested Owner |
 |---|---|---|
-
-## Confirmation Log
-
-| When | Confirmed By | Scope | Confirmation |
-|---|---|---|---|
 
 ## Applied Result
 
