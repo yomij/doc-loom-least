@@ -35,6 +35,11 @@ approved_at:
 | Source | Archive Target | Reason |
 |---|---|---|
 
+## Entry Point Decisions
+
+| Path | Decision | Type (global/local/agent-summary/none) | Authority / Conflict | Reason |
+|---|---|---|---|---|
+
 ## Blocked Decisions
 
 | Topic | Sources | Why Blocked | Needed Decision |

@@ -43,6 +43,18 @@ After applying governance decisions, update the docs entry index:
 - State that evidence/archive are historical or evidentiary.
 - State that derived/generated views are not source of truth.
 
+## Entry Points
+
+L3 entries route; they are not source facts.
+
+- Root `README.md` is required. Keep it to routing, authority sources/order,
+  and conflict rules; no domain detail.
+- Agent files such as `AGENTS.md` get only a thin derived pointer.
+- Local `README.md` files are only for complex domains: authority
+  relationships, many files, or deep nesting. Plain directories record `none`.
+- Entries name authority sources and any conflict chain must match the shared
+  Fact Authority Order.
+
 ## Bridge Rules
 
 Do not create bridges by default. Prefer a bridge only when the old path is a
@@ -74,6 +86,10 @@ docs/archive/
 
 Archive material should be traceable through `superseded_by` metadata or an
 archive index when useful. It is evidence, not current context by default.
+
+Any document under an `archive/`, `old/`, `deprecated/` path or marked
+deprecated must carry `status: archived | superseded`. A doc without an active
+status is not current fact and must not enter current-fact context.
 
 ## Agent Instruction Governance
 

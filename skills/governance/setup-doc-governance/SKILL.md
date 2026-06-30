@@ -14,7 +14,7 @@ Read when trigger condition is met:
 - `references/shared-protocol.md` when: checking execution instruction order,
   fact authority order, risk levels, or artifact policy.
 - `references/layering-and-routing.md` when: writing authority structure, index
-  rules, bridge rules, or archive rules.
+  rules, entry points and authority declaration, bridge rules, or archive rules.
 - `references/verdicts.md` when: routing files or facts, writing decision
   tables, or deciding block conditions.
 - `../../development/doc-sync-close/references/doc-update-rules.md` when: checking authority
@@ -48,6 +48,9 @@ docs/authority/**                 # only sections with confirmed facts
 docs/cases/<case-id>/evidence/**  # when case evidence is needed
 docs/archive/**                   # when archival is applied
 docs/README.md
+README.md                         # root L3 entry
+<domain>/README.md                # only in complex domain directories
+AGENTS.md / CLAUDE.md summary     # thin derived pointer when present
 bridge files                      # only when old entries are likely to mislead
 ```
 
@@ -73,11 +76,12 @@ governance plan.
 3. Extract facts as statement, source, evidence, scope, and risk.
 4. Route files and facts with `promote`, `merge`, `bridge`, `archive`, or
    `block`.
-5. Write the governance plan with `status: proposed`.
-6. Stop for one user confirmation of the plan.
-7. After confirmation, set `status: approved` and apply non-blocked decisions.
-8. Write applied result back into the same governance plan.
-9. Update the docs entry index after applying decisions.
+5. Record entry decisions: global, local, agent-summary, or none.
+6. Write the governance plan with `status: proposed`.
+7. Stop for one user confirmation of the plan.
+8. After confirmation, set `status: approved` and apply non-blocked decisions.
+9. Write applied result back into the same governance plan.
+10. Update the docs entry index after applying decisions.
 
 The first plan write is not permission to move, archive, bridge, or update
 authority docs.
@@ -154,3 +158,5 @@ When applying:
 - Do not modify code, tests, build scripts, or runtime behavior.
 - Do not make bridge files carry old facts.
 - Do not treat evidence, archive, derived, or generated docs as current facts.
+- Do not add local entries to plain directories; record `none`.
+- `archive/`, `old/`, and `deprecated/` docs must be `status: archived | superseded`.

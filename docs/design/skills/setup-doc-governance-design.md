@@ -747,6 +747,18 @@ docs/archive/
 
 ---
 
+## 18.5 入口与权威声明规则
+
+入口层（L3）只做路由，不承载领域事实。
+
+- 根 `README.md` 为必需全局入口，限定为路由、权威来源与顺序、冲突规则，不含领域细节。
+- `AGENTS.md` 等 always-on agent 文件只放薄派生指针。
+- 局部 `README.md` 仅用于复杂领域（有权威关系、文件多或层级深）；普通目录记 `none`。
+- 入口须声明权威来源，冲突链须与本 skill 的 Fact Authority Order 一致。
+- `archive/`、`old/`、`deprecated/` 路径或标注废弃的文档必须带 `status: archived | superseded`，非 active 的文档只作证据，不进入当前事实上下文。
+
+---
+
 ## 19. AI Context 读取规则
 
 不生成独立 `CONTEXT_PACK_POLICY.md`。
