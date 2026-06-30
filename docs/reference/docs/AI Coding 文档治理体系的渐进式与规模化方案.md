@@ -174,7 +174,7 @@ id: adr-auth-boundary-20260526
 title: 统一认证边界与会话验证策略
 doc_type: adr
 domain: identity
-system: account-platform
+system_id: account-platform
 service: auth-gateway
 owner: team-identity
 reviewers: [arch-council, sre-auth]
