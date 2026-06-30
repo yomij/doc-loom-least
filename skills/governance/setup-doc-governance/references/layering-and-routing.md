@@ -47,11 +47,14 @@ After applying governance decisions, update the docs entry index:
 
 L3 entries route; they are not source facts.
 
-- Root `README.md` is required. Keep it to routing, authority sources/order,
-  and conflict rules; no domain detail.
+- Use the narrowest entry: root `README.md` for the repo, `docs/README.md` for
+  area routes and important docs. Keep area maps in local `README.md` files.
 - Agent files such as `AGENTS.md` get only a thin derived pointer.
-- Local `README.md` files are only for complex domains: authority
-  relationships, many files, or deep nesting. Plain directories record `none`.
+- Local `README.md` files map top-level docs layers or complex domains:
+  authority relationships, many files, or deep nesting. Plain directories
+  record `none`.
+- Do not list every leaf doc at the top level unless it is a key authority or
+  frequent entry.
 - Entries name authority sources and any conflict chain must match the shared
   Fact Authority Order.
 

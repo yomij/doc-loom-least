@@ -35,7 +35,7 @@ approved_at:
 
 ## Entry Point Decisions
 
-| Path | Decision | Type (global/local/agent-summary/none) | Authority / Conflict | Reason |
+| Path | Decision | Type (repo/docs-route/local/agent-summary/none) | Authority / Conflict | Reason |
 |---|---|---|---|---|
 
 ## Blocked Decisions

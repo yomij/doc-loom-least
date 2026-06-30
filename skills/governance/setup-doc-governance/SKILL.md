@@ -47,9 +47,9 @@ docs/authority/README.md
 docs/authority/**                 # only sections with confirmed facts
 docs/cases/<case-id>/evidence/**  # when case evidence is needed
 docs/archive/**                   # when archival is applied
-docs/README.md
-README.md                         # root L3 entry
-<domain>/README.md                # only in complex domain directories
+docs/README.md                    # docs area routes and important docs
+README.md                         # repo entry when needed
+<area>/README.md                  # local map for doc layers or complex domains
 AGENTS.md / CLAUDE.md summary     # thin derived pointer when present
 bridge files                      # only when old entries are likely to mislead
 ```
@@ -76,7 +76,7 @@ governance plan.
 3. Extract facts as statement, source, evidence, scope, and risk.
 4. Route files and facts with `promote`, `merge`, `bridge`, `archive`, or
    `block`.
-5. Record entry decisions: global, local, agent-summary, or none.
+5. Record entry decisions: repo, docs-route, local, agent-summary, or none.
 6. Write the governance plan with `status: proposed`.
 7. Stop for one user confirmation of the plan.
 8. After confirmation, set `status: approved` and apply non-blocked decisions.
