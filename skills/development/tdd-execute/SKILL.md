@@ -80,10 +80,20 @@ Allowed Red sources:
 - An existing failing test that directly maps to current acceptance criteria and
   is not unrelated baseline or flaky failure.
 
-Avoid testing anti-patterns: do not assert mock existence as behavior, do not
-add production test-only methods, do not mock dependencies without understanding
-side effects, and keep mock responses aligned with real structures. Prefer
-realistic integration tests when mocks exceed the behavior under test.
+Before accepting Red, apply this test quality gate:
+
+- Name a behavior or public contract, not an implementation step.
+- Assert observable output, state, persistence, event, side effect, or error.
+- Keep one primary failure theme and only the setup needed to understand it.
+- Ensure it catches a plausible real regression and survives behavior-preserving
+  refactors.
+- Do not assert private methods, internal call order, temporary structures,
+  non-contract fields, mock existence, or weak coverage-only facts.
+- Do not add production test-only methods or invent meaningless Red just to
+  satisfy process.
+- Mock only system boundaries or slow, external, unstable dependencies whose
+  side effects are understood; keep mock data realistic. Prefer integration
+  tests when mocks exceed the behavior under test.
 
 ## TDD Exceptions
 
