@@ -53,7 +53,7 @@ description: Execute an approved persistent Doc Loom case plan using TDD discipl
 不应该触发：
 
 - `plan.md` 未确认。
-- `plan_version` 未确认，或 `status` 不是 `approved`。
+- 当前计划没有当前 `plan_version` 的确认记录，或 `status` 不是 `approved`。
 - 用户只是要求 review。此时使用 `review`。
 - 用户只是要求收尾。此时使用 `doc-sync-close`。
 - 普通一次性 coding 任务，除非用户明确启动 Doc Loom case workflow。
@@ -624,7 +624,7 @@ review_risk: high
 ## 16. Gate
 
 - 没有 approved plan，不执行。
-- 当前 `plan_version` 未被确认，不执行。
+- 当前计划没有当前 `plan_version` 的确认记录，不执行。
 - TDD required 但未写失败测试，不实现。
 - 新测试如果第一次运行就通过，必须重写测试或说明已有行为已经满足，并回到计划判断。
 - 测试失败原因不是预期原因，不进入实现。

@@ -171,6 +171,8 @@ flowchart LR
 - `base_commit`：确认时的代码基线，事后出现无法解释的 diff 必须重新评估
 - `## Decisions`：用户在讨论中明确确认的执行约束，落进 plan.md
 
+`plan_version` 是内部追溯字段，不是用户批准话术要求。用户确认对象清楚时，`plan-confirm` 负责把当前版本写入 `Confirmation Log`；只有确认对象不清楚时才要求补充说明。
+
 执行阶段允许**轻量 adaptive execution**：低风险、同目标、同责任边界的小改动写进 `Plan Amendments`，不递增 version、不重新审批。但目标、验收标准、风险等级、TDD 策略、public contract 一旦变化，必须重新确认。
 
 ### 5.3 TDD 执行与例外

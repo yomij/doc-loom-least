@@ -197,14 +197,14 @@ base_commit:
 
 ## 10. Plan Version Confirmation
 
-`plan_version` 是用户确认计划的语义版本。
+`plan_version` 是用户确认计划的语义版本，也是内部追溯字段；用户批准话术在确认对象清楚时不必显式写版本号。
 
 确认规则：
 
 ```text
 1. 用户确认时，记录当前 plan_version、approved_by、approved_at 和 base_commit。
-2. Confirmation Log 必须说明用户确认的是哪个 plan_version。
-3. tdd-execute 执行前必须读取当前 approved plan_version。
+2. Confirmation Log 必须记录被确认的 plan_version；用户原话不必包含版本号。
+3. tdd-execute 执行前必须读取当前 plan_version 的 approved 记录。
 4. 如果计划发生实质变化，必须递增 plan_version、回到 draft 并重新确认。
 5. 非实质编辑只能修正文档表达、补 Confirmation Log 或更新执行记录，不改变已确认计划含义。
 ```
@@ -613,7 +613,7 @@ last_updated:
 - 有阻塞冲突，不写执行计划。
 - 没有用户确认，不进入 `tdd-execute`。
 - 计划变化后必须递增 `plan_version` 并重新确认。
-- 当前 `plan_version` 未被确认，或 `status` 不是 `approved`，不准执行。
+- 当前计划未被确认、Confirmation Log 未记录当前 `plan_version`，或 `status` 不是 `approved`，不准执行。
 - 用户确认的讨论决策改变计划时，必须更新 `## Decisions`、递增 `plan_version` 并重新确认。
 - checkbox / step status 更新不触发重新确认。
 - adaptive execution 小改不触发重新确认；实质变化必须重新确认。

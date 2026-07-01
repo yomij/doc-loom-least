@@ -31,8 +31,8 @@ Verify:
 - `plan.md` exists.
 - `status: approved`.
 - `plan_version` exists.
-- `approved_by`, `approved_at`, and `Confirmation Log` refer to the current
-  `plan_version`.
+- `approved_by` and `approved_at` exist, and `Confirmation Log` records
+  approval for the current `plan_version`.
 - The case is not in an unrecoverable closed status; see shared-protocol.md →
   Case Resume for resumable statuses.
 - `TDD Applicability` is declared.
@@ -186,7 +186,7 @@ in `execution.md`.
 ## Gates
 
 - No approved plan, no execution. → Route: plan-confirm. Reason: no approved plan found. Required input: user request for plan creation.
-- Unconfirmed current `plan_version`, no execution. → Route: plan-confirm. Reason: plan version unconfirmed. Required input: user explicit approval of current plan_version.
+- Current plan has no approval log for the current `plan_version`, no execution. → Route: plan-confirm. Reason: current plan approval unconfirmed. Required input: user explicit approval of the current plan.
 - Unrecoverable closed case status, no execution without a new case or explicit
   reconfirmation.
 - TDD required but no observed expected Red, or unexpected Red failure, no

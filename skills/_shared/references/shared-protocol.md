@@ -165,6 +165,9 @@ explicit user intent.
 
 High-risk confirmations must identify the object being approved. Prefer:
 `Approve plan vN` or `Confirm authority patch for <doc>: <change>`.
+For plan approval, naming the plan version is a preferred format, not a hard
+wording requirement, when the current plan object is unambiguous. The approving
+skill records the current version in the relevant confirmation log.
 
 Short answers such as `yes`, `ok`, or `continue` confirm only the immediate
 conversation recommendation. They do not approve high-risk execution, create

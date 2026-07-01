@@ -45,8 +45,9 @@ If `case_id` or case docs are missing, stop with
    current `plan_version`.
 9. Self-review for coverage, placeholders, name consistency, buildability, and
    TDD integrity.
-10. Ask for user confirmation. High risk requires explicit confirmation tied
-    to the current `plan_version`.
+10. Ask for user confirmation. High risk requires explicit confirmation of the
+    current plan object, but the user's wording does not have to include
+    `plan_version` when the object is unambiguous.
 11. After confirmation, update `plan.md`, `case_state.yaml`, and `handoff.md`
     when a future resume point exists. Use `templates/handoff.md`.
 
@@ -97,17 +98,20 @@ for the characterization workflow.
 
 ## Version And Confirmation
 
-`plan_version` is the semantic version of the user-confirmed plan.
+`plan_version` is the semantic version of the user-confirmed plan. It is an
+internal traceability field; user approval wording does not have to name it
+when the approved plan is unambiguous.
 
 | Event | `plan.md` status | `case_state.yaml` phase | Approval fields |
 |---|---|---|---|
 | Draft written | `draft` | `waiting_for_plan_confirmation` | Empty |
-| User confirms current version | `approved` | `planned` | `approved_by: user`, `approved_at`, `base_commit` |
+| User confirms current plan | `approved` | `planned` | `approved_by: user`, `approved_at`, `base_commit` |
 | Material change | `draft` | `waiting_for_plan_confirmation` | Cleared or no longer current |
 
-On confirmation, add a Confirmation Log entry and record `base_commit` or an
-unavailable reason. When `git_available: false`, leave `base_commit` empty and
-record the reason; this does not block plan creation.
+On confirmation, add a Confirmation Log entry that records the current
+`plan_version`, then record `base_commit` or an unavailable reason. When
+`git_available: false`, leave `base_commit` empty and record the reason; this
+does not block plan creation.
 
 Material plan changes require incrementing `plan_version` and asking for
 confirmation again.
@@ -122,8 +126,10 @@ changes. Checkbox/status edits do not change plan semantics.
 - No `case_id` or case docs, no plan. → Route: docloom-workflow. Reason: missing case identity. Required input: user request for case initialization.
 - Blocking conflict means no execution plan. → Route: context-authority. Reason: blocking conflict. Required input: conflict details for resolution.
 - No user confirmation, no `tdd-execute` -> wait for user input.
-- High-risk confirmation must identify the current `plan_version`; ambiguous
-  short confirmation is not enough.
-- Current `plan_version` must be approved before execution.
+- High-risk confirmation must identify the current plan object. Naming
+  `plan_version` is preferred but not required when the object is unambiguous;
+  ambiguous short confirmation is not enough.
+- The current plan must be approved and the Confirmation Log must record the
+  current `plan_version` before execution.
 - Discussion decisions that change execution constraints must enter
   `## Decisions` and be confirmed.
