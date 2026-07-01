@@ -3,13 +3,14 @@ title: Doc Loom Constitution
 type: constitution
 status: active
 created: 2026-06-18
-updated: 2026-06-29
+updated: 2026-07-01
 tags:
   - doc-loom
   - constitution
   - foundational-principles
   - docs-governance
   - lifecycle-scope
+  - human-first
 ---
 
 # Constitution
@@ -46,6 +47,14 @@ Expanding beyond development must happen as narrow lifecycle domains and skills,
 
 Human-facing designs, documents, workflows, prompts, guides, artifacts, and explanations must be highly semantic, readable, understandable, and beautiful. They should make the domain meaning obvious, reduce cognitive overhead, and preserve aesthetic clarity through structure, naming, language, and composition.
 
+### 4. Human Experience Comes First
+
+Doc Loom must optimize for the human user's experience, not for agent convenience or process completeness.
+
+Do not force users to perform unnecessary work, confirmations, command execution, information gathering, formatting, or bookkeeping. When an agent can reasonably discover, verify, update, or execute something within the repo and available tools, the agent should own that work.
+
+Interrupt the user only when a real human decision, external fact, explicit authorization, preference choice, or high-risk irreversible action is required.
+
 ## Non-Negotiable Consequences
 
 - Do not add workflow stages only to make reasoning feel safer.
@@ -53,6 +62,7 @@ Human-facing designs, documents, workflows, prompts, guides, artifacts, and expl
 - Do not treat unbound Markdown prose as official evidence.
 - Do not make Doc Loom larger than the change it governs.
 - Do not add lifecycle domains before a real workflow needs them.
+- Do not make users do work that the agent can reasonably complete.
 
 ## Amendment Rule
 
