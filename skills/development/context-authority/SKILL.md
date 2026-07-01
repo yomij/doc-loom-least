@@ -1,13 +1,13 @@
 ---
 name: context-authority
-description: Gather minimal context and resolve authority before planning. Use before plan-confirm when a case needs a context gate, on resume, or when authority conflicts may affect the plan.
+description: Check minimal context and authority before planning. Use only for resume, case ambiguity, high-risk/public contract, workflow/agent policy, or conflicts.
 ---
 
 # context-authority
 
-Read the smallest relevant context before planning. Do not write an
-implementation plan, modify files, create case identity, or resolve authority
-conflicts.
+This is a conditional preflight gate, not a default workflow phase. Read the
+smallest relevant context before planning. Do not write an implementation plan,
+modify files, create case identity, or resolve authority conflicts.
 
 Read when trigger condition is met:
 
@@ -21,8 +21,8 @@ Read when trigger condition is met:
 
 ## Start
 
-If `docloom-workflow` already ran workspace checks in this session, reuse that
-output. Otherwise run the minimal workspace checks:
+Consume the workspace snapshot from `docloom-workflow` when available. Otherwise
+run the minimal workspace checks:
 
 ```bash
 git rev-parse --show-toplevel
@@ -39,8 +39,16 @@ docs, and do not record `base_commit`.
 
 ## Trigger Boundary
 
-Use this skill when planning needs a context gate, resume needs current case
-state, or authority/code/test conflicts may affect the plan.
+Use this skill only when planning would otherwise proceed and at least one
+condition holds:
+
+- A resume needs current case state.
+- Multiple case candidates or ambiguous case identity may affect the route.
+- Authority, code, tests, or case docs may conflict.
+- The task touches a High-Risk Topic, public contract, ADR-protected boundary,
+  workflow policy, or agent policy.
+- `plan-confirm` found missing context and there is no safe low-risk skip
+  reason.
 
 Skip it for:
 
@@ -48,6 +56,8 @@ Skip it for:
 - Mechanical documentation edits.
 - Explanation-only requests that will not enter planning.
 - Local tasks that do not require authority, code, or test cross-checking.
+- Persistent work that already has an inline context summary or an explicit
+  low-risk skipped-context reason.
 
 Use `setup-doc-governance` instead for documentation governance initialization.
 Use `review` only when the user explicitly asks for review.
@@ -66,7 +76,8 @@ Use `review` only when the user explicitly asks for review.
 
 ## Output
 
-Default output is an inline context summary for `plan-confirm`.
+Default output is an inline context summary or skipped-context reason for
+`plan-confirm`.
 
 Write `docs/cases/<case-id>/context-authority-brief.md` only when:
 
@@ -111,7 +122,6 @@ assumption and risk.
 - No context, no plan; output `needs_user_decision` or `needs_case_selection`.
 - Do not enter `plan-confirm` with a blocking conflict.
 - Do not create a case id or case docs. → Route: docloom-workflow. Reason: case creation owned by docloom-workflow. Required input: user request for case initialization.
-- Read-only; do not modify any file.
 - Do not use archived, superseded, needs-refresh, derived, or scratch docs as
   current facts unless the user explicitly asks for history.
 - If sources are only low-authority or stale, mark the result as risk or block;

@@ -1445,9 +1445,9 @@ docs/governance/CONTEXT_PACK_POLICY.md
 
 ## 定位
 
-上下文获取与权威源判断 Skill。
+条件性上下文获取与权威源判断 preflight gate，不是默认 workflow phase。
 
-它负责在计划前建立最小事实基础。它不是所有开发任务的固定入口，只在任务需要上下文 gate、恢复任务、权威判断或冲突判断时触发。
+它负责在计划前建立最小事实基础。它不是所有开发任务的固定入口，只在任务需要上下文 gate、恢复任务、case 歧义判断、权威判断、高风险边界判断或冲突判断时触发。
 
 ## 负责什么
 
@@ -1459,7 +1459,8 @@ docs/governance/CONTEXT_PACK_POLICY.md
 - 仅在任务涉及文档治理、authority 变更、workflow / agent policy、public contract、高风险冲突或 blocked decision 时读取 `docs/governance/YYYY-MM-DD-<slug>.md`。
 - 识别并分级 authority / code / tests / case docs 冲突。
 - 标记不确定点和风险。
-- 输出 route verdict，给 `plan-confirm` 判断是否能计划。
+- 输出 route verdict、inline context summary 或 skipped-context reason，给
+  `plan-confirm` 判断是否能计划。
 ```
 
 ## 固定开始动作
@@ -1487,7 +1488,7 @@ git status --short
 
 ## 输出
 
-默认输出是对话中的最小上下文摘要，或交给 `plan-confirm` 内嵌到 `plan.md` 的 `Context Summary / Context Sources`。
+默认输出是对话中的最小上下文摘要，或交给 `plan-confirm` 内嵌到 `plan.md` 的 `Context Summary / Context Sources`。如果触发条件不成立，只输出 skipped-context reason。
 
 只有已有 case、恢复任务、高风险任务、存在冲突、多 agent / 跨会话接续或用户明确要求时，才写：
 

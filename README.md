@@ -51,7 +51,7 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 |---|---|
 | `docloom-workflow` | Entry point & lightweight router — parses task state and routes to the right stage skill |
 | `setup-doc-governance` | Governance init & maintenance — scans docs, extracts facts, produces governance plans |
-| `context-authority` | Fact authority gate — reads minimal context, resolves conflicts, issues routing verdict |
+| `context-authority` | Conditional fact authority gate — reads minimal context, resolves conflicts, issues routing verdict |
 | `plan-confirm` | Planning gate — generates plans with risk levels, TDD strategy, and waits for your approval |
 | `tdd-execute` | Execution gate — Red-Green-Refactor cycle with evidence, or recorded TDD exceptions |
 | `doc-sync-close` | Closure gate — syncs docs, records acceptance, risks, and follow-ups |

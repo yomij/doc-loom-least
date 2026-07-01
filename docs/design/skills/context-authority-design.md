@@ -8,7 +8,8 @@
 
 ## 1. 定位
 
-`context-authority` 是计划前的上下文获取与事实权威判断 skill。
+`context-authority` 是计划前的条件性上下文获取与事实权威判断
+preflight gate，不是默认 workflow phase。
 
 它负责建立计划所需的最小事实基础，但不写实施计划、不改代码、不创建任务实体、不解决权威冲突。
 
@@ -21,7 +22,7 @@ context-authority 默认不落盘；只有必要时才写 context brief。
 路由 verdict 优先于开放式建议。
 ```
 
-`context-authority` 不是所有开发任务的固定入口。它只在任务确实需要计划前上下文 gate、恢复上下文、权威判断或冲突判断时触发。
+`context-authority` 不是所有开发任务的固定入口。它只在任务确实需要计划前上下文 gate、恢复上下文、case 歧义判断、权威判断、高风险边界判断或冲突判断时触发。
 
 ---
 
@@ -30,7 +31,7 @@ context-authority 默认不落盘；只有必要时才写 context brief。
 ```yaml
 ---
 name: context-authority
-description: Gather minimal task context and resolve authority sources before planning. Use before plan-confirm when a case needs a context gate, when resuming a case, when deciding which docs/code/tests are authoritative, or when checking conflicts between user requests, authority docs, code, tests, governance decisions, and case docs.
+description: Check minimal context and authority before planning. Use only for resume, case ambiguity, high-risk/public contract, workflow/agent policy, or conflicts.
 ---
 ```
 
@@ -40,11 +41,11 @@ description: Gather minimal task context and resolve authority sources before pl
 
 应该触发：
 
-- 当前任务需要进入 `plan-confirm`。
 - 用户要求继续、恢复或判断已有任务状态。
+- 存在多个 case 候选，或 case identity 可能影响路由。
 - 用户要求判断当前上下文、任务状态或文档权威。
-- 任务涉及 authority、public contract、workflow、agent policy、架构边界或高风险领域。
-- `plan-confirm` 发现缺少足够上下文。
+- 任务涉及 authority、public contract、workflow、agent policy、ADR 保护的架构边界或高风险领域。
+- `plan-confirm` 发现缺少足够上下文，且没有安全的低风险 skipped-context reason。
 
 可跳过：
 
@@ -52,6 +53,7 @@ description: Gather minimal task context and resolve authority sources before pl
 - 纯机械文档修正。
 - 用户明确只要求查询或解释，且不进入计划。
 - 不需要 authority / code / tests 交叉判断的局部低风险任务。
+- 已有 inline context summary 或明确低风险 skipped-context reason 的普通持久任务。
 
 不应该触发：
 
