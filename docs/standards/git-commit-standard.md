@@ -1,17 +1,18 @@
-# Git 提交标准
+# Git Commit Standards
 
-提交标题除 Git 自动生成的 `Merge ...`、`Revert ...` 外，统一使用：
+Except for Git auto-generated messages like `Merge ...` and `Revert ...`, all commit titles **must** use the format:
 
 ```text
 <type>: <summary>
 ```
 
-- `type` 必填且小写，只允许 `feat`、`fix`、`docs`、`chore`、`refactor`、`style`、`test`、`perf`、`revert`。
-- `summary` 必填，简短说明业务对象和动作。
-- `type` 与 `summary` 之间必须使用英文半角冒号 `:`。
+- `type` is **required**, lowercase only, and limited to:
+  `feat`, `fix`, `docs`, `chore`, `refactor`, `style`, `test`, `perf`, `revert`.
+- `summary` is **required**, briefly describing the business object and action.
+- A single English colon `:` **must** be placed between `type` and `summary`.
 
-示例：
+Example:
 
 ```text
-feat: 新增xxx功能
+feat: add xxx feature
 ```
