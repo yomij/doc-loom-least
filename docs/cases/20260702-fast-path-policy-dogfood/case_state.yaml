@@ -1,0 +1,11 @@
+case_id: 20260702-fast-path-policy-dogfood
+phase: closed
+case_docs: docs/cases/20260702-fast-path-policy-dogfood
+closure_status: Done with Caveats
+closure_path: docs/cases/20260702-fast-path-policy-dogfood/closure.md
+current_plan_version: 1
+next_skill: none
+route_reason: case closed with caveats after recovery dogfood
+required_input: none
+review_risk: high
+last_updated: 2026-07-02T19:35:00+08:00

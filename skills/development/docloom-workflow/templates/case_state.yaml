@@ -1,0 +1,21 @@
+# Case State
+#
+# This template is used by docloom-workflow when creating a new case.
+# Phase and closure_status are routing truth. Other fields are routing metadata.
+#
+# See _shared/references/shared-protocol.md for:
+# - Allowed phase values and their writers
+# - Allowed closure_status values
+# - State conflict handling
+# - Optional routing fields
+
+case_id:
+phase: waiting_for_plan_confirmation
+case_docs: docs/cases/<case-id>
+closure_status: open
+closure_path:
+current_plan_version:
+next_skill:
+route_reason:
+required_input:
+last_updated:

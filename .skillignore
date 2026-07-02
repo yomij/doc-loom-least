@@ -1,0 +1,4 @@
+# Only publish canonical Doc Loom Least skills from skills/.
+docs/archive
+docs/archive/*
+docs/archive/**
