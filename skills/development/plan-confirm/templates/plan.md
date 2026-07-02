@@ -79,9 +79,3 @@ base_commit:
 
 | When | Confirmed By | Plan Version | Confirmation |
 |---|---|---|---|
-
-## Optional Section Menu
-
-Add only the sections needed for this case: Decisions, Assumptions, TDD Plan,
-Adaptive Execution, Plan Amendments, Tests to Add / Update, Risks, or
-Documentation Impact. Remove this menu after choosing sections.
