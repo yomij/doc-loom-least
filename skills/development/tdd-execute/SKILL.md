@@ -106,8 +106,8 @@ If execution changes `TDD Required: Yes` to `No`, stop and return to
 
 ## Adaptive Execution
 
-Follow the approved plan by default. If the plan or user explicitly allows
-adaptive execution, record low-risk same-goal amendments in `plan.md`:
+Follow the approved plan by default. If adaptive execution is allowed, record
+`minor deviation` amendments in `plan.md`:
 
 ```md
 ## Plan Amendments
@@ -115,12 +115,20 @@ adaptive execution, record low-risk same-goal amendments in `plan.md`:
 |---|---|---|---|---|
 ```
 
-Continue only for low-risk changes within the same goal and responsibility
-boundary, such as adjacent fixtures, helper files, or minor command adjustment.
+## Plan Deviation Classification
 
-Stop and return to `plan-confirm` for goal changes, acceptance changes, risk
-changes, public contract, authority impact, cross-module boundary, dependency
-or config changes, new migration, or TDD strategy changes.
+Compare actual execution against these approved plan boundaries: Goal,
+Non-goals, Decisions, Files to Change, Tasks, Acceptance Criteria, TDD
+Applicability, risk level, documentation impact, and command/config/dependency
+scope. Do not call a change a deviation unless you can name the boundary it
+differs from.
+
+| Classification | Meaning | Handling |
+|---|---|---|
+| `no deviation` | The work remains fully explained by the approved plan. | Continue and record normal execution evidence. |
+| `minor deviation` | Low-risk, same-goal, same-responsibility adjustment, such as adjacent fixtures, helper files, or an equivalent local command adjustment. | Record the change and reason in `execution.md`; if adaptive execution is allowed, also record it in `plan.md ## Plan Amendments`, then continue. |
+| `material deviation` | Goal, acceptance criteria, file boundary, risk level, documentation impact, TDD strategy, public contract, authority, cross-module boundary, dependency/config, or migration scope changes. | Stop and return to `plan-confirm` for a plan amendment. |
+| `hard stop` | The execution would touch a Non-goal, violate a Decision, modify authority docs, or change scripts, dependencies, lockfiles, CI, or test command config without authorization. | Stop and wait for explicit confirmation or a new plan. |
 
 ## Execution Evidence
 
@@ -128,7 +136,7 @@ Write or update `execution.md` when:
 
 - TDD is required.
 - Code or behavior changes.
-- Plan deviation occurs.
+- Any `minor deviation`, `material deviation`, or `hard stop` occurs.
 - Tests fail, retry, or need failure explanation.
 - Material `review_risk` exists.
 - The task may need resume.
@@ -136,8 +144,8 @@ Write or update `execution.md` when:
 Use `templates/execution.md`. Maintain the latest result in the body and keep a
 short `## History`; do not create numbered execution directories by default.
 
-Plan checkbox progress may be updated, but do not change plan goals, command
-semantics, acceptance criteria, TDD strategy, Decisions, or file scope.
+Plan checkbox progress may be updated, but semantic changes must be classified
+above.
 
 ## Review Risk
 
@@ -202,8 +210,5 @@ in `execution.md`.
 - TDD required but no observed expected Red, or unexpected Red failure, no
   implementation.
 - TDD exception without alternative verification -> wait for user input.
-- Serious plan deviation, stop. → Route: plan-confirm. Reason: plan deviation exceeds adaptive scope. Required input: plan amendment.
-- Touching non-goals or violating decisions, stop.
-- Do not modify authority docs.
-- Do not modify scripts, dependencies, lockfiles, CI, or test command config
-  unless authorized.
+- Any `material deviation` or `hard stop`, stop and follow Plan Deviation
+  Classification.

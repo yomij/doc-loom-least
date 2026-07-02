@@ -69,6 +69,8 @@ Key distinctions:
 Required execution evidence:
 
 - If `execution.md` exists, use it as execution evidence.
+- If `execution.md` records a material deviation, verify it returned to
+  `plan-confirm` or has explicit user confirmation before unqualified `Done`.
 - If Artifact Policy required `execution.md` but it is absent, record an
   evidence gap and do not use unqualified `Done`.
 - If Artifact Policy did not require `execution.md`, closure may carry the full
@@ -126,6 +128,7 @@ its resolution in `closure.md`.
 - User-provided Critical or Important findings that affect acceptance cannot be
   ignored.
 - High `review_risk` with insufficient evidence cannot be unqualified `Done`.
+- Unresolved material deviation cannot be unqualified `Done`.
 - Missing `execution.md` required by Artifact Policy cannot be unqualified
   `Done` -> wait for user input.
 - Case docs that end, pause, block, cancel, or supersede must get `closure.md`.
