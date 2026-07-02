@@ -12,6 +12,7 @@ This index routes current Doc Loom Least documentation. Historical and reference
 | Installation | [INSTALL](../INSTALL.md) |
 | Development standards | [Git Commit Standard](standards/git-commit-standard.md) |
 | Current workflow design | [Workflow And Design](share/workflow-and-design.md) |
+| Architecture module design | [Architecture Module Design](design/architecture-module-design.md) |
 | Skill designs | [docs/design/skills](design/skills/) |
 | Historical and external references | [docs/reference](reference/) |
 
