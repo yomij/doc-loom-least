@@ -36,9 +36,3 @@ Yes / No
 
 | Command | Result | Notes |
 |---|---|---|
-
-## Optional Section Menu
-
-Add only the sections needed for this case: TDD Log, Deviations, Remaining
-Issues, Review Risk, Checkpoints / Commits, or History. Remove this menu after
-choosing sections.
