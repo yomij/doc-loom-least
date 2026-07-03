@@ -51,6 +51,15 @@ must include alternative verification.
 may mechanically sync safe derived docs, but authority changes are proposals by
 default unless a concrete narrow patch is confirmed.
 
+`docs/cases/README.md` may exist as a derived case dashboard for discovery. It
+does not replace per-case routing truth or evidence; case artifacts remain the
+source of truth.
+
+`docloom-workflow` may perform next-slice discovery from
+`docs/product/current-state.md` or equivalent user-provided facts. This produces
+ranked recommendations only; selected candidates still enter the normal
+`plan-confirm` confirmation flow before execution.
+
 `review` and `grill` are manual helpers. They do not write files, update case
 state, route workflow, or create authority/governance proposals.
 
@@ -98,5 +107,8 @@ execution.
 - `skills/development/plan-confirm/references/risk-levels.md`
 - `skills/development/tdd-execute/SKILL.md`
 - `skills/development/doc-sync-close/SKILL.md`
+- `skills/_shared/references/loop-protocol.md`
+- `docs/product/current-state.md`
 - `skills/assessment/review/SKILL.md`
 - `skills/assessment/grill/SKILL.md`
+- `docs/cases/README.md`
