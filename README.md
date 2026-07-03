@@ -12,6 +12,22 @@ Doc Loom Least helps you and your AI agent stay aligned on three questions throu
 
 It does this with a small set of Agent Skills and lightweight Markdown artifacts — nothing more.
 
+## Architecture and Usage Flow
+
+These diagrams summarize the repo-native architecture and the normal usage path. The animated GIFs are embedded for quick reading, with static PNG previews linked below each diagram.
+
+### Architecture
+
+![Doc Loom Least architecture](docs/share/diagrams/doc-loom-architecture-en.gif)
+
+[PNG preview](docs/share/diagrams/doc-loom-architecture-en.png)
+
+### Usage flow
+
+![Doc Loom Least usage flow](docs/share/diagrams/doc-loom-usage-loop-en.gif)
+
+[PNG preview](docs/share/diagrams/doc-loom-usage-loop-en.png)
+
 ## Why Doc Loom Least?
 
 AI agents are powerful but forgetful. In development work, they drift from context, skip confirmation on risky changes, and leave behind no record of what happened or why.

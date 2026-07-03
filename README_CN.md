@@ -12,6 +12,22 @@ Doc Loom Least 帮助你和 AI 助手在工作流中始终对齐三件事：
 
 它用最小的一组 Agent Skills 和轻量 Markdown 产物来实现这一切——仅此而已。
 
+## 架构与使用流程
+
+下面两张图概览当前 repo-native 架构和日常使用路径。README 中直接嵌入动态 GIF，并在每张图下方提供静态 PNG 预览。
+
+### 系统架构
+
+![Doc Loom Least 系统架构](docs/share/diagrams/doc-loom-architecture-cn.gif)
+
+[PNG 预览](docs/share/diagrams/doc-loom-architecture-cn.png)
+
+### 使用流程
+
+![Doc Loom Least 使用流程](docs/share/diagrams/doc-loom-usage-loop-cn.gif)
+
+[PNG 预览](docs/share/diagrams/doc-loom-usage-loop-cn.png)
+
 ## 为什么需要 Doc Loom Least？
 
 AI 助手强大但健忘。在开发任务中，它们会偏离上下文、跳过风险变更的确认、不留任何记录说明发生了什么以及为什么。
