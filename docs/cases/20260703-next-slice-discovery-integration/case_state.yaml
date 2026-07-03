@@ -1,0 +1,11 @@
+case_id: 20260703-next-slice-discovery-integration
+phase: closed
+case_docs: docs/cases/20260703-next-slice-discovery-integration
+closure_status: Done with Caveats
+closure_path: docs/cases/20260703-next-slice-discovery-integration/closure.md
+current_plan_version: 1
+next_skill: none
+route_reason: next-slice discovery integrated with existing Doc Loom gates
+required_input: none
+review_risk: high
+last_updated: 2026-07-03T11:10:00+08:00

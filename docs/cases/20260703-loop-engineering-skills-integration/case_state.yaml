@@ -1,0 +1,11 @@
+case_id: 20260703-loop-engineering-skills-integration
+phase: closed
+case_docs: docs/cases/20260703-loop-engineering-skills-integration
+closure_status: Done with Caveats
+closure_path: docs/cases/20260703-loop-engineering-skills-integration/closure.md
+current_plan_version: 2
+next_skill: none
+route_reason: cases dashboard integrated as derived discovery index
+required_input: none
+review_risk: high
+last_updated: 2026-07-03T10:38:44+08:00
