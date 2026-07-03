@@ -16,7 +16,7 @@ It does this with a small set of Agent Skills and lightweight Markdown artifacts
 
 AI agents are powerful but forgetful. In development work, they drift from context, skip confirmation on risky changes, and leave behind no record of what happened or why.
 
-Doc Loom Least currently solves this for development work with the smallest possible mechanism: a set of skills that gate key moments (planning, execution, closure) and a shared protocol that keeps facts, case state, and artifacts consistent across sessions.
+Doc Loom Least currently solves this for development work with the smallest possible mechanism: a set of skills that gate key moments (planning, execution, closure), a shared protocol that keeps facts, case state, and artifacts consistent across sessions, and a bounded discovery path for finding the next small development slice without bypassing confirmation.
 
 Its broader direction is a personal product workflow substrate that can later carry product, research, design, release, and operations flows. In that sense it is a repo-native, skill-based platform, not a CLI tool, daemon, app backend, or pipeline product.
 
@@ -50,7 +50,7 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 
 | Skill | Role |
 |---|---|
-| `docloom-workflow` | Entry point & lightweight router — parses task state and routes to the right stage skill |
+| `docloom-workflow` | Entry point & lightweight router — parses task state, reports case status, discovers next-slice candidates, and routes to the right stage skill |
 | `setup-doc-governance` | Governance init & maintenance — scans docs, extracts facts, produces governance plans |
 | `context-authority` | Conditional fact authority gate — reads minimal context, resolves conflicts, issues routing verdict |
 | `plan-confirm` | Planning gate — generates plans with risk levels, TDD strategy, and waits for your approval |
@@ -70,6 +70,8 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 │   ├── ssot-map.md            # Source-of-truth map
 │   ├── authority/             # Current governed facts, including constitution
 │   ├── adr/                   # Architectural decision records
+│   ├── cases/                 # Per-case artifacts and derived case dashboard
+│   ├── product/               # Operational product-state inputs, not authority
 │   ├── governance/            # Governance batch plans
 │   └── archive/               # Historical and raw evidence, not current authority
 └── skills/
@@ -116,6 +118,19 @@ docloom-workflow
 ```
 
 `docloom-workflow` only routes — it never replaces a stage skill.
+
+### Case status & next-slice discovery
+
+When you want to know where things stand, `docloom-workflow` can read the
+derived case dashboard and the relevant case artifacts, then report the current
+phase, evidence, next skill, and any required input.
+
+When you ask what to build next, it can use
+[`docs/product/current-state.md`](docs/product/current-state.md), case
+follow-ups, and targeted repo evidence to recommend ranked next-slice
+candidates. A recommendation is not execution authorization: once you choose a
+candidate, the work still goes through normal case identity, planning, approval,
+execution, and closure.
 
 ### Manual review & stress-test
 
