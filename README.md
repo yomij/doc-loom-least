@@ -4,13 +4,13 @@
 
 > A minimal, document-driven personal product workflow substrate. The current slice is AI-assisted development: no CLI backend, no heavy pipeline, just skills and Markdown.
 
-Doc Loom Least helps you and your AI agent stay aligned on three questions throughout a workflow:
+Doc Loom Least keeps you and your AI agent aligned on three questions throughout a workflow:
 
 - **What facts should we trust right now?**
 - **What documents should we create or update?**
 - **Which decisions need human confirmation first?**
 
-It does this with a small set of Agent Skills and lightweight Markdown artifacts — nothing more.
+It does that with a small set of Agent Skills and lightweight Markdown artifacts.
 
 ## Architecture and Usage Flow
 
@@ -30,11 +30,11 @@ These diagrams summarize the repo-native architecture and the normal usage path.
 
 ## Why Doc Loom Least?
 
-AI agents are powerful but forgetful. In development work, they drift from context, skip confirmation on risky changes, and leave behind no record of what happened or why.
+AI agents are capable, but they forget. In development work they drift from context, skip confirmation on risky changes, and leave no record of what they did or why.
 
-Doc Loom Least currently solves this for development work with the smallest possible mechanism: a set of skills that gate key moments (planning, execution, closure), a shared protocol that keeps facts, case state, and artifacts consistent across sessions, and a bounded discovery path for finding the next small development slice without bypassing confirmation.
+Doc Loom Least solves this for development work with the smallest mechanism that does the job: a set of skills that gate key moments (planning, execution, closure), a shared protocol that keeps facts, case state, and artifacts consistent across sessions, and a bounded discovery path for finding the next small development slice without bypassing confirmation.
 
-Its broader direction is a personal product workflow substrate that can later carry product, research, design, release, and operations flows. In that sense it is a repo-native, skill-based platform, not a CLI tool, daemon, app backend, or pipeline product.
+The broader direction is a personal product workflow substrate that can later carry product, research, design, release, and operations flows. “Platform” here means a repo-native, skill-based workflow substrate — not a CLI tool, daemon, app backend, or pipeline product.
 
 ## Principles
 
@@ -49,11 +49,11 @@ These are non-negotiable, drawn from the [Constitution](docs/authority/constitut
 
 ## Lifecycle Scope
 
-The current supported lifecycle domain is **development**. Future domains such as product, research, and design should enter only as narrow skills with clear workflow boundaries. Empty roadmap directories and speculative stages are intentionally avoided.
+The only lifecycle domain supported right now is **development**. Future domains like product, research, and design should enter as narrow skills with clear workflow boundaries. Empty roadmap directories and speculative stages are avoided on purpose.
 
 ## What v1 Does NOT Do
 
-These boundaries keep the project minimal by design:
+These boundaries are what keep the project minimal:
 
 - No CLI backend or daemon
 - No heavy orchestrator skill
@@ -66,14 +66,14 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 
 | Skill | Role |
 |---|---|
-| `docloom-workflow` | Entry point & lightweight router — parses task state, reports case status, discovers next-slice candidates, and routes to the right stage skill |
-| `setup-doc-governance` | Governance init & maintenance — scans docs, extracts facts, produces governance plans |
-| `context-authority` | Conditional fact authority gate — reads minimal context, resolves conflicts, issues routing verdict |
-| `plan-confirm` | Planning gate — generates plans with risk levels, TDD strategy, and waits for your approval |
-| `tdd-execute` | Execution gate — Red-Green-Refactor cycle with evidence, or recorded TDD exceptions |
-| `doc-sync-close` | Closure gate — syncs docs, records acceptance, risks, and follow-ups |
-| `review` | Manual read-only review of designs, diffs, tests, docs, or case evidence |
-| `grill` | Manual interactive stress-test of requirements, designs, or claims |
+| `docloom-workflow` | Entry point and lightweight router. Parses task state, reports case status, discovers next-slice candidates, and routes to the right stage skill. |
+| `setup-doc-governance` | Governance init and maintenance. Scans docs, extracts facts, produces governance plans. |
+| `context-authority` | Conditional fact authority gate. Reads minimal context, resolves conflicts, issues a routing verdict. |
+| `plan-confirm` | Planning gate. Generates plans with risk levels and TDD strategy, then waits for your approval. |
+| `tdd-execute` | Execution gate. Red-Green-Refactor cycle with evidence, or recorded TDD exceptions. |
+| `doc-sync-close` | Closure gate. Syncs docs, records acceptance, risks, and follow-ups. |
+| `review` | Manual read-only review of designs, diffs, tests, docs, or case evidence. |
+| `grill` | Manual interactive stress-test of requirements, designs, or claims. |
 
 ## Repository Structure
 
@@ -102,7 +102,7 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 
 ### Quick doc edits (no case needed)
 
-For one-off, low-risk documentation changes — read the [Constitution](docs/authority/constitution.md), then edit the target doc. No case, no plan, no execution record.
+For one-off, low-risk documentation changes, read the [Constitution](docs/authority/constitution.md) and then edit the target doc directly. No case, no plan, no execution record.
 
 ### Document governance
 
@@ -137,23 +137,16 @@ docloom-workflow
 
 ### Case status & next-slice discovery
 
-When you want to know where things stand, `docloom-workflow` can read the
-derived case dashboard and the relevant case artifacts, then report the current
-phase, evidence, next skill, and any required input.
+When you want to know where things stand, `docloom-workflow` can read the derived case dashboard and the relevant case artifacts, then report the current phase, the evidence so far, the next skill to use, and any input it needs from you.
 
-When you ask what to build next, it can use
-[`docs/product/current-state.md`](docs/product/current-state.md), case
-follow-ups, and targeted repo evidence to recommend ranked next-slice
-candidates. A recommendation is not execution authorization: once you choose a
-candidate, the work still goes through normal case identity, planning, approval,
-execution, and closure.
+When you ask what to build next, it can pull from [`docs/product/current-state.md`](docs/product/current-state.md), case follow-ups, and targeted repo evidence to recommend ranked next-slice candidates. A recommendation is not execution authorization: once you pick a candidate, the work still goes through normal case identity, planning, approval, execution, and closure.
 
 ### Manual review & stress-test
 
 Use `review` and `grill` only when you explicitly ask:
 
-- `review` — read-only assessment with findings and evidence gaps. No files written, no state changed.
-- `grill` — interactive challenge of claims, one question at a time. No artifacts, no workflow routing.
+- `review`: read-only assessment with findings and evidence gaps. No files written, no state changed.
+- `grill`: interactive challenge of claims, one question at a time. No artifacts, no workflow routing.
 
 ## Installation
 
@@ -179,7 +172,7 @@ skillshare sync
 
 For project-scoped installation and detailed verification steps, see [INSTALL.md](INSTALL.md).
 
-In environments that support Agent Skills without `skillshare`, copy or symlink the desired directories that contain `SKILL.md` from the grouped `skills/` tree into your skills directory and invoke them by name:
+In environments that support Agent Skills but don't have `skillshare`, copy or symlink the directories containing `SKILL.md` from the grouped `skills/` tree into your skills directory, then invoke them by name:
 
 ```
 Use docloom-workflow to continue the current case.
