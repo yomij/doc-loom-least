@@ -1,0 +1,129 @@
+#!/bin/sh
+set -eu
+
+failures=0
+
+fail() {
+  printf 'FAIL: %s\n' "$*" >&2
+  failures=$((failures + 1))
+}
+
+ok() {
+  printf 'ok: %s\n' "$*"
+}
+
+require_file() {
+  if [ -f "$1" ]; then
+    ok "file $1"
+  else
+    fail "missing file $1"
+  fi
+}
+
+check_skill() {
+  file=$1
+  expected=$2
+  require_file "$file"
+  actual=$(awk '/^name: / { print $2; exit }' "$file" 2>/dev/null || true)
+  if [ "$actual" = "$expected" ]; then
+    ok "skill $expected"
+  else
+    fail "$file has name '$actual', expected '$expected'"
+  fi
+}
+
+check_frontmatter_key() {
+  file=$1
+  key=$2
+  if sed -n '1,24p' "$file" | grep -q "^$key:"; then
+    return 0
+  fi
+  fail "$file missing frontmatter key $key"
+}
+
+check_case_state() {
+  file=$1
+  for key in case_id phase case_docs closure_status last_updated; do
+    if ! grep -q "^$key:" "$file"; then
+      fail "$file missing $key"
+    fi
+  done
+}
+
+check_symlink_target() {
+  path=$1
+  if [ -L "$path" ] && [ -e "$path" ]; then
+    ok "symlink $path"
+  else
+    fail "broken or missing symlink $path"
+  fi
+}
+
+require_file START_HERE.md
+require_file INSTALL.md
+require_file scripts/verify-fixtures
+require_file examples/minimal-project/README.md
+require_file docs/standards/release.md
+
+check_skill skills/development/docloom-workflow/SKILL.md docloom-workflow
+check_skill skills/governance/setup-doc-governance/SKILL.md setup-doc-governance
+check_skill skills/development/context-authority/SKILL.md context-authority
+check_skill skills/development/plan-confirm/SKILL.md plan-confirm
+check_skill skills/development/tdd-execute/SKILL.md tdd-execute
+check_skill skills/development/doc-sync-close/SKILL.md doc-sync-close
+check_skill skills/assessment/review/SKILL.md review
+check_skill skills/assessment/grill/SKILL.md grill
+
+for file in $(find docs/authority -type f -name '*.md' | sort); do
+  check_frontmatter_key "$file" status
+  check_frontmatter_key "$file" authority
+  check_frontmatter_key "$file" source_of_truth
+done
+
+for file in $(find docs/cases examples -path '*/case_state.yaml' -type f 2>/dev/null | sort); do
+  check_case_state "$file"
+done
+
+for path in \
+  skills/assessment/review/references/shared-protocol.md \
+  skills/development/context-authority/references/shared-protocol.md \
+  skills/development/doc-sync-close/references/shared-protocol.md \
+  skills/development/docloom-workflow/references/shared-protocol.md \
+  skills/development/plan-confirm/references/shared-protocol.md \
+  skills/development/tdd-execute/references/shared-protocol.md \
+  skills/governance/setup-doc-governance/references/shared-protocol.md \
+  skills/development/doc-sync-close/templates/handoff.md \
+  skills/development/plan-confirm/templates/handoff.md \
+  skills/development/tdd-execute/templates/handoff.md
+do
+  check_symlink_target "$path"
+done
+
+if grep -R "docs/design\|docs/reference" README.md README_CN.md INSTALL.md START_HERE.md docs/index.md docs/ssot-map.md >/dev/null 2>&1; then
+  fail "current entry docs still reference old docs/design or docs/reference paths"
+fi
+
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  if git diff --check >/dev/null 2>&1; then
+    ok "git diff --check"
+  else
+    fail "git diff --check failed"
+  fi
+fi
+
+if [ -x scripts/verify-fixtures ]; then
+  if scripts/verify-fixtures >/dev/null; then
+    ok "fixtures"
+  else
+    fail "scripts/verify-fixtures failed"
+  fi
+else
+  fail "scripts/verify-fixtures is not executable"
+fi
+
+if [ "$failures" -ne 0 ]; then
+  printf '%s check(s) failed\n' "$failures" >&2
+  exit 1
+fi
+
+printf 'all checks passed\n'

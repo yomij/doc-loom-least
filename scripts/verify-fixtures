@@ -1,0 +1,41 @@
+#!/bin/sh
+set -eu
+
+failures=0
+
+fail() {
+  printf 'FAIL: %s\n' "$*" >&2
+  failures=$((failures + 1))
+}
+
+check_section() {
+  file=$1
+  heading=$2
+  if ! grep -q "^## $heading" "$file"; then
+    fail "$file missing section: $heading"
+  fi
+}
+
+for scenario in \
+  one-shot-doc-edit \
+  fast-path-small-change \
+  full-case-dev-task \
+  status-only-resume \
+  governance-rebuild
+do
+  file="fixtures/$scenario/README.md"
+  if [ ! -f "$file" ]; then
+    fail "missing fixture $file"
+    continue
+  fi
+  check_section "$file" "Input"
+  check_section "$file" "Expected Output"
+  check_section "$file" "Must Not Happen"
+done
+
+if [ "$failures" -ne 0 ]; then
+  printf '%s fixture check(s) failed\n' "$failures" >&2
+  exit 1
+fi
+
+printf 'fixture checks passed\n'
