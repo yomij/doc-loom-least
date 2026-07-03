@@ -12,6 +12,9 @@ Doc Loom Least keeps you and your AI agent aligned on three questions throughout
 
 It does that with a small set of Agent Skills and lightweight Markdown artifacts.
 
+New here? Start with [START_HERE.md](START_HERE.md). It reduces the workflow to
+three paths: one-shot edit, Fast-Path case, or full case workflow.
+
 ## Architecture and Usage Flow
 
 These diagrams summarize the repo-native architecture and the normal usage path. The animated GIFs are embedded for quick reading, with static PNG previews linked below each diagram.
@@ -79,8 +82,12 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 
 ```
 .
+├── START_HERE.md              # Short user-facing entry
 ├── INSTALL.md                 # Installation guide
 ├── CHANGELOG.md               # Version history
+├── scripts/                   # Local static verification checks
+├── fixtures/                  # Scenario fixtures for protocol regression checks
+├── examples/                  # Minimal repo-shaped evaluation example
 ├── docs/
 │   ├── index.md               # Documentation routing index
 │   ├── ssot-map.md            # Source-of-truth map
@@ -99,6 +106,15 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 ```
 
 ## Typical Usage
+
+### First run
+
+Read [START_HERE.md](START_HERE.md), then run:
+
+```bash
+scripts/verify
+scripts/verify-fixtures
+```
 
 ### Quick doc edits (no case needed)
 
@@ -171,6 +187,9 @@ skillshare sync
 ```
 
 For project-scoped installation and detailed verification steps, see [INSTALL.md](INSTALL.md).
+
+To evaluate without installing, read
+[examples/minimal-project](examples/minimal-project/).
 
 In environments that support Agent Skills but don't have `skillshare`, copy or symlink the directories containing `SKILL.md` from the grouped `skills/` tree into your skills directory, then invoke them by name:
 

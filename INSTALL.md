@@ -4,6 +4,21 @@ Doc Loom Least is distributed as Agent Skills. The fastest supported path is
 `skillshare`, which can install, sync, check, and update the skills across AI
 CLI targets.
 
+## Evaluate First
+
+To inspect the workflow before installing anything, read:
+
+- [START_HERE.md](START_HERE.md)
+- [examples/minimal-project](examples/minimal-project/)
+- [fixtures](fixtures/)
+
+Local repository checks:
+
+```bash
+scripts/verify
+scripts/verify-fixtures
+```
+
 ## Prerequisites
 
 Install and initialize `skillshare` once on the machine:
@@ -52,6 +67,10 @@ skillshare sync -p
 
 Use the HTTPS `github.com/yomij/doc-loom-least` source instead of SSH when the
 repository is public or the local git credential helper is already configured.
+
+For reproducible installs, prefer a release tag or commit when your installer
+supports git refs. Release tags are cut only from clean commits; see
+[docs/standards/release.md](docs/standards/release.md).
 
 ## Update
 

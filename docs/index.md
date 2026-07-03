@@ -4,6 +4,7 @@ This index routes current Doc Loom Least documentation. Historical and reference
 
 | Topic | Current entry |
 |---|---|
+| Short start guide | [Start Here](../START_HERE.md) |
 | Authority entry | [Authority Index](authority/README.md) |
 | Product scope | [Product Scope](authority/product/scope.md) |
 | Repository and skill architecture | [Repository And Skills](authority/architecture/repo-and-skills.md) |
@@ -11,6 +12,7 @@ This index routes current Doc Loom Least documentation. Historical and reference
 | Documentation governance | [Documentation Governance](authority/workflow/doc-governance.md) |
 | Agent policy | [Agent Policy](authority/agent/policy.md) |
 | Distribution and install | [Distribution](authority/operations/distribution.md), [INSTALL](../INSTALL.md) |
+| Release tags | [Release Standard](standards/release.md) |
 | Git commit titles | [Git Commit Titles](authority/operations/git.md) |
 | Constitutional principles | [Constitution](authority/constitution.md) |
 | Lifecycle scope and skill grouping | [ADR-0001 Lifecycle Scope And Skill Grouping](adr/ADR-0001-lifecycle-scope-and-skill-grouping.md) |
@@ -18,6 +20,8 @@ This index routes current Doc Loom Least documentation. Historical and reference
 | Constitution authority location | [ADR-0003 Constitution Authority Location](adr/ADR-0003-constitution-authority-location.md) |
 | Source-of-truth map | [SSOT Map](ssot-map.md) |
 | Project overview | [README](../README.md), [README_CN](../README_CN.md) |
+| Evaluation example | [Minimal Project Example](../examples/minimal-project/) |
+| Protocol fixtures | [fixtures](../fixtures/) |
 | Current workflow design | [Workflow And Design](share/workflow-and-design.md) |
 | Governance batch plans | [docs/governance](governance/) |
 | Historical and raw evidence | [docs/archive](archive/) |
