@@ -6,14 +6,15 @@ type: architecture
 source_of_truth: code
 supersedes: []
 superseded_by: []
-last_verified: 2026-07-02
+last_verified: 2026-07-03
 ---
 
 # Repository And Skills
 
 Doc Loom Least currently ships as Agent Skills and Markdown documentation. This
-repository has no runtime source tree, package manifest, or test suite at the
-time of verification.
+repository has no runtime source tree or package manifest. It has lightweight
+static verification scripts and scenario fixtures; these are maintenance
+checks, not a product runtime or backend.
 
 Canonical skill groups:
 
@@ -23,6 +24,9 @@ Canonical skill groups:
 | `skills/governance/` | Documentation and knowledge governance. |
 | `skills/assessment/` | Manual review and challenge helpers. |
 | `skills/_shared/` | Shared protocol and templates; not directly invoked. |
+| `scripts/` | Static repository and fixture verification. |
+| `fixtures/` | Protocol scenario fixtures. |
+| `examples/` | Minimal repo-shaped evaluation example. |
 
 Canonical skill invocation names:
 
@@ -46,3 +50,5 @@ clear boundaries exist.
 - [ADR-0001](../../adr/ADR-0001-lifecycle-scope-and-skill-grouping.md)
 - Current tracked `skills/**/SKILL.md` frontmatter.
 - [skills/README.md](../../../skills/README.md)
+- [scripts/verify](../../../scripts/verify)
+- [fixtures](../../../fixtures/)

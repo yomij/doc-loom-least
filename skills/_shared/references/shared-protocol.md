@@ -90,6 +90,11 @@ identity.
 `case_state.yaml` is a routing signal. Phase and closure_status are routing
 truth. Markdown artifacts are evidence truth.
 
+User-facing status should collapse to the smallest useful model unless the
+user asks for routing detail: `status-only`, `planned`, `executing`, or
+`closed`. Narrower phases such as `waiting_for_plan_confirmation` and
+`doc_syncing` remain agent routing details; do not make the user manage them.
+
 Initial fields: case_id, phase, case_docs, closure_status, last_updated.
 Optional routing fields: closure_path, current_plan_version, review_risk.
 

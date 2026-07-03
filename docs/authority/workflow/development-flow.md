@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-02
+last_verified: 2026-07-03
 ---
 
 # Development Workflow
@@ -63,6 +63,22 @@ ranked recommendations only; selected candidates still enter the normal
 `review` and `grill` are manual helpers. They do not write files, update case
 state, route workflow, or create authority/governance proposals.
 
+## User-Facing State Model
+
+The user-facing workflow model is intentionally smaller than the internal
+case-state routing fields:
+
+| State | Meaning |
+|---|---|
+| `status-only` | Read and report; no files changed. |
+| `planned` | A plan exists and execution still needs approval or a valid Fast-Path record. |
+| `executing` | An approved plan is being implemented and checked. |
+| `closed` | Closure records final status, evidence, caveats, and follow-ups. |
+
+`case_state.yaml` may still use narrower routing phases such as
+`waiting_for_plan_confirmation` or `doc_syncing`. Those phases are agent
+routing details and should not expand the concepts a user must manage.
+
 ## Fact Authority
 
 Use the shared fact authority order:
@@ -112,3 +128,4 @@ execution.
 - `skills/assessment/review/SKILL.md`
 - `skills/assessment/grill/SKILL.md`
 - `docs/cases/README.md`
+- `START_HERE.md`

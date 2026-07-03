@@ -2,7 +2,21 @@
 
 ## Unreleased
 
+### Added
+- Added `START_HERE.md` as the short user-facing entry for one-shot,
+  Fast-Path, and full-case paths.
+- Added local static checks: `scripts/verify` and `scripts/verify-fixtures`.
+- Added protocol fixtures for one-shot edits, Fast-Path, full cases,
+  status-only resume, and governance rebuild.
+- Added `examples/minimal-project/` for evaluation without installing skills.
+- Added `docs/standards/release.md` for reproducible tag/release handling.
+- Added ADR-0001 for lifecycle scope and skill grouping.
+- Added docs index, SSOT map, and skills layout map.
+- development/plan-confirm/references/risk-levels.md (new file).
+
 ### Changed
+- Clarified the user-facing state model as four states while keeping narrower
+  `case_state.yaml` phases as agent routing details.
 - Repositioned Doc Loom Least as a repo-native personal product workflow
   substrate whose current supported lifecycle domain is development.
 - Grouped canonical skills under `skills/development/`, `skills/governance/`,
@@ -58,11 +72,6 @@
 - Allowed empty base_commit with git_available: false reason in plan-confirm.
 - Replaced generic "triggered sections" in templates (plan.md, execution.md,
   closure.md) with per-section trigger conditions in HTML comments.
-
-### Added
-- Added ADR-0001 for lifecycle scope and skill grouping.
-- Added docs index, SSOT map, and skills layout map.
-- development/plan-confirm/references/risk-levels.md (new file).
 
 ## v1 (2026-06-18)
 

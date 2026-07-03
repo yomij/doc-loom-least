@@ -23,6 +23,13 @@ without adopting a CLI backend or pipeline product.
 - Manual `review` and `grill` skills exist as conversation-only helpers.
 - `docs/cases/README.md` provides a derived dashboard for current and recent
   cases.
+- `START_HERE.md` provides the short user-facing entry for one-shot,
+  Fast-Path, and full-case paths.
+- `scripts/verify` and `scripts/verify-fixtures` provide static maintenance
+  checks without adding a runtime backend.
+- `fixtures/` and `examples/minimal-project/` provide lightweight evaluation
+  and regression evidence.
+- `docs/standards/release.md` defines the clean-commit tag/release checklist.
 - `docloom-workflow` can perform read-only next-slice discovery from this file,
   the cases dashboard, closure follow-ups, and targeted repo evidence.
 - `skills/_shared/references/loop-protocol.md` defines case candidates,
@@ -31,11 +38,12 @@ without adopting a CLI backend or pipeline product.
 
 ## Current Bottleneck
 
-Next-slice discovery has now been dogfooded on a real small feature. The
-scoring rubric found a useful next target, but the first default output was too
-wide for a quick human decision. The next bottleneck is validating the compact
-candidate output on the next real discovery pass before strengthening the
-rubric.
+External review found the strongest adoption risks in onboarding size,
+verification, install evaluation, release reproducibility, and state-model
+complexity. The current slice adds a short start guide, static checks,
+fixtures, an evaluation example, release standard, and a four-state
+user-facing model. The next bottleneck is a clean tagged release and at least
+one external-project dogfood pass.
 
 ## Feedback / Signals
 
@@ -48,6 +56,10 @@ rubric.
   the default decision view.
 - The project constitution requires the smallest useful workflow contract and
   rejects heavy orchestration.
+- External review identified verification and adoption friction as the most
+  useful near-term improvement area.
+- A real release tag must wait for a clean committed tree, because tags point
+  at commits rather than uncommitted files.
 
 ## Constraints
 
