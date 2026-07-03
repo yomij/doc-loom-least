@@ -1,6 +1,6 @@
 ---
 name: docloom-workflow
-description: Default entry for Doc Loom Least. Use when a user asks for a docs-first workflow but does not name a specific skill.
+description: Default entry for Doc Loom Least. Use when a user asks for a docs-first workflow but does not name a specific skill, asks for status/continue/where-we-are routing, or asks what next product or development slice should be discovered.
 ---
 
 # docloom-workflow
@@ -9,6 +9,9 @@ Route to the owning skill; do not replace stage skills.
 
 Read shared rules first when routing or creating case state:
 `references/shared-protocol.md`.
+
+Read `references/loop-protocol.md` when the user asks for case candidates,
+loop-style discovery, next work, next feature, or next-slice discovery.
 
 ## Start
 
@@ -39,8 +42,33 @@ Status-only behavior:
 - Do not modify files.
 - Do not repair `case_state.yaml`.
 - Read only the git state and necessary case docs.
+- Use `docs/cases/README.md`, when present, only to narrow case artifact reads;
+  verify phase, next skill, and required input from case artifacts.
 - Output current phase, evidence, route decision, next skill, blocking issue,
   and one clarifying question if needed.
+
+For multiple case candidates or follow-ups, use the Case Candidates table from
+`references/loop-protocol.md`; this is output shape only, not a new stage.
+
+## Next-Slice Discovery
+
+Use this mode when the user asks what to build next, what the next feature slice
+should be, or asks the agent to discover the next iteration target.
+
+Inputs are `docs/product/current-state.md` or equivalent current-turn facts,
+case dashboard and closure follow-ups when present, minimal git state, and
+targeted repo evidence only when needed to support candidate claims.
+
+If required product-state fields are missing, do not recommend a new task. Use
+the blocking output from `references/loop-protocol.md`; if creating the file is
+the next user-approved action, use `templates/product-current-state.md`.
+
+Output Next Slice Candidates using the table in `references/loop-protocol.md`.
+Recommend exactly one candidate with one-sentence reasoning, or recommend no
+candidate when evidence is insufficient.
+
+Next-slice discovery is read-only. Create no case or plan until the user selects
+a candidate; then route through normal case identity and `plan-confirm`.
 
 ## Case Identity
 
@@ -81,17 +109,19 @@ overrides all conditions below.
 | 3 | User explicitly asks for review or code/docs/test/design review | `review` |
 | 4 | Multiple case candidates and no safe assumption | `status-only` with `needs_case_selection` |
 | 5 | User asks for status or intent is ambiguous | `status-only` |
-| 6 | Persistent work needing a context gate: resume, authority, conflict, or High-Risk Topic | `context-authority` |
-| 7 | Low-risk, ≤ 3 files, ≤ 20 lines diff, no conflict, no cross-session need — fast-path conditions all hold | `plan-confirm` (fast-path) |
-| 8 | Persistent work with inline context or skipped-context reason | `plan-confirm` |
-| 9 | Approved plan exists and user explicitly asks to execute or continue | `tdd-execute` |
-| 10 | User asks to sync docs, close, write closure, or execution is complete | `doc-sync-close` |
+| 6 | User asks for next-slice discovery without selecting a candidate | `status-only` with Next Slice Candidates |
+| 7 | User selects a next-slice candidate and persistent work is needed | `plan-confirm` after case identity and context/skip reason exist |
+| 8 | Persistent work needing a context gate: resume, authority, conflict, or High-Risk Topic | `context-authority` |
+| 9 | Low-risk, ≤ 3 files, ≤ 20 lines diff, no conflict, no cross-session need — fast-path conditions all hold | `plan-confirm` (fast-path) |
+| 10 | Persistent work with inline context or skipped-context reason | `plan-confirm` |
+| 11 | Approved plan exists and user explicitly asks to execute or continue | `tdd-execute` |
+| 12 | User asks to sync docs, close, write closure, or execution is complete | `doc-sync-close` |
 
 Explicit skill invocation wins. If a user names a Doc Loom skill, honor that
 skill unless its gate routes back to `docloom-workflow` or another required
 owner.
 
-For fast-path (row 7): `plan-confirm` writes a minimal approved plan with
+For fast-path (row 9): `plan-confirm` writes a minimal approved plan with
 `approved_by: fast-path`, a Confirmation Log row, fast-path eligibility, and no
 task-level TDD breakdown. See `references/shared-protocol.md` → Fast-Path.
 
@@ -123,6 +153,14 @@ Next skill:
 Blocking issue:
 ```
 
+For next-slice discovery, append:
+
+```text
+Next Slice Candidates:
+Recommended:
+Required human decision:
+```
+
 Do not create route artifacts. If a route decision affects a plan, it belongs
 in `plan.md` context, assumptions, or risks. If it affects closure, it belongs
 in `closure.md`.
@@ -140,6 +178,7 @@ in `closure.md`.
 - Do not auto-trigger `review`, even when `review_risk` is high.
 - Do not route or own `grill`; it requires explicit invocation.
 - Do not write files in status-only mode.
+- Do not execute or plan a next-slice candidate until the user selects it.
 - Do not silently repair state cache conflicts.
 - Do not write `base_commit` or `risk_level`; these belong to `plan.md` frontmatter.
 - Do not call a CLI backend.

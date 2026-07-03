@@ -44,6 +44,9 @@ condition holds:
 
 - A resume needs current case state.
 - Multiple case candidates or ambiguous case identity may affect the route.
+- A loop-originated or next-slice candidate touches workflow policy, agent
+  policy, authority docs, public contract, High-Risk Topic, or conflict-prone
+  implementation.
 - Authority, code, tests, or case docs may conflict.
 - The task touches a High-Risk Topic, public contract, ADR-protected boundary,
   workflow policy, or agent policy.

@@ -53,7 +53,11 @@ Key distinctions:
 7. Handle authority changes as proposals or confirmed narrow patches.
 8. Write `closure.md`.
 9. After `closure.md` is written and checked, update `case_state.yaml`.
-10. Write `handoff.md` only for `Paused`, `Blocked`, or another future resume
+10. Refresh derived discovery docs only when closure evidence justifies it:
+    `docs/cases/README.md` for dashboard-relevant case changes and
+    `docs/product/current-state.md` for operational product-state changes.
+    Keep both non-authoritative; do not invent product direction.
+11. Write `handoff.md` only for `Paused`, `Blocked`, or another future resume
     point. Use `templates/handoff.md`.
 
 ## Acceptance Mapping
@@ -128,6 +132,10 @@ last_updated: <timestamp>
 
 If state update fails, `closure.md` remains the truth record, but do not claim
 workflow fully synced.
+
+If dashboard or product-state refresh fails or is not justified by evidence, do
+not roll back closure. Record the gap or skip reason; authority and case
+artifacts remain truth.
 
 review_risk is consumed at closure. Do not change it during closure unless new
 closure-process evidence changes the assessment. Record the consumed value and

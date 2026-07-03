@@ -26,6 +26,8 @@ Read when trigger condition is met:
 - Relevant authority docs.
 - Existing `plan.md` when revising a plan.
 - User-confirmed discussion decisions that affect this plan.
+- Selected discovery candidate, when work was triggered by case candidates or
+  next-slice discovery.
 
 If `case_id` or case docs are missing, stop with
 `needs_docloom_workflow` / `needs_case_initialization`.
@@ -81,6 +83,9 @@ Plan core content must include:
 - Tasks with exact paths, planned commands, expected results, and no
   placeholders.
 - Confirmation log.
+
+When a discovery candidate triggered the plan, include `## Discovery Candidate`
+with: Mode, Candidate ID, Evidence, Recommendation Reason, and User Decision.
 
 Include triggered sections only when they have content: confirmed decisions,
 non-obvious assumptions, detailed TDD plan, adaptive execution, plan amendments,
@@ -138,3 +143,5 @@ changes. Checkbox/status edits do not change plan semantics.
   `approved_by: fast-path` and the verified Fast-Path conditions.
 - Discussion decisions that change execution constraints must enter
   `## Decisions` and be confirmed.
+- A selected discovery candidate is planning context only. It does not approve
+  the plan.

@@ -8,6 +8,9 @@ description: Execute an approved Doc Loom case plan using TDD discipline. Use on
 Ordinary one-shot coding tasks and simple document edits do not automatically
 enter this skill.
 
+A recommendation is not execution authorization; execute only after
+`plan-confirm` has produced an approved plan with a current confirmation log.
+
 Read when trigger condition is met:
 
 - `references/shared-protocol.md` when: updating case_state.yaml phase,

@@ -59,6 +59,11 @@ truth. Historical material is evidence, not current authority.
 
 Risk levels and confirmation policy: see `development/plan-confirm/references/risk-levels.md`.
 
+Loop-style discovery rules: see `loop-protocol.md`. Loop-originated work is a
+discovery source, not a separate workflow. It follows the same instruction
+order, fact authority order, case identity, artifact policy, confirmation
+semantics, and manual review/grill gates.
+
 ## High-Risk Topics
 
 High-risk topics: security, auth, permission, privacy, billing, data deletion,
@@ -132,6 +137,17 @@ When `case_state.yaml` conflicts with Markdown artifacts:
 Only create artifacts listed in the Artifact Policy table. Do not invent new
 artifact types unless the user explicitly requests one or a governance plan
 approves one.
+
+`docs/cases/README.md` is an optional derived dashboard, not a case artifact.
+It may summarize active cases, human waits, recent closures, and follow-up
+candidates for discovery. It is never routing truth, execution evidence, or an
+append-only log. If it conflicts with `case_state.yaml`, `plan.md`,
+`execution.md`, or `closure.md`, the case artifact wins and the dashboard should
+be refreshed.
+
+`docs/product/current-state.md` is an optional operational input for
+next-slice discovery. It is not authority and must not override active
+authority docs, current implementation, accepted ADRs, or user-confirmed facts.
 
 Evidence ownership: `plan.md` records expected acceptance criteria and planned
 verification; `execution.md` records actual commands, deviations,
