@@ -63,9 +63,9 @@ If required product-state fields are missing, do not recommend a new task. Use
 the blocking output from `references/loop-protocol.md`; if creating the file is
 the next user-approved action, use `templates/product-current-state.md`.
 
-Output Next Slice Candidates using the table in `references/loop-protocol.md`.
-Recommend exactly one candidate with one-sentence reasoning, or recommend no
-candidate when evidence is insufficient.
+Output Next Slice Candidates using the compact table in
+`references/loop-protocol.md`. Recommend exactly one candidate with
+one-sentence reasoning, or recommend no candidate when evidence is insufficient.
 
 Next-slice discovery is read-only. Create no case or plan until the user selects
 a candidate; then route through normal case identity and `plan-confirm`.
@@ -153,12 +153,14 @@ Next skill:
 Blocking issue:
 ```
 
-For next-slice discovery, append:
+For next-slice discovery, use compact output instead of repeating the full
+default response unless blocked:
 
 ```text
+Status:
 Next Slice Candidates:
 Recommended:
-Required human decision:
+Decision:
 ```
 
 Do not create route artifacts. If a route decision affects a plan, it belongs

@@ -26,21 +26,26 @@ without adopting a CLI backend or pipeline product.
 - `docloom-workflow` can perform read-only next-slice discovery from this file,
   the cases dashboard, closure follow-ups, and targeted repo evidence.
 - `skills/_shared/references/loop-protocol.md` defines case candidates,
-  next-slice candidates, and the simple scoring output.
+  next-slice candidates, and the compact scoring output.
 - Case artifacts remain the source of truth for routing and evidence.
 
 ## Current Bottleneck
 
-Next-slice discovery now exists, but the simple scoring rubric has not yet been
-dogfooded on a real small feature. The next bottleneck is proving that candidate
-evidence and scoring are useful enough before strengthening the rubric.
+Next-slice discovery has now been dogfooded on a real small feature. The
+scoring rubric found a useful next target, but the first default output was too
+wide for a quick human decision. The next bottleneck is validating the compact
+candidate output on the next real discovery pass before strengthening the
+rubric.
 
 ## Feedback / Signals
 
 - User explicitly wants AI-assisted discovery of the next most useful
   development slice.
 - Prior dashboard integration left next-slice discovery as the next follow-up.
-- The next-slice integration case closed with a follow-up to dogfood the rubric.
+- The next-slice rubric dogfood found that the default candidate table exposed
+  too much scoring detail.
+- Compact candidate output keeps score factors for ranking but hides them from
+  the default decision view.
 - The project constitution requires the smallest useful workflow contract and
   rejects heavy orchestration.
 

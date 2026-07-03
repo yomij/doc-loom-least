@@ -1,0 +1,11 @@
+case_id: 20260703-next-slice-rubric-dogfood
+phase: closed
+case_docs: docs/cases/20260703-next-slice-rubric-dogfood
+closure_status: Done with Caveats
+closure_path: docs/cases/20260703-next-slice-rubric-dogfood/closure.md
+current_plan_version: 2
+next_skill: none
+route_reason: compact next-slice output applied and case closed with caveats
+required_input: none
+review_risk: high
+last_updated: 2026-07-03T13:52:33+08:00

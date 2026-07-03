@@ -60,23 +60,25 @@ Score = Impact + Confidence + Unlock - Effort - Risk
 Use integer scores from 1 to 5. `Unlock` measures downstream work enabled;
 `Effort` and `Risk` are penalties. Sort by Score descending; break ties with
 higher Confidence, then lower Risk, then lower Effort. Explain the
-recommendation in one sentence.
+recommendation in one sentence. Keep factor scores out of the default output;
+expand them only when the user asks why, when the score is challenged, or when
+recording case evidence.
 
 Output:
 
 ```md
 ## Next Slice Candidates
 
-| ID | Slice | Evidence | Impact | Confidence | Unlock | Effort | Risk | Score | Suggested Route |
-|---|---|---|---:|---:|---:|---:|---:|---:|---|
+| ID | Slice | Why | Score | Route |
+|---|---|---|---:|---|
 ```
 
 Then state:
 
 ```text
-Recommended: N1
-Reason:
-Required human decision: choose a candidate, ask for another discovery pass, or provide missing product-state facts.
+Recommended: N1: <slice>
+Reason: <one sentence>
+Decision: reply with a candidate ID, "more", or updated product-state facts.
 ```
 
 ## Safety
