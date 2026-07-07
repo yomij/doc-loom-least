@@ -104,23 +104,17 @@ Important/Critical finding, not a passing assessment.
 
 ## Output Contract
 
+For `Standard` and the Standard section of `Dual-pass`, lead with the decision
+a human needs, then findings, then evidence details. Keep evidence explicit, but
+do not front-load audit tables unless the source set is large or contested.
+
 Use this structure:
 
 ```md
-## Scope
-
-## Review Maturity
-
-## Evidence Reviewed
-| Source | Why Included | Trust / Freshness |
-|---|---|---|
-
-## Evidence Not Reviewed
-| Source | Reason | Impact |
-|---|---|---|
-
-## Assessment
+## Verdict
 No material issue found / Material issues found / Insufficient evidence
+
+One-sentence summary of the review result.
 
 ## Findings
 
@@ -131,28 +125,46 @@ No material issue found / Material issues found / Insufficient evidence
 ### Minor
 
 ## Evidence Gaps
+
+## Scope
+
+## Review Context
+- Mode: Standard / Dual-pass
+- Maturity: Draft / In-progress / Completed
+- Reviewed: `source`; why included; trust/freshness when relevant.
+- Not reviewed: `source`; reason; impact.
 ```
 
-Assessment rules:
+If there are many sources, contested sources, or trust/freshness matters, use a
+compact table inside `Review Context`:
+
+```md
+| Source | Why Included | Trust / Freshness |
+|---|---|---|
+```
+
+Verdict rules:
 
 - Critical or Important finding -> `Material issues found`.
 - Only Minor or no finding -> `No material issue found`.
 - Missing key evidence prevents judging Critical/Important -> `Insufficient evidence`.
 
-If there are no findings, say `None within reviewed scope`.
+If there are no findings, say `None within reviewed scope` under `Findings`.
 
 ## Finding Format
 
 Each finding must be locatable and verifiable:
 
-```text
-- Severity:
-- Location:
-- Problem:
-- Evidence:
-- Impact:
-- Required correction:
+```md
+- `path/file.md:42`: Problem in one sentence.
+  Evidence: Specific observed evidence or contradiction.
+  Impact: Why this matters to correctness, governance, risk, or user outcome.
+  Required correction: Condition that resolves the issue.
 ```
+
+The severity is supplied by the section heading. Do not repeat `Severity:` per
+finding. If a line number is not available, use the nearest stable heading,
+symbol, test name, command, or artifact path.
 
 Severity anchoring:
 - Critical: security vulnerability, data loss path, auth bypass, public
