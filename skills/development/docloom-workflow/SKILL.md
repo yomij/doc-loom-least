@@ -114,7 +114,7 @@ overrides all conditions below.
 | 8 | Persistent work needing a context gate: resume, authority, conflict, or High-Risk Topic | `context-authority` |
 | 9 | Low-risk, ≤ 3 files, ≤ 20 lines diff, no conflict, no cross-session need — fast-path conditions all hold | `plan-confirm` (fast-path) |
 | 10 | Persistent work with inline context or skipped-context reason | `plan-confirm` |
-| 11 | Approved plan exists and user explicitly asks to execute or continue | `tdd-execute` |
+| 11 | Current-plan confirmation without hold, or approved plan with current execute/continue intent | `tdd-execute` |
 | 12 | User asks to sync docs, close, write closure, or execution is complete | `doc-sync-close` |
 
 Explicit skill invocation wins. If a user names a Doc Loom skill, honor that
@@ -171,8 +171,11 @@ in `closure.md`.
 
 - Do not create a case just because the entry skill ran; status-only remains
   read-only.
-- Approved plan without an execution request -> wait for user input, unless it
-  is a Fast-Path plan approved under the current user request.
+- Current-plan approval -> same-turn execution unless plan-only, hold, revise,
+  or review first.
+- Later-discovered approved plan -> wait unless current execute, continue, or
+  reconfirm intent exists.
+- Fast-Path remains limited to verified low-risk current requests.
 - Do not run `context-authority` for status, explanation-only, or clearly
   low-risk one-step work.
 - Do not enter `plan-confirm` for persistent work without a context summary,

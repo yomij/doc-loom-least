@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-02
+last_verified: 2026-07-08
 ---
 
 # Development Workflow
@@ -40,12 +40,15 @@ constitution first when it is discoverable. Missing a conventional constitution
 file is not by itself missing authority.
 
 `plan-confirm` consumes case identity created elsewhere. It writes `plan.md` as
-`status: draft`, records risk and TDD strategy, and waits for confirmation
-before persistent execution unless the case meets all Fast-Path conditions.
+`status: draft`, records risk and TDD strategy, and asks for confirmation.
+Confirming the current plan authorizes same-turn execution unless the user asks
+to hold, revise, or review first.
 
-`tdd-execute` executes only an approved case plan. TDD is required by default;
-exceptions must be recorded in the plan or a confirmed same-turn amendment and
-must include alternative verification.
+`tdd-execute` requires an approved plan plus current execution authorization:
+same-turn current-plan approval, current execute/continue intent, valid
+Fast-Path, or reconfirmation of an older approved plan. TDD is required by
+default; exceptions must be recorded in the plan or a confirmed same-turn
+amendment and must include alternative verification.
 
 `doc-sync-close` writes `closure.md` before updating case state to closed. It
 may mechanically sync safe derived docs, but authority changes are proposals by
@@ -90,12 +93,17 @@ Low-risk work follows the smallest applicable path:
   Fast-Path conditions in shared protocol are verified and recorded in the
   minimal plan.
 - Non-Fast-Path low-risk and medium-risk persistent work requires user
-  confirmation before execution.
-- High-risk work requires explicit confirmation of the current object.
+  confirmation of the current plan; confirmation authorizes same-turn execution
+  unless the user asks to hold.
+- High-risk work requires explicit confirmation of the current object; same-turn
+  execution follows unless the user asks to hold.
 
 `approved_by: fast-path` means the agent verified the Fast-Path conditions
 under the current user request. It does not authorize unrelated background
 execution.
+
+Approved plans are not standing execution grants. Later status, resume, or
+dashboard discovery still needs current execute, continue, or reconfirm intent.
 
 ## Sources
 

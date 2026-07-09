@@ -19,6 +19,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260708-plan-approval-direct-execute` | Done with Caveats | `20260708-plan-approval-direct-execute/closure.md` | High-risk workflow-policy change verified by document/skill inspection; no automated workflow interpreter tests exist. |
 | `20260703-next-slice-rubric-dogfood` | Done with Caveats | `20260703-next-slice-rubric-dogfood/closure.md` | Compact output applied; validate it on the next real discovery pass before promoting the rubric. |
 | `20260703-loop-protocol-fix` | Done | `20260703-loop-protocol-fix/closure.md` | Fast-path defect fix: `loop-protocol.md` reference + wording; no policy change. |
 | `20260703-next-slice-discovery-integration` | Done with Caveats | `20260703-next-slice-discovery-integration/closure.md` | Dogfood follow-up consumed by `20260703-next-slice-rubric-dogfood`. |

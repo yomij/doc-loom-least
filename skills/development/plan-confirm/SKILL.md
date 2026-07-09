@@ -54,6 +54,8 @@ If `case_id` or case docs are missing, stop with
 11. After confirmation or Fast-Path approval, update `plan.md`,
     `case_state.yaml`, and `handoff.md` when a future resume point exists. Use
     `templates/handoff.md`.
+12. On current-plan confirmation, continue to `tdd-execute` same-turn when
+    preflight inputs are available, unless the user asks to hold.
 
 ## Plan Rules
 
@@ -113,7 +115,7 @@ approved plan is unambiguous.
 | Event | `plan.md` status | `case_state.yaml` phase | Approval fields |
 |---|---|---|---|
 | Draft written | `draft` | `waiting_for_plan_confirmation` | Empty |
-| User confirms current plan | `approved` | `planned` | `approved_by: user`, `approved_at`, `base_commit` |
+| User confirms current plan | `approved` | `planned`, then same-turn `tdd-execute` unless the user asks to hold | `approved_by: user`, `approved_at`, `base_commit` |
 | Fast-path conditions verified | `approved` | `planned` | `approved_by: fast-path`, `approved_at`, `base_commit` or unavailable reason |
 | Material change | `draft` | `waiting_for_plan_confirmation` | Cleared or no longer current |
 
@@ -135,6 +137,10 @@ changes. Checkbox/status edits do not change plan semantics.
 - No `case_id` or case docs, no plan. → Route: docloom-workflow. Reason: missing case identity. Required input: user request for case initialization.
 - Blocking conflict means no execution plan. → Route: context-authority. Reason: blocking conflict. Required input: conflict details for resolution.
 - No user confirmation or valid fast-path approval, no `tdd-execute` -> wait for user input.
+- Current-plan confirmation -> same-turn `tdd-execute` unless plan-only, hold,
+  revise, or review.
+- Later-discovered approved plan -> needs current execute, continue, or
+  reconfirm intent.
 - High-risk confirmation must identify the current plan object. Naming
   `plan_version` is preferred but not required when the object is unambiguous;
   ambiguous short confirmation is not enough.

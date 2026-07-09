@@ -176,9 +176,11 @@ When a skill cannot proceed and routes to another skill, output:
 
 `Route: <skill-name>. Reason: <brief reason>. Required input: <what the next skill needs>.`
 
-This is a text contract, not a route artifact. In the same session, an agent may
-continue to the next natural stage only when the user clearly confirmed or asked
-to continue and the target skill's required inputs are already available.
+This is a text contract, not a route artifact. Continue in-session only when
+user intent and target inputs are clear. Current-plan approval counts as
+same-turn `tdd-execute` intent unless the user says plan-only, hold, revise, or
+review. Later-discovered approved plans need current execute, continue, or
+reconfirm intent.
 
 Never auto-continue to `review`, `grill`, or `setup-doc-governance`; those need
 explicit user intent.
@@ -189,7 +191,8 @@ High-risk confirmations must identify the object being approved. Prefer:
 `Approve plan vN` or `Confirm authority patch for <doc>: <change>`.
 For plan approval, naming the plan version is a preferred format, not a hard
 wording requirement, when the current plan object is unambiguous. The approving
-skill records the current version in the relevant confirmation log.
+skill records the current version. Current-plan approval also authorizes
+same-turn execution unless the user says plan-only, hold, revise, or review.
 
 Short answers such as `yes`, `ok`, or `continue` confirm only the immediate
 conversation recommendation. They do not approve high-risk execution, create

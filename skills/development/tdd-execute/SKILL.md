@@ -10,6 +10,8 @@ enter this skill.
 
 A recommendation is not execution authorization; execute only after
 `plan-confirm` has produced an approved plan with a current confirmation log.
+Execution authorization means same-turn current-plan approval, execute/continue
+intent, valid Fast-Path, or explicit reconfirmation of an older approved plan.
 
 Read when trigger condition is met:
 
@@ -44,9 +46,10 @@ Verify:
 - `Goal`, `Non-goals`, `Decisions`, and `Acceptance Criteria` are clear.
 - Workspace changes relative to `base_commit` are explainable, including
   staged, unstaged, and untracked files.
+- Current execution authorization exists.
 
-If the user approves and asks to execute in the same turn while `plan.md` is
-still draft, perform the minimal approval writeback first, then continue.
+If the user approves the current plan while `plan.md` is still draft, write the
+approval, then continue unless the user asks to hold.
 
 If a required check fails, do not execute. Route back to `plan-confirm` unless
 the only issue is missing state cache or same-turn approval writeback.

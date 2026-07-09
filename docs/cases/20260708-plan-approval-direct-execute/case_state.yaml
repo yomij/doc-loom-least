@@ -1,0 +1,11 @@
+case_id: 20260708-plan-approval-direct-execute
+phase: closed
+case_docs: docs/cases/20260708-plan-approval-direct-execute
+closure_status: Done with Caveats
+closure_path: docs/cases/20260708-plan-approval-direct-execute/closure.md
+current_plan_version: 1
+next_skill: none
+route_reason: current-plan approval now authorizes same-turn execution by default
+required_input: none
+review_risk: high
+last_updated: 2026-07-08T16:52:45+08:00
