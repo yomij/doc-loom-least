@@ -1,11 +1,11 @@
 case_id: 20260710-post-execution-review-atomic-commits
-phase: executing
+phase: closed
 case_docs: docs/cases/20260710-post-execution-review-atomic-commits
-closure_status: open
-closure_path:
+closure_status: Done
+closure_path: docs/cases/20260710-post-execution-review-atomic-commits/closure.md
 current_plan_version: 2
-next_skill: tdd-execute
-route_reason: executing approved plan v2
+next_skill: none
+route_reason: acceptance and review passed; closed by declared atomic closure step
 required_input: none
 review_risk: high
-last_updated: 2026-07-10T17:12:41+08:00
+last_updated: 2026-07-10T17:34:54+08:00

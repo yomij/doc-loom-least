@@ -275,12 +275,12 @@ Expected result: active entry docs no longer contradict the core workflow.
 **Files:** `execution.md`, `plan.md`, and only files required by concrete
 findings.
 
-- [ ] Run the Engineering pass in `review` Post-execution mode.
-- [ ] Run the Spec pass separately against requirements v1 and plan v2.
-- [ ] Aggregate verdicts without cross-axis compensation.
-- [ ] For each material root cause, record exact files/title/verification,
+- [x] Run the Engineering pass in `review` Post-execution mode.
+- [x] Run the Spec pass separately against requirements v1 and plan v2.
+- [x] Aggregate verdicts without cross-axis compensation.
+- [x] For each material root cause, record exact files/title/verification,
   create an atomic `fix:` commit, and re-review.
-- [ ] Record final verdicts and findings disposition in `execution.md`.
+- [x] Record final verdicts and findings disposition in `execution.md`.
 
 Expected result: both axes and the aggregate verdict pass.
 
@@ -289,12 +289,12 @@ Expected result: both axes and the aggregate verdict pass.
 **Files:** create `closure.md`; update `case_state.yaml`, `plan.md`,
 `execution.md`, and `docs/cases/README.md`.
 
-- [ ] Run final targeted checks, YAML parse, Git log, diff, and workspace scope.
-- [ ] Map all acceptance criteria to evidence.
-- [ ] Write closure and closed state without adding implementation fixes.
-- [ ] Commit `docs: close post-execution review and atomic commits case` with
+- [x] Run final targeted checks, YAML parse, Git log, diff, and workspace scope.
+- [x] Map all acceptance criteria to evidence.
+- [x] Write closure and closed state without adding implementation fixes.
+- [x] Commit `docs: close post-execution review and atomic commits case` with
   `Doc-Loom-Step: closure`.
-- [ ] Report unqualified `Done` only after commit success and clean status.
+- [x] Report unqualified `Done` only after commit success and clean status.
 
 Expected result: final evidence is durable and the case-related worktree is
 clean.

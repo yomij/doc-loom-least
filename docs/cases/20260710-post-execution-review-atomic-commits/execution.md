@@ -32,8 +32,8 @@ Yes. Execution started from the explicitly approved plan v2 with no deviation.
 | Approved plan v2 is durable before implementation | met | Commit `cba800911764e4aa806c830eef67733b8fe2281b` |
 | Core workflow behavior | met | Review owns the complete Post-execution contract; stage Skills own invocation, fix/commit, and closure gates |
 | Derived documentation sync | met | Active entry docs distinguish explicit ad-hoc review from the workflow-owned gate and show commit boundaries |
-| Final Engineering and Spec review | pending | Task 3 |
-| Atomic closure commit | pending | Task 4 |
+| Final Engineering and Spec review | met | Initial F1/F2 findings fixed in separate commits; affected axes and aggregate gate re-ran to `pass` |
+| Atomic closure commit | met by closure step | Closure report, closed state, final evidence, and dashboard are the declared `Doc-Loom-Step: closure` unit; identity is verified from Git after commit |
 
 ## Commands Run
 
@@ -58,6 +58,8 @@ Yes. Execution started from the explicitly approved plan v2 with no deviation.
 | Commit title/trailer and local-link checks | pass | All current case commits and scoped links valid |
 | F1 plan-confirm Skill validation and semantic `rg` | pass | Approved requirements commit now has a pre-plan owner, draft guard, scope, trailer, and safety gate |
 | F2 tdd-execute Skill validation and semantic `rg` | pass | Separately authorized history rewrites invalidate hashes/review, refresh evidence, and force final re-review |
+| First bundled re-review command | fail | A semantic `rg` pattern incorrectly expected `refresh affected` and `commit` on one line; preceding validations passed |
+| Corrected targeted semantic checks and full aggregate re-review | pass | F1/F2 contracts present; complete range, Skills, links, titles, trailers, stale rules, symlinks, and artifacts valid |
 
 ## Review Risk
 
@@ -126,8 +128,42 @@ must resolve this before closure.
 - F2 implemented: separately authorized history rewriting now invalidates
   affected commit mappings and prior Post-execution evidence, requires baseline
   and rewritten-range validation, refreshes `execution.md`, and forces the
-  final Engineering/Spec gate before closure. Verification passed; atomic fix
-  commit pending.
+  final Engineering/Spec gate before closure. Verification passed; committed as
+  `e02f819`.
+
+### Re-review
+
+#### Engineering
+
+- Verdict: No material issue found
+- Findings: none within reviewed scope
+- Evidence gaps: none
+- Scope: exact baseline, complete five-commit case delta, Skill contracts,
+  authority, active derived docs, current command evidence, Git health, and
+  unnecessary-complexity checks.
+- F1 disposition: resolved by `53c19ef`; `plan-confirm` now owns and gates the
+  approved requirements commit before implementation-plan drafting.
+
+#### Spec
+
+- Verdict: No material issue found
+- Findings: none within reviewed scope
+- Evidence gaps: none
+- Scope: requirements v1, approved plan v2, confirmed decisions, acceptance
+  criteria, file/responsibility boundaries, and final accumulated delta.
+- F1 disposition: resolved by `53c19ef`.
+- F2 disposition: resolved by `e02f819`; authorized history rewrite now forces
+  refreshed evidence and final review of the rewritten range.
+
+#### Final Aggregate
+
+- Result: `pass`
+- Reviewed baseline: `763025a586e26ecba6a5f1641ab7d4288ad2662d`
+- Reviewed committed range: `cba8009` through `e02f819`
+- Reviewed staged changes: none
+- Reviewed unstaged changes: none
+- Reviewed untracked changes: none
+- Unresolved Critical/Important/Minor findings: none
 
 ## Checkpoints / Commits
 
@@ -137,3 +173,4 @@ must resolve this before closure.
 | task:core-workflow | `0a9c900130a58513b8eea24792b5c687eda4a04b` | Core semantic checks, Skill validation, diff and trailers |
 | task:derived-docs | `3ce5b796f2496cd3518692237020f64b5108a593` | Active stale-rule, flow, diff, and trailer checks |
 | review-fix:F1 | `53c19ef253616d10d08f5c1717b1cb5219b64ede` | plan-confirm validation, semantic search, diff and trailers |
+| review-fix:F2 | `e02f819414d9f9cd565d51c0c48d975ec2abc114` | tdd-execute validation, history-rewrite semantic search, diff and trailers |
