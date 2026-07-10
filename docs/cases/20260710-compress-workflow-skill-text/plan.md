@@ -239,16 +239,16 @@ evidence.
 
 ### Task 4: Run mandatory review and fix loop
 
-- [ ] Run separate Engineering and Spec passes against the complete delta.
-- [ ] Fix each material root cause in an atomic commit and re-review.
-- [ ] Record final per-axis and aggregate verdicts.
+- [x] Run separate Engineering and Spec passes against the complete delta.
+- [x] Fix each material root cause in an atomic commit and re-review.
+- [x] Record final per-axis and aggregate verdicts.
 
 ### Task 5: Close with the atomic closure commit
 
-- [ ] Map acceptance criteria to final evidence.
-- [ ] Write closure, closed state, and dashboard update without implementation
+- [x] Map acceptance criteria to final evidence.
+- [x] Write closure, closed state, and dashboard update without implementation
   fixes.
-- [ ] Create and verify the closure commit; report `Done` only when clean.
+- [x] Create and verify the closure commit; report `Done` only when clean.
 
 ## Planned Commands
 

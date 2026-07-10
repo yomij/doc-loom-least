@@ -58,10 +58,10 @@ Semantic locks:
 |---|---|---|
 | Plan commit | met | `3f65c73d9da545d247c46059121445bfdc9a82c6` |
 | Authority compression | met | `development-flow.md` 175→80 lines; `git.md` 84→61 lines; required principles retained |
-| Shared compression | met | `shared-protocol.md` 344→285 lines and 2,183→1,689 words; semantic anchors and consumer links retained |
+| Shared compression | met | `shared-protocol.md` 344→285 lines and 2,183→1,691 words; semantic anchors and consumer links retained |
 | Skill compression | met | Review 322→242 lines; execute 308→209; close 190→132; plan 187→131; all Skill/frontmatter and semantic checks pass |
-| Final review | pending | Task 4 |
-| Closure commit | pending | Task 5 |
+| Final review | met | Initial Spec F1 fixed by `38ba689`; final Engineering and Spec verdicts have no findings/gaps and aggregate `pass` |
+| Closure commit | met by closure step | Closure, closed state, final evidence, and dashboard form the declared `Doc-Loom-Step: closure` unit |
 
 ## Commands Run
 
@@ -73,11 +73,11 @@ Semantic locks:
 | Authority post-compression `wc -l -w` | pass | 141 lines / 633 words total, down from 259 / 1,447 |
 | Authority principle/trailer semantic `rg` | pass | Stage ownership pointer, four workflow outcomes, title/trailers, closure and rewrite evidence retained |
 | Authority `git diff --check` | pass | No whitespace errors |
-| Shared post-compression `wc -l -w` | pass | 285 lines / 1,689 words, down from 344 / 2,183 |
+| Shared post-compression `wc -l -w` | pass | 285 lines / 1,691 words after F1, down from 344 / 2,183 |
 | Shared positive/negative semantic `rg` | pass | Ownership, state derivation, artifacts, closure, routing, authorization, atomic, legacy, degraded Git, and Fast-Path anchors retained; stale wording absent |
 | Shared consumer symlink/read checks | pass | All seven existing shared-protocol consumer links resolve to the owner file |
 | Shared `git diff --check` | pass | No whitespace errors |
-| Skill post-compression `wc -l -w` | pass | Seven targets total 1,140 lines / 6,511 words, below 1,355 / 8,600; no target grew |
+| Skill post-compression `wc -l -w` | pass | Seven targets total 1,140 lines / 6,513 words, below 1,355 / 8,600; no target grew |
 | Four-Skill `quick_validate.py` and YAML parse | pass | All Skill frontmatter plus plan/state YAML valid |
 | Skill semantic positive/stale-rule `rg` | pass | Dual-axis review, exact delta, aggregate, invocation/fix loop, requirements/plan commits, history refresh, and Done gate retained; stale rules absent |
 | Reference and broken-symlink checks | pass after command correction | All referenced paths readable; `find -L skills -type l -print` empty |
@@ -136,6 +136,34 @@ contracts. Final Engineering/Spec review must prove that no gate was weakened.
 - Planned commit: `fix: restore exact closure state derivation` with
   `Doc-Loom-Step: review-fix:F1`.
 
+### Final Re-Review
+
+#### Engineering
+
+- Verdict: No material issue found.
+- Findings: none within reviewed scope.
+- Evidence gaps: none.
+- Scope: exact baseline through `38ba689`, all committed case changes, current
+  standards/authority, Skill/YAML validation, references, Git health, and
+  complexity/ownership checks.
+
+#### Spec
+
+- Verdict: No material issue found.
+- Findings: none within reviewed scope.
+- Evidence gaps: none.
+- Scope: approved compression plan, prior review/atomic-commit requirements,
+  all acceptance criteria, allowed file boundaries, and final accumulated delta.
+- F1 disposition: resolved by `38ba689`; exact closure-state derivation restored.
+
+#### Final Aggregate
+
+- Result: `pass`.
+- Reviewed baseline: `1d5a05b2e3a49637876447c520a917e6e80dd31e`.
+- Reviewed committed range: `3f65c73` through `38ba689`.
+- Reviewed staged/unstaged/untracked changes: none.
+- Unresolved findings or evidence gaps: none.
+
 ## Checkpoints / Commits
 
 | Step | Commit | Verification |
@@ -143,3 +171,5 @@ contracts. Final Engineering/Spec review must prove that no gate was weakened.
 | plan | `3f65c73d9da545d247c46059121445bfdc9a82c6` | YAML/frontmatter, staged scope, diff, trailers |
 | authority-contracts | `33f6692836ebe0a23eedb53948eb4f92096870fc` | Principle anchors, counts, diff, trailers |
 | shared-contract | `e2fdafb2111926da6f72c5772021b9e5b800153e` | Shared semantics, counts, consumer links, diff, trailers |
+| skill-contracts | `f0bef93714e355fe60bd44d0673163dead6289d6` | Skill validation, semantic anchors, budgets, diff, trailers |
+| review-fix:F1 | `38ba6896e8cc766b5cbf9f4b8299de62400539d3` | Exact state derivation, Skill validation, symlinks, diff, trailers |

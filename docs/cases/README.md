@@ -19,6 +19,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260710-compress-workflow-skill-text` | Done | `20260710-compress-workflow-skill-text/closure.md` | Seven contracts reduced 1,610→1,140 lines; dual-axis review passed after one atomic wording fix. |
 | `20260710-post-execution-review-atomic-commits` | Done | `20260710-post-execution-review-atomic-commits/closure.md` | Mandatory Engineering/Spec review passed after two atomic review fixes; no follow-up. |
 | `20260708-plan-approval-direct-execute` | Done with Caveats | `20260708-plan-approval-direct-execute/closure.md` | High-risk workflow-policy change verified by document/skill inspection; no automated workflow interpreter tests exist. |
 | `20260703-next-slice-rubric-dogfood` | Done with Caveats | `20260703-next-slice-rubric-dogfood/closure.md` | Compact output applied; validate it on the next real discovery pass before promoting the rubric. |

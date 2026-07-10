@@ -1,11 +1,11 @@
 case_id: 20260710-compress-workflow-skill-text
-phase: executing
+phase: closed
 case_docs: docs/cases/20260710-compress-workflow-skill-text
-closure_status: open
-closure_path:
+closure_status: Done
+closure_path: docs/cases/20260710-compress-workflow-skill-text/closure.md
 current_plan_version: 1
-next_skill: tdd-execute
-route_reason: executing approved behavior-preserving compression plan
+next_skill: none
+route_reason: case closed after passing review and declared closure commit
 required_input: none
 review_risk: high
-last_updated: 2026-07-10T18:02:02+08:00
+last_updated: 2026-07-10T18:21:45+08:00
