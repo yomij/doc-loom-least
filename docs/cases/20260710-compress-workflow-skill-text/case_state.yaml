@@ -1,0 +1,10 @@
+case_id: 20260710-compress-workflow-skill-text
+phase: planned
+case_docs: docs/cases/20260710-compress-workflow-skill-text
+closure_status: open
+closure_path:
+current_plan_version: 1
+next_skill: tdd-execute
+route_reason: plan v1 approved with same-turn execution intent
+required_input: none
+last_updated: 2026-07-10T18:01:15+08:00
