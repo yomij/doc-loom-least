@@ -37,29 +37,35 @@ If `case_id` or case docs are missing, stop with
 1. Validate context or the explicit low-risk skipped-context reason. No context
    and no skip reason means no plan.
 2. Confirm case id, case docs, and run mode: `isolated`, `branch`, or `inline`.
-3. Classify risk: `low`, `medium`, or `high`.
-4. Decide TDD applicability.
-5. Decide whether the case is eligible for mandatory Post-execution review and
+3. When an explicitly requested requirements artifact exists, verify its
+   approval record. Never commit a draft as approved. If it is approved and Git
+   is available but its approval commit is absent, stage only the requirements
+   and directly related routing state, inspect them, and create the atomic
+   requirements commit with `Doc-Loom-Step: requirements` before drafting the
+   implementation plan. In Git degraded mode, record why the commit is absent.
+4. Classify risk: `low`, `medium`, or `high`.
+5. Decide TDD applicability.
+6. Decide whether the case is eligible for mandatory Post-execution review and
    semantic atomic commits; record compact strategies when it is.
-6. Lock file structure and file responsibilities.
-7. Write bite-sized implementation tasks with exact files, commands, expected
+7. Lock file structure and file responsibilities.
+8. Write bite-sized implementation tasks with exact files, commands, expected
    results, and acceptance criteria.
-8. Write `docs/cases/<case-id>/plan.md` as `status: draft`.
-9. Update `case_state.yaml` to `phase: waiting_for_plan_confirmation` with the
+9. Write `docs/cases/<case-id>/plan.md` as `status: draft`.
+10. Update `case_state.yaml` to `phase: waiting_for_plan_confirmation` with the
    current `plan_version`.
-10. Self-review for coverage, placeholders, name consistency, buildability, and
+11. Self-review for coverage, placeholders, name consistency, buildability, and
    TDD integrity.
-11. Ask for user confirmation unless Fast-Path conditions are verified. High
+12. Ask for user confirmation unless Fast-Path conditions are verified. High
     risk requires explicit confirmation of the current plan object, but the
     user's wording does not have to include `plan_version` when the object is
     unambiguous.
-12. After confirmation or Fast-Path approval, update `plan.md`,
+13. After confirmation or Fast-Path approval, update `plan.md`,
     `case_state.yaml`, and `handoff.md` when a future resume point exists. Use
     `templates/handoff.md`.
-13. When the approved Atomic Commit Strategy requires a plan commit and Git is
+14. When the approved Atomic Commit Strategy requires a plan commit and Git is
     available, stage only the approved plan, routing state, and directly
     related case artifacts; inspect and commit that unit before implementation.
-14. On current-plan confirmation, continue to `tdd-execute` same-turn when
+15. On current-plan confirmation, continue to `tdd-execute` same-turn when
     preflight inputs and the required plan commit are available, unless the
     user asks to hold.
 
@@ -140,8 +146,8 @@ unrelated files, push, PR, merge, tag, release, amend, rebase, squash, history
 rewriting, material plan deviations, or unlisted dependency, lockfile, CI,
 schema, config-contract, or authority changes.
 
-If an approved requirements artifact exists, verify its approval commit before
-creating the plan commit. The plan's `base_commit` remains the exact
+The requirements approval record authorizes only its requirements commit, not
+planning or implementation. The plan's `base_commit` remains the exact
 pre-execution baseline; do not try to embed the hash of the commit containing
 the plan itself.
 
@@ -157,6 +163,9 @@ changes. Checkbox/status edits do not change plan semantics.
 - No context and no skipped-context reason, no plan. → Route: context-authority. Reason: missing context. Required input: user request and workspace state.
 - No `case_id` or case docs, no plan. → Route: docloom-workflow. Reason: missing case identity. Required input: user request for case initialization.
 - Blocking conflict means no execution plan. → Route: context-authority. Reason: blocking conflict. Required input: conflict details for resolution.
+- Explicit requirements artifact without approval, or an approved requirements
+  artifact that cannot be committed safely while Git is available -> no
+  implementation plan.
 - No user confirmation or valid fast-path approval, no `tdd-execute` -> wait for user input.
 - Current-plan confirmation -> same-turn `tdd-execute` unless plan-only, hold,
   revise, or review.

@@ -44,7 +44,9 @@ file is not by itself missing authority.
 `plan-confirm` consumes case identity created elsewhere. It writes `plan.md` as
 `status: draft`, records risk and TDD strategy, and asks for confirmation.
 Confirming the current plan authorizes same-turn execution unless the user asks
-to hold, revise, or review first.
+to hold, revise, or review first. When an explicitly requested requirements
+artifact has been approved, `plan-confirm` first ensures its atomic approval
+commit exists before drafting the implementation plan.
 
 `tdd-execute` requires an approved plan plus current execution authorization:
 same-turn current-plan approval, current execute/continue intent, valid

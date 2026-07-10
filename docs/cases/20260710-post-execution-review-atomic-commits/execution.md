@@ -52,6 +52,11 @@ Yes. Execution started from the explicitly approved plan v2 with no deviation.
 | Active stale-rule `rg` | pass | No remaining absolute manual-only/no-commit contradictions in scoped active sources |
 | Derived positive-anchor `rg` | pass | English/Chinese flow, review axes, fix loop, and closure commit are documented |
 | Derived path/link inspection | pass | No new local link target was introduced; existing README links unchanged |
+| Post-execution baseline and complete-delta preflight | pass | Exact base resolved; three case commits, no staged/untracked/unrelated changes; execution evidence update explained |
+| Full YAML/frontmatter script including `templates/plan.md` | fail | Review command incorrectly assumed the template begins with frontmatter; the template intentionally begins with guidance comments |
+| Corrected artifact/Skill YAML/frontmatter validation | pass | Actual Skill and case artifacts parse successfully |
+| Commit title/trailer and local-link checks | pass | All current case commits and scoped links valid |
+| F1 plan-confirm Skill validation and semantic `rg` | pass | Approved requirements commit now has a pre-plan owner, draft guard, scope, trailer, and safety gate |
 
 ## Review Risk
 
@@ -59,9 +64,69 @@ High: execution changes workflow policy, review authorization, Git commit
 authorization, authority text, and closure semantics. Mandatory final review
 must resolve this before closure.
 
+## Post-Execution Review
+
+- Mode: Post-execution
+- Maturity: Completed
+- Exact baseline: `763025a586e26ecba6a5f1641ab7d4288ad2662d`
+- Committed target: `cba8009`, `0a9c900`, `3ce5b79`
+- Staged target: none
+- Unstaged target: this case-local execution evidence update
+- Untracked target: none
+- Unrelated workspace changes: none
+
+### Engineering
+
+- Verdict: Material issues found
+- Critical: none
+- Important:
+  - F1 — `skills/development/plan-confirm/SKILL.md:143`: the workflow requires
+    an approved requirements commit but assigns no Skill the action of creating
+    it before planning. Evidence: `plan-confirm` only says to verify an existing
+    commit, while requirements R12 says confirmation creates that commit before
+    implementation planning. Impact: a future requirements-first case can
+    reach planning without a deterministic owner for the required boundary.
+    Required correction: make one existing stage own the approved requirements
+    commit before drafting the implementation plan, while never committing an
+    unapproved draft.
+- Minor: none
+- Evidence gaps: none
+
+### Spec
+
+- Verdict: Material issues found
+- Critical: none
+- Important:
+  - F1 — requirements R12 is only partially implemented because no Skill owns
+    creation of the confirmed requirements commit before planning.
+  - F2 — `skills/development/tdd-execute/SKILL.md:283`: the implementation
+    correctly withholds history-rewrite authorization from plan approval, but
+    omits requirements R22's behavior after the user separately authorizes
+    amend, rebase, or squash. Impact: recorded hashes and a prior final review
+    can become stale. Required correction: refresh affected execution evidence
+    and re-run Post-execution review against the rewritten range before closure.
+- Minor: none
+- Evidence gaps: none
+
+### Aggregate
+
+- Result: `changes_required`
+- Root causes: F1 requirements-commit ownership; F2 post-rewrite evidence
+  invalidation.
+- Handling: separate atomic fixes followed by affected-axis and aggregate
+  re-review.
+
+### Fix Loop
+
+- F1 implemented: `plan-confirm` now owns creation of an approved requirements
+  commit before drafting the plan, refuses unapproved drafts, scopes staging,
+  records degraded mode, and blocks unsafe Git completion. Workflow authority
+  names the same owner. Verification passed; atomic fix commit pending.
+
 ## Checkpoints / Commits
 
 | Step | Commit | Verification |
 |---|---|---|
 | plan-v2 | `cba800911764e4aa806c830eef67733b8fe2281b` | YAML/frontmatter, staged diff, commit trailers |
 | task:core-workflow | `0a9c900130a58513b8eea24792b5c687eda4a04b` | Core semantic checks, Skill validation, diff and trailers |
+| task:derived-docs | `3ce5b796f2496cd3518692237020f64b5108a593` | Active stale-rule, flow, diff, and trailer checks |
