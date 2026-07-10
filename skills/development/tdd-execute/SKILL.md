@@ -285,6 +285,12 @@ amend, rebase, squash, history rewriting, or a material plan deviation. If a
 mixed file cannot be isolated safely, stop rather than create a non-atomic
 commit.
 
+If the user separately authorizes amend, rebase, squash, or another history
+rewrite, treat affected commit hashes and any prior Post-execution result as
+stale. Revalidate the exact baseline and rewritten range, refresh affected
+commit mappings in `execution.md`, and re-run the final Engineering and Spec
+gate before closure.
+
 ## Gates
 
 - No approved plan, no execution. → Route: plan-confirm. Reason: no approved plan found. Required input: user request for plan creation.

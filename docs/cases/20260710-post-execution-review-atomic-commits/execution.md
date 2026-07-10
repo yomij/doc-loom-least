@@ -57,6 +57,7 @@ Yes. Execution started from the explicitly approved plan v2 with no deviation.
 | Corrected artifact/Skill YAML/frontmatter validation | pass | Actual Skill and case artifacts parse successfully |
 | Commit title/trailer and local-link checks | pass | All current case commits and scoped links valid |
 | F1 plan-confirm Skill validation and semantic `rg` | pass | Approved requirements commit now has a pre-plan owner, draft guard, scope, trailer, and safety gate |
+| F2 tdd-execute Skill validation and semantic `rg` | pass | Separately authorized history rewrites invalidate hashes/review, refresh evidence, and force final re-review |
 
 ## Review Risk
 
@@ -121,7 +122,12 @@ must resolve this before closure.
 - F1 implemented: `plan-confirm` now owns creation of an approved requirements
   commit before drafting the plan, refuses unapproved drafts, scopes staging,
   records degraded mode, and blocks unsafe Git completion. Workflow authority
-  names the same owner. Verification passed; atomic fix commit pending.
+  names the same owner. Verification passed; committed as `53c19ef`.
+- F2 implemented: separately authorized history rewriting now invalidates
+  affected commit mappings and prior Post-execution evidence, requires baseline
+  and rewritten-range validation, refreshes `execution.md`, and forces the
+  final Engineering/Spec gate before closure. Verification passed; atomic fix
+  commit pending.
 
 ## Checkpoints / Commits
 
@@ -130,3 +136,4 @@ must resolve this before closure.
 | plan-v2 | `cba800911764e4aa806c830eef67733b8fe2281b` | YAML/frontmatter, staged diff, commit trailers |
 | task:core-workflow | `0a9c900130a58513b8eea24792b5c687eda4a04b` | Core semantic checks, Skill validation, diff and trailers |
 | task:derived-docs | `3ce5b796f2496cd3518692237020f64b5108a593` | Active stale-rule, flow, diff, and trailer checks |
+| review-fix:F1 | `53c19ef253616d10d08f5c1717b1cb5219b64ede` | plan-confirm validation, semantic search, diff and trailers |

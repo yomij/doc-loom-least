@@ -77,3 +77,8 @@ successful closure commit and no unexplained case-related working-tree changes.
 Plan approval does not authorize push, PR, merge, tag, release, amend, rebase,
 squash, history rewriting, unrelated files, material plan deviations, or
 unlisted dependency, lockfile, CI, schema, config-contract, or authority work.
+
+When the user separately authorizes history rewriting, previously recorded
+affected hashes and review evidence become stale. Revalidate the exact baseline
+and rewritten range, refresh execution evidence, and repeat the final
+Engineering/Spec review before closure.
