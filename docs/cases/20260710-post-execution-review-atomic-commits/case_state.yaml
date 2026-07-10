@@ -1,0 +1,10 @@
+case_id: 20260710-post-execution-review-atomic-commits
+phase: planned
+case_docs: docs/cases/20260710-post-execution-review-atomic-commits
+closure_status: open
+closure_path:
+current_plan_version: 1
+next_skill: tdd-execute
+route_reason: plan v1 approved with explicit commit-first execution intent
+required_input: none
+last_updated: 2026-07-10T16:28:08+08:00
