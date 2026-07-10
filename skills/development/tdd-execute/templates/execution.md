@@ -11,7 +11,12 @@ Triggered sections: include each only when it has content.
   Plan Boundary, Actual Change, Classification, Handling.
 - Remaining Issues: Include when unresolved issues exist at execution end.
 - Review Risk: Include when risk is medium/high or material deviation occurred.
+- Post-Execution Review: Include when the approved plan requires the gate. Record
+  exact baseline, committed/staged/unstaged/untracked scope, separate
+  Engineering and Spec verdicts/findings/gaps, aggregate result, and re-review
+  history.
 - Checkpoints / Commits: Include when staging or committing happened.
+  Map semantic steps to actual hashes; never predict a commit's own hash.
 - History: Include when updating an existing report.
 Do not keep empty headings.
 -->

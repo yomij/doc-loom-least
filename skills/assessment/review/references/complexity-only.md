@@ -1,7 +1,12 @@
 # Complexity-only Review
 
-Use this reference only when `review` selects `Complexity-only` or the
-complexity section of `Dual-pass`.
+Use this reference when `review` selects `Complexity-only`, the complexity
+section of `Dual-pass`, or the unnecessary-complexity check inside the
+Post-execution Engineering axis.
+
+In Post-execution mode, use the tags and exemptions below as heuristics but
+report findings in the Engineering axis contract. Do not switch the whole gate
+to Complexity-only output or omit correctness checks.
 
 ## Scope
 

@@ -10,6 +10,12 @@ Triggered sections: include each only when it has content.
 - Knowledge Changes: Include when authority_candidate, ADR_candidate, regression_candidate, runbook_candidate, or justified case_local exists.
 - Decisions Reviewed: Include when closure reviewed plan decisions.
 - Findings Disposition: Include when user-provided review findings were consumed.
+- Post-Execution Review: Include for eligible cases. Record final Engineering
+  and Spec verdicts, aggregate result, unresolved Minor findings/evidence
+  caveats, and reviewed baseline/range.
+- Commit Summary: Include when the approved plan declares atomic commits.
+  Record task/refactor/review-fix hashes and the required closure-step identity,
+  but never write the closure commit's own hash into this file.
 - Authority Changes: Include when authority proposal or patch was recorded.
 - Lifecycle Changes Proposed: Include when authority lifecycle status change was proposed.
 - Follow-up Updates: Include when existing follow-ups changed status.

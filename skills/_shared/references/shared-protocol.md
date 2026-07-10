@@ -14,13 +14,15 @@ cross-skill constraints.
 | Documentation governance plan and authority rebuild | `setup-doc-governance` |
 | Minimal context, authority checks, route verdict before planning | `context-authority` |
 | Plan generation, risk, version, base commit, user confirmation | `plan-confirm` |
-| TDD execution, execution evidence, plan checkbox progress, review risk signal | `tdd-execute` |
-| Closure, L2/L3 sync, authority proposals or confirmed narrow patches | `doc-sync-close` |
-| Read-only evidence review | `review` |
+| TDD execution, execution evidence, semantic task/fix commits, Post-execution invocation and fix loop | `tdd-execute` |
+| Closure, closure commit, L2/L3 sync, authority proposals or confirmed narrow patches | `doc-sync-close` |
+| Read-only ad-hoc and workflow-owned Post-execution evidence review | `review` |
 | Interactive pressure testing | `grill` |
 
-`review` and `grill` are manual conversation-only helpers. They do not write
-case artifacts, route workflow, or update state.
+Ad-hoc `review` and `grill` are manual conversation helpers. `review` also owns
+the read-only Post-execution mode invoked by `tdd-execute` under an approved
+eligible plan. Neither assessment skill writes case artifacts, routes workflow,
+or updates state.
 
 ## Execution Instruction Order
 
@@ -62,7 +64,7 @@ Risk levels and confirmation policy: see `development/plan-confirm/references/ri
 Loop-style discovery rules: see `loop-protocol.md`. Loop-originated work is a
 discovery source, not a separate workflow. It follows the same instruction
 order, fact authority order, case identity, artifact policy, confirmation
-semantics, and manual review/grill gates.
+semantics, Post-execution review policy, and manual ad-hoc review/grill gates.
 
 ## High-Risk Topics
 
@@ -113,15 +115,24 @@ These belong to `plan.md` frontmatter. Do not store detailed evidence in
 When `case_state.yaml` conflicts with Markdown artifacts:
 - Report `state_cache_conflict`.
 - Derive phase from the smallest reliable signal:
-  1. `closure.md` exists -> `closed`.
-  2. `execution.md` exists and acceptance checks are complete -> `doc_syncing`.
-  3. `execution.md` exists -> `executing`.
-  4. `plan.md` has `status: approved` -> `planned`.
-  5. `plan.md` has `status: draft` -> `waiting_for_plan_confirmation`.
-  6. No clear signal -> `needs_user_decision`.
+  1. `closure.md` exists and required closure-commit evidence is valid ->
+     `closed`.
+  2. `closure.md` exists but a declared closure commit is absent, failed, or
+     still dirty -> `doc_syncing`.
+  3. `execution.md` exists and acceptance plus required Post-execution checks
+     are complete -> `doc_syncing`.
+  4. `execution.md` exists -> `executing`.
+  5. `plan.md` has `status: approved` -> `planned`.
+  6. `plan.md` has `status: draft` -> `waiting_for_plan_confirmation`.
+  7. No clear signal -> `needs_user_decision`.
 - Route based on the derived phase.
 - Do not silently overwrite the cache; the owning skill may update it only after
   deriving the correct phase.
+
+For a plan with `## Atomic Commit Strategy`, valid closure-commit evidence means
+Git shows the closure path and closed routing state in the declared closure
+step commit and neither remains uncommitted. For legacy plans without that
+strategy, the prior artifact-based derivation remains valid.
 
 ## Artifact Policy
 
@@ -149,11 +160,13 @@ be refreshed.
 next-slice discovery. It is not authority and must not override active
 authority docs, current implementation, accepted ADRs, or user-confirmed facts.
 
-Evidence ownership: `plan.md` records expected acceptance criteria and planned
-verification; `execution.md` records actual commands, deviations,
-failures/retries, and interim evidence only when required above; `closure.md`
-records final acceptance status and final verification summary, and may carry
-the full command evidence when `execution.md` is skipped.
+Evidence ownership: `plan.md` records expected acceptance criteria, review and
+commit strategies, and planned verification; `execution.md` records actual
+commands, deviations, failures/retries, task/fix commit hashes, and final
+Post-execution axis evidence when required; `closure.md` records final
+acceptance, aggregate review result, residual findings, commit-range summary,
+and final verification. It may carry full command evidence when `execution.md`
+is skipped.
 
 ## Closure Status
 
@@ -167,8 +180,10 @@ Final status must be exactly one of:
 - `Paused`
 - `Abandoned`
 
-Unmet acceptance criteria cannot be marked `Done`. Missing review conversation
-is not by itself a closure blocker.
+Unmet acceptance criteria cannot be marked `Done`. Missing ad-hoc review
+conversation is not by itself a closure blocker. For an eligible case whose
+approved plan declares Post-execution review, missing or non-passing required
+review evidence blocks unqualified `Done`.
 
 ## Route Output
 
@@ -182,8 +197,9 @@ same-turn `tdd-execute` intent unless the user says plan-only, hold, revise, or
 review. Later-discovered approved plans need current execute, continue, or
 reconfirm intent.
 
-Never auto-continue to `review`, `grill`, or `setup-doc-governance`; those need
-explicit user intent.
+Never auto-continue to ad-hoc `review`, `grill`, or `setup-doc-governance`;
+those need explicit user intent. This does not prevent `tdd-execute` from
+invoking `review` in Post-execution mode under the current approved plan.
 
 ## Confirmation Semantics
 
@@ -205,6 +221,31 @@ change. A broad instruction such as "sync docs" is not enough.
 Confirmed discussion decisions remain task-scoped until they are recorded in
 `plan.md`, a governance plan, or `closure.md`.
 
+Approval of a current plan with an Atomic Commit Strategy authorizes the
+declared case-scoped staging and semantic commits without repeated prompts. It
+does not authorize unrelated files, another case, push, PR, merge, tag,
+release, amend, rebase, squash, history rewriting, material deviations, or
+unlisted dependency, lockfile, CI, schema, config-contract, or authority work.
+
+## Atomic Commit Contract
+
+For plans that declare an Atomic Commit Strategy, commits occur at coherent,
+independently valid semantic completion points: approved plan, green task,
+verified refactor when independently meaningful, material review-fix root
+cause, and closure. Requirements approval is also committed when an explicit
+requirements artifact exists. Do not manufacture commits for Red states,
+failed attempts, empty stages, checkboxes, or timestamps.
+
+Every case commit must follow the repository title standard, exclude unrelated
+changes, leave relevant checks passing, and map deterministically to the case
+and completion point, preferably with `Doc-Loom-Case` and `Doc-Loom-Step`
+trailers. Actual task/refactor/fix hashes belong in `execution.md`; a closure
+artifact never predicts its own commit hash.
+
+These review and commit gates apply prospectively to eligible cases whose
+current approved plan declares them. They do not retroactively invalidate
+legacy cases.
+
 ## Git Degraded Mode
 
 When `git_available: false`, continue document work and review/grill
@@ -212,6 +253,10 @@ conversation. Skip `base_commit`, branch/worktree operations, git diff, and
 commit/stage; record the reason or "commit deferred: git unavailable". Manual
 changed-file or commit information from the user is pending evidence, not
 verified git state.
+
+An eligible case under the Atomic Commit Contract cannot receive unqualified
+`Done` without Git baseline and required commit evidence. `Done with Caveats`
+for missing Git evidence requires an explicit owner decision.
 
 ## Run Modes
 
@@ -240,7 +285,7 @@ Do not create a case when:
 - The task is a one-shot explanation, question, or review.
 - The task is a low-risk local edit (typo, comment, local config).
 - The user asks for status only.
-- A conversation-only skill (review, grill) is active.
+- A standalone conversation-only review or grill is active.
 
 ## Fast-Path
 
@@ -262,11 +307,12 @@ Steps: `docloom-workflow` creates `case_state.yaml` only → `plan-confirm`
 writes a minimal `plan.md` record with `status: approved`, `risk_level: low`,
 `plan_version: 1`, `approved_by: fast-path`, `approved_at`, `base_commit` or an
 unavailable reason, a Confirmation Log row, a Fast-Path Conditions evidence
-table, brief goal/non-goals/acceptance/files, and no task-level TDD breakdown →
-`tdd-execute` runs (TDD exception applies by default; characterization/build
-check for trivial changes; `execution.md` optional, summary inline in
-`closure.md`) → `doc-sync-close` writes `closure.md`, sets `case_state.yaml`
-`closed`.
+table, brief goal/non-goals/acceptance/files, compact review/commit strategies,
+and no task-level TDD breakdown → `tdd-execute` runs one compact green
+implementation commit plus Engineering/Spec review (TDD exception applies by
+default; characterization/build check for trivial changes; `execution.md`
+optional, summary inline in `closure.md`) → `doc-sync-close` writes
+`closure.md`, sets `case_state.yaml` `closed`, and creates the closure commit.
 
 Any condition failing → full pipeline.
 

@@ -180,7 +180,9 @@ in `closure.md`.
   low-risk one-step work.
 - Do not enter `plan-confirm` for persistent work without a context summary,
   context brief, or explicit low-risk skipped-context reason.
-- Do not auto-trigger `review`, even when `review_risk` is high.
+- Do not auto-trigger ad-hoc `review`, even when `review_risk` is high.
+  `tdd-execute` owns the approved Post-execution review gate for eligible cases;
+  it is not a router stage.
 - Do not route or own `grill`; it requires explicit invocation.
 - Do not write files in status-only mode.
 - Do not execute or plan a next-slice candidate until the user selects it.

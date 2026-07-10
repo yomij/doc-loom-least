@@ -39,23 +39,29 @@ If `case_id` or case docs are missing, stop with
 2. Confirm case id, case docs, and run mode: `isolated`, `branch`, or `inline`.
 3. Classify risk: `low`, `medium`, or `high`.
 4. Decide TDD applicability.
-5. Lock file structure and file responsibilities.
-6. Write bite-sized implementation tasks with exact files, commands, expected
+5. Decide whether the case is eligible for mandatory Post-execution review and
+   semantic atomic commits; record compact strategies when it is.
+6. Lock file structure and file responsibilities.
+7. Write bite-sized implementation tasks with exact files, commands, expected
    results, and acceptance criteria.
-7. Write `docs/cases/<case-id>/plan.md` as `status: draft`.
-8. Update `case_state.yaml` to `phase: waiting_for_plan_confirmation` with the
+8. Write `docs/cases/<case-id>/plan.md` as `status: draft`.
+9. Update `case_state.yaml` to `phase: waiting_for_plan_confirmation` with the
    current `plan_version`.
-9. Self-review for coverage, placeholders, name consistency, buildability, and
+10. Self-review for coverage, placeholders, name consistency, buildability, and
    TDD integrity.
-10. Ask for user confirmation unless Fast-Path conditions are verified. High
+11. Ask for user confirmation unless Fast-Path conditions are verified. High
     risk requires explicit confirmation of the current plan object, but the
     user's wording does not have to include `plan_version` when the object is
     unambiguous.
-11. After confirmation or Fast-Path approval, update `plan.md`,
+12. After confirmation or Fast-Path approval, update `plan.md`,
     `case_state.yaml`, and `handoff.md` when a future resume point exists. Use
     `templates/handoff.md`.
-12. On current-plan confirmation, continue to `tdd-execute` same-turn when
-    preflight inputs are available, unless the user asks to hold.
+13. When the approved Atomic Commit Strategy requires a plan commit and Git is
+    available, stage only the approved plan, routing state, and directly
+    related case artifacts; inspect and commit that unit before implementation.
+14. On current-plan confirmation, continue to `tdd-execute` same-turn when
+    preflight inputs and the required plan commit are available, unless the
+    user asks to hold.
 
 ## Plan Rules
 
@@ -85,13 +91,17 @@ Plan core content must include:
 - Tasks with exact paths, planned commands, expected results, and no
   placeholders.
 - Confirmation log.
+- For eligible cases, `## Post-Execution Review Strategy` and `## Atomic Commit
+  Strategy` with baseline, axes, gate/fix behavior, semantic boundaries,
+  staging scope, titles/trailers, and excluded Git actions.
 
 When a discovery candidate triggered the plan, include `## Discovery Candidate`
 with: Mode, Candidate ID, Evidence, Recommendation Reason, and User Decision.
 
 Include triggered sections only when they have content: confirmed decisions,
 non-obvious assumptions, detailed TDD plan, adaptive execution, plan amendments,
-tests to add or update, risks, or documentation impact.
+tests to add or update, review strategy, commit strategy, risks, or
+documentation impact.
 
 Use `templates/plan.md` as the shape.
 
@@ -124,6 +134,17 @@ records the current `plan_version`, then record `base_commit` or an unavailable
 reason. When `git_available: false`, leave `base_commit` empty and record the
 reason; this does not block plan creation.
 
+Current-plan approval authorizes the case-scoped commits declared by the
+Atomic Commit Strategy without repeated confirmation. It does not authorize
+unrelated files, push, PR, merge, tag, release, amend, rebase, squash, history
+rewriting, material plan deviations, or unlisted dependency, lockfile, CI,
+schema, config-contract, or authority changes.
+
+If an approved requirements artifact exists, verify its approval commit before
+creating the plan commit. The plan's `base_commit` remains the exact
+pre-execution baseline; do not try to embed the hash of the commit containing
+the plan itself.
+
 Material plan changes require incrementing `plan_version` and asking for
 confirmation again.
 
@@ -139,6 +160,8 @@ changes. Checkbox/status edits do not change plan semantics.
 - No user confirmation or valid fast-path approval, no `tdd-execute` -> wait for user input.
 - Current-plan confirmation -> same-turn `tdd-execute` unless plan-only, hold,
   revise, or review.
+- Eligible plan with Git available but no required atomic plan commit -> do not
+  begin implementation.
 - Later-discovered approved plan -> needs current execute, continue, or
   reconfirm intent.
 - High-risk confirmation must identify the current plan object. Naming
@@ -149,5 +172,7 @@ changes. Checkbox/status edits do not change plan semantics.
   `approved_by: fast-path` and the verified Fast-Path conditions.
 - Discussion decisions that change execution constraints must enter
   `## Decisions` and be confirmed.
+- Eligible plan without Post-Execution Review and Atomic Commit strategies ->
+  no execution until the current plan is corrected and confirmed.
 - A selected discovery candidate is planning context only. It does not approve
   the plan.

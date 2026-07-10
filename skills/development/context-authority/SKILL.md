@@ -65,7 +65,8 @@ Skip it for:
   declared.
 
 Use `setup-doc-governance` instead for documentation governance initialization.
-Use `review` only when the user explicitly asks for review.
+Invoke ad-hoc `review` only when the user explicitly asks. The approved
+Post-execution review gate, when applicable, is invoked later by `tdd-execute`.
 
 ## Workflow
 

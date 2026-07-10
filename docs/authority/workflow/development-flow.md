@@ -14,7 +14,7 @@ last_verified: 2026-07-08
 
 The development workflow is owned by the current skill implementation under
 `skills/development/`, the shared protocol, and the assessment skills for
-manual review/challenge behavior.
+read-only review and manual challenge behavior.
 
 ## Skill Ownership
 
@@ -23,13 +23,15 @@ manual review/challenge behavior.
 | Case identity, delayed case creation, status-only routing, artifact policy | `docloom-workflow` |
 | Minimal context and authority checks before planning | `context-authority` |
 | Plan generation, risk, version, base commit, and user confirmation | `plan-confirm` |
-| TDD execution, execution evidence, plan progress, and review-risk signal | `tdd-execute` |
-| Closure, L2/L3 sync, and authority proposals or confirmed narrow patches | `doc-sync-close` |
-| Read-only evidence review | `review` |
+| TDD execution, execution evidence, semantic task/fix commits, Post-execution invocation and fix loop | `tdd-execute` |
+| Closure, closure commit, L2/L3 sync, and authority proposals or confirmed narrow patches | `doc-sync-close` |
+| Read-only ad-hoc and workflow-owned Post-execution evidence review | `review` |
 | Interactive pressure testing | `grill` |
 
 `docloom-workflow` is a thin router. It does not replace stage skills, generate
-plans, execute implementation work, auto-trigger review, or call a CLI backend.
+plans, execute implementation work, auto-trigger ad-hoc review, or call a CLI
+backend. Mandatory Post-execution review is invoked inside `tdd-execute`, not
+routed as a new phase.
 
 `context-authority` is conditional. Use it for resume, case ambiguity,
 high-risk or public-contract work, workflow or agent policy, or conflicts; do
@@ -50,9 +52,17 @@ Fast-Path, or reconfirmation of an older approved plan. TDD is required by
 default; exceptions must be recorded in the plan or a confirmed same-turn
 amendment and must include alternative verification.
 
+For an eligible persistent case, `tdd-execute` creates semantic atomic commits
+at independently valid green task, verified refactor, and material review-fix
+boundaries. After planned execution and verification, it invokes `review` in
+Completed Post-execution mode, persists separate Engineering and Spec results,
+and owns the fix/re-review loop until the aggregate result passes.
+
 `doc-sync-close` writes `closure.md` before updating case state to closed. It
 may mechanically sync safe derived docs, but authority changes are proposals by
-default unless a concrete narrow patch is confirmed.
+default unless a concrete narrow patch is confirmed. For plans declaring the
+atomic policy, it creates the closure commit and reports unqualified `Done` only
+after Git proves that commit succeeded and the case-related worktree is clean.
 
 `docs/cases/README.md` may exist as a derived case dashboard for discovery. It
 does not replace per-case routing truth or evidence; case artifacts remain the
@@ -63,8 +73,9 @@ source of truth.
 ranked recommendations only; selected candidates still enter the normal
 `plan-confirm` confirmation flow before execution.
 
-`review` and `grill` are manual helpers. They do not write files, update case
-state, route workflow, or create authority/governance proposals.
+Ad-hoc `review` and `grill` are manual helpers. `review` also owns the
+workflow-authorized read-only Post-execution mode. Neither writes files, updates
+case state, routes workflow, or creates authority/governance proposals.
 
 ## Fact Authority
 
@@ -98,12 +109,52 @@ Low-risk work follows the smallest applicable path:
 - High-risk work requires explicit confirmation of the current object; same-turn
   execution follows unless the user asks to hold.
 
+Current-plan approval also authorizes only the case-scoped semantic commits
+declared by its Atomic Commit Strategy. It does not authorize unrelated files,
+push, publication, history rewriting, material deviations, or unlisted
+dependency, CI, schema, config-contract, or authority work.
+
 `approved_by: fast-path` means the agent verified the Fast-Path conditions
 under the current user request. It does not authorize unrelated background
 execution.
 
 Approved plans are not standing execution grants. Later status, resume, or
 dashboard discovery still needs current execute, continue, or reconfirm intent.
+
+## Post-Execution Quality Gate
+
+Eligible persistent cases that change code, tests, Skill behavior, workflow
+policy, public contracts, executable configuration, or user-observable behavior
+must complete a read-only Post-execution review before successful closure. The
+approved plan supplies the exact baseline and authorizes the gate without a
+separate reminder.
+
+The review covers the complete case delta, including committed, staged,
+unstaged, and untracked case changes. Engineering checks technical soundness,
+tests, contracts, standards, triggered high-risk concerns, Git evidence, and
+unnecessary complexity. Spec checks the approved Goal, Non-goals, Decisions,
+Acceptance Criteria, amendments, missing behavior, incorrect behavior, and
+scope creep. The axes remain separate; one cannot compensate for the other.
+
+Critical or Important findings return to execution for the smallest verified
+root-cause fix, an atomic fix commit, and re-review. Missing material evidence
+cannot pass. No new phase or mandatory `review.md` artifact is introduced;
+durable evidence lives in `execution.md` and `closure.md`.
+
+## Semantic Atomic Commits
+
+For plans declaring the policy, approved requirements when present, approved
+plan, independently valid green tasks, verified refactors, material review
+fixes, and closure are semantic commit boundaries. Atomic means one coherent,
+verified, independently reviewable and revertible unit, not one commit per
+checkbox. Red states, failed attempts, empty stages, and timestamps are not
+normal completion commits.
+
+Each case commit follows the Git authority, excludes unrelated changes, leaves
+relevant checks passing, and maps to the case and completion point. Fast-Path
+may use one compact implementation commit, but still performs Engineering/Spec
+review and a closure commit. These rules are prospective for plans that declare
+them and do not invalidate legacy cases.
 
 ## Sources
 

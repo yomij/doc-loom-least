@@ -21,7 +21,7 @@ Canonical skill groups:
 |---|---|
 | `skills/development/` | Current development case workflow. |
 | `skills/governance/` | Documentation and knowledge governance. |
-| `skills/assessment/` | Manual review and challenge helpers. |
+| `skills/assessment/` | Read-only review and manual challenge helpers. |
 | `skills/_shared/` | Shared protocol and templates; not directly invoked. |
 
 Canonical skill invocation names:
@@ -36,6 +36,11 @@ Canonical skill invocation names:
 | `setup-doc-governance` | `skills/governance/setup-doc-governance/SKILL.md` |
 | `review` | `skills/assessment/review/SKILL.md` |
 | `grill` | `skills/assessment/grill/SKILL.md` |
+
+`review` supports explicit ad-hoc assessment and the workflow-owned read-only
+Post-execution gate invoked by `tdd-execute` under an approved eligible plan.
+`grill` remains explicit and manual. Assessment skills do not own case state,
+workflow routing, implementation fixes, or closure.
 
 Future lifecycle groups such as `product/`, `research/`, or `design/` must not
 be created as empty roadmap placeholders. Add them only when real skills with

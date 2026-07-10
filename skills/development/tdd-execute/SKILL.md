@@ -1,6 +1,6 @@
 ---
 name: tdd-execute
-description: Execute an approved Doc Loom case plan using TDD discipline. Use only after plan-confirm has produced an approved plan.
+description: Execute an approved Doc Loom case plan using TDD discipline, semantic atomic commits, and the mandatory post-execution review gate for eligible cases. Use only after plan-confirm has produced an approved plan.
 ---
 
 # tdd-execute
@@ -19,6 +19,9 @@ Read when trigger condition is met:
   checking artifact policy, or resolving authority order.
 - `references/tdd-exceptions.md` when: the plan declares TDD Required: No, or
   execution encounters a situation that may require an exception amendment.
+- `../../assessment/review/SKILL.md` when: the approved plan declares a
+  Post-Execution Review Strategy or the case is eligible for the mandatory
+  final review gate.
 
 ## Preflight
 
@@ -47,6 +50,9 @@ Verify:
 - Workspace changes relative to `base_commit` are explainable, including
   staged, unstaged, and untracked files.
 - Current execution authorization exists.
+- Eligible cases declare Post-Execution Review and Atomic Commit strategies.
+- When the plan requires an atomic plan commit, the approved plan and routing
+  state are already committed before implementation starts.
 
 If the user approves the current plan while `plan.md` is still draft, write the
 approval, then continue unless the user asks to hold.
@@ -65,14 +71,19 @@ the only issue is missing state cache or same-turn approval writeback.
 4. Green: write minimal implementation and run the target test.
 5. Refactor: only planned or necessary refactors; run related tests after each.
 6. Quality check with planned or obvious low-risk read-only commands.
-7. Update execution docs and plan checkbox progress.
-8. Update handoff only when a future resume point exists. Use
+7. At each independently valid green task or verified refactor boundary,
+   update evidence and create the approved semantic atomic commit.
+8. Update execution docs and plan checkbox progress.
+9. Update handoff only when a future resume point exists. Use
    `templates/handoff.md`.
-9. Record `review_risk` as a signal only.
-10. Check every acceptance criterion.
-11. When execution work is complete and closure is the next owner, update
-    `case_state.yaml` to `phase: doc_syncing`.
-12. Stage or commit only when the plan or user explicitly authorizes it.
+10. Record `review_risk` as a signal.
+11. Check every acceptance criterion and run final planned verification.
+12. For an eligible case, invoke `review` in `Post-execution` mode, persist its
+    Engineering, Spec, and aggregate results, and complete the fix/re-review
+    loop below.
+13. Only after the aggregate result is `pass`, update `case_state.yaml` to
+    `phase: doc_syncing` and route to `doc-sync-close`.
+14. Stage or commit only within the approved authorization and strategy.
 
 ## TDD Rules
 
@@ -163,7 +174,8 @@ above.
 
 ## Review Risk
 
-Record `review_risk` as data, not a recommendation or workflow gate.
+Record `review_risk` as data. It does not itself trigger ad-hoc review; eligible
+cases use the separately defined mandatory Post-execution gate.
 
 | Value | When to set |
 |---|---|
@@ -173,8 +185,44 @@ Record `review_risk` as data, not a recommendation or workflow gate.
 
 Update when scope changes or new evidence resolves a previous concern. Do not
 clear to `low` unless all original high-risk conditions are resolved with
-evidence. The closure skill consumes the final value. Do not trigger `review`;
-only the user can request it.
+evidence. The closure skill consumes the final value. Outside an approved
+Post-execution gate, only the user can request `review`.
+
+## Post-Execution Review
+
+An eligible case is a persistent case that changes production code or tests,
+Skill behavior, workflow policy, a public contract, executable configuration,
+or user-observable behavior. Explanation-only, status-only, standalone review,
+and one-shot non-case work are not eligible. Purely mechanical docs may use a
+compact inline Engineering/Spec check when the approved plan says so.
+
+Start the gate only after:
+
+- every planned implementation task is complete;
+- required tests and quality checks have passed;
+- acceptance criteria have preliminary evidence;
+- expected task/refactor commits exist;
+- the exact plan baseline resolves and the full case delta is explainable.
+
+Invoke `review` in `Post-execution` mode under the approved plan. Keep the
+Engineering and Spec passes isolated and persist, in `execution.md`, the exact
+baseline, reviewed commit/working-tree scope, per-axis verdicts, material
+findings, evidence gaps, aggregate result, and re-review history.
+
+Handle the aggregate result deterministically:
+
+- `pass`: continue to `doc_syncing`.
+- `insufficient_evidence`: collect the missing material evidence and re-run the
+  affected axis plus the aggregate gate; do not treat absence as pass.
+- `changes_required`: keep ownership in execution. Fix the smallest coherent
+  root cause, add or update regression coverage when appropriate, run relevant
+  checks, create one atomic `fix:` commit with `Doc-Loom-Step:
+  review-fix:<id>`, re-run the affected axis, then re-run the aggregate gate
+  against the accumulated final change.
+
+Unresolved Critical or Important findings block `doc_syncing` and unqualified
+closure. Minor findings remain visible in execution evidence and residual-risk
+assessment.
 
 ## State Update
 
@@ -189,7 +237,7 @@ closure_status: open
 ```
 
 When implementation and acceptance checks are complete and docs sync or closure
-is next:
+is next, and the required Post-execution aggregate result is `pass`:
 
 ```yaml
 phase: doc_syncing
@@ -209,11 +257,33 @@ workflow is fully synced.
 
 ## Commits
 
-Default: do not stage or commit.
+Default: do not stage or commit unless the approved plan or current user
+instruction authorizes it. Approval of a plan with an Atomic Commit Strategy
+authorizes the declared case-scoped plan, task, refactor, review-fix, and
+closure commits without repeated confirmation.
 
-Only stage or commit when the plan or user explicitly asks. Stage only
-case-related files, preserve unrelated user changes, and record commit hashes
-in `execution.md`.
+For each authorized commit:
+
+1. Choose one coherent, independently valid completion point or root cause.
+2. Include its implementation, tests or alternative verification, necessary
+   task-local docs, and evidence needed to explain that unit.
+3. Stage explicit case-related paths only. Do not use broad staging or include
+   unrelated user or other-case changes.
+4. Inspect `git diff --cached`, run `git diff --cached --check`, and run the
+   relevant task checks before committing.
+5. Use the repository `<type>: <summary>` title and the plan's deterministic
+   `Doc-Loom-Case` and `Doc-Loom-Step` trailers.
+6. Record the resulting task, refactor, or review-fix hash in `execution.md`.
+
+Do not commit an intentional Red state, failed attempt, timestamp-only update,
+or checkbox-only change as a semantic completion point. Combine dependent plan
+tasks when separating them would create an invalid commit. Keep an independently
+verified behavior-preserving refactor separate when practical.
+
+Authorization never includes unrelated files, push, PR, merge, tag, release,
+amend, rebase, squash, history rewriting, or a material plan deviation. If a
+mixed file cannot be isolated safely, stop rather than create a non-atomic
+commit.
 
 ## Gates
 
@@ -226,3 +296,7 @@ in `execution.md`.
 - TDD exception without alternative verification -> wait for user input.
 - Any `material deviation` or `hard stop`, stop and follow Plan Deviation
   Classification.
+- Eligible case without declared review/commit strategies, required plan/task
+  commits, or a resolvable exact baseline -> return to `plan-confirm` or report
+  `insufficient_evidence`; do not close.
+- Required Post-execution result other than `pass` -> remain in execution.

@@ -228,10 +228,10 @@ Case evidence:
 
 **Files:** `plan.md`, `case_state.yaml`
 
-- [ ] On approval, write plan v2 approval fields and Confirmation Log.
-- [ ] Set case state to `planned` with current plan version 2.
-- [ ] Parse YAML/frontmatter and inspect the staged diff.
-- [ ] Commit `docs: approve simplified review and commit plan` with
+- [x] On approval, write plan v2 approval fields and Confirmation Log.
+- [x] Set case state to `planned` with current plan version 2.
+- [x] Parse YAML/frontmatter and inspect the staged diff.
+- [x] Commit `docs: approve simplified review and commit plan` with
   `Doc-Loom-Step: plan-v2`.
 
 Expected result: plan v2 supersedes v1 before behavior changes.
@@ -241,15 +241,15 @@ Expected result: plan v2 supersedes v1 before behavior changes.
 **Files:** all paths under `Core behavior and authority`, plus `plan.md`,
 `case_state.yaml`, and `execution.md`.
 
-- [ ] Add the full `Post-execution` mode directly to `review/SKILL.md`.
-- [ ] Add only stage-owned invocation, fix loop, and commit rules to
+- [x] Add the full `Post-execution` mode directly to `review/SKILL.md`.
+- [x] Add only stage-owned invocation, fix loop, and commit rules to
   `tdd-execute` and `doc-sync-close`.
-- [ ] Add review/commit strategy and approval authorization to `plan-confirm`.
-- [ ] Narrow absolute manual-only wording in shared/router/context/loop rules.
-- [ ] Apply concise workflow, Git, and architecture authority patches.
-- [ ] Update conditional template headings.
-- [ ] Run core positive/stale-rule, YAML, symlink, and diff checks.
-- [ ] Commit `feat: require post-execution review and atomic commits` with
+- [x] Add review/commit strategy and approval authorization to `plan-confirm`.
+- [x] Narrow absolute manual-only wording in shared/router/context/loop rules.
+- [x] Apply concise workflow, Git, and architecture authority patches.
+- [x] Update conditional template headings.
+- [x] Run core positive/stale-rule, YAML, symlink, and diff checks.
+- [x] Commit `feat: require post-execution review and atomic commits` with
   `Doc-Loom-Step: task:core-workflow`.
 
 Expected result: the workflow behavior is complete without new references,

@@ -87,5 +87,7 @@ Decision: reply with a candidate ID, "more", or updated product-state facts.
   After selection, plan through case identity and `plan-confirm`; execute only
   through `tdd-execute` after the plan is approved.
 - Shared-protocol routing and confirmation rules still apply, including no
-  auto-trigger of `review` or `grill`, no silent authority promotion, and
-  `context-authority` for high-risk, authority-touching, or conflict candidates.
+  auto-trigger of ad-hoc `review` or `grill`, no silent authority promotion,
+  and `context-authority` for high-risk, authority-touching, or conflict
+  candidates. A later approved eligible plan may authorize `tdd-execute` to run
+  the workflow-owned Post-execution review gate.

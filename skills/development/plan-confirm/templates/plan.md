@@ -12,6 +12,13 @@ Triggered sections: include each only when it has content.
 - Adaptive Execution: Include when the plan or user allows same-goal amendments.
 - Plan Amendments: Include when a previously approved plan was amended.
 - Tests: Include when tests need a dedicated list beyond Tasks.
+- Post-Execution Review Strategy: Include for eligible persistent cases. Define
+  exact baseline, Engineering/Spec isolation, complete-delta evidence,
+  aggregate gate, fix/re-review behavior, and durable evidence location.
+- Atomic Commit Strategy: Include for eligible persistent cases. Define
+  semantic completion points, explicit staging scope, expected titles and
+  `Doc-Loom-Case`/`Doc-Loom-Step` trailers, verification, and excluded Git
+  actions.
 - Risks: Include when residual risks exist beyond risk level classification.
 - Documentation Impact: Include when the plan changes authority, governance, or L3 docs.
 Do not keep empty headings.
