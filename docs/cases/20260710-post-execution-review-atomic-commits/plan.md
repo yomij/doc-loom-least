@@ -1,588 +1,355 @@
 ---
 case_id: 20260710-post-execution-review-atomic-commits
-plan_version: 1
+plan_version: 2
 status: approved
 risk_level: high
 approved_by: user
-approved_at: 2026-07-10T16:28:08+08:00
-base_commit: c6dfe4612c341d26ba9d125d493781a4c527025f
+approved_at: 2026-07-10T17:10:43+08:00
+base_commit: 763025a586e26ecba6a5f1641ab7d4288ad2662d
 ---
 
 # Implementation Plan
 
 ## Goal
 
-Implement the approved requirements for mandatory post-execution review and
-semantic atomic commits across the Doc Loom development workflow.
+Implement requirements v1 through the smallest workflow change:
 
-The completed workflow must:
-
-- run a read-only Engineering and Spec review after eligible execution and
-  before closure;
-- return material findings to execution for verified atomic fix commits and
-  re-review;
-- create traceable atomic commits for approved requirements, approved plan,
-  green tasks, verified refactors, review fixes, and closure;
-- report unqualified `Done` only after the final review passes and the closure
-  commit succeeds;
-- preserve the constitutional minimum path by keeping Fast-Path compact and by
-  adding no daemon, backend, persistent review phase, or mandatory review
-  artifact.
+- add a workflow-owned `Post-execution` mode directly to `review`;
+- require `tdd-execute` to run it after eligible implementation and own the
+  fix/re-review loop;
+- require semantic atomic commits for the approved plan, green tasks, review
+  fixes, and closure;
+- let `doc-sync-close` report unqualified `Done` only after review passes and
+  the closure commit succeeds.
 
 ## Non-goals
 
-- Do not change the constitution.
-- Do not add a CLI backend, daemon, scheduler, queue, remote service, GitHub
-  Action, or centralized orchestrator.
-- Do not make `grill` automatic or part of the development workflow.
-- Do not require post-execution review for explanation-only, status-only, or
-  read-only conversations.
-- Do not require a `review.md` case artifact or a new case phase.
-- Do not commit TDD Red states, failed attempts, timestamp-only changes, or one
-  commit per checkbox.
+- Do not create shared post-execution-review or atomic-commit reference files.
+- Do not create new reference symlinks or a workflow-verifier script.
+- Do not create a new case phase or mandatory `review.md` artifact.
+- Do not modify the constitution or general Agent Policy.
+- Do not make `grill` automatic.
 - Do not push, merge, tag, release, amend, rebase, or squash commits.
-- Do not regenerate the binary GIF/PNG workflow diagrams in this case. Update
-  the textual and Mermaid workflow descriptions; record visual refresh as a
-  follow-up only if the final review finds material user-facing drift.
-- Do not modify archived historical designs as current facts.
+- Do not regenerate binary workflow diagrams.
+- Do not modify archived historical designs.
 
 ## Context
 
-- Summary / Brief: approved
+- Requirements: approved
   `docs/cases/20260710-post-execution-review-atomic-commits/requirements.md`.
-- Route Verdict: `proceed_to_plan` after owner approval of requirements v1.
-- Skipped Context Reason: none.
+- Prior plan: v1 was approved and committed, but no workflow behavior commit
+  was created.
+- Revision reason: the owner challenged the two new shared references, seven
+  distribution symlinks, 138-line verifier, and broad authority surface as
+  over-engineering.
+- User decision: keep the requirements, discard the uncommitted v1 execution
+  attempt, and revise to the smallest design centered on `review/SKILL.md`.
+- Route Verdict: `proceed_to_plan` with material plan revision.
 
-Context summary:
+Current facts:
 
-- Current authority and Skills make `review` manual-only, treat missing review
-  as non-blocking, and disable staging/committing by default.
-- The owner approved requirements v1 to replace those rules for eligible
-  persistent cases with mandatory completed-change review and semantic atomic
-  commits.
-- The approved design uses separate Engineering and Spec axes, keeps review
-  read-only, lets `tdd-execute` own the review/fix loop, and lets
-  `doc-sync-close` own the final closure commit gate.
-- The user-provided external code-review Skill contributed the two-axis,
-  fixed-baseline, fail-fast, and isolated-context ideas. Its branch-only
-  three-dot diff, hard issue-tracker dependency, and mandatory parallel-agent
-  assumptions are not adopted.
-- The constitution permits new gates only when they solve concrete failures
-  through the smallest path. This plan therefore adds shared references and a
-  semantic verifier, not a new runtime service or persistent workflow phase.
-
-Context sources:
-
-| Source | Layer | Why Included | Trust |
-|---|---|---|---|
-| `docs/authority/constitution.md` | Constitutional authority | Minimum path, human-first, and no-heavy-pipeline constraints | Highest |
-| `docs/authority/workflow/development-flow.md` | Active authority | Current manual review and execution/closure semantics | High |
-| `docs/authority/agent/policy.md` | Active authority | Agent authorization and high-risk workflow-policy boundary | High |
-| `docs/authority/operations/git.md` | Active authority | Current commit-title contract | High |
-| `skills/_shared/references/shared-protocol.md` | Current implementation | Shared routing, artifact, closure, Git, and review rules | High |
-| `skills/development/plan-confirm/SKILL.md` | Current implementation | Plan approval, base commit, and authorization contract | High |
-| `skills/development/tdd-execute/SKILL.md` | Current implementation | Execution, evidence, review risk, and optional commit behavior | High |
-| `skills/assessment/review/SKILL.md` | Current implementation | Review evidence, maturity, severity, and read-only output | High |
-| `skills/development/doc-sync-close/SKILL.md` | Current implementation | Acceptance, authority sync, and closure behavior | High |
-| Approved requirements v1 | Confirmed case fact | Target behavior and acceptance object | High |
+- Requirements commit: `1cb58fd`.
+- Approved plan v1 commit: `763025a`.
+- All uncommitted v1 implementation changes were removed before this draft.
+- Current workspace is clean before writing plan v2.
+- Current branch is `case/20260710-post-execution-review-atomic-commits`.
 
 ## Decisions
 
-1. `tdd-execute` owns the mandatory post-execution review loop for eligible
-   cases; `review` remains the read-only reviewer and does not write state.
-2. Ad-hoc review remains available on explicit user request. Workflow-owned
-   completed review is additionally authorized by an approved eligible plan.
-3. Engineering and Spec are separate review axes. They may run sequentially in
-   isolated passes; parallel sub-agents are optional and require runtime/user
-   authorization.
-4. `review_risk` remains a risk-depth signal. It is no longer the authorization
-   source because every eligible case is reviewed; high risk strengthens the
-   evidence and independence expected from the review.
-5. No new case phase is added. The case remains `executing` until the aggregate
-   review passes, then `tdd-execute` moves it to `doc_syncing`.
-6. No mandatory `review.md` is added. Durable findings, fix commits, and final
-   verdicts live in `execution.md`; closure consumes the final result.
-7. Detailed review and commit rules are single-sourced in two disclosed shared
-   references rather than duplicated across stage Skills.
-8. Plan approval authorizes branch creation plus case-scoped staging and atomic
-   commits described by this plan. It does not authorize push or history
-   rewriting.
-9. Commit traceability uses the existing `<type>: <summary>` title plus
-   `Doc-Loom-Case` and `Doc-Loom-Step` trailers.
-10. Existing cases remain compatible. Commit-aware closure derivation applies
-    when the approved plan declares atomic commits required; legacy closed
-    cases continue using their existing evidence.
-11. A shell semantic verifier provides TDD-style Red/Green evidence for the
-    Markdown and Skill contracts.
-12. This case has one bootstrap exception: the approved requirements and draft
-    plan were created under the old no-commit policy. After plan v1 approval and
-    before behavior changes, execution will commit the approved requirements,
-    then commit the approved plan and routing state as two separate atomic
-    commits.
-13. `docs/authority/agent/policy.md` will change `source_of_truth` from `adr` to
-    `user_confirmed` because the new durable commit responsibility comes from
-    this owner-confirmed case rather than an existing ADR. ADR-0002 remains a
-    cited source for the unchanged human-first policy.
-
-## Assumptions
-
-- Git remains available during execution.
-- Branch creation after plan approval is allowed by the approved run mode.
-- `rg`, `bash`, Ruby, and standard Git commands remain available; no dependency
-  installation is required.
-- Current untracked files belong only to this case.
-- The shared-protocol symlinks remain valid and do not require duplicate edits.
-- Updating existing authority docs under the exact changes listed below is a
-  confirmed narrow authority patch when plan v1 is explicitly approved.
+1. Detailed Engineering/Spec review behavior lives only in
+   `skills/assessment/review/SKILL.md`.
+2. `tdd-execute` contains only stage-owned review timing, fix-loop, task commit,
+   and review-fix commit rules.
+3. `doc-sync-close` contains only final review evidence and closure commit
+   gates.
+4. `plan-confirm` records review/commit strategy and makes current-plan approval
+   authorize case-scoped staging and commits.
+5. `shared-protocol.md` receives only the minimum cross-skill exception to the
+   existing manual-review rule plus shared closure/authorization semantics.
+6. `docloom-workflow`, `context-authority`, and `loop-protocol` receive only
+   narrow wording changes where their absolute manual-only rule would conflict.
+7. Atomic commit detail is stage-owned; durable repository-level principles are
+   summarized in `docs/authority/operations/git.md`.
+8. No separate shared references, symlinks, or semantic verifier are created.
+9. Verification uses targeted `rg`, diff, Git history, YAML, and a mandatory
+   final Engineering/Spec review.
+10. Plan v1 remains immutable history. Plan v2 supersedes it before any behavior
+    implementation commit.
 
 ## Workspace Baseline
 
 - Proposed Base Commit:
-  `c6dfe4612c341d26ba9d125d493781a4c527025f`
-- Branch at plan creation: `main`
+  `763025a586e26ecba6a5f1641ab7d4288ad2662d`
+- Branch: `case/20260710-post-execution-review-atomic-commits`
 - Run Mode: `branch`
-- Planned branch: `case/20260710-post-execution-review-atomic-commits`
-- Dirty Workspace: yes; only the current untracked case directory.
-- Existing Changed Files:
-  - `docs/cases/20260710-post-execution-review-atomic-commits/requirements.md`
-  - `docs/cases/20260710-post-execution-review-atomic-commits/case_state.yaml`
-  - `docs/cases/20260710-post-execution-review-atomic-commits/plan.md`
+- Dirty Workspace Before Plan v2: no.
+- Current Change: draft plan v2 and case routing state only.
 
 ## Risk Level
 
 High.
 
-Reason: the change modifies workflow and agent policy, authority facts, review
-authorization, Git authorization, case-state derivation, and closure semantics.
-These are High-Risk Topics under the shared protocol.
+Reason: this still changes workflow policy, review authorization, Git
+authorization, and closure semantics. The revision reduces implementation
+surface but not the policy risk.
 
-Plan confirmation policy: explicit confirmation of current plan v1 is required.
-Plan approval authorizes same-turn execution, branch creation, and the scoped
-atomic commits below unless the owner says plan-only, hold, revise, or review
-first.
+Plan v2 requires explicit confirmation. Approval authorizes same-turn execution
+and the case-scoped commits below unless the owner says hold or plan-only.
 
 ## TDD Applicability
 
-- TDD Required: Yes.
-- Strategy: semantic contract test.
-- Red:
-  - create `tools/verify-workflow-contracts.sh` with positive assertions for
-    mandatory post-execution review and atomic commits plus negative assertions
-    for stale manual-only/no-commit rules;
-  - run it against current active authority, Skills, templates, and derived
-    entry docs;
-  - verify it fails for the expected stale-contract reasons.
-- Green:
-  - implement the approved workflow contracts;
-  - run the same verifier until all required anchors pass and stale active rules
-    are absent.
-- Refactor:
-  - consolidate repeated detail into the two shared reference files;
-  - rerun the verifier, shell syntax check, link/symlink checks, and diff checks.
-
-The Red script is not committed in a failing state. The observed failure is
-recorded in `execution.md`; the script is committed together with the coherent
-Green workflow change.
+- TDD Required: No.
+- Exception category: Pure documentation change.
+- Reason: the executable product surface is Markdown Skill contracts and
+  authority text; the repository has no workflow interpreter or runtime test
+  suite. The discarded verifier would test wording anchors rather than runtime
+  behavior.
+- Alternative Verification:
+  - targeted positive and stale-rule `rg` checks;
+  - `git diff --check` before each commit;
+  - YAML/frontmatter parsing for case artifacts;
+  - broken-symlink check;
+  - per-commit scope and trailer inspection;
+  - mandatory final Engineering and Spec review through the updated `review`
+    Skill.
 
 ## Post-Execution Review Strategy
 
+- Mode: `Post-execution` in `review/SKILL.md`.
 - Maturity: `Completed`.
-- Engineering axis:
-  - inspect the full case delta against the exact base commit;
-  - check rule consistency, routing and state ownership, shell verifier quality,
-    Git safety, compatibility, evidence integrity, and unnecessary complexity.
-- Spec axis:
-  - map the final delta to every requirement and acceptance criterion in
-    requirements v1 and plan v1;
-  - identify missing, partial, incorrect, or unrequested behavior.
-- Context isolation:
-  - run the two axes as separate sequential passes in this environment;
-  - do not use one axis verdict as evidence for the other.
+- Engineering axis: correctness of workflow ownership, state transitions,
+  commit safety, evidence integrity, compatibility, and unnecessary complexity.
+- Spec axis: final diff against requirements v1 and plan v2, including missing,
+  partial, incorrect, or unrequested behavior.
+- Isolation: separate sequential passes; no sub-agent dependency.
 - Gate:
-  - Critical or Important finding -> smallest fix, verification, atomic fix
-    commit, and re-review;
+  - Critical/Important -> smallest fix, verification, atomic fix commit,
+    re-review;
   - insufficient evidence -> collect evidence and re-review;
-  - only Minor or no findings -> pass to closure.
-- Evidence:
-  - record per-axis verdicts, findings, disposition, reviewed range, and commit
-    mapping in `execution.md`.
+  - only Minor/no findings -> pass to closure.
+- Durable result: record final axis verdicts and material findings in
+  `execution.md`; no `review.md`.
 
 ## Atomic Commit Strategy
 
-Every commit uses the current title standard plus trailers:
+Plan approval authorizes explicit staging for this case only.
+
+| Order | Step | Commit Title |
+|---:|---|---|
+| 1 | Approved plan v2 | `docs: approve simplified review and commit plan` |
+| 2 | Core workflow behavior | `feat: require post-execution review and atomic commits` |
+| 3 | Directly conflicting derived docs | `docs: document post-execution review workflow` |
+| 4+ | Review fixes, when needed | Exact `fix:` title recorded before staging |
+| Final | Closure | `docs: close post-execution review and atomic commits case` |
+
+Every commit uses:
 
 ```text
 Doc-Loom-Case: 20260710-post-execution-review-atomic-commits
-Doc-Loom-Step: requirements
-Doc-Loom-Step: plan
-Doc-Loom-Step: task:core-workflow
-Doc-Loom-Step: task:derived-docs
-Doc-Loom-Step: review-fix:F1
-Doc-Loom-Step: closure
+Doc-Loom-Step: plan-v2 | task:core-workflow | task:derived-docs | review-fix:F1 | closure
 ```
 
-Only one `Doc-Loom-Step` trailer is used in an individual commit. Review-fix
-IDs increment from `F1` and are recorded in `execution.md` before staging.
-
-Planned commits:
-
-| Order | Semantic Step | Planned Title | Required Verification Before Commit |
-|---:|---|---|---|
-| 1 | `requirements` | `docs: approve post-execution review requirements` | Requirements status and YAML parse |
-| 2 | `plan` | `docs: approve post-execution review plan` | Plan approval fields, case state, YAML parse |
-| 3 | `task:core-workflow` | `feat: require post-execution review and atomic commits` | Expected Red observed earlier; verifier Green, `bash -n`, symlink check, diff check |
-| 4 | `task:derived-docs` | `docs: document review and atomic commit workflow` | Verifier Green, stale wording grep, Markdown diff check |
-| 5+ | Review fix `F1`, `F2`, and onward when needed | Exact `fix:` title is derived from the concrete root cause and recorded in `execution.md` before staging | Relevant regression check plus aggregate re-review |
-| final | `closure` | `docs: close post-execution review and atomic commits case` | Final review pass, acceptance mapping, clean staged scope |
-
-No commit may include unrelated user changes. Do not amend or squash these
-commits under this plan.
-
-## Adaptive Execution
-
-Review fixes that stay within the approved goal, acceptance criteria, and file
-responsibilities are allowed as minor deviations. Before editing, record in
-`execution.md` the finding ID, exact files, exact `fix:` commit title, planned
-verification, and expected impact.
-
-Any fix that changes the goal, Non-goals, risk, TDD strategy, authority scope,
-public contract, dependency/configuration scope, binary diagram scope, or file
-responsibility is a material deviation and returns to `plan-confirm` for a new
-plan version.
+No broad staging, unrelated files, push, or history rewriting is authorized.
 
 ## Files to Change
 
-Create:
+Core behavior and authority:
 
-- `skills/_shared/references/post-execution-review.md`
-- `skills/_shared/references/atomic-commits.md`
-- `tools/verify-workflow-contracts.sh`
-- `docs/cases/20260710-post-execution-review-atomic-commits/execution.md`
-- `docs/cases/20260710-post-execution-review-atomic-commits/closure.md`
-
-Create distribution symlinks:
-
-- `skills/development/plan-confirm/references/post-execution-review.md`
-- `skills/development/plan-confirm/references/atomic-commits.md`
-- `skills/development/tdd-execute/references/post-execution-review.md`
-- `skills/development/tdd-execute/references/atomic-commits.md`
-- `skills/assessment/review/references/post-execution-review.md`
-- `skills/development/doc-sync-close/references/post-execution-review.md`
-- `skills/development/doc-sync-close/references/atomic-commits.md`
-
-Modify core authority and standards:
-
-- `docs/authority/README.md`
-- `docs/authority/architecture/repo-and-skills.md`
-- `docs/authority/workflow/development-flow.md`
-- `docs/authority/agent/policy.md`
-- `docs/authority/operations/git.md`
-- `docs/standards/git-commit-standard.md`
-
-Modify shared and stage Skill contracts:
-
-- `skills/_shared/references/shared-protocol.md`
-- `skills/_shared/references/loop-protocol.md`
-- `skills/development/docloom-workflow/SKILL.md`
-- `skills/development/context-authority/SKILL.md`
-- `skills/development/plan-confirm/SKILL.md`
-- `skills/development/plan-confirm/templates/plan.md`
-- `skills/development/tdd-execute/SKILL.md`
-- `skills/development/tdd-execute/templates/execution.md`
 - `skills/assessment/review/SKILL.md`
 - `skills/assessment/review/references/complexity-only.md`
+- `skills/development/tdd-execute/SKILL.md`
+- `skills/development/tdd-execute/templates/execution.md`
 - `skills/development/doc-sync-close/SKILL.md`
 - `skills/development/doc-sync-close/templates/closure.md`
+- `skills/development/plan-confirm/SKILL.md`
+- `skills/development/plan-confirm/templates/plan.md`
+- `skills/development/docloom-workflow/SKILL.md`
+- `skills/development/context-authority/SKILL.md`
+- `skills/_shared/references/shared-protocol.md`
+- `skills/_shared/references/loop-protocol.md`
+- `docs/authority/workflow/development-flow.md`
+- `docs/authority/operations/git.md`
+- `docs/authority/architecture/repo-and-skills.md`
 
-Modify derived and operational documentation:
+Directly conflicting derived docs:
 
 - `README.md`
 - `README_CN.md`
-- `CHANGELOG.md`
 - `skills/README.md`
-- `docs/index.md`
-- `docs/ssot-map.md`
 - `docs/product/current-state.md`
 - `docs/share/workflow-and-design.md`
-- `docs/cases/README.md`
+- `CHANGELOG.md`
 
-Modify current case evidence:
+Case evidence:
 
-- `docs/cases/20260710-post-execution-review-atomic-commits/requirements.md`
 - `docs/cases/20260710-post-execution-review-atomic-commits/plan.md`
 - `docs/cases/20260710-post-execution-review-atomic-commits/case_state.yaml`
-
-The per-Skill `references/shared-protocol.md` paths are symlinks to the shared
-source and must not be edited separately.
+- create `docs/cases/20260710-post-execution-review-atomic-commits/execution.md`
+- create `docs/cases/20260710-post-execution-review-atomic-commits/closure.md`
+- `docs/cases/README.md` at closure
 
 ## File Responsibilities
 
-| File / Group | Responsibility |
+| Owner | Responsibility |
 |---|---|
-| `post-execution-review.md` | Eligibility, evidence resolution, Engineering/Spec axes, verdict aggregation, fix loop |
-| `atomic-commits.md` | Authorization, semantic boundaries, commit health, trailers, mixed-worktree and closure rules |
-| `shared-protocol.md` | Cross-skill vocabulary, ownership, state derivation, artifact and compatibility hooks |
-| Stage `SKILL.md` files | Stage-specific invocation, sequencing, gates, and evidence ownership only |
-| Authority docs | Confirmed durable workflow, agent, architecture, and Git policy facts |
-| Templates | Minimal durable fields for planned review/commit strategy and actual evidence |
-| `verify-workflow-contracts.sh` | Reproducible semantic guards against contract drift |
-| Derived docs | Human-facing explanation consistent with authority and current Skills |
-| Case docs | Approved intent, execution evidence, review findings, commits, closure |
+| `review/SKILL.md` | Complete post-execution preflight, Engineering/Spec axes, aggregation, findings contract |
+| `tdd-execute/SKILL.md` | Eligibility, invocation timing, fix/re-review loop, task and review-fix commits |
+| `doc-sync-close/SKILL.md` | Consume passing verdict and create closure commit |
+| `plan-confirm/SKILL.md` | Record strategy and authorize declared commits on approval |
+| `shared-protocol.md` | Minimal cross-skill ownership, route, closure, and authorization rules |
+| Workflow/Git authority | Durable policy summary, not detailed implementation manual |
+| Templates | Conditional strategy and evidence headings only |
+| Derived docs | Remove direct contradictions and explain the final user-visible flow |
 
 ## Acceptance Criteria
 
 | Criteria | Planned Verification |
 |---|---|
-| Eligible persistent cases cannot reach successful closure without Completed post-execution review. | Semantic verifier plus inspection of shared protocol, `tdd-execute`, `review`, and `doc-sync-close`. |
-| Engineering and Spec are separate axes with independent evidence and verdicts. | Inspect shared review reference and review output contract; run Spec mapping during final review. |
-| Review uses exact plan baseline and includes committed, staged, unstaged, and untracked case changes. | Inspect review preflight rules and run final review against `c6dfe461...` plus `git status --short` and untracked listing. |
-| Missing Spec or material evidence cannot pass. | Semantic verifier and review gate inspection. |
-| Critical/Important findings return to execution, require verified atomic fix commits, and trigger re-review. | Inspect shared review reference, `tdd-execute` loop, and closure gates. |
-| `review` remains read-only while supporting both explicit ad-hoc review and approved workflow-owned completed review. | Inspect review trigger, gates, shared ownership, and absence of review state writes. |
-| No new case phase or mandatory `review.md` artifact is introduced. | Inspect shared phase/artifact tables and `rg` for new review artifact/phase declarations. |
-| Approved requirements, approved plan, green tasks, review fixes, and closure have semantic atomic commit rules. | Inspect atomic commit reference, plan/tdd/closure Skills, templates, and Git authority. |
-| Plan approval authorizes case-scoped stage/commit but not push or history rewriting. | Inspect plan confirmation, agent policy, shared Git authorization, and negative semantic guards. |
-| Task/fix commits must be coherent, verified, revertible, and unrelated-change free. | Inspect atomic commit reference and `tdd-execute` commit gates. |
-| Closure is not unqualified `Done` until review passes and closure commit succeeds. | Inspect commit-aware closure/state rules and `doc-sync-close` gates. |
-| Legacy closed cases remain readable without retroactive commit requirements. | Inspect compatibility wording and review current closed case routing rules. |
-| Fast-Path keeps compact review and commit outcomes without empty stages. | Inspect shared Fast-Path, plan/tdd/close rules, and derived usage docs. |
-| Active stale rules such as review-always-manual and commit-disabled-by-default are removed or narrowed to ad-hoc/legacy scope. | Run semantic verifier and targeted `rg` over active authority, Skills, README, product, share, and standards docs. |
-| Shared-protocol symlinks remain valid. | Run `find -L skills -type l -print`; expect no broken links. |
-| Shell verifier is syntactically valid and passes. | Run `bash -n tools/verify-workflow-contracts.sh` and `bash tools/verify-workflow-contracts.sh`. |
-| Markdown changes have no whitespace errors. | Run `git diff --check c6dfe4612c341d26ba9d125d493781a4c527025f HEAD` and worktree `git diff --check`. |
-| Commit sequence, titles, trailers, and scopes match the approved strategy. | Inspect `git log --format='%H%n%B%n---' c6dfe4612c341d26ba9d125d493781a4c527025f..HEAD` and each commit diff. |
-| Final workspace has no unexplained case-related changes before Done. | Run `git status --short`; expect clean after closure commit. |
-| No CLI backend, daemon, scheduler, queue, automatic push, or unauthorized history rewrite is introduced. | Semantic verifier plus targeted source inspection. |
+| `review` directly owns a `Post-execution` mode with separate Engineering and Spec axes. | Inspect `review/SKILL.md`; targeted positive `rg`. |
+| Review covers the approved plan/spec, complete current diff, tests/evidence, scope creep, errors, contracts, and complexity. | Inspect mode preflight and axis checks. |
+| Either axis with Critical/Important findings returns to execution; missing material evidence cannot pass. | Inspect review aggregate verdict and `tdd-execute` fix loop. |
+| `review` remains read-only and ad-hoc review remains explicit. | Inspect review gates and shared wording. |
+| Eligible execution invokes Post-execution review automatically under the approved plan. | Inspect `tdd-execute` workflow and narrowed manual-only rules. |
+| Task and review-fix commits are atomic, verified, case-scoped, and unrelated-change free. | Inspect `tdd-execute` commit section and Git authority. |
+| Plan approval authorizes declared case commits but not push or history rewriting. | Inspect `plan-confirm`, shared confirmation semantics, and Git authority. |
+| Closure requires passing review evidence and a successful closure commit before unqualified `Done`. | Inspect `doc-sync-close`, closure template, shared closure rule. |
+| No new reference, symlink, verifier, case phase, or `review.md` artifact is introduced. | Inspect final file list, `git status`, and shared artifact/phase tables. |
+| Fast-Path uses compact review/commit behavior without empty stages. | Inspect shared, plan, execute, and close wording. |
+| Legacy cases are not retroactively invalidated. | Inspect shared/closure compatibility wording. |
+| Directly conflicting manual-only statements are removed or narrowed. | Run stale-rule `rg` across active Skills, authority, README, product, and share docs. |
+| No broken Skill symlink exists. | Run `find -L skills -type l -print`; expect empty. |
+| Markdown and staged changes are clean. | Run `git diff --check` and `git diff --cached --check`. |
+| Commit sequence, titles, trailers, and scope match plan v2. | Inspect `git log` and per-commit diffs from `763025a`. |
+| Final Engineering and Spec review both pass. | Record separate verdicts in `execution.md`. |
 
 ## Tasks
 
-### Task 0: Bootstrap approved case commits
+### Task 0: Commit approved plan v2
 
-**Files:**
+**Files:** `plan.md`, `case_state.yaml`
 
-- Modify: `requirements.md`, `plan.md`, `case_state.yaml`
+- [ ] On approval, write plan v2 approval fields and Confirmation Log.
+- [ ] Set case state to `planned` with current plan version 2.
+- [ ] Parse YAML/frontmatter and inspect the staged diff.
+- [ ] Commit `docs: approve simplified review and commit plan` with
+  `Doc-Loom-Step: plan-v2`.
 
-- [ ] Create branch
-  `case/20260710-post-execution-review-atomic-commits` from
-  `c6dfe4612c341d26ba9d125d493781a4c527025f` after plan approval.
-- [ ] Validate requirements and case-state YAML with Ruby.
-- [ ] Stage only the approved `requirements.md`; inspect the cached diff; commit
-  `docs: approve post-execution review requirements` with case/step trailers.
-- [ ] Stage the approved `plan.md` and planned `case_state.yaml`; inspect the
-  cached diff; commit `docs: approve post-execution review plan` with trailers.
-- [ ] Confirm the two commits contain no production/Skill behavior changes.
+Expected result: plan v2 supersedes v1 before behavior changes.
 
-Expected result: the case has two clean, ordered bootstrap commits before any
-workflow implementation change.
+### Task 1: Implement the minimal core workflow
 
-### Task 1: Establish a failing semantic contract
+**Files:** all paths under `Core behavior and authority`, plus `plan.md`,
+`case_state.yaml`, and `execution.md`.
 
-**Files:**
+- [ ] Add the full `Post-execution` mode directly to `review/SKILL.md`.
+- [ ] Add only stage-owned invocation, fix loop, and commit rules to
+  `tdd-execute` and `doc-sync-close`.
+- [ ] Add review/commit strategy and approval authorization to `plan-confirm`.
+- [ ] Narrow absolute manual-only wording in shared/router/context/loop rules.
+- [ ] Apply concise workflow, Git, and architecture authority patches.
+- [ ] Update conditional template headings.
+- [ ] Run core positive/stale-rule, YAML, symlink, and diff checks.
+- [ ] Commit `feat: require post-execution review and atomic commits` with
+  `Doc-Loom-Step: task:core-workflow`.
 
-- Create: `tools/verify-workflow-contracts.sh`
-- Create/update: `execution.md`
+Expected result: the workflow behavior is complete without new references,
+symlinks, scripts, phases, or artifacts.
 
-- [ ] Write positive assertions for mandatory completed review, two-axis
-  semantics, atomic commit authorization/boundaries, and closure-commit gating.
-- [ ] Write negative assertions for stale active rules including review-always-
-  manual, no-auto-review, missing-review-nonblocking, and default-no-commit.
-- [ ] Run `bash -n tools/verify-workflow-contracts.sh`; expect syntax pass.
-- [ ] Run `bash tools/verify-workflow-contracts.sh`; expect Red caused by the
-  current active contracts, not by a script defect.
-- [ ] Record the exact expected Red evidence in `execution.md` without
-  committing the failing script state.
+### Task 2: Synchronize directly conflicting derived docs
 
-Expected result: a reproducible failing contract proves the current workflow
-does not satisfy requirements v1.
+**Files:** all paths under `Directly conflicting derived docs`, plus `plan.md`
+and `execution.md`.
 
-### Task 2: Implement core workflow, review, and Git contracts
+- [ ] Replace manual-only guidance with explicit ad-hoc plus workflow-owned
+  post-execution review wording.
+- [ ] Update text/Mermaid flow and Git/commit explanation without touching
+  binary diagrams.
+- [ ] Run stale-rule, path/link, and diff checks.
+- [ ] Commit `docs: document post-execution review workflow` with
+  `Doc-Loom-Step: task:derived-docs`.
 
-**Files:**
+Expected result: active entry docs no longer contradict the core workflow.
 
-- Create: `skills/_shared/references/post-execution-review.md`
-- Create: `skills/_shared/references/atomic-commits.md`
-- Modify all core authority, standards, shared protocol, stage Skill, reference,
-  and template files listed under `Files to Change`.
-- Update: `execution.md`, `plan.md` task progress.
+### Task 3: Run final review and fix loop
 
-- [ ] Add the two shared SSOT references and concise conditional pointers from
-  the owning Skills.
-- [ ] Create the approved per-Skill relative symlinks so skillshare copy-mode
-  distribution carries the referenced contracts without duplicating content.
-- [ ] Update shared ownership, route, artifact, state derivation, Fast-Path,
-  degraded Git, and compatibility rules.
-- [ ] Update `plan-confirm` to plan and authorize post-execution review and
-  atomic commits.
-- [ ] Update `tdd-execute` to commit green tasks, run the two-axis review, own
-  the fix/re-review loop, and move to `doc_syncing` only after pass.
-- [ ] Update `review` to support approved workflow-owned Completed review while
-  remaining read-only and preserving explicit ad-hoc modes.
-- [ ] Update `doc-sync-close` to consume final review/commit evidence and require
-  a successful closure commit before unqualified Done.
-- [ ] Apply the exact confirmed authority patches for workflow, agent, Git, and
-  review-role facts; preserve constitution scope.
-- [ ] Update templates with conditional review/commit strategy and evidence
-  sections.
-- [ ] Run the semantic verifier to Green, `bash -n`, symlink validation, and
-  diff checks.
-- [ ] Stage only the coherent core change and commit
-  `feat: require post-execution review and atomic commits` with trailers.
+**Files:** `execution.md`, `plan.md`, and only files required by concrete
+findings.
 
-Expected result: active authority and executable Skill contracts implement the
-new behavior and the semantic verifier passes.
+- [ ] Run the Engineering pass in `review` Post-execution mode.
+- [ ] Run the Spec pass separately against requirements v1 and plan v2.
+- [ ] Aggregate verdicts without cross-axis compensation.
+- [ ] For each material root cause, record exact files/title/verification,
+  create an atomic `fix:` commit, and re-review.
+- [ ] Record final verdicts and findings disposition in `execution.md`.
 
-### Task 3: Synchronize derived and human-facing documentation
+Expected result: both axes and the aggregate verdict pass.
 
-**Files:**
+### Task 4: Close with an atomic closure commit
 
-- Modify all files listed under `Modify derived and operational documentation`.
-- Update: `execution.md`, `plan.md` task progress.
+**Files:** create `closure.md`; update `case_state.yaml`, `plan.md`,
+`execution.md`, and `docs/cases/README.md`.
 
-- [ ] Replace stale manual-only review and optional-commit guidance in English
-  and Chinese entries.
-- [ ] Update textual and Mermaid workflow descriptions to show execution,
-  review/fix, closure, and commit boundaries.
-- [ ] Update skill layout wording so `review` is both ad-hoc and workflow-owned,
-  while `grill` remains manual.
-- [ ] Update Git authority routes and SSOT labels from title-only wording to
-  atomic commit policy wording.
-- [ ] Update product current state and changelog with the confirmed behavior.
-- [ ] Refresh the case dashboard to show this case waiting/executing as
-  appropriate; defer final closed state to closure.
-- [ ] Run the semantic verifier, stale wording checks, link/path inspection, and
-  Markdown diff checks.
-- [ ] Commit `docs: document review and atomic commit workflow` with trailers.
+- [ ] Run final targeted checks, YAML parse, Git log, diff, and workspace scope.
+- [ ] Map all acceptance criteria to evidence.
+- [ ] Write closure and closed state without adding implementation fixes.
+- [ ] Commit `docs: close post-execution review and atomic commits case` with
+  `Doc-Loom-Step: closure`.
+- [ ] Report unqualified `Done` only after commit success and clean status.
 
-Expected result: current entry points and derived guidance agree with authority
-and Skills without changing binary diagram assets.
-
-### Task 4: Run mandatory post-execution review and fix loop
-
-**Files:**
-
-- Update: `execution.md`, `plan.md` task progress.
-- Modify core or derived files only when a review finding requires correction.
-
-- [ ] Confirm expected implementation commits exist and the case delta is
-  explainable from the exact base commit.
-- [ ] Run an isolated Engineering review pass.
-- [ ] Run an isolated Spec review pass against requirements v1 and plan v1.
-- [ ] Aggregate findings without allowing one axis to compensate for the other.
-- [ ] For each material root cause, implement the smallest fix, verify it,
-  create an atomic `fix:` commit with trailers, and re-run the affected and
-  aggregate reviews.
-- [ ] Record final per-axis verdicts, evidence gaps, findings disposition,
-  reviewed range, and commit mapping in `execution.md`.
-
-Expected result: aggregate review verdict is `pass`, or execution remains open
-with explicit material findings/evidence gaps.
-
-### Task 5: Verify, close, and create the closure commit
-
-**Files:**
-
-- Create: `closure.md`
-- Modify: `case_state.yaml`, `plan.md`, `execution.md`, `docs/cases/README.md`
-- Modify other derived docs only if final verified evidence requires a narrow
-  synchronization already authorized by this plan.
-
-- [ ] Run final semantic verifier, shell syntax, symlink, stale wording, diff,
-  YAML, commit-log, and workspace-scope checks.
-- [ ] Map every acceptance criterion to final evidence.
-- [ ] Write closure and final review/commit summary before updating state.
-- [ ] Update case state to closed only as part of the staged closure unit.
-- [ ] Inspect the staged closure diff and create
-  `docs: close post-execution review and atomic commits case` with trailers.
-- [ ] Verify the closure commit contains the final case evidence and no new
-  implementation fix.
-- [ ] Run `git status --short`; do not report unqualified `Done` unless the
-  closure commit succeeded and the case-related worktree is clean.
-
-Expected result: the case is closed by a successful atomic closure commit and
-all final evidence is durable.
+Expected result: final evidence is durable and the case-related worktree is
+clean.
 
 ## Planned Commands
 
-Commands are run from repository root. Exact commit commands will use multiple
-`-m` arguments so titles and trailers remain deterministic.
-
 ```text
-git switch -c case/20260710-post-execution-review-atomic-commits
-ruby -e 'require "yaml"; YAML.load_file("docs/cases/20260710-post-execution-review-atomic-commits/case_state.yaml"); %w[requirements.md plan.md].each { |name| path = "docs/cases/20260710-post-execution-review-atomic-commits/#{name}"; text = File.read(path); frontmatter = text.match(/\A---\n(.*?)\n---\n/m)&.[](1) or abort("missing frontmatter: #{path}"); YAML.safe_load(frontmatter, permitted_classes: [Time], aliases: false) }; puts "yaml: ok"'
-git add docs/cases/20260710-post-execution-review-atomic-commits/requirements.md
-git diff --cached --check
-git diff --cached --stat
-git commit -m 'docs: approve post-execution review requirements' -m 'Doc-Loom-Case: 20260710-post-execution-review-atomic-commits' -m 'Doc-Loom-Step: requirements'
-git add docs/cases/20260710-post-execution-review-atomic-commits/plan.md docs/cases/20260710-post-execution-review-atomic-commits/case_state.yaml
-git diff --cached --check
-git diff --cached --stat
-git commit -m 'docs: approve post-execution review plan' -m 'Doc-Loom-Case: 20260710-post-execution-review-atomic-commits' -m 'Doc-Loom-Step: plan'
-bash -n tools/verify-workflow-contracts.sh
-bash tools/verify-workflow-contracts.sh
-ln -s ../../../_shared/references/post-execution-review.md skills/development/plan-confirm/references/post-execution-review.md
-ln -s ../../../_shared/references/atomic-commits.md skills/development/plan-confirm/references/atomic-commits.md
-ln -s ../../../_shared/references/post-execution-review.md skills/development/tdd-execute/references/post-execution-review.md
-ln -s ../../../_shared/references/atomic-commits.md skills/development/tdd-execute/references/atomic-commits.md
-ln -s ../../../_shared/references/post-execution-review.md skills/assessment/review/references/post-execution-review.md
-ln -s ../../../_shared/references/post-execution-review.md skills/development/doc-sync-close/references/post-execution-review.md
-ln -s ../../../_shared/references/atomic-commits.md skills/development/doc-sync-close/references/atomic-commits.md
+ruby -e 'require "yaml"; YAML.load_file("docs/cases/20260710-post-execution-review-atomic-commits/case_state.yaml"); puts "yaml: ok"'
+rg -n 'Post-execution|Engineering Axis|Spec Axis|Atomic Commits|closure commit' skills docs/authority
+rg -n 'No automatic review triggers|不自动触发 Review，Review 始终是手动行为|Do not auto-trigger `review`, even when `review_risk` is high.|Do not trigger `review`; only the user can request it.|Default: do not stage or commit.|Missing review conversation is not by itself a closure blocker.' skills docs/authority README.md README_CN.md docs/product/current-state.md docs/share/workflow-and-design.md
 find -L skills -type l -print
-git add docs/authority/README.md docs/authority/architecture/repo-and-skills.md docs/authority/workflow/development-flow.md docs/authority/agent/policy.md docs/authority/operations/git.md docs/standards/git-commit-standard.md skills/_shared/references/shared-protocol.md skills/_shared/references/loop-protocol.md skills/_shared/references/post-execution-review.md skills/_shared/references/atomic-commits.md skills/development/docloom-workflow/SKILL.md skills/development/context-authority/SKILL.md skills/development/plan-confirm/SKILL.md skills/development/plan-confirm/references/post-execution-review.md skills/development/plan-confirm/references/atomic-commits.md skills/development/plan-confirm/templates/plan.md skills/development/tdd-execute/SKILL.md skills/development/tdd-execute/references/post-execution-review.md skills/development/tdd-execute/references/atomic-commits.md skills/development/tdd-execute/templates/execution.md skills/assessment/review/SKILL.md skills/assessment/review/references/post-execution-review.md skills/assessment/review/references/complexity-only.md skills/development/doc-sync-close/SKILL.md skills/development/doc-sync-close/references/post-execution-review.md skills/development/doc-sync-close/references/atomic-commits.md skills/development/doc-sync-close/templates/closure.md tools/verify-workflow-contracts.sh docs/cases/20260710-post-execution-review-atomic-commits/execution.md docs/cases/20260710-post-execution-review-atomic-commits/plan.md docs/cases/20260710-post-execution-review-atomic-commits/case_state.yaml
-git diff --cached --check
-git diff --cached --stat
-git commit -m 'feat: require post-execution review and atomic commits' -m 'Doc-Loom-Case: 20260710-post-execution-review-atomic-commits' -m 'Doc-Loom-Step: task:core-workflow'
-git add README.md README_CN.md CHANGELOG.md skills/README.md docs/index.md docs/ssot-map.md docs/product/current-state.md docs/share/workflow-and-design.md docs/cases/README.md docs/cases/20260710-post-execution-review-atomic-commits/execution.md docs/cases/20260710-post-execution-review-atomic-commits/plan.md
-git diff --cached --check
-git diff --cached --stat
-git commit -m 'docs: document review and atomic commit workflow' -m 'Doc-Loom-Case: 20260710-post-execution-review-atomic-commits' -m 'Doc-Loom-Step: task:derived-docs'
-git diff --check c6dfe4612c341d26ba9d125d493781a4c527025f HEAD
 git diff --check
-git status --short
-git ls-files --others --exclude-standard
-git log --format='%H%n%B%n---' c6dfe4612c341d26ba9d125d493781a4c527025f..HEAD
-git add docs/cases/20260710-post-execution-review-atomic-commits/closure.md docs/cases/20260710-post-execution-review-atomic-commits/case_state.yaml docs/cases/20260710-post-execution-review-atomic-commits/execution.md docs/cases/20260710-post-execution-review-atomic-commits/plan.md docs/cases/README.md
 git diff --cached --check
-git diff --cached --stat
-git commit -m 'docs: close post-execution review and atomic commits case' -m 'Doc-Loom-Case: 20260710-post-execution-review-atomic-commits' -m 'Doc-Loom-Step: closure'
 git status --short
+git log --format='%H%n%B%n---' 763025a586e26ecba6a5f1641ab7d4288ad2662d..HEAD
 ```
 
-Staging commands will name explicit case-related paths after inspecting the
-current diff. No wildcard staging and no `git add -A` are authorized.
+The stale-rule `rg` is expected to return no active contradictions after the
+corresponding task. Explicit staging paths and exact commit commands are taken
+from the approved Atomic Commit Strategy; broad staging is not authorized.
 
 ## Risks
 
 | Risk | Mitigation |
 |---|---|
-| The new review gate becomes ceremony | Fail on missing evidence, separate axes, compact Fast-Path, no new phase/artifact |
-| Same-agent review repeats implementation bias | Isolated review passes; prefer independent reviewer when explicitly available |
-| Two shared references increase protocol surface | Each has one clear SSOT responsibility and conditional pointers |
-| Semantic grep tests become brittle | Test durable contract anchors and stale contradictions, not prose formatting |
-| Commit policy creates noisy history | Commit semantic green units, not attempts or checkboxes |
-| Mixed working tree captures unrelated files | Branch mode, explicit staging paths, cached diff inspection before every commit |
-| Plan/requirements bootstrap violates future order | Record one transitional exception; commit them first after plan approval and before behavior changes |
-| Closure file exists but commit fails | Commit-aware closure rule; no Done report until closure commit and clean scope |
-| Legacy cases appear invalid | Apply commit-aware derivation only to plans declaring the new policy |
-| Binary usage diagrams remain visually stale | Update textual/Mermaid flows now; final review decides whether a follow-up is material |
-| Authority and Skills drift | One Green semantic verifier plus final two-axis review |
+| Review details leak into multiple Skills | Keep the complete mode only in `review`; other Skills consume its verdict |
+| Atomic commit rules duplicate | Keep only stage-owned rules plus a concise Git authority summary |
+| Manual-only wording remains elsewhere | Targeted stale-rule search over active sources |
+| Same-agent review bias | Separate Engineering and Spec passes; no shared verdict context |
+| Workflow still feels heavy | No new phase, artifact, reference, symlink, or script; compact Fast-Path |
+| Plan v1 history causes ambiguity | Plan v2 explicitly supersedes v1 and uses a new approval commit |
 
 ## Documentation Impact
 
-Confirmed narrow authority patches on plan approval:
+Confirmed narrow authority patches on plan v2 approval:
 
-| Authority Doc | Confirmed Change Boundary |
-|---|---|
-| `docs/authority/workflow/development-flow.md` | Add mandatory eligible post-execution review, fix loop, commit gates, and commit-aware closure while preserving minimum path and legacy compatibility |
-| `docs/authority/agent/policy.md` | Make approved case-scoped atomic commits an agent responsibility; reserve push/history rewrite and material deviations for explicit authorization; change `source_of_truth` from `adr` to `user_confirmed` while retaining ADR-0002 as a source |
-| `docs/authority/operations/git.md` | Expand title-only authority into semantic atomic commit boundaries, health, scope, traceability, and closure rules |
-| `docs/authority/architecture/repo-and-skills.md` | Describe `review` as both explicit ad-hoc assessment and workflow-owned read-only completed review; keep `grill` manual |
-| `docs/authority/README.md` | Update authority routing labels for review role and Git commit policy |
+- `docs/authority/workflow/development-flow.md`: add the mandatory eligible
+  post-execution review/fix loop and atomic commit closure behavior.
+- `docs/authority/operations/git.md`: retain the title standard and add concise
+  semantic atomic commit boundaries and authorization.
+- `docs/authority/architecture/repo-and-skills.md`: change the assessment group
+  description from manual review to read-only review plus manual challenge.
 
-Derived docs and operational inputs will be mechanically synchronized after the
-core contracts are Green. The constitution remains unchanged.
+The constitution and Agent Policy remain unchanged.
+
+## Plan Revision History
+
+| Version | Status | Decision |
+|---:|---|---|
+| 1 | superseded before behavior implementation | Approved broad design with two shared references, symlinks, and verifier; owner rejected it as over-engineered. |
+| 2 | draft | Inline review behavior in `review/SKILL.md`; stage-owned commit rules; no new references or verifier. |
 
 ## Confirmation Log
 
 | When | Confirmed By | Plan Version | Confirmation |
 |---|---|---:|---|
 | 2026-07-10T16:28:08+08:00 | user | 1 | `批准。先提交，然后执行` |
+| 2026-07-10T17:10:43+08:00 | user | 2 | `批准` |
