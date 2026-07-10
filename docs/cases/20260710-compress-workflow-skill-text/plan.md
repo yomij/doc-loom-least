@@ -217,12 +217,12 @@ Case evidence:
 **Files:** `skills/_shared/references/shared-protocol.md`, `plan.md`,
 `case_state.yaml`, and `execution.md`.
 
-- [ ] Record current counts and semantic characterization.
-- [ ] Deduplicate ownership prose, authorization exclusions, Atomic Commit
+- [x] Record current counts and semantic characterization.
+- [x] Deduplicate ownership prose, authorization exclusions, Atomic Commit
   wording, and shared closure facts without removing shared semantics.
-- [ ] Run line/word budgets, semantic positive/negative checks, Skill
+- [x] Run line/word budgets, semantic positive/negative checks, Skill
   consumer-path inspection, YAML, symlink, and diff checks.
-- [ ] Create the declared atomic shared-contract commit.
+- [x] Create the declared atomic shared-contract commit.
 
 ### Task 3: Compress Review and stage Skills
 
