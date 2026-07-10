@@ -229,13 +229,13 @@ Case evidence:
 **Files:** `review`, `tdd-execute`, `plan-confirm`, `doc-sync-close`, plus case
 evidence.
 
-- [ ] Keep complete rules only at the approved owner and replace consumer
+- [x] Keep complete rules only at the approved owner and replace consumer
   restatements with short references and local gates.
-- [ ] Preserve frontmatter triggers, all stage ownership, and prior-case
+- [x] Preserve frontmatter triggers, all stage ownership, and prior-case
   behavioral anchors.
-- [ ] Run Skill validation, total budgets, semantic positive/negative checks,
+- [x] Run Skill validation, total budgets, semantic positive/negative checks,
   YAML, symlink, and diff checks.
-- [ ] Create the declared atomic Skill-contract commit.
+- [x] Create the declared atomic Skill-contract commit.
 
 ### Task 4: Run mandatory review and fix loop
 

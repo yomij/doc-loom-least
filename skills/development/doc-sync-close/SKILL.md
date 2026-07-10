@@ -5,144 +5,103 @@ description: Sync docs and close a Doc Loom case, including final review evidenc
 
 # doc-sync-close
 
-Read when trigger condition is met:
-
-- `references/shared-protocol.md` when: writing closure_status, checking
-  artifact policy, or resolving authority order.
-- `references/doc-update-rules.md` when: any L1 authority doc may change, L3
-  derived docs need sync, or writing the authority change table.
+Read `references/shared-protocol.md` for identity, status, artifacts, authority,
+and Atomic Commit rules. Read `references/doc-update-rules.md` before any L1
+authority, L3 derived, or authority-change-table work.
 
 ## Inputs
 
-- `plan.md`, especially Goal, Non-goals, Decisions, Acceptance Criteria,
-  Documentation Impact, and Plan Amendments.
-- `execution.md` when it exists or Artifact Policy requires it.
-- Test and verification results.
-- Current diff.
-- `review_risk` from execution or user context.
-- The final Post-execution Engineering, Spec, and aggregate verdicts for an
-  eligible case.
-- The approved Atomic Commit Strategy and actual task/refactor/review-fix
-  commit mapping.
-- User-provided findings, including pasted `review` output, if any.
-- Related authority and L3 docs.
-- `case_state.yaml`.
-- Governance plans only when checking existing blocked decisions or recording
-  governance follow-up. See `references/doc-update-rules.md` for path conventions.
+- Plan Goal, Non-goals, Decisions, Acceptance, Docs Impact, and amendments.
+- Existing/required execution evidence, checks, current diff, and `review_risk`.
+- For eligible cases: final Engineering/Spec/aggregate review evidence and
+  actual task/refactor/review-fix commit mapping.
+- User-provided findings; related authority/L3 docs; `case_state.yaml`.
+- Governance plans only for existing blocked decisions or governance follow-up.
 
-Per shared protocol Case Identity, this skill consumes existing case identity.
-If the user asks for documented closure without case docs, route back to
-`docloom-workflow` for minimal case identity.
+This skill consumes an existing case. Documented closure without case docs
+routes to `docloom-workflow` for minimal identity.
 
-## Closure Status
+## Status
 
-Use the closure status set from `references/shared-protocol.md`.
+Use the exact closure status set in shared-protocol.
 
-Key distinctions:
-- `Done`: all acceptance criteria are verified as met; required review and
-  commit gates pass; the closure commit succeeds; the case-related worktree is
-  clean.
-- `Done with Caveats`: main goal complete, residual risk or follow-up remains.
-- For other statuses, record the specific reason in `closure.md`.
+- `Done`: the consolidated Done Gate below passes, the closure commit succeeds,
+  and case-related worktree scope is clean.
+- `Done with Caveats`: main goal is complete but residual risk/follow-up remains.
+- Any other status records its specific reason in `closure.md`.
 
 ## Workflow
 
-1. Determine the candidate closure status from acceptance evidence, user
-   instruction, and execution state.
-2. For an eligible case, verify both review axes and the aggregate result are
-   present, material findings are resolved, and required semantic commits
-   exist.
-3. Verify each acceptance criterion as `met`, `partially_met`, `not_met`,
-   `not_verified`, or `out_of_scope`.
-4. Summarize code changes, tests, unrun checks, commits, and risks.
-5. Identify knowledge changes without turning closure into a governance
-   interview.
-6. Sync L2 operational docs.
-7. Mechanically sync safe L3 derived docs when allowed.
-8. Handle authority changes as proposals or confirmed narrow patches.
-9. Write `closure.md` without predicting or embedding its own commit hash.
-10. After `closure.md` is written and checked, update `case_state.yaml`.
-11. Refresh derived discovery docs only when closure evidence justifies it:
-    `docs/cases/README.md` for dashboard-relevant case changes and
-    `docs/product/current-state.md` for operational product-state changes.
-    Keep both non-authoritative; do not invent product direction.
-12. When the approved plan requires an atomic closure commit, stage only the
-    closure unit, inspect the staged diff, run final checks, create the declared
-    closure commit, and verify it from Git metadata and trailers.
-13. Write `handoff.md` only for `Paused`, `Blocked`, or another future resume
-    point. Use `templates/handoff.md`.
-14. Report unqualified `Done` only after required closure-commit success and a
-    clean case-related worktree.
+1. Choose candidate status from acceptance evidence, user instruction, and
+   execution state.
+2. Apply the Done Gate and map every criterion to `met`, `partially_met`,
+   `not_met`, `not_verified`, or `out_of_scope`.
+3. Summarize changes, checks, unrun verification, commits, risks, and knowledge
+   impact without repeating the plan or interim narrative.
+4. Sync L2 operational docs and mechanically safe L3 derived docs.
+5. Handle authority as a proposal or a confirmed narrow patch.
+6. Write and validate `closure.md` without predicting its own commit hash; then
+   update `case_state.yaml`.
+7. Refresh `docs/cases/README.md` only for dashboard-relevant closure and
+   `docs/product/current-state.md` only for evidenced product-state change.
+   Both remain non-authoritative; invent no product direction.
+8. When required, stage only the closure unit, inspect it, run final checks,
+   create the declared closure commit, and verify Git metadata/trailers.
+9. Write `handoff.md` only for `Paused`, `Blocked`, or another future resume
+   point, using `templates/handoff.md`.
+10. Report unqualified `Done` only after closure-commit success and clean
+    case-related worktree scope.
 
-## Acceptance Mapping
+## Done Gate
 
-| Acceptance result | Closure handling |
+Unqualified `Done` requires all of:
+
+- every acceptance criterion is `met` or explained `out_of_scope`;
+- required `execution.md` exists; if optional/absent, `closure.md` carries full
+  verification evidence;
+- any material deviation returned to `plan-confirm` or was explicitly confirmed;
+- user-provided material findings affecting acceptance are resolved;
+- high `review_risk` has sufficient resolution evidence;
+- for eligible cases, the exact review baseline, separate Engineering and Spec
+  verdicts, aggregate `pass`, material-finding disposition, and re-review history
+  are present, with residual Minor findings/evidence caveats recorded;
+- required semantic commits are verified from Git, not case prose, and actual
+  task/refactor/review-fix hashes are recorded;
+- required closure path and closed state are committed successfully with no
+  unexplained case-related worktree changes.
+
+Acceptance handling when the gate cannot pass:
+
+| Result | Handling |
 |---|---|
-| All `met` | May be `Done`; use `Done with Caveats` if residual risk or unconfirmed authority proposal remains. |
-| Any `not_verified` | Verify, get user confirmation, record caveat, or choose `Blocked` / `Done with Caveats`. |
-| Any `partially_met` | Not `Done` unless user accepts the remainder as follow-up; then use `Done with Caveats`. |
-| Any `not_met` | Usually `Blocked`, `Paused`, `Cancelled`, or `Superseded`; only user goal change can allow caveated closure. |
-| `out_of_scope` | Does not block closure, but explain why it is out of scope. |
+| `not_verified` | Verify, obtain user decision, record a caveat, or choose `Blocked`/`Done with Caveats`. |
+| `partially_met` | Not `Done`; only accepted follow-up permits `Done with Caveats`. |
+| `not_met` | Usually `Blocked`, `Paused`, `Cancelled`, or `Superseded`; only a changed user goal permits caveated closure. |
+| `out_of_scope` | Does not block, but explain the boundary. |
 
-Required execution evidence:
+Missing optional `execution.md` alone does not downgrade closure. Closure owns
+final acceptance and verification; include prior detail only when needed to
+justify status.
 
-- If `execution.md` exists, use it as execution evidence.
-- If `execution.md` records a material deviation, verify it returned to
-  `plan-confirm` or has explicit user confirmation before unqualified `Done`.
-- If Artifact Policy required `execution.md` but it is absent, record an
-  evidence gap and do not use unqualified `Done`.
-- If Artifact Policy did not require `execution.md`, closure may carry the full
-  verification evidence itself.
-- Missing non-required `execution.md` does not automatically downgrade closure.
-- For an eligible case, `execution.md` must record the exact review baseline,
-  separate Engineering and Spec verdicts, aggregate `pass`, material finding
-  disposition, and actual task/fix commit hashes.
-- For a plan with an Atomic Commit Strategy, verify required commits from Git;
-  case prose alone is not commit evidence.
+## Knowledge And Authority
 
-Closure owns final acceptance status and final verification summary. Do not
-repeat the full planned task list from `plan.md` or interim process narrative
-from `execution.md` unless that evidence is needed to justify the final status.
+Classify knowledge as `authority_candidate`, `ADR_candidate`,
+`regression_candidate`, `runbook_candidate`, `derived_sync`, `case_local`, or
+`none`. Record the proposal/follow-up/sync/local note; never silently promote it.
 
-## Knowledge Changes
+Check whether the final diff or confirmed decision creates a reusable future
+constraint. Explain `case_local`; unresolved `authority_candidate` is residual
+risk and requires `Done with Caveats` instead of `Done`.
 
-Classify possible knowledge changes as:
+Default to a proposed authority change in closure. Apply a patch only with
+explicit confirmation of the concrete file/boundary and all
+`references/doc-update-rules.md` conditions. An approved plan naming those exact
+files and boundaries counts. Structural, high-risk, conflict-heavy, new-area,
+bridge/archive, or lifecycle authority work becomes a governance batch/new case.
 
-- `authority_candidate`
-- `ADR_candidate`
-- `regression_candidate`
-- `runbook_candidate`
-- `derived_sync`
-- `case_local`
-- `none`
+## State And Closure Commit
 
-Do not silently promote knowledge into authority. Classify the knowledge change
-and record the authority proposal, follow-up, derived sync, or case-local note.
-
-Before closing, check whether the final diff or confirmed decisions create a
-reusable default that may constrain future work. If so, record it as
-`authority_candidate`, `ADR_candidate`, or `runbook_candidate`. If it is
-classified as `case_local`, explain why it does not constrain future work. An
-unresolved `authority_candidate` is residual risk; use `Done with Caveats`
-instead of unqualified `Done`.
-
-## Authority Handling
-
-Default: write a proposed change in closure.
-
-Apply an authority patch only when the user explicitly confirms a narrow patch
-and all conditions in `references/doc-update-rules.md` are satisfied. Approval
-of a current plan that names the concrete authority files and exact change
-boundaries counts as that confirmation for the approved case.
-
-Structural, high-risk, conflict-heavy, new authority-area, bridge/archive, or
-lifecycle changes go to a new governance batch or a new case.
-
-## State Update
-
-Write `closure.md` before updating `case_state.yaml`.
-
-State shape:
+Write `closure.md` before state:
 
 ```yaml
 phase: closed
@@ -151,40 +110,23 @@ closure_path: docs/cases/<case-id>/closure.md
 last_updated: <timestamp>
 ```
 
-If state update fails, `closure.md` remains the truth record, but do not claim
-workflow fully synced.
+If state update fails, closure remains evidence truth but the workflow is not
+fully synced. For Atomic Commit plans, uncommitted closure is incomplete: the
+declared closure commit must contain both closure path and closed state. On
+commit failure, preserve recovery evidence, do not report unqualified `Done`,
+and remain `doc_syncing` until Git proves the unit.
 
-For plans declaring an Atomic Commit Strategy, a present but uncommitted
-`closure.md` is not completed closure. Verify the closure path and closed state
-are contained in the declared closure commit. If the commit fails, preserve the
-evidence for recovery but do not report unqualified `Done`; resume remains at
-`doc_syncing` until Git proves the closure unit is committed.
-
-If dashboard or product-state refresh fails or is not justified by evidence, do
-not roll back closure. Record the gap or skip reason; authority and case
-artifacts remain truth.
-
-review_risk is consumed at closure. Do not change it during closure unless new
-closure-process evidence changes the assessment. Record the consumed value and
-its resolution in `closure.md`.
+A skipped/failed dashboard or product-state refresh does not roll back closure;
+record why. Consume final `review_risk`; change it only when new closure evidence
+changes the assessment, and record its disposition.
 
 ## Gates
 
-- Authority update requires concrete user confirmation -> wait for user input.
-- Unmet acceptance criteria cannot be `Done` -> wait for user input.
-- User-provided Critical or Important findings that affect acceptance cannot be
-  ignored.
-- Eligible case without final Engineering and Spec verdicts, aggregate `pass`,
-  or resolved material findings cannot be unqualified `Done`.
-- High `review_risk` with insufficient evidence cannot be unqualified `Done`.
-- Unresolved material deviation cannot be unqualified `Done`.
-- Missing `execution.md` required by Artifact Policy cannot be unqualified
-  `Done` -> wait for user input.
-- Case docs that end, pause, block, cancel, or supersede must get `closure.md`.
-- Do not update `case_state.yaml` to closed before closure is written.
-- Do not modify plan semantics; at most append a closure link or short note.
-- Do not modify code, tests, dependencies, scripts, lockfiles, CI, acceptance
-  criteria, or plan semantics to make closure pass.
-- Do not include implementation fixes in the closure commit.
-- Required closure commit failure or unexplained case-related worktree changes
-  block an unqualified `Done` report.
+- Authority patch without concrete confirmation -> wait for user input.
+- A case that ends/pauses/blocks/cancels/is superseded requires `closure.md`.
+- Never close state before writing closure or modify plan semantics beyond a
+  closure link/note.
+- Never change code, tests, dependencies, scripts, lockfiles, CI, acceptance, or
+  plan semantics to make closure pass; closure commits contain no implementation
+  fixes.
+- Any failed Done Gate condition blocks an unqualified `Done` report.

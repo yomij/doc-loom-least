@@ -41,8 +41,9 @@ Semantic locks:
 
 - Approved plan committed as `3f65c73`.
 - Authority compression committed as `33f6692` and verified.
-- Shared protocol compressed from 344 lines / 2,183 words to 285 lines /
-  1,689 words while retaining all shared contracts.
+- Shared protocol compressed and committed as `e2fdafb`.
+- Review and stage Skills compressed while retaining their owned triggers,
+  gates, evidence, state, and commit behavior.
 
 ## TDD Applicability
 
@@ -58,7 +59,7 @@ Semantic locks:
 | Plan commit | met | `3f65c73d9da545d247c46059121445bfdc9a82c6` |
 | Authority compression | met | `development-flow.md` 175→80 lines; `git.md` 84→61 lines; required principles retained |
 | Shared compression | met | `shared-protocol.md` 344→285 lines and 2,183→1,689 words; semantic anchors and consumer links retained |
-| Skill compression | pending | Task 3 |
+| Skill compression | met | Review 322→242 lines; execute 308→209; close 190→132; plan 187→131; all Skill/frontmatter and semantic checks pass |
 | Final review | pending | Task 4 |
 | Closure commit | pending | Task 5 |
 
@@ -76,6 +77,12 @@ Semantic locks:
 | Shared positive/negative semantic `rg` | pass | Ownership, state derivation, artifacts, closure, routing, authorization, atomic, legacy, degraded Git, and Fast-Path anchors retained; stale wording absent |
 | Shared consumer symlink/read checks | pass | All seven existing shared-protocol consumer links resolve to the owner file |
 | Shared `git diff --check` | pass | No whitespace errors |
+| Skill post-compression `wc -l -w` | pass | Seven targets total 1,140 lines / 6,511 words, below 1,355 / 8,600; no target grew |
+| Four-Skill `quick_validate.py` and YAML parse | pass | All Skill frontmatter plus plan/state YAML valid |
+| Skill semantic positive/stale-rule `rg` | pass | Dual-axis review, exact delta, aggregate, invocation/fix loop, requirements/plan commits, history refresh, and Done gate retained; stale rules absent |
+| Reference and broken-symlink checks | pass after command correction | All referenced paths readable; `find -L skills -type l -print` empty |
+| First combined reference/symlink command | retry | Used zsh special variable `path`, which hid `PATH` from later commands; rerun with `ref_file` passed |
+| Skill `git diff --check` | pass | No whitespace errors |
 
 ## Review Risk
 
@@ -88,3 +95,4 @@ contracts. Final Engineering/Spec review must prove that no gate was weakened.
 |---|---|---|
 | plan | `3f65c73d9da545d247c46059121445bfdc9a82c6` | YAML/frontmatter, staged scope, diff, trailers |
 | authority-contracts | `33f6692836ebe0a23eedb53948eb4f92096870fc` | Principle anchors, counts, diff, trailers |
+| shared-contract | `e2fdafb2111926da6f72c5772021b9e5b800153e` | Shared semantics, counts, consumer links, diff, trailers |

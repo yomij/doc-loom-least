@@ -5,266 +5,197 @@ description: Read-only evidence review of a design doc, proposal, code diff, tes
 
 # review
 
-Perform read-only evidence review through one of two entry paths:
+Use one entry path:
 
-- explicit conversation review requested by the user;
+- explicit user-requested conversation review;
 - workflow-owned `Post-execution` review invoked by `tdd-execute` under the
-  current approved plan.
+  current approved eligible plan.
 
-Only `Post-execution` may run without a separate review request. Current-plan
-approval authorizes that read-only gate for the approved case; it does not make
-ad-hoc review automatic.
+Only `Post-execution` needs no separate review request. Plan approval authorizes
+that case-scoped gate, never automatic ad-hoc review.
 
-When the user explicitly asks for over-engineering, simplification, deletion,
-redundancy, YAGNI, or ponytail-style review, run `Complexity-only` mode inside
-this skill. This is mode selection, not workflow routing.
+## Modes
 
-Do not create files, update state, route workflow, close a case, or write
-authority/governance proposals.
+- `Standard`: default code, docs, tests, design, proposal, or evidence review.
+- `Complexity-only`: only for explicit over-engineering, simplification,
+  deletion, redundancy, YAGNI, or ponytail requests.
+- `Dual-pass`: explicit request for Standard plus complexity review.
+- `Post-execution`: mandatory completed-work gate invoked by `tdd-execute`; run
+  isolated Engineering and Spec axes and aggregate without compensation.
 
-`tdd-execute` may persist the Post-execution verdict and findings in
-`execution.md`. If the user later provides ad-hoc findings to `doc-sync-close`,
-closure may consume them as user-provided findings. `review` itself still
-writes no state.
+Complexity mode is internal mode selection, not routing. It does not assess
+correctness, security, performance, coverage, or other Standard concerns. Read
+`references/complexity-only.md` for its scope, tags, exemptions, and output; in
+`Dual-pass`, use it only for the complexity section.
+
+## Read-Only Gate
+
+Do not create or modify files, code, docs, artifacts, state, authority, or
+governance proposals; do not route workflow or close a case. `tdd-execute` may
+persist Post-execution output in `execution.md`, and `doc-sync-close` may consume
+later user-provided ad-hoc findings, but `review` writes nothing.
 
 ## Resolve Target
 
-If the user specifies an object, review that object.
+Use a user-specified object. Otherwise:
 
-If no object is specified:
+1. `Post-execution`: approved plan, its exact `base_commit`, and complete case
+   delta.
+2. Obvious current conversation object.
+3. Non-empty current Git diff.
+4. Explicit current case materials.
+5. One minimal clarification question.
 
-1. In `Post-execution`, use the approved case plan, its exact `base_commit`, and
-   the complete case delta defined below.
-2. Otherwise use the current conversation object when obvious.
-3. Else review current git diff when non-empty.
-4. Else review current case materials when a case is explicit.
-5. Else ask one minimal clarification question.
+Never default to the whole repository or all docs.
 
-Do not default to reading the whole repo or all docs.
+## Maturity
 
-## Review Mode
+State one for `Standard`/`Dual-pass`; omit for `Complexity-only` unless relevant:
 
-Use one mode:
+- `Draft`: requirements, assumptions, boundaries, facts, design coherence.
+- `In-progress`: changes, gaps, plan conformance, risk drift.
+- `Completed`: acceptance evidence, test credibility, docs impact, residual risk.
 
-- `Standard`: default for ordinary review, code review, docs review, test
-  review, design review, or "check this" requests.
-- `Complexity-only`: use only when the user explicitly asks for
-  over-engineering, simplification, deletion, redundancy, YAGNI, or
-  ponytail-style review.
-- `Dual-pass`: use only when the user asks for both normal review and
-  complexity review.
-- `Post-execution`: use only when `tdd-execute` invokes the mandatory gate for
-  an eligible case under an approved plan. Run separate Engineering and Spec
-  axes, then aggregate them without compensation.
-
-`Complexity-only` is not a correctness, security, performance, or coverage
-review. If the user only asks for complexity, do not report those issues as
-findings; mention that a Standard review is needed if they want that scope.
-
-## Review Maturity
-
-For `Standard` and `Dual-pass`, state one maturity. For `Complexity-only`, omit
-maturity unless it affects whether something is over-designed.
-
-- `Draft`: review requirements, assumptions, boundaries, facts, and design
-  coherence.
-- `In-progress`: review current changes, known gaps, plan conformance, and risk
-  drift.
-- `Completed`: review acceptance evidence, test credibility, documentation
-  impact, and residual risk.
-
-`Post-execution` always uses `Completed` maturity.
+`Post-execution` is always `Completed`.
 
 ## Post-Execution Preflight
 
-Before either axis runs:
+Before either axis:
 
-1. Read the current approved `plan.md`, approved Plan Amendments, case evidence,
-   and project instructions.
-2. Read `base_commit` from the approved plan. Validate that exact commit with
-   `git rev-parse --verify <base_commit>^{commit}`. Do not silently replace it
-   with a merge-base or three-dot comparison.
-3. Build the complete target from all case-related changes:
-   - committed delta: `git diff <base_commit>..HEAD` and
+1. Read project instructions, the current approved plan and amendments, and case
+   evidence.
+2. Validate the plan's exact baseline with
+   `git rev-parse --verify <base_commit>^{commit}`. Never substitute a merge-base
+   or three-dot comparison.
+3. Build the complete case target from:
+   - `git diff <base_commit>..HEAD` and
      `git log <base_commit>..HEAD --oneline`;
-   - staged tracked changes: `git diff --cached`;
-   - unstaged tracked changes: `git diff`;
-   - untracked files: `git ls-files --others --exclude-standard`, followed by
-     reading each case-related file.
-4. Explain unrelated workspace changes and exclude them. An unresolved mixed
-   file or unexplained change is an evidence gap, not a pass.
-5. Verify planned tasks, required tests or alternative checks, preliminary
-   acceptance evidence, and expected task commits are complete.
-6. Resolve the Spec source in this order: current approved plan; approved Plan
-   Amendments; confirmed current-task decisions in case evidence; relevant
-   authority, ADRs, and public contracts; upstream issue or PRD referenced by
-   the plan.
+   - `git diff --cached` and `git diff`;
+   - `git ls-files --others --exclude-standard`, then read every case-related
+     untracked file.
+4. Explain and exclude unrelated changes. A mixed file that cannot be resolved
+   is an evidence gap.
+5. Verify planned tasks, tests/alternative checks, preliminary acceptance
+   evidence, and expected task commits.
+6. Resolve Spec authority in order: approved plan; approved amendments;
+   confirmed case decisions; relevant authority/ADR/public contracts; referenced
+   upstream issue or PRD.
 
-An unresolved baseline, empty eligible target, missing trustworthy Spec source,
-unexplained case change, or missing material command evidence yields
-`insufficient_evidence`. In Git degraded mode, report the evidence gap; do not
-invent a baseline or commit history.
+Return `insufficient_evidence` for an unresolved/invalid baseline, empty eligible
+target, missing trustworthy Spec source or material command evidence, or
+unexplained case change. In Git degraded mode, report the gap and invent no
+baseline or history.
 
-## Evidence Selection
+## Evidence And Checks
 
-Read the smallest relevant evidence:
+Read only relevant target files/diffs, cited sources, active authority/ADR/
+contracts, related code/tests, and user-provided command/runtime evidence.
+`case_state.yaml` is routing, not evidence; read it only for state-consistency
+review. Missing evidence is a gap, never a passing claim.
 
-- Target document, diff, or files.
-- Explicitly cited sources.
-- Directly related constitution, active authority, ADR, or contract.
-- Code/tests relevant to the target claim.
-- User-provided command output or runtime evidence.
-
-`case_state.yaml` is a routing signal, not evidence. Read it only when the
-review target is state consistency.
-
-If evidence is missing, report an evidence gap rather than converting it into a
-passing claim. In `Post-execution`, material gaps participate in the aggregate
-gate result.
-
-## Fact Authority
-
-Follow the fact authority order in `references/shared-protocol.md`.
-
-## Review Checks
-
-Core checks: claim clarity, evidence support, stated assumptions/non-goals,
-verifiable success criteria, appropriate fact sources, and no draft/derived/
-archive/scratch material treated as authority.
+Follow fact authority in `references/shared-protocol.md`. Check claim clarity,
+evidence, assumptions/non-goals, verifiable success criteria, source authority,
+and that draft/derived/archive/scratch material is not promoted as fact.
 
 Type-specific checks:
-- Code/diff: requirement or plan match, scope control, edge/error handling, and
-  no authority, contract, ADR, or public API violation.
-- Tests/TDD: behavior and failure-path coverage, no mock/implementation-detail
-  testing, realistic mock structures, and command evidence matching TDD claims.
-- Documentation governance: authority, case evidence, derived, archive, and
-  scratch separated; no unconfirmed promotion; `source_of_truth` correct.
 
-For `Complexity-only`, read `references/complexity-only.md` and use only that
-scope, tags, exemptions, and output contract. For `Dual-pass`, use it only for
-the final complexity section.
+- Code/diff: requirement/plan match, scope, edges/errors, authority, contract,
+  ADR, and public API safety.
+- Tests/TDD: behavior/failure coverage, credible Red/Green evidence, realistic
+  mocks, and no private-implementation assertions.
+- Documentation governance: correct separation and `source_of_truth`, with no
+  unconfirmed authority promotion.
 
-For `Standard` and `Dual-pass` high-risk targets, check direct evidence for
-relevant High-Risk Topics from `references/shared-protocol.md`. Missing key
-evidence in these areas should usually be `Insufficient evidence` or an
-Important/Critical finding, not a passing assessment.
+For high-risk Standard/Dual-pass targets, require direct evidence for triggered
+High-Risk Topics from `references/shared-protocol.md`. Missing key evidence is
+normally `Insufficient evidence` or an Important/Critical finding.
 
 ## Post-Execution Axes
 
-Run the axes as separate evidence passes. Parallel sub-agents are optional, not
-a dependency. When one reviewer performs both passes, finish and record one
-axis before loading the other axis brief. Neither axis may use the other axis's
-verdict as evidence.
+Finish and record each evidence pass separately; neither may use the other's
+verdict as evidence. Parallel subagents are optional. If one reviewer performs
+both, finish one axis before loading the other brief.
 
-### Engineering Axis
+### Engineering
 
-Review technical and workflow soundness against the smallest relevant set of
-project instructions, active standards, authority, ADRs, contracts, changed
-and adjacent implementation, tests, configuration, and current command
-evidence. Check:
+Check the smallest relevant set of instructions, standards, authority, ADRs,
+contracts, changed/adjacent implementation, tests, config, and command evidence:
 
-- correctness, plausible regressions, edge cases, errors, and failure handling;
-- triggered security, privacy, permission, and other High-Risk Topics;
-- test credibility, relevant failure paths, and whether reported tools ran;
-- public contracts, authority, ADRs, repository standards, and Git health;
-- complete-delta and commit evidence, including unrelated-change isolation;
+- correctness, regressions, edges, errors, and failure handling;
+- triggered High-Risk Topics;
+- test credibility, failure paths, and claimed tool execution;
+- public contracts, repository standards, authority/ADR, and Git health;
+- complete-delta/commit evidence and unrelated-change isolation;
 - unnecessary complexity, coupling, duplication, speculative behavior, and
-  the applicable tags/exemptions in `references/complexity-only.md`.
+  applicable complexity tags/exemptions.
 
-Tool-enforced issues may be omitted from prose only when the relevant tool
-actually ran and passed for the reviewed target.
+Omit tool-enforced issues only when that tool ran and passed for the target.
 
-### Spec Axis
+### Spec
 
-Compare the complete target with the approved task object. Check:
-
-- Goal, Non-goals, confirmed Decisions, and Acceptance Criteria;
-- approved file/responsibility boundaries and Plan Amendments;
-- missing, partial, or incorrectly implemented behavior;
-- scope creep, Non-goal violations, and unsupported acceptance claims;
-- directly relevant authority, ADR, contract, issue, or PRD requirements.
-
-Quote or point to the governing plan/spec evidence for each finding. A
-trustworthy Spec source is mandatory for an eligible persistent case.
+Compare the complete target with Goal, Non-goals, Decisions, Acceptance
+Criteria, approved file/responsibility boundaries and amendments, plus directly
+relevant authority, ADR, contract, issue, or PRD requirements. Find missing,
+partial, wrong, or unrequested behavior; scope creep; Non-goal violations; and
+unsupported acceptance claims. Cite governing Spec evidence for every finding.
+A trustworthy Spec source is mandatory for an eligible case.
 
 ## Post-Execution Gate
 
-Keep Engineering and Spec reports visible separately, then compute exactly one
-aggregate result:
+Keep both reports visible, then compute exactly one aggregate result:
 
 | Condition | Result |
 |---|---|
 | Either axis has unresolved Critical or Important findings | `changes_required` |
 | Either axis lacks evidence needed to judge material risk | `insufficient_evidence` |
-| Both axes have only Minor findings or no findings | `pass` |
+| Both axes have only Minor findings or none | `pass` |
 
-Deduplicate handling by root cause when useful, but never remove a finding from
-an axis or let one axis compensate for the other. Return the result to
-`tdd-execute`; `review` remains read-only and does not perform fixes, commits,
-state updates, routing, or closure.
+Deduplicate handling by root cause when useful, but never remove a finding or
+let axes compensate. Return only this gate result to `tdd-execute`; fixes,
+commits, state, routing, and closure remain outside `review`.
 
 ## Output Contract
 
-For `Standard` and the Standard section of `Dual-pass`, lead with the decision a
-human needs, then findings, then evidence details. Keep evidence explicit, but
-do not front-load audit tables unless the source set is large or contested.
-
-Use this structure:
+For `Standard` and the Standard part of `Dual-pass`, lead with the human
+decision, then findings and evidence. Use:
 
 ```md
 ## Verdict
 No material issue found / Material issues found / Insufficient evidence
-
-One-sentence summary of the review result.
+One-sentence result.
 
 ## Findings
-
 ### Critical
-
 ### Important
-
 ### Minor
 
 ## Evidence Gaps
-
 ## Scope
-
 ## Review Context
 - Mode: Standard / Dual-pass
 - Maturity: Draft / In-progress / Completed
-- Reviewed: `source`; why included; trust/freshness when relevant.
+- Reviewed: `source`; reason; trust/freshness when relevant.
 - Not reviewed: `source`; reason; impact.
 ```
 
-If there are many sources, contested sources, or trust/freshness matters, use a
-compact table inside `Review Context`:
+Critical/Important means `Material issues found`; Minor-only/none means `No
+material issue found`; missing key evidence that prevents material judgment
+means `Insufficient evidence`. Write `None within reviewed scope` when empty.
+For many or contested sources, use `Source | Why Included | Trust / Freshness`
+as a compact context table.
 
-```md
-| Source | Why Included | Trust / Freshness |
-|---|---|---|
-```
-
-Verdict rules:
-
-- Critical or Important finding -> `Material issues found`.
-- Only Minor or no finding -> `No material issue found`.
-- Missing key evidence prevents judging Critical/Important -> `Insufficient evidence`.
-
-If there are no findings, say `None within reviewed scope` under `Findings`.
-
-For `Post-execution`, use this compact durable contract for each axis, followed
-by the aggregate gate:
+For each Post-execution axis, persist this compact contract, then the aggregate:
 
 ```md
 ## Engineering
 - Verdict: No material issue found / Material issues found / Insufficient evidence
-- Findings: Critical / Important / Minor, using the standard finding format
+- Findings: Critical / Important / Minor, using the finding format
 - Evidence Gaps:
 - Scope:
 
 ## Spec
 - Verdict: No material issue found / Material issues found / Insufficient evidence
-- Findings: Critical / Important / Minor, using the standard finding format
+- Findings: Critical / Important / Minor, using the finding format
 - Evidence Gaps:
 - Scope:
 
@@ -276,47 +207,36 @@ by the aggregate gate:
 
 ## Finding Format
 
-Each finding must be locatable and verifiable:
-
 ```md
 - `path/file.md:42`: Problem in one sentence.
-  Evidence: Specific observed evidence or contradiction.
-  Impact: Why this matters to correctness, governance, risk, or user outcome.
+  Evidence: Specific observation or contradiction.
+  Impact: Effect on correctness, governance, risk, or user outcome.
   Required correction: Condition that resolves the issue.
 ```
 
-The severity is supplied by the section heading. Do not repeat `Severity:` per
-finding. If a line number is not available, use the nearest stable heading,
-symbol, test name, command, or artifact path.
+Use a stable heading, symbol, test, command, or path when no line exists. The
+section supplies severity:
 
-Severity anchoring:
-- Critical: security vulnerability, data loss path, auth bypass, public
-  contract violation with no workaround. Example: API endpoint allows
-  unauthenticated data deletion.
-- Important: significant logic error, missing error handling, test gap for
-  public contract, authority fact treated as derived. Example: a public API
-  endpoint lacks error handling for malformed input.
-- Minor: cosmetic issue, naming inconsistency, stale link, redundant code.
-  Example: a doc references a moved file path.
+- Critical: security vulnerability, data loss, auth bypass, or public-contract
+  break without workaround.
+- Important: significant logic/error-handling defect, public-contract test gap,
+  or authority fact treated as derived.
+- Minor: cosmetic/naming issue, stale link, or redundant code.
 
-`Required correction` describes the condition for resolving the issue. It must
-not assign workflow next owner or route.
+`Required correction` states a resolution condition, never a route or owner.
 
 ## Subagent Review
 
-If the user explicitly requests independent or subagent review, a subagent may
-return findings. The main agent must merge, deduplicate, grade severity, and
-keep this output contract. Subagent findings do not become workflow state.
+Use subagents only when the user explicitly requests independent/subagent
+review. The main agent merges/deduplicates findings, assigns severity, and keeps
+this contract; subagent output never becomes workflow state.
 
 ## Gates
 
-- Ad-hoc `Standard`, `Complexity-only`, and `Dual-pass` review require explicit
-  user intent. `Post-execution` requires an approved eligible plan and
-  invocation by `tdd-execute`.
-- Read-only; do not write files or modify code, docs, state, or artifacts.
-- Do not output a workflow route, next owner, ready-to-close claim, closure
-  verdict, authority proposal, or governance follow-up. `Post-execution` may
-  output only its aggregate gate result for `tdd-execute` to consume.
-- Do not package missing evidence as passing.
-- `Complexity-only` does not replace Standard review for correctness, security,
-  performance, test credibility, or High-Risk Topics.
+- Ad-hoc modes require explicit user intent; `Post-execution` requires an
+  approved eligible plan and `tdd-execute` invocation.
+- Do not present missing evidence as a pass.
+- Output no workflow route, next owner, ready-to-close/closure verdict, authority
+  proposal, or governance follow-up. Post-execution may output only its aggregate
+  result for `tdd-execute`.
+- Complexity-only never replaces Standard review for non-complexity concerns.

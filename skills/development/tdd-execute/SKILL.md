@@ -5,304 +5,205 @@ description: Execute an approved Doc Loom case plan using TDD discipline, semant
 
 # tdd-execute
 
-Ordinary one-shot coding tasks and simple document edits do not automatically
-enter this skill.
+One-shot work and simple docs do not automatically enter this skill. Execute
+only with an approved current plan and current authorization: same-turn plan
+approval, execute/continue intent, valid Fast-Path, or explicit reconfirmation
+of an older plan. A recommendation is not authorization.
 
-A recommendation is not execution authorization; execute only after
-`plan-confirm` has produced an approved plan with a current confirmation log.
-Execution authorization means same-turn current-plan approval, execute/continue
-intent, valid Fast-Path, or explicit reconfirmation of an older approved plan.
+Read:
 
-Read when trigger condition is met:
-
-- `references/shared-protocol.md` when: updating case_state.yaml phase,
-  checking artifact policy, or resolving authority order.
-- `references/tdd-exceptions.md` when: the plan declares TDD Required: No, or
-  execution encounters a situation that may require an exception amendment.
-- `../../assessment/review/SKILL.md` when: the approved plan declares a
-  Post-Execution Review Strategy or the case is eligible for the mandatory
-  final review gate.
+- `references/shared-protocol.md` for state, artifacts, authority,
+  authorization, Atomic Commit, and compatibility rules.
+- `references/tdd-exceptions.md` when `TDD Required: No` or considering an
+  exception amendment.
+- `../../assessment/review/SKILL.md` for an eligible or plan-declared
+  Post-execution gate.
 
 ## Preflight
 
-Before editing, read:
+Read the case plan/state, required context brief, relevant code/tests, and
+project command/package-manager instructions. Verify:
 
-- `docs/cases/<case-id>/plan.md`
-- `case_state.yaml`
-- Referenced context brief when high risk, resuming, conflict-related, or
-  authority/public contract/workflow-related.
-- Relevant code and tests.
-- Project command and package-manager instructions.
+- `plan.md` exists with `status: approved`, `plan_version`, `approved_by`,
+  `approved_at`, and a matching Confirmation Log entry;
+- Fast-Path approval includes its verified conditions;
+- the case is not unrecoverably closed;
+- Goal, Non-goals, Decisions, Acceptance Criteria, and TDD Applicability are
+  executable and clear;
+- staged, unstaged, and untracked changes relative to `base_commit` are
+  explainable;
+- current execution authorization exists;
+- eligible cases declare Post-Execution Review and Atomic Commit strategies;
+- any required atomic plan commit already contains the approved plan and
+  routing state.
 
-Verify:
-
-- `plan.md` exists.
-- `status: approved`.
-- `plan_version` exists.
-- `approved_by` and `approved_at` exist, and `Confirmation Log` records
-  approval for the current `plan_version`.
-- If `approved_by: fast-path`, the plan records the verified Fast-Path
-  conditions from shared-protocol.md.
-- The case is not in an unrecoverable closed status; see shared-protocol.md →
-  Case Resume for resumable statuses.
-- `TDD Applicability` is declared.
-- `Goal`, `Non-goals`, `Decisions`, and `Acceptance Criteria` are clear.
-- Workspace changes relative to `base_commit` are explainable, including
-  staged, unstaged, and untracked files.
-- Current execution authorization exists.
-- Eligible cases declare Post-Execution Review and Atomic Commit strategies.
-- When the plan requires an atomic plan commit, the approved plan and routing
-  state are already committed before implementation starts.
-
-If the user approves the current plan while `plan.md` is still draft, write the
-approval, then continue unless the user asks to hold.
-
-If a required check fails, do not execute. Route back to `plan-confirm` unless
-the only issue is missing state cache or same-turn approval writeback.
+If the user approves a still-draft current plan, perform the minimal approval
+writeback first and continue unless they ask to hold. Otherwise failed preflight
+returns to `plan-confirm`, except a missing state cache may be repaired locally.
 
 ## Workflow
 
-1. Review the plan critically for executable steps, valid commands, test
-   strategy, non-goals, and acceptance criteria.
-2. Update `case_state.yaml` to `phase: executing` before implementation starts,
-   unless the only work is preflight or approval writeback.
-3. Red: write or identify the failing test, run the minimal command, and verify
-   the failure reason is expected.
-4. Green: write minimal implementation and run the target test.
-5. Refactor: only planned or necessary refactors; run related tests after each.
-6. Quality check with planned or obvious low-risk read-only commands.
-7. At each independently valid green task or verified refactor boundary,
-   update evidence and create the approved semantic atomic commit.
-8. Update execution docs and plan checkbox progress.
-9. Update handoff only when a future resume point exists. Use
-   `templates/handoff.md`.
-10. Record `review_risk` as a signal.
-11. Check every acceptance criterion and run final planned verification.
-12. For an eligible case, invoke `review` in `Post-execution` mode, persist its
-    Engineering, Spec, and aggregate results, and complete the fix/re-review
-    loop below.
-13. Only after the aggregate result is `pass`, update `case_state.yaml` to
-    `phase: doc_syncing` and route to `doc-sync-close`.
-14. Stage or commit only within the approved authorization and strategy.
+1. Critically check steps, commands, tests, non-goals, and acceptance.
+2. Set `phase: executing` before implementation (not for preflight-only or
+   approval-writeback-only work).
+3. Red: run the smallest behavior test and observe the expected failure.
+4. Green: implement minimally and pass the target test.
+5. Refactor only as planned/necessary; rerun related tests after each change.
+6. Run planned and obvious low-risk quality checks.
+7. At each independently valid green task or verified refactor completion,
+   update evidence and create its authorized semantic commit.
+8. Update plan progress and execution evidence; write handoff only for a future
+   resume point, using `templates/handoff.md`.
+9. Maintain `review_risk`; verify every acceptance criterion and final check.
+10. For eligible work, invoke `review` in Post-execution mode, persist both axes
+    and aggregate result, and own the fix/re-review loop.
+11. Only after aggregate `pass`, set `phase: doc_syncing` and route to
+    `doc-sync-close`.
+12. Stage/commit only within the approved strategy and shared authorization.
 
 ## TDD Rules
 
-Default: write the failing test before implementation.
+Default: write the failing test first. Claim TDD only after observing the
+expected failure and later pass. If a new test passes immediately, determine
+whether the behavior already exists or the test is wrong before continuing.
 
-Do not claim TDD completion unless you observed the test fail for the expected
-reason and later pass. If a new test passes on the first run, stop and decide
-whether the test is wrong or the behavior already exists.
+Allowed Red: a new failing test, or an existing non-flaky failure that directly
+maps to current acceptance. Before accepting it:
 
-Allowed Red sources:
-
-- A newly written failing test.
-- An existing failing test that directly maps to current acceptance criteria and
-  is not unrelated baseline or flaky failure.
-
-Before accepting Red, apply this test quality gate:
-
-- Name a behavior or public contract, not an implementation step.
-- Assert observable output, state, persistence, event, side effect, or error.
-- Keep one primary failure theme and only the setup needed to understand it.
-- Ensure it catches a plausible real regression and survives behavior-preserving
-  refactors.
-- Do not assert private methods, internal call order, temporary structures,
-  non-contract fields, mock existence, or weak coverage-only facts.
-- Do not add production test-only methods or invent meaningless Red just to
-  satisfy process.
-- Mock only system boundaries or slow, external, unstable dependencies whose
-  side effects are understood; keep mock data realistic. Prefer integration
-  tests when mocks exceed the behavior under test.
+- name behavior/public contract and assert observable output, state,
+  persistence, event, side effect, or error;
+- keep one failure theme and enough setup to understand it;
+- catch a plausible regression and survive behavior-preserving refactors;
+- avoid private methods, call order, temporary/non-contract fields, mock
+  existence, coverage-only assertions, and production test-only hooks;
+- mock only understood system boundaries or slow/external/unstable dependencies,
+  with realistic data; prefer integration tests when mocks dominate.
 
 ## TDD Exceptions
 
-An exception must already be in the approved plan or same-turn confirmed
-amendment. It must include alternative verification. See
-`references/tdd-exceptions.md`.
+The approved plan or a same-turn confirmed amendment must declare the exception
+and alternative verification; see `references/tdd-exceptions.md`. Changing
+`TDD Required: Yes` to `No` is material: stop and return to `plan-confirm`.
 
-If execution changes `TDD Required: Yes` to `No`, stop and return to
-`plan-confirm`; this is a material test strategy change.
+## Deviations
 
-## Adaptive Execution
+Judge actual work against Goal, Non-goals, Decisions, Files, Tasks, Acceptance,
+TDD, risk, docs impact, and command/config/dependency scope. Name the changed
+boundary before classifying it.
 
-Follow the approved plan by default. If adaptive execution is allowed, record
-`minor deviation` amendments in `plan.md`:
-
-```md
-## Plan Amendments
-| When | Change | Reason | User Confirmation | Impact |
-|---|---|---|---|---|
-```
-
-## Plan Deviation Classification
-
-Compare actual execution against these approved plan boundaries: Goal,
-Non-goals, Decisions, Files to Change, Tasks, Acceptance Criteria, TDD
-Applicability, risk level, documentation impact, and command/config/dependency
-scope. Do not call a change a deviation unless you can name the boundary it
-differs from.
-
-| Classification | Meaning | Handling |
-|---|---|---|
-| `no deviation` | The work remains fully explained by the approved plan. | Continue and record normal execution evidence. |
-| `minor deviation` | Low-risk, same-goal, same-responsibility adjustment, such as adjacent fixtures, helper files, or an equivalent local command adjustment. | Record the change and reason in `execution.md`; if adaptive execution is allowed, also record it in `plan.md ## Plan Amendments`, then continue. |
-| `material deviation` | Goal, acceptance criteria, file boundary, risk level, documentation impact, TDD strategy, public contract, authority, cross-module boundary, dependency/config, or migration scope changes. | Stop and return to `plan-confirm` for a plan amendment. |
-| `hard stop` | The execution would touch a Non-goal, violate a Decision, modify authority docs, or change scripts, dependencies, lockfiles, CI, or test command config without authorization. | Stop and wait for explicit confirmation or a new plan. |
+| Class | Handling |
+|---|---|
+| `no deviation` | Continue; record normal evidence. |
+| `minor deviation` | Low-risk, same-goal/responsibility adjustment. Record in `execution.md`; when adaptive execution is allowed, also append `plan.md ## Plan Amendments` with When, Change, Reason, User Confirmation, Impact. |
+| `material deviation` | Goal, acceptance, files, risk, docs, TDD, public contract, authority, cross-module, dependency/config, or migration scope changed. Stop for a confirmed plan amendment. |
+| `hard stop` | A Non-goal/Decision would be violated, or unapproved authority, script, dependency, lockfile, CI, or test-command config would change. Stop for explicit confirmation/new plan. |
 
 ## Execution Evidence
 
-Write or update `execution.md` when:
+Write/update `execution.md` for TDD, code/behavior change, any deviation, test
+failure/retry, material `review_risk`, or continuity evidence. Docs-only,
+recovery, or trivial config may skip it when final verification fits in
+`closure.md`.
 
-- TDD is required.
-- Code or behavior changes.
-- Any `minor deviation`, `material deviation`, or `hard stop` occurs.
-- Tests fail, retry, or need failure explanation.
-- Material `review_risk` exists.
-- The task may need a future resume point with process evidence.
-
-For docs-only, recovery, or trivial config work, skip `execution.md` when there
-is no independent execution evidence to preserve and final verification can fit
-in `closure.md`. Do not duplicate planned acceptance criteria from `plan.md` as
-final evidence; record actual commands, deviations, failures/retries, interim
-findings, and resume-critical facts.
-
-Use `templates/execution.md`. Maintain the latest result in the body and keep a
-short `## History`; do not create numbered execution directories by default.
-
-Plan checkbox progress may be updated, but semantic changes must be classified
-above.
+Use `templates/execution.md`; keep current results in the body and a short
+History, not numbered execution directories. Record actual commands,
+deviations, failures/retries, interim findings, task/fix hashes, and
+resume-critical facts—not a copy of planned acceptance. Checkbox progress may
+change without changing plan semantics.
 
 ## Review Risk
 
-Record `review_risk` as data. It does not itself trigger ad-hoc review; eligible
-cases use the separately defined mandatory Post-execution gate.
+`review_risk` is data, not an ad-hoc review trigger:
 
-| Value | When to set |
+| Value | Use |
 |---|---|
 | `low` | Local change, no public contract, tests pass. |
-| `medium` | New internal feature, moderate scope, main paths covered. |
-| `high` | Implementation touches a High-Risk Topic, coverage insufficient, material plan deviation, or authority proposal pending. |
+| `medium` | Internal feature, moderate scope, main paths covered. |
+| `high` | High-Risk Topic, insufficient coverage, material deviation, or pending authority proposal. |
 
-Update when scope changes or new evidence resolves a previous concern. Do not
-clear to `low` unless all original high-risk conditions are resolved with
-evidence. The closure skill consumes the final value. Outside an approved
-Post-execution gate, only the user can request `review`.
+Update as evidence changes; do not clear to low until original high-risk causes
+are resolved. Closure consumes the final value. Outside an approved
+Post-execution gate, only the user may request `review`.
 
 ## Post-Execution Review
 
-An eligible case is a persistent case that changes production code or tests,
-Skill behavior, workflow policy, a public contract, executable configuration,
-or user-observable behavior. Explanation-only, status-only, standalone review,
-and one-shot non-case work are not eligible. Purely mechanical docs may use a
-compact inline Engineering/Spec check when the approved plan says so.
+Eligible cases persistently change production code/tests, Skill behavior,
+workflow policy, public contract, executable config, or user-observable
+behavior. Explanation/status-only, standalone review, and one-shot non-case work
+are ineligible. Purely mechanical docs may use a compact inline Engineering/Spec
+check only when the approved plan says so.
 
-Start the gate only after:
+Start only when tasks, required tests/checks, preliminary acceptance evidence,
+expected task/refactor commits, exact plan baseline, and explainable complete
+delta are all present.
 
-- every planned implementation task is complete;
-- required tests and quality checks have passed;
-- acceptance criteria have preliminary evidence;
-- expected task/refactor commits exist;
-- the exact plan baseline resolves and the full case delta is explainable.
+Invoke `review` under the approved plan. Keep Engineering and Spec isolated and
+persist exact baseline, reviewed commits/worktree, verdicts, findings, evidence
+gaps, aggregate result, and re-review history. Consume the aggregate contract
+owned by `review`:
 
-Invoke `review` in `Post-execution` mode under the approved plan. Keep the
-Engineering and Spec passes isolated and persist, in `execution.md`, the exact
-baseline, reviewed commit/working-tree scope, per-axis verdicts, material
-findings, evidence gaps, aggregate result, and re-review history.
+- `pass`: proceed to `doc_syncing`.
+- `insufficient_evidence`: collect material evidence, rerun the affected axis,
+  then aggregate again; absence never passes.
+- `changes_required`: remain in execution; fix one smallest coherent root cause,
+  add/update regression coverage when appropriate, run relevant checks, commit
+  one atomic `fix:` unit with `Doc-Loom-Step: review-fix:<id>`, rerun the affected
+  axis, then aggregate against the accumulated final delta.
 
-Handle the aggregate result deterministically:
+Unresolved Critical/Important findings block `doc_syncing` and unqualified
+closure. Keep Minor findings visible for residual-risk judgment.
 
-- `pass`: continue to `doc_syncing`.
-- `insufficient_evidence`: collect the missing material evidence and re-run the
-  affected axis plus the aggregate gate; do not treat absence as pass.
-- `changes_required`: keep ownership in execution. Fix the smallest coherent
-  root cause, add or update regression coverage when appropriate, run relevant
-  checks, create one atomic `fix:` commit with `Doc-Loom-Step:
-  review-fix:<id>`, re-run the affected axis, then re-run the aggregate gate
-  against the accumulated final change.
+## State
 
-Unresolved Critical or Important findings block `doc_syncing` and unqualified
-closure. Minor findings remain visible in execution evidence and residual-risk
-assessment.
-
-## State Update
-
-Update `case_state.yaml` only for phase and routing signals. Markdown execution
-evidence is evidence truth. Set `closure_status: open` on phase entry.
-
-When implementation starts:
+State carries phase/routing; Markdown carries evidence. On phase entry keep
+`closure_status: open`:
 
 ```yaml
+# implementation begins
 phase: executing
 closure_status: open
-```
 
-When implementation and acceptance checks are complete and docs sync or closure
-is next, and the required Post-execution aggregate result is `pass`:
-
-```yaml
+# acceptance complete and required Post-execution result is pass
 phase: doc_syncing
 closure_status: open
 ```
 
-When review risk affects routing or closure judgment:
-
-```yaml
-review_risk: high   # low | medium | high
-```
-
-`review_risk` records only `low`, `medium`, or `high`. Reasons stay in
-`execution.md` or closure evidence. If `case_state.yaml` update fails, do not
-roll back completed implementation, but record the failure and do not claim the
-workflow is fully synced.
+`review_risk` accepts only `low`, `medium`, or `high`; reasons live in evidence.
+If state update fails, preserve completed implementation, record the failure,
+and do not claim the workflow fully synced.
 
 ## Commits
 
-Default: do not stage or commit unless the approved plan or current user
-instruction authorizes it. Approval of a plan with an Atomic Commit Strategy
-authorizes the declared case-scoped plan, task, refactor, review-fix, and
-closure commits without repeated confirmation.
+Do not stage/commit without current user or approved-plan authorization. Follow
+the full shared Atomic Commit Contract and authorization exclusions. For each
+authorized task/refactor/review-fix commit:
 
-For each authorized commit:
+1. Select one independently valid completion point/root cause.
+2. Include implementation, tests/alternative verification, necessary local docs,
+   and explanatory evidence for that unit.
+3. Stage explicit case paths only; isolate unrelated user/other-case changes.
+4. Inspect `git diff --cached`, run `git diff --cached --check`, and run relevant
+   checks.
+5. Use `<type>: <summary>` plus deterministic `Doc-Loom-Case` and
+   `Doc-Loom-Step` trailers.
+6. Record the resulting task/refactor/review-fix hash in `execution.md`.
 
-1. Choose one coherent, independently valid completion point or root cause.
-2. Include its implementation, tests or alternative verification, necessary
-   task-local docs, and evidence needed to explain that unit.
-3. Stage explicit case-related paths only. Do not use broad staging or include
-   unrelated user or other-case changes.
-4. Inspect `git diff --cached`, run `git diff --cached --check`, and run the
-   relevant task checks before committing.
-5. Use the repository `<type>: <summary>` title and the plan's deterministic
-   `Doc-Loom-Case` and `Doc-Loom-Step` trailers.
-6. Record the resulting task, refactor, or review-fix hash in `execution.md`.
+Combine dependent work when separation would create an invalid commit; keep an
+independently verified refactor separate when practical. If a mixed file cannot
+be isolated safely, stop.
 
-Do not commit an intentional Red state, failed attempt, timestamp-only update,
-or checkbox-only change as a semantic completion point. Combine dependent plan
-tasks when separating them would create an invalid commit. Keep an independently
-verified behavior-preserving refactor separate when practical.
-
-Authorization never includes unrelated files, push, PR, merge, tag, release,
-amend, rebase, squash, history rewriting, or a material plan deviation. If a
-mixed file cannot be isolated safely, stop rather than create a non-atomic
-commit.
-
-If the user separately authorizes amend, rebase, squash, or another history
-rewrite, treat affected commit hashes and any prior Post-execution result as
-stale. Revalidate the exact baseline and rewritten range, refresh affected
-commit mappings in `execution.md`, and re-run the final Engineering and Spec
-gate before closure.
+After separately authorized amend/rebase/squash/history rewrite, prior hashes
+and Post-execution evidence are stale. Revalidate the exact baseline and range,
+refresh commit mappings, and rerun final Engineering and Spec before closure.
 
 ## Gates
 
-- No approved plan, no execution. → Route: plan-confirm. Reason: no approved plan found. Required input: user request for plan creation.
-- Current plan has no approval log for the current `plan_version`, no execution. → Route: plan-confirm. Reason: current plan approval unconfirmed. Required input: user explicit approval of the current plan.
-- Unrecoverable closed case status, no execution without a new case or explicit
-  reconfirmation.
-- TDD required but no observed expected Red, or unexpected Red failure, no
-  implementation.
-- TDD exception without alternative verification -> wait for user input.
-- Any `material deviation` or `hard stop`, stop and follow Plan Deviation
-  Classification.
-- Eligible case without declared review/commit strategies, required plan/task
-  commits, or a resolvable exact baseline -> return to `plan-confirm` or report
-  `insufficient_evidence`; do not close.
+- No approved plan or matching current-version approval log -> `plan-confirm`.
+- Unrecoverable closed case needs a new case or explicit reconfirmation.
+- Required TDD without expected Red, unexpected Red, or an exception without
+  alternative verification -> no implementation.
+- Material deviation/hard stop -> apply Deviations handling.
+- Eligible case missing strategies, required plan/task commits, or resolvable
+  exact baseline -> return to `plan-confirm` or report
+  `insufficient_evidence`; never close.
 - Required Post-execution result other than `pass` -> remain in execution.

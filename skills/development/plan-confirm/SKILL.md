@@ -5,73 +5,52 @@ description: Create and confirm an implementation plan before execution. Use aft
 
 # plan-confirm
 
-`plan-confirm` consumes case identity; it does not create a case id or case docs.
+Consume existing case identity; never create a case id or case docs.
 
-Read when trigger condition is met:
+Read `references/shared-protocol.md` for state, artifacts, instruction order,
+authorization, and Atomic Commit rules. Read `references/risk-levels.md` for
+risk, confirmation policy, and risk-based TDD decisions.
 
-- `references/shared-protocol.md` when: writing case_state.yaml phase update,
-  checking artifact policy, or checking execution instruction order.
-- `references/risk-levels.md` when: classifying risk level, writing
-  plan_confirmation_policy, or deciding TDD applicability exception based on
-  risk.
+## Inputs
 
-## Required Inputs
+- User request, existing case id/docs, and current Git baseline.
+- Context summary/brief or explicit low-risk skipped-context reason; include the
+  route verdict/sources when `context-authority` ran.
+- Relevant authority and existing plan when revising.
+- User-confirmed decisions and any selected discovery candidate.
 
-- Current user request.
-- `case_id` and `docs/cases/<case-id>/` from `docloom-workflow`.
-- Context summary, `context-authority-brief.md`, or explicit low-risk
-  skipped-context reason.
-- Route verdict and context sources when `context-authority` ran.
-- Current git baseline.
-- Relevant authority docs.
-- Existing `plan.md` when revising a plan.
-- User-confirmed discussion decisions that affect this plan.
-- Selected discovery candidate, when work was triggered by case candidates or
-  next-slice discovery.
-
-If `case_id` or case docs are missing, stop with
-`needs_docloom_workflow` / `needs_case_initialization`.
+Missing case identity routes to `docloom-workflow` with
+`needs_case_initialization`.
 
 ## Workflow
 
-1. Validate context or the explicit low-risk skipped-context reason. No context
-   and no skip reason means no plan.
-2. Confirm case id, case docs, and run mode: `isolated`, `branch`, or `inline`.
-3. When an explicitly requested requirements artifact exists, verify its
-   approval record. Never commit a draft as approved. If it is approved and Git
-   is available but its approval commit is absent, stage only the requirements
-   and directly related routing state, inspect them, and create the atomic
-   requirements commit with `Doc-Loom-Step: requirements` before drafting the
-   implementation plan. In Git degraded mode, record why the commit is absent.
-4. Classify risk: `low`, `medium`, or `high`.
-5. Decide TDD applicability.
-6. Decide whether the case is eligible for mandatory Post-execution review and
-   semantic atomic commits; record compact strategies when it is.
-7. Lock file structure and file responsibilities.
-8. Write bite-sized implementation tasks with exact files, commands, expected
-   results, and acceptance criteria.
-9. Write `docs/cases/<case-id>/plan.md` as `status: draft`.
-10. Update `case_state.yaml` to `phase: waiting_for_plan_confirmation` with the
-   current `plan_version`.
-11. Self-review for coverage, placeholders, name consistency, buildability, and
-   TDD integrity.
-12. Ask for user confirmation unless Fast-Path conditions are verified. High
-    risk requires explicit confirmation of the current plan object, but the
-    user's wording does not have to include `plan_version` when the object is
-    unambiguous.
-13. After confirmation or Fast-Path approval, update `plan.md`,
-    `case_state.yaml`, and `handoff.md` when a future resume point exists. Use
-    `templates/handoff.md`.
-14. When the approved Atomic Commit Strategy requires a plan commit and Git is
-    available, stage only the approved plan, routing state, and directly
-    related case artifacts; inspect and commit that unit before implementation.
-15. On current-plan confirmation, continue to `tdd-execute` same-turn when
-    preflight inputs and the required plan commit are available, unless the
-    user asks to hold.
+1. Validate context or the explicit low-risk skip; no context/skip means no plan.
+2. Confirm case id/docs and `isolated`, `branch`, or `inline` run mode.
+3. If an explicitly requested requirements artifact exists, verify approval.
+   Never commit a draft as approved. When approved, Git is available, and its
+   approval commit is missing, stage only requirements plus related routing
+   state, inspect, and commit with `Doc-Loom-Step: requirements` before planning;
+   in Git degraded mode record why it is absent.
+4. Classify `low`/`medium`/`high` risk and decide TDD applicability.
+5. Determine eligibility for mandatory Post-execution review and semantic
+   commits; eligible plans must record both strategies.
+6. Lock file responsibilities and write small tasks with exact paths, commands,
+   expected results, and acceptance criteria.
+7. Write `plan.md` as `status: draft`; set state to
+   `waiting_for_plan_confirmation` with current `plan_version`.
+8. Self-review coverage, placeholders, naming, buildability, and TDD integrity.
+9. Ask for confirmation unless Fast-Path conditions are verified. High risk
+   requires an unambiguous current plan object; version wording is preferred,
+   not mandatory.
+10. On user/Fast-Path approval, update plan, state, and handoff only when a
+    future resume point exists (`templates/handoff.md`).
+11. If the approved strategy requires a plan commit and Git is available, stage
+    only the approved plan, routing state, and related case artifacts; inspect
+    and commit before implementation.
+12. Continue same-turn to `tdd-execute` when current-plan approval, preflight
+    inputs, and required plan commit exist, unless the user asks to hold.
 
-## Plan Rules
-
-`plan.md` frontmatter:
+## Plan Contract
 
 ```yaml
 ---
@@ -85,103 +64,68 @@ base_commit:
 ---
 ```
 
-Plan core content must include:
+Core content:
 
-- Goal and non-goals.
-- Context summary, context brief link, or skipped-context reason.
-- Workspace baseline.
-- Risk level and reason.
+- Goal/non-goals; context summary/brief/skip; workspace baseline; risk/reason.
 - TDD applicability and strategy or confirmed exception.
-- Files to change.
+- Files and exact, placeholder-free tasks.
 - Acceptance criteria with planned verification, not final command evidence.
-- Tasks with exact paths, planned commands, expected results, and no
-  placeholders.
-- Confirmation log.
+- Confirmation Log.
 - For eligible cases, `## Post-Execution Review Strategy` and `## Atomic Commit
-  Strategy` with baseline, axes, gate/fix behavior, semantic boundaries,
-  staging scope, titles/trailers, and excluded Git actions.
+  Strategy`: baseline, axes, gate/fix behavior, semantic boundaries, staging,
+  titles/trailers, and excluded Git actions.
 
-When a discovery candidate triggered the plan, include `## Discovery Candidate`
-with: Mode, Candidate ID, Evidence, Recommendation Reason, and User Decision.
-
-Include triggered sections only when they have content: confirmed decisions,
-non-obvious assumptions, detailed TDD plan, adaptive execution, plan amendments,
-tests to add or update, review strategy, commit strategy, risks, or
-documentation impact.
-
-Use `templates/plan.md` as the shape.
+When discovery triggered work, add `## Discovery Candidate` with Mode, Candidate
+ID, Evidence, Recommendation Reason, and User Decision. Add confirmed decisions,
+assumptions, detailed TDD, adaptive execution/amendments, tests, strategies,
+risks, or docs impact only when they contain useful information. Use
+`templates/plan.md`.
 
 ## TDD Applicability
 
-Default: TDD Required: Yes.
-
-Allowed exception categories are defined in `../tdd-execute/references/tdd-exceptions.md`.
-Plan must record: TDD Required (Yes/No), Reason if No, Alternative Verification. When
-declaring TDD Required: No, cite the specific category from tdd-exceptions.md.
-
-For behavior-preserving refactors, see `../tdd-execute/references/tdd-exceptions.md`
-for the characterization workflow.
+Default: `TDD Required: Yes`. Exceptions and characterization rules live in
+`../tdd-execute/references/tdd-exceptions.md`. A `No` plan records its named
+category, reason, and Alternative Verification.
 
 ## Version And Confirmation
 
-`plan_version` is the semantic version of the approved plan. It is an internal
-traceability field; user approval wording does not have to name it when the
-approved plan is unambiguous.
+`plan_version` traces plan semantics; approval need not name it when the current
+plan is unambiguous.
 
-| Event | `plan.md` status | `case_state.yaml` phase | Approval fields |
-|---|---|---|---|
-| Draft written | `draft` | `waiting_for_plan_confirmation` | Empty |
-| User confirms current plan | `approved` | `planned`, then same-turn `tdd-execute` unless the user asks to hold | `approved_by: user`, `approved_at`, `base_commit` |
-| Fast-path conditions verified | `approved` | `planned` | `approved_by: fast-path`, `approved_at`, `base_commit` or unavailable reason |
-| Material change | `draft` | `waiting_for_plan_confirmation` | Cleared or no longer current |
+| Event | Plan/state | Approval |
+|---|---|---|
+| Draft | `draft` / `waiting_for_plan_confirmation` | Empty |
+| User confirms current plan | `approved` / `planned`, then same-turn execution unless held | `approved_by: user`, `approved_at`, `base_commit` |
+| Fast-Path verified | `approved` / `planned` | `approved_by: fast-path`, `approved_at`, `base_commit` or unavailable reason |
+| Material change | `draft` / `waiting_for_plan_confirmation` | Cleared/not current |
 
-On user confirmation or fast-path approval, add a Confirmation Log entry that
-records the current `plan_version`, then record `base_commit` or an unavailable
-reason. When `git_available: false`, leave `base_commit` empty and record the
-reason; this does not block plan creation.
+Approval records the current version in Confirmation Log and records
+`base_commit` or an unavailable reason. With `git_available: false`, leave the
+baseline empty and record why; planning may continue.
 
-Current-plan approval authorizes the case-scoped commits declared by the
-Atomic Commit Strategy without repeated confirmation. It does not authorize
-unrelated files, push, PR, merge, tag, release, amend, rebase, squash, history
-rewriting, material plan deviations, or unlisted dependency, lockfile, CI,
-schema, config-contract, or authority changes.
+Current-plan approval authorizes only commits declared by its Atomic Commit
+Strategy; use shared-protocol for the full exclusion list. Requirements approval
+authorizes only its requirements commit, not planning/implementation. The plan
+baseline remains the exact pre-execution point and never attempts to contain the
+hash of its own plan commit.
 
-The requirements approval record authorizes only its requirements commit, not
-planning or implementation. The plan's `base_commit` remains the exact
-pre-execution baseline; do not try to embed the hash of the commit containing
-the plan itself.
-
-Material plan changes require incrementing `plan_version` and asking for
-confirmation again.
-
-Material changes include goal, decisions, file scope, test strategy, risk level,
-authority impact, TDD exception, public contract, or file responsibility
-changes. Checkbox/status edits do not change plan semantics.
+Goal, decisions, file/responsibility scope, tests/TDD exception, risk, authority
+impact, public contract, or other execution-constraint changes are material:
+increment the version and reconfirm. Checkbox/status edits are not semantic.
 
 ## Gates
 
-- No context and no skipped-context reason, no plan. → Route: context-authority. Reason: missing context. Required input: user request and workspace state.
-- No `case_id` or case docs, no plan. → Route: docloom-workflow. Reason: missing case identity. Required input: user request for case initialization.
-- Blocking conflict means no execution plan. → Route: context-authority. Reason: blocking conflict. Required input: conflict details for resolution.
-- Explicit requirements artifact without approval, or an approved requirements
-  artifact that cannot be committed safely while Git is available -> no
-  implementation plan.
-- No user confirmation or valid fast-path approval, no `tdd-execute` -> wait for user input.
-- Current-plan confirmation -> same-turn `tdd-execute` unless plan-only, hold,
-  revise, or review.
-- Eligible plan with Git available but no required atomic plan commit -> do not
-  begin implementation.
-- Later-discovered approved plan -> needs current execute, continue, or
-  reconfirm intent.
-- High-risk confirmation must identify the current plan object. Naming
-  `plan_version` is preferred but not required when the object is unambiguous;
-  ambiguous short confirmation is not enough.
-- The current plan must be approved and the Confirmation Log must record the
-  current `plan_version` before execution. Fast-path plans must record
-  `approved_by: fast-path` and the verified Fast-Path conditions.
-- Discussion decisions that change execution constraints must enter
-  `## Decisions` and be confirmed.
-- Eligible plan without Post-Execution Review and Atomic Commit strategies ->
-  no execution until the current plan is corrected and confirmed.
-- A selected discovery candidate is planning context only. It does not approve
-  the plan.
+- No context/skip -> `context-authority`; no case identity ->
+  `docloom-workflow`; blocking conflict -> `context-authority`.
+- Unapproved requirements, or approved requirements that cannot be safely
+  committed while Git is available -> no implementation plan.
+- No user/Fast-Path approval -> no execution. Current approval executes
+  same-turn unless plan-only, hold, revise, or review; older approval needs
+  current execute/continue/reconfirm intent.
+- Eligible Git plan missing its required plan commit -> no implementation.
+- Approval must identify the current object and Confirmation Log version;
+  Fast-Path must record its approver and verified conditions.
+- Execution-constraint decisions belong in confirmed `## Decisions`.
+- Eligible plan missing either review or commit strategy must be corrected and
+  reconfirmed before execution.
+- A discovery candidate is context, never plan approval.
