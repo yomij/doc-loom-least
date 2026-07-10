@@ -89,6 +89,53 @@ Semantic locks:
 High: compression touches active workflow authority and executable Skill
 contracts. Final Engineering/Spec review must prove that no gate was weakened.
 
+## Post-Execution Review
+
+- Mode: Post-execution
+- Maturity: Completed
+- Exact baseline: `1d5a05b2e3a49637876447c520a917e6e80dd31e`
+- Committed target: `3f65c73`, `33f6692`, `e2fdafb`, `f0bef93`
+- Staged target: none
+- Unstaged target at initial review: none
+- Untracked target: none
+- Unrelated workspace changes: none
+
+### Engineering
+
+- Verdict: No material issue found.
+- Findings: none within reviewed scope.
+- Evidence gaps: none.
+- Scope: complete case delta, repository/authority rules, Skill validity,
+  YAML/frontmatter, references/symlinks, command evidence, Git health, ownership
+  boundaries, and unnecessary-complexity checks.
+
+### Spec
+
+- Verdict: Material issues found.
+- Critical: none.
+- Important:
+  - F1 — `skills/_shared/references/shared-protocol.md:105` changed the exact
+    closure-state derivation from an existing `closure.md` plus valid commit
+    evidence to undefined “Valid `closure.md`” wording. Impact: the compressed
+    contract could add an ambiguous closure-validity gate. Required correction:
+    restore the exact existence-plus-valid-evidence condition.
+- Minor: none.
+- Evidence gaps: none.
+
+### Initial Aggregate
+
+- Result: `changes_required`.
+- Root cause: F1 exact state-derivation wording drift.
+
+### Fix Loop
+
+- F1 restored `closure.md` existence plus valid required closure-commit evidence
+  as the first state-derivation condition.
+- Verification: targeted state-derivation `rg`, all four Skill validations,
+  broken-symlink check, and `git diff --check` passed.
+- Planned commit: `fix: restore exact closure state derivation` with
+  `Doc-Loom-Step: review-fix:F1`.
+
 ## Checkpoints / Commits
 
 | Step | Commit | Verification |

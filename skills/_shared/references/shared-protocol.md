@@ -102,7 +102,7 @@ default. Keep detailed evidence in Markdown.
 On a state/artifact conflict, report `state_cache_conflict` and derive the
 phase from the first reliable signal:
 
-1. Valid `closure.md` plus required closure-commit evidence -> `closed`.
+1. `closure.md` exists and required closure-commit evidence is valid -> `closed`.
 2. `closure.md` but absent/failed/dirty closure commit -> `doc_syncing`.
 3. `execution.md` with completed acceptance and required Post-execution checks
    -> `doc_syncing`.
