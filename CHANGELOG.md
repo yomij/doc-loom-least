@@ -3,6 +3,11 @@
 ## Unreleased
 
 ### Changed
+- Added workflow-owned Post-execution review with separate Engineering and Spec
+  axes, material finding fix/re-review, and no new review phase or artifact.
+- Added approved case-scoped semantic atomic commits for plans, green tasks,
+  review fixes, and closure; unqualified `Done` now waits for closure-commit
+  success in cases that declare the policy.
 - Repositioned Doc Loom Least as a repo-native personal product workflow
   substrate whose current supported lifecycle domain is development.
 - Grouped canonical skills under `skills/development/`, `skills/governance/`,

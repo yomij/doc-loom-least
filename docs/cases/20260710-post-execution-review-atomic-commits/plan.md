@@ -260,12 +260,12 @@ symlinks, scripts, phases, or artifacts.
 **Files:** all paths under `Directly conflicting derived docs`, plus `plan.md`
 and `execution.md`.
 
-- [ ] Replace manual-only guidance with explicit ad-hoc plus workflow-owned
+- [x] Replace manual-only guidance with explicit ad-hoc plus workflow-owned
   post-execution review wording.
-- [ ] Update text/Mermaid flow and Git/commit explanation without touching
+- [x] Update text/Mermaid flow and Git/commit explanation without touching
   binary diagrams.
-- [ ] Run stale-rule, path/link, and diff checks.
-- [ ] Commit `docs: document post-execution review workflow` with
+- [x] Run stale-rule, path/link, and diff checks.
+- [x] Commit `docs: document post-execution review workflow` with
   `Doc-Loom-Step: task:derived-docs`.
 
 Expected result: active entry docs no longer contradict the core workflow.

@@ -14,7 +14,8 @@ Yes. Execution started from the explicitly approved plan v2 with no deviation.
 
 - Approved plan v2 was committed before workflow implementation.
 - Core workflow behavior and authority changes are implemented and verified.
-- Directly conflicting derived documentation remains for Task 2.
+- Directly conflicting English, Chinese, layout, product-state, share, and
+  changelog documentation is synchronized without changing binary diagrams.
 
 ## TDD Applicability
 
@@ -30,7 +31,7 @@ Yes. Execution started from the explicitly approved plan v2 with no deviation.
 |---|---|---|
 | Approved plan v2 is durable before implementation | met | Commit `cba800911764e4aa806c830eef67733b8fe2281b` |
 | Core workflow behavior | met | Review owns the complete Post-execution contract; stage Skills own invocation, fix/commit, and closure gates |
-| Derived documentation sync | pending | Task 2 |
+| Derived documentation sync | met | Active entry docs distinguish explicit ad-hoc review from the workflow-owned gate and show commit boundaries |
 | Final Engineering and Spec review | pending | Task 3 |
 | Atomic closure commit | pending | Task 4 |
 
@@ -47,6 +48,10 @@ Yes. Execution started from the explicitly approved plan v2 with no deviation.
 | `find -L skills -type l -print` | pass | No broken symlinks |
 | `uv run python .../quick_validate.py <skill>` | fail | Validator environment lacked `PyYAML`; no Skill content failure was reached |
 | `uv run --with pyyaml python .../quick_validate.py <skill>` | pass | All six modified Skill directories valid |
+| Derived-doc `git diff --check` | pass | No whitespace errors |
+| Active stale-rule `rg` | pass | No remaining absolute manual-only/no-commit contradictions in scoped active sources |
+| Derived positive-anchor `rg` | pass | English/Chinese flow, review axes, fix loop, and closure commit are documented |
+| Derived path/link inspection | pass | No new local link target was introduced; existing README links unchanged |
 
 ## Review Risk
 
@@ -59,3 +64,4 @@ must resolve this before closure.
 | Step | Commit | Verification |
 |---|---|---|
 | plan-v2 | `cba800911764e4aa806c830eef67733b8fe2281b` | YAML/frontmatter, staged diff, commit trailers |
+| task:core-workflow | `0a9c900130a58513b8eea24792b5c687eda4a04b` | Core semantic checks, Skill validation, diff and trailers |

@@ -57,8 +57,9 @@ These boundaries are what keep the project minimal:
 
 - No CLI backend or daemon
 - No heavy orchestrator skill
-- No automatic review triggers — reviews are always manual
-- No treating `review_risk` as review authorization
+- No automatic ad-hoc review triggers or treating `review_risk` as authorization
+- No separate review phase or mandatory `review.md`; eligible approved cases
+  run the read-only Post-execution gate inside `tdd-execute`
 
 Simple doc edits and low-risk local changes take the minimum path. Only persistent development work enters the full case workflow with plans, execution records, and closure.
 
@@ -69,10 +70,10 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
 | `docloom-workflow` | Entry point and lightweight router. Parses task state, reports case status, discovers next-slice candidates, and routes to the right stage skill. |
 | `setup-doc-governance` | Governance init and maintenance. Scans docs, extracts facts, produces governance plans. |
 | `context-authority` | Conditional fact authority gate. Reads minimal context, resolves conflicts, issues a routing verdict. |
-| `plan-confirm` | Planning gate. Generates plans with risk levels and TDD strategy, then waits for your approval. |
-| `tdd-execute` | Execution gate. Red-Green-Refactor cycle with evidence, or recorded TDD exceptions. |
-| `doc-sync-close` | Closure gate. Syncs docs, records acceptance, risks, and follow-ups. |
-| `review` | Manual read-only review of designs, diffs, tests, docs, or case evidence. |
+| `plan-confirm` | Planning gate. Generates risk, TDD, review, and atomic-commit strategies, then waits for your approval. |
+| `tdd-execute` | Execution gate. Runs Red-Green-Refactor or a recorded exception, creates approved semantic commits, and owns the review/fix loop. |
+| `doc-sync-close` | Closure gate. Syncs docs, records final evidence, and creates the atomic closure commit when required. |
+| `review` | Read-only ad-hoc review plus the workflow-owned Engineering/Spec Post-execution gate. |
 | `grill` | Manual interactive stress-test of requirements, designs, or claims. |
 
 ## Repository Structure
@@ -95,7 +96,7 @@ Simple doc edits and low-risk local changes take the minimum path. Only persiste
     ├── _shared/               # Cross-skill shared protocol
     ├── development/           # Current development flow skills
     ├── governance/            # Documentation governance skills
-    └── assessment/            # Manual review and challenge helpers
+    └── assessment/            # Read-only review and manual challenge helpers
 ```
 
 ## Typical Usage
@@ -129,8 +130,10 @@ docloom-workflow
   → context-authority (when context gate is needed)
   → plan-confirm
   → you approve the plan
-  → tdd-execute
-  → doc-sync-close
+  → atomic plan commit
+  → tdd-execute → green task commits
+  → Engineering + Spec review → fix commit + re-review when needed
+  → doc-sync-close → atomic closure commit
 ```
 
 `docloom-workflow` only routes — it never replaces a stage skill.
@@ -141,12 +144,17 @@ When you want to know where things stand, `docloom-workflow` can read the derive
 
 When you ask what to build next, it can pull from [`docs/product/current-state.md`](docs/product/current-state.md), case follow-ups, and targeted repo evidence to recommend ranked next-slice candidates. A recommendation is not execution authorization: once you pick a candidate, the work still goes through normal case identity, planning, approval, execution, and closure.
 
-### Manual review & stress-test
+### Review & stress-test
 
-Use `review` and `grill` only when you explicitly ask:
+Ad-hoc `review` and `grill` run only when you explicitly ask:
 
 - `review`: read-only assessment with findings and evidence gaps. No files written, no state changed.
 - `grill`: interactive challenge of claims, one question at a time. No artifacts, no workflow routing.
+
+Separately, an approved eligible persistent case automatically runs
+`review`'s read-only Post-execution mode before closure. It reports Engineering
+and Spec verdicts independently; material findings return to execution for an
+atomic fix commit and re-review.
 
 ## Installation
 

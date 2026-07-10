@@ -20,7 +20,10 @@ without adopting a CLI backend or pipeline product.
 
 - Development workflow skills exist for routing, context authority, planning,
   TDD execution, and closure.
-- Manual `review` and `grill` skills exist as conversation-only helpers.
+- `review` supports explicit ad-hoc assessment and the approved workflow-owned
+  Post-execution Engineering/Spec gate; `grill` remains conversation-only.
+- Eligible plans authorize semantic task/fix commits and require a closure
+  commit before unqualified `Done`.
 - `docs/cases/README.md` provides a derived dashboard for current and recent
   cases.
 - `docloom-workflow` can perform read-only next-slice discovery from this file,
@@ -53,7 +56,8 @@ rubric.
 
 - No CLI backend, daemon, scheduler, MCP server, GitHub Actions loop runner, or
   centralized orchestrator.
-- Keep `review` and `grill` manual-only.
+- Keep ad-hoc `review` and `grill` manual-only; keep mandatory Post-execution
+  review inside `tdd-execute`, without a new phase or artifact.
 - Keep `docloom-workflow` a thin router and discovery entry, not an executor.
 - Preserve plan confirmation and TDD execution gates.
 
