@@ -196,21 +196,21 @@ Case evidence:
 
 **Files:** `plan.md`, `case_state.yaml`
 
-- [ ] Write approval fields, confirmation log, and planned state.
-- [ ] Validate YAML/frontmatter and staged scope.
-- [ ] Create the declared atomic plan commit.
+- [x] Write approval fields, confirmation log, and planned state.
+- [x] Validate YAML/frontmatter and staged scope.
+- [x] Create the declared atomic plan commit.
 
 ### Task 1: Characterize and compress authority contracts
 
 **Files:** `docs/authority/workflow/development-flow.md`,
 `docs/authority/operations/git.md`, and case evidence.
 
-- [ ] Record current authority claims and line/word counts.
-- [ ] Replace duplicated ownership/procedure with pointers and concise
+- [x] Record current authority claims and line/word counts.
+- [x] Replace duplicated ownership/procedure with pointers and concise
   principle-level statements.
-- [ ] Verify the four workflow principles, Git title/trailer contract,
+- [x] Verify the four workflow principles, Git title/trailer contract,
   rewritten-history invalidation, YAML/frontmatter, links, and diff.
-- [ ] Create the declared atomic authority-contract commit.
+- [x] Create the declared atomic authority-contract commit.
 
 ### Task 2: Compress the shared contract
 
