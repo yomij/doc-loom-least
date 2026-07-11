@@ -1,0 +1,10 @@
+case_id: 20260712-human-first-workflow-simplification
+phase: planned
+case_docs: docs/cases/20260712-human-first-workflow-simplification
+closure_status: open
+closure_path:
+current_plan_version: 1
+next_skill: tdd-execute
+route_reason: Plan v1 approved in the current turn with declared local branch and commit authorization.
+required_input: Approved plan v1 and current execution intent.
+last_updated: 2026-07-12T01:30:16+08:00

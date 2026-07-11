@@ -9,10 +9,14 @@ refresh this file.
 
 ## Active Cases
 
-None.
+| Case | Phase | Evidence | Next Human Decision |
+|---|---|---|---|
+| `20260712-human-first-workflow-simplification` | Planned; entering execution | `20260712-human-first-workflow-simplification/plan.md` | None; plan v1 was approved in the current turn. |
 
 ## Waiting On Human
 
+| Case | Waiting For | Evidence |
+|---|---|---|
 None.
 
 ## Recently Closed
