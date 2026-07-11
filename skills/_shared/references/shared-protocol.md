@@ -58,11 +58,19 @@ Loop-style discovery follows `loop-protocol.md`. It is a discovery source, not
 a separate workflow, and uses these same orders, identity, artifacts,
 confirmation, Post-execution review, and manual assessment gates.
 
-## High-Risk Topics
+## High-Risk Topics And Classification
 
-Security, auth, permission, privacy, billing, data deletion, public API, CLI,
+Security, auth, permission, privacy, billing, data deletion, public API/CLI,
 schema, config contract, migration, ADR-protected architecture boundaries, and
-workflow or agent policy change.
+workflow or agent policy always require deliberate context checks. Topic alone
+does not determine execution risk.
+
+Classify risk from consequence, reversibility, exposure, authority impact, and
+verification strength. Security, money, private data, destructive operations,
+irreversible migrations, and public compatibility are presumptively high.
+Reversible internal workflow or Skill text is normally medium, but remains high
+when it weakens authorization, changes a public contract/L1 critical fact, or
+enables irreversible action.
 
 ## Case Identity
 
@@ -153,7 +161,8 @@ unqualified `Done` for an eligible plan that declares it.
 
 ## Route Output
 
-When blocked or handing off, output:
+When blocked or handing off, tell the user the status, reason, and decision or
+input needed in plain language. This internal diagnostic form is optional:
 
 `Route: <skill-name>. Reason: <brief reason>. Required input: <what the next skill needs>.`
 
@@ -180,6 +189,12 @@ must identify the document and concrete change; “sync docs” is insufficient.
 Discussion decisions remain task-scoped until recorded in `plan.md`, a
 governance plan, or `closure.md`.
 
+Before asking for plan confirmation, surface a short human approval summary:
+the outcome, material scope, expected local Git actions/commit count, user
+interruptions, and excluded actions. Do not make users discover commit or
+authority effects inside a long plan. Fast-Path records the same information in
+compact form even when approval is agent-verified.
+
 Approval of a current plan with an Atomic Commit Strategy authorizes only its
 declared case-scoped staging and semantic commits. It excludes unrelated files,
 another case, push, PR, merge, tag, release, amend, rebase, squash, history
@@ -201,6 +216,14 @@ task/refactor/fix hashes in `execution.md`; closure never predicts its own hash.
 
 These review/commit gates apply prospectively to eligible cases whose current
 approved plan declares them; legacy cases remain valid.
+
+Fast-Path is the compact exception: it does not require separate plan,
+implementation, and closure commits. After the green change and compact review,
+one `Doc-Loom-Step: closure` commit may contain the minimal approved plan,
+implementation/verification, closure, closed state, and necessary derived
+dashboard sync. Its title describes the shipped change. It must still be
+coherent, independently reviewable and revertible, and contain no unrelated
+work.
 
 ## Git Degraded Mode
 
@@ -251,12 +274,13 @@ Compact flow: `docloom-workflow` creates only state; `plan-confirm` writes a
 minimal plan with `status: approved`, `risk_level: low`, `plan_version: 1`,
 `approved_by: fast-path`, `approved_at`, `base_commit` or its unavailable
 reason, Confirmation Log and Fast-Path Conditions evidence, goal/non-goals,
-acceptance/files, compact review/commit strategies, and no task-level TDD
-breakdown; `tdd-execute` creates one green implementation commit plus
-Engineering/Spec review (default TDD exception with characterization/build
-verification; optional `execution.md`); `doc-sync-close` writes `closure.md`,
-sets `case_state.yaml` to `closed`, and creates the closure commit. Any failed
-condition uses the full pipeline.
+acceptance/files, a human approval summary, compact review/commit strategies,
+and no task-level TDD breakdown or separate plan commit. `tdd-execute` produces
+the green change and compact Engineering/Spec review with characterization or
+build verification; `execution.md` remains optional. `doc-sync-close` writes a
+short `closure.md`, closes state, and creates one combined local completion
+commit containing the approved plan, green change, review evidence, closure,
+state, and necessary dashboard sync. Any failed condition uses the full flow.
 
 ## Small Project Degradation
 

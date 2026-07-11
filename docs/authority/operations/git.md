@@ -6,7 +6,8 @@ type: operations
 source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
-last_verified: 2026-07-02
+owner: user
+last_verified: 2026-07-12
 ---
 
 # Git Commit Titles
@@ -55,6 +56,16 @@ Doc-Loom-Step: requirements | plan | task:<id> | refactor:<id> | review-fix:<id>
 Actual task, refactor, and review-fix hashes are recorded in `execution.md`.
 `closure.md` must not predict its own commit hash. Unqualified `Done` requires a
 successful closure commit and no unexplained case-related working-tree changes.
+
+Fast-Path is the compact exception: it creates no separate plan or task commit.
+After its green delta and compact review pass, one `Doc-Loom-Step: closure`
+commit may contain the approved minimal plan, implementation/verification,
+closure, closed state, and necessary dashboard sync. Its title describes the
+user-visible change, not closure bookkeeping.
+
+Before plan confirmation, the human-facing summary states the expected number
+and purpose of local commits and makes clear that push, PR, merge, release, and
+history rewriting are excluded unless separately authorized.
 
 Plan approval does not authorize publication or history rewriting. When the
 user separately authorizes a rewrite, affected hashes and review evidence are

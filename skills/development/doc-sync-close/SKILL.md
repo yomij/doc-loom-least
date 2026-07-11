@@ -1,6 +1,6 @@
 ---
 name: doc-sync-close
-description: Sync docs and close a Doc Loom case, including final review evidence and the atomic closure commit when the approved plan requires them. Use after execution, or when a case is blocked, cancelled, paused, superseded, or abandoned.
+description: Sync docs and close a Doc Loom case, including final review evidence, full-flow closure commits, or the single combined Fast-Path completion commit declared by the approved plan. Use after execution, or when a case is blocked, cancelled, paused, superseded, or abandoned.
 ---
 
 # doc-sync-close
@@ -25,8 +25,9 @@ routes to `docloom-workflow` for minimal identity.
 
 Use the exact closure status set in shared-protocol.
 
-- `Done`: the consolidated Done Gate below passes, the closure commit succeeds,
-  and case-related worktree scope is clean.
+- `Done`: the consolidated Done Gate below passes, the declared full-flow
+  closure or Fast-Path combined completion commit succeeds, and case-related
+  worktree scope is clean.
 - `Done with Caveats`: main goal is complete but residual risk/follow-up remains.
 - Any other status records its specific reason in `closure.md`.
 
@@ -45,8 +46,9 @@ Use the exact closure status set in shared-protocol.
 7. Refresh `docs/cases/README.md` only for dashboard-relevant closure and
    `docs/product/current-state.md` only for evidenced product-state change.
    Both remain non-authoritative; invent no product direction.
-8. When required, stage only the closure unit, inspect it, run final checks,
-   create the declared closure commit, and verify Git metadata/trailers.
+8. When required, stage and inspect the declared completion unit, run final
+   checks, create the full-flow closure commit or Fast-Path combined completion
+   commit, and verify Git metadata/trailers.
 9. Write `handoff.md` only for `Paused`, `Blocked`, or another future resume
    point, using `templates/handoff.md`.
 10. Report unqualified `Done` only after closure-commit success and clean
@@ -65,9 +67,11 @@ Unqualified `Done` requires all of:
 - for eligible cases, the exact review baseline, separate Engineering and Spec
   verdicts, aggregate `pass`, material-finding disposition, and re-review history
   are present, with residual Minor findings/evidence caveats recorded;
-- required semantic commits are verified from Git, not case prose, and actual
-  task/refactor/review-fix hashes are recorded;
-- required closure path and closed state are committed successfully with no
+- full-flow semantic commits are verified from Git and their actual
+  task/refactor/review-fix hashes are recorded; for Fast-Path, the reviewed
+  green delta and complete combined unit are staged and verified before commit;
+- required closure path and closed state are committed successfully in the
+  declared full-flow closure or Fast-Path combined completion unit, with no
   unexplained case-related worktree changes.
 
 Acceptance handling when the gate cannot pass:
@@ -82,6 +86,11 @@ Acceptance handling when the gate cannot pass:
 Missing optional `execution.md` alone does not downgrade closure. Closure owns
 final acceptance and verification; include prior detail only when needed to
 justify status.
+
+Lead with a short human summary and reference plan/execution evidence instead
+of repeating their narratives or full command tables. Fast-Path closure stays
+compact and contains only the final decision, verification summary, review
+result, Git effect, risks, and status.
 
 ## Knowledge And Authority
 
@@ -112,7 +121,9 @@ last_updated: <timestamp>
 
 If state update fails, closure remains evidence truth but the workflow is not
 fully synced. For Atomic Commit plans, uncommitted closure is incomplete: the
-declared closure commit must contain both closure path and closed state. On
+declared full-flow closure commit or Fast-Path combined completion commit must
+contain both closure path and closed state. The Fast-Path unit may also contain
+its already verified green implementation; it must not add unreviewed fixes. On
 commit failure, preserve recovery evidence, do not report unqualified `Done`,
 and remain `doc_syncing` until Git proves the unit.
 
@@ -127,6 +138,7 @@ changes the assessment, and record its disposition.
 - Never close state before writing closure or modify plan semantics beyond a
   closure link/note.
 - Never change code, tests, dependencies, scripts, lockfiles, CI, acceptance, or
-  plan semantics to make closure pass; closure commits contain no implementation
-  fixes.
+  plan semantics to make closure pass. Full-flow closure commits contain no
+  implementation fixes; a Fast-Path combined unit contains only the green delta
+  that already passed its compact review.
 - Any failed Done Gate condition blocks an unqualified `Done` report.

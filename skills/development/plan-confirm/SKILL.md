@@ -32,11 +32,14 @@ Missing case identity routes to `docloom-workflow` with
    state, inspect, and commit with `Doc-Loom-Step: requirements` before planning;
    in Git degraded mode record why it is absent.
 4. Classify `low`/`medium`/`high` risk and decide TDD applicability.
-5. Determine eligibility for mandatory Post-execution review and semantic
-   commits; eligible plans must record both strategies.
+5. Determine whether this is Fast-Path or full eligible work. Both record review
+   and commit strategies; Fast-Path declares one combined completion commit and
+   no separate plan commit.
 6. Lock file responsibilities and write small tasks with exact paths, commands,
    expected results, and acceptance criteria.
-7. Write `plan.md` as `status: draft`; set state to
+7. Lead with a short Human Approval Summary covering outcome, material scope,
+   expected local Git actions/commit count, likely interruptions, and excluded
+   actions. Then write `plan.md` as `status: draft`; set state to
    `waiting_for_plan_confirmation` with current `plan_version`.
 8. Self-review coverage, placeholders, naming, buildability, and TDD integrity.
 9. Ask for confirmation unless Fast-Path conditions are verified. High risk
@@ -48,7 +51,8 @@ Missing case identity routes to `docloom-workflow` with
     only the approved plan, routing state, and related case artifacts; inspect
     and commit before implementation.
 12. Continue same-turn to `tdd-execute` when current-plan approval, preflight
-    inputs, and required plan commit exist, unless the user asks to hold.
+    inputs, and the declared plan-commit condition are satisfied, unless the
+    user asks to hold.
 
 ## Plan Contract
 
@@ -66,7 +70,8 @@ base_commit:
 
 Core content:
 
-- Goal/non-goals; context summary/brief/skip; workspace baseline; risk/reason.
+- Human Approval Summary; goal/non-goals; context summary/brief/skip; workspace
+  baseline; risk/reason.
 - TDD applicability and strategy or confirmed exception.
 - Files and exact, placeholder-free tasks.
 - Acceptance criteria with planned verification, not final command evidence.
@@ -74,6 +79,11 @@ Core content:
 - For eligible cases, `## Post-Execution Review Strategy` and `## Atomic Commit
   Strategy`: baseline, axes, gate/fix behavior, semantic boundaries, staging,
   titles/trailers, and excluded Git actions.
+
+The Human Approval Summary is the confirmation surface, not an extra artifact.
+Keep it short enough to read before the detailed plan. State the expected number
+and purpose of local commits; say explicitly when push/PR/history rewriting are
+excluded. For Fast-Path, describe the single combined completion commit.
 
 When discovery triggered work, add `## Discovery Candidate` with Mode, Candidate
 ID, Evidence, Recommendation Reason, and User Decision. Add confirmed decisions,
@@ -109,6 +119,10 @@ authorizes only its requirements commit, not planning/implementation. The plan
 baseline remains the exact pre-execution point and never attempts to contain the
 hash of its own plan commit.
 
+Fast-Path has no required plan commit. Its approved minimal plan remains in the
+working tree until the green change, compact review, closure, and state are
+committed together as the declared completion unit.
+
 Goal, decisions, file/responsibility scope, tests/TDD exception, risk, authority
 impact, public contract, or other execution-constraint changes are material:
 increment the version and reconfirm. Checkbox/status edits are not semantic.
@@ -122,9 +136,12 @@ increment the version and reconfirm. Checkbox/status edits are not semantic.
 - No user/Fast-Path approval -> no execution. Current approval executes
   same-turn unless plan-only, hold, revise, or review; older approval needs
   current execute/continue/reconfirm intent.
-- Eligible Git plan missing its required plan commit -> no implementation.
+- Full eligible Git plan missing its required plan commit -> no implementation;
+  Fast-Path proceeds under its declared combined completion strategy.
 - Approval must identify the current object and Confirmation Log version;
   Fast-Path must record its approver and verified conditions.
+- Do not ask for confirmation until the Human Approval Summary makes local Git
+  effects and excluded publication/history actions obvious.
 - Execution-constraint decisions belong in confirmed `## Decisions`.
 - Eligible plan missing either review or commit strategy must be corrected and
   reconfirmed before execution.

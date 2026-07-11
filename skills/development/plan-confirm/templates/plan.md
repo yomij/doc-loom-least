@@ -1,6 +1,7 @@
 <!--
-Required core: Goal, Non-goals, Context, Workspace Baseline, Risk Level,
-TDD Applicability, Files to Change, Acceptance Criteria, Tasks, Confirmation Log.
+Required core: Human Approval Summary, Goal, Non-goals, Context, Workspace
+Baseline, Risk Level, TDD Applicability, Files to Change, Acceptance Criteria,
+Tasks, Confirmation Log.
 Plan owns expected acceptance criteria and planned verification, not final
 command evidence.
 
@@ -34,6 +35,14 @@ base_commit:
 ---
 
 # Implementation Plan
+
+## Human Approval Summary
+
+- Outcome:
+- Material scope:
+- Decision needed:
+- Expected local Git actions / commit count:
+- Excluded actions:
 
 ## Goal
 

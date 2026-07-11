@@ -1,9 +1,10 @@
 <!--
-Required core: Plan Reference, Changes Made, TDD Applicability,
+Required core: Human Summary, Plan Reference, Changes Made, TDD Applicability,
 Acceptance Criteria Status, Commands Run.
 Use this file only when Artifact Policy requires independent execution evidence.
 Record actual commands, deviations, failures/retries, interim findings, and
-resume-critical facts; avoid repeating plan-only expectations.
+resume-critical facts; avoid repeating plan-only expectations. Reference plan
+criteria and closure summaries instead of copying their prose.
 
 Triggered sections: include each only when it has content.
 - TDD Log: Include when TDD Required: Yes.
@@ -21,6 +22,13 @@ Triggered sections: include each only when it has content.
 Do not keep empty headings.
 -->
 # Execution Report
+
+## Human Summary
+
+- Outcome so far:
+- What changed:
+- User action needed:
+- Local Git effect:
 
 ## Plan Reference
 

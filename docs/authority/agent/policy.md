@@ -7,7 +7,7 @@ source_of_truth: adr
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-02
+last_verified: 2026-07-12
 ---
 
 # Agent Policy
@@ -27,11 +27,18 @@ They should remain thin pointers to this policy, the constitution, and current
 authority docs. When the active constitution changes, update adapters to point
 to it; do not copy constitutional clauses or the full protocol into adapters.
 
-## High-Risk Topics
+## High-Risk Topics And Classification
 
-High-risk topics include security, auth, permission, privacy, billing, data
-deletion, public API, CLI, schema, config contract, migration, ADR-protected
-architecture boundaries, and workflow or agent policy change.
+Security, auth, permission, privacy, billing, data deletion, public API/CLI,
+schema, config contract, migration, ADR-protected architecture boundaries, and
+workflow or agent policy require deliberate context checks.
+
+Execution risk is classified from consequence, reversibility, exposure,
+authority impact, and verification strength. Security, money, private data,
+destructive operations, irreversible migration, and public compatibility are
+presumptively high. Reversible internal workflow or Skill text is normally
+medium, but remains high when it weakens authorization, changes a public
+contract or L1 critical fact, or enables irreversible action.
 
 ## Sources
 

@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-08
+last_verified: 2026-07-12
 ---
 
 # Development Workflow
@@ -18,8 +18,9 @@ rules live in `skills/_shared/references/shared-protocol.md`.
 
 ## Stage Contract
 
-- `docloom-workflow` is a thin router and case-identity owner; it does not plan,
-  execute, auto-trigger ad-hoc review, or call a backend.
+- `docloom-workflow` is the human-facing doorway, thin router, and case-identity
+  owner. It routes stage ownership internally and does not plan, execute,
+  auto-trigger ad-hoc review, or call a backend.
 - `context-authority` is a conditional pre-plan gate for resume, ambiguity,
   authority, conflict, public-contract, and high-risk work. It reads the active
   constitution first when discoverable.
@@ -47,6 +48,10 @@ It excludes publication, history rewriting, material deviations, unrelated
 changes, and unlisted high-risk scope; see shared protocol for the full boundary.
 An approved plan is not a standing grant for a later session.
 
+The confirmation surface must summarize the human outcome, material scope,
+expected local Git actions/commit count, likely interruptions, and excluded
+publication/history actions before asking for approval.
+
 ## Required Quality Outcomes
 
 Eligible persistent cases must complete Post-execution review before successful
@@ -54,14 +59,17 @@ closure. `tdd-execute` invokes `review`; Engineering and Spec remain separate,
 missing material evidence cannot pass, and material findings return to a
 verified atomic fix and re-review. This adds no case phase or `review.md`.
 
-Plans declaring atomic commits use semantic completion points: approved
+Full plans declaring atomic commits use semantic completion points: approved
 requirements when present, approved plan, independently valid green work,
-verified refactors, material review fixes, and closure. Fast-Path may collapse
-implementation into one commit but still performs review and closure commit.
-The policy is prospective and does not invalidate legacy cases.
+verified refactors, material review fixes, and closure. Fast-Path still performs
+a compact Engineering/Spec review but uses no separate plan/task/closure
+commits: the approved minimal plan, green delta, review evidence, closure, and
+closed state form one combined completion commit. The policy is prospective and
+does not invalidate legacy cases.
 
 Unqualified `Done` requires met acceptance criteria, passing required review,
-a successful closure commit, and no unexplained case-related worktree changes.
+a successful declared full-flow closure or Fast-Path completion commit, and no
+unexplained case-related worktree changes.
 
 ## Sources
 

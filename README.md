@@ -61,18 +61,25 @@ These boundaries are what keep the project minimal:
 - No separate review phase or mandatory `review.md`; eligible approved cases
   run the read-only Post-execution gate inside `tdd-execute`
 
-Simple doc edits and low-risk local changes take the minimum path. Only persistent development work enters the full case workflow with plans, execution records, and closure.
+Simple doc edits and low-risk local changes take the minimum path. Small
+persistent work may use compact Fast-Path; broader or riskier development uses
+the full plan, execution, review, and closure evidence flow.
 
 ## Skills
 
+For normal use, start with `docloom-workflow` or simply ask the agent to manage
+a persistent development task with Doc Loom. It chooses the internal owner;
+you do not need to select a stage skill. The remaining names are stable advanced
+entry points and implementation owners.
+
 | Skill | Role |
 |---|---|
-| `docloom-workflow` | Entry point and lightweight router. Parses task state, reports case status, discovers next-slice candidates, and routes to the right stage skill. |
+| `docloom-workflow` | Recommended human-facing entry. Handles persistent feature/bug/refactor requests, status, continuation, and discovery, then routes internally. |
 | `setup-doc-governance` | Governance init and maintenance. Scans docs, extracts facts, produces governance plans. |
 | `context-authority` | Conditional fact authority gate. Reads minimal context, resolves conflicts, issues a routing verdict. |
-| `plan-confirm` | Planning gate. Generates risk, TDD, review, and atomic-commit strategies, then waits for your approval. |
+| `plan-confirm` | Planning gate. Generates risk, TDD, review, and commit strategies, then surfaces or records the applicable confirmation boundary. |
 | `tdd-execute` | Execution gate. Runs Red-Green-Refactor or a recorded exception, creates approved semantic commits, and owns the review/fix loop. |
-| `doc-sync-close` | Closure gate. Syncs docs, records final evidence, and creates the atomic closure commit when required. |
+| `doc-sync-close` | Closure gate. Syncs docs, records final evidence, and creates the full-flow closure or compact Fast-Path completion commit. |
 | `review` | Read-only ad-hoc review plus the workflow-owned Engineering/Spec Post-execution gate. |
 | `grill` | Manual interactive stress-test of requirements, designs, or claims. |
 
@@ -126,23 +133,29 @@ Default scope is `docs-only`. Only escalate to `full-repo` when authority claims
 For tasks that need planning, execution, acceptance, and a closure record:
 
 ```
-docloom-workflow
+Ask Doc Loom to handle the persistent feature, bug, or refactor
+  → docloom-workflow routes internally
   → context-authority (when context gate is needed)
   → plan-confirm
-  → you approve the plan
-  → atomic plan commit
+  → you see scope + expected local Git actions, then approve the plan
+  → atomic plan commit for the full flow
   → tdd-execute → green task commits
   → Engineering + Spec review → fix commit + re-review when needed
   → doc-sync-close → atomic closure commit
 ```
 
-`docloom-workflow` only routes — it never replaces a stage skill.
+For a verified small low-risk Fast-Path case, the minimal plan, green change,
+compact review, closure, and closed state are committed once instead of creating
+separate plan/task/closure commits.
+
+`docloom-workflow` routes internally—it never replaces stage ownership, and
+normal users do not need to invoke those stages themselves.
 
 ### Case status & next-slice discovery
 
-When you want to know where things stand, `docloom-workflow` can read the derived case dashboard and the relevant case artifacts, then report the current phase, the evidence so far, the next skill to use, and any input it needs from you.
+When you want to know where things stand, `docloom-workflow` can read the derived case dashboard and the relevant case artifacts, then report what is complete, what can happen next, and any decision it needs from you. Internal phase and skill names stay out of the default response unless they help diagnose a problem.
 
-When you ask what to build next, it can pull from [`docs/product/current-state.md`](docs/product/current-state.md), case follow-ups, and targeted repo evidence to recommend ranked next-slice candidates. A recommendation is not execution authorization: once you pick a candidate, the work still goes through normal case identity, planning, approval, execution, and closure.
+When you ask what to build next, it can pull from [`docs/product/current-state.md`](docs/product/current-state.md), case follow-ups, and targeted repo evidence to recommend ranked next-slice candidates. It labels facts inferred from the repo and asks only for missing human information that could materially change the ranking. A recommendation is not execution authorization: once you pick a candidate, the work still goes through normal case identity, planning, approval, execution, and closure.
 
 ### Review & stress-test
 
@@ -180,14 +193,16 @@ skillshare sync
 
 For project-scoped installation and detailed verification steps, see [INSTALL.md](INSTALL.md).
 
-In environments that support Agent Skills but don't have `skillshare`, copy or symlink the directories containing `SKILL.md` from the grouped `skills/` tree into your skills directory, then invoke them by name:
+In environments that support Agent Skills but don't have `skillshare`, copy or symlink the directories containing `SKILL.md` from the grouped `skills/` tree into your skills directory. The normal entry is:
 
 ```
+Use Doc Loom to implement this persistent feature.
 Use docloom-workflow to continue the current case.
-Use setup-doc-governance to organize docs-only governance.
-Use review to audit this plan.
-Use grill to stress-test this API design.
 ```
+
+Explicit advanced entry points remain available, for example `review` for a
+read-only audit, `grill` for interactive pressure-testing, and
+`setup-doc-governance` for documentation governance.
 
 ## Fact Authority Order
 

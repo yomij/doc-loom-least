@@ -34,8 +34,8 @@ project command/package-manager instructions. Verify:
   explainable;
 - current execution authorization exists;
 - eligible cases declare Post-Execution Review and Atomic Commit strategies;
-- any required atomic plan commit already contains the approved plan and
-  routing state.
+- any required full-flow atomic plan commit already contains the approved plan
+  and routing state; Fast-Path instead declares one combined completion commit.
 
 If the user approves a still-draft current plan, perform the minimal approval
 writeback first and continue unless they ask to hold. Otherwise failed preflight
@@ -50,8 +50,9 @@ returns to `plan-confirm`, except a missing state cache may be repaired locally.
 4. Green: implement minimally and pass the target test.
 5. Refactor only as planned/necessary; rerun related tests after each change.
 6. Run planned and obvious low-risk quality checks.
-7. At each independently valid green task or verified refactor completion,
-   update evidence and create its authorized semantic commit.
+7. In the full flow, create authorized semantic commits at independently valid
+   green task or verified refactor completion. In Fast-Path, keep the verified
+   green delta uncommitted for the combined completion unit.
 8. Update plan progress and execution evidence; write handoff only for a future
    resume point, using `templates/handoff.md`.
 9. Maintain `review_risk`; verify every acceptance criterion and final check.
@@ -111,6 +112,10 @@ deviations, failures/retries, interim findings, task/fix hashes, and
 resume-critical facts—not a copy of planned acceptance. Checkbox progress may
 change without changing plan semantics.
 
+Lead with `## Human Summary`: current outcome, what changed, whether the user
+must act, and relevant local Git effect. Reference plan criteria instead of
+copying plan prose; closure references this evidence rather than duplicating it.
+
 ## Review Risk
 
 `review_risk` is data, not an ad-hoc review trigger:
@@ -119,7 +124,7 @@ change without changing plan semantics.
 |---|---|
 | `low` | Local change, no public contract, tests pass. |
 | `medium` | Internal feature, moderate scope, main paths covered. |
-| `high` | High-Risk Topic, insufficient coverage, material deviation, or pending authority proposal. |
+| `high` | High-consequence risk under the shared classification, insufficient coverage, material deviation, or pending authority proposal. |
 
 Update as evidence changes; do not clear to low until original high-risk causes
 are resolved. Closure consumes the final value. Outside an approved
@@ -133,9 +138,14 @@ behavior. Explanation/status-only, standalone review, and one-shot non-case work
 are ineligible. Purely mechanical docs may use a compact inline Engineering/Spec
 check only when the approved plan says so.
 
+Fast-Path uses a compact Engineering/Spec check against its minimal plan and
+complete working-tree delta. Material findings leave Fast-Path and use the full
+fix/re-review behavior; only a passing compact check may enter the combined
+completion commit.
+
 Start only when tasks, required tests/checks, preliminary acceptance evidence,
-expected task/refactor commits, exact plan baseline, and explainable complete
-delta are all present.
+expected full-flow task/refactor commits or the Fast-Path combined strategy,
+exact plan baseline, and explainable complete delta are all present.
 
 Invoke `review` under the approved plan. Keep Engineering and Spec isolated and
 persist exact baseline, reviewed commits/worktree, verdicts, findings, evidence
@@ -192,6 +202,11 @@ Combine dependent work when separation would create an invalid commit; keep an
 independently verified refactor separate when practical. If a mixed file cannot
 be isolated safely, stop.
 
+Fast-Path creates no task commit. After its compact review passes,
+`doc-sync-close` creates the single `Doc-Loom-Step: closure` completion commit
+containing the approved minimal plan, green change, verification, closure,
+closed state, and necessary dashboard sync.
+
 After separately authorized amend/rebase/squash/history rewrite, prior hashes
 and Post-execution evidence are stale. Revalidate the exact baseline and range,
 refresh commit mappings, and rerun final Engineering and Spec before closure.
@@ -203,7 +218,9 @@ refresh commit mappings, and rerun final Engineering and Spec before closure.
 - Required TDD without expected Red, unexpected Red, or an exception without
   alternative verification -> no implementation.
 - Material deviation/hard stop -> apply Deviations handling.
-- Eligible case missing strategies, required plan/task commits, or resolvable
+- Full eligible case missing strategies, required plan/task commits, or resolvable
   exact baseline -> return to `plan-confirm` or report
   `insufficient_evidence`; never close.
+- Fast-Path missing its combined strategy, green verification, or passing
+  compact review -> no completion commit and no unqualified closure.
 - Required Post-execution result other than `pass` -> remain in execution.

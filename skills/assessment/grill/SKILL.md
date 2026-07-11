@@ -32,12 +32,14 @@ Separate fact from decision:
 
 - Fact question: check code, tests, or docs first when possible. Report evidence
   or evidence gap.
-- Decision question: ask one sharp question, give 2-3 meaningful options, and
-  recommend one with a short reason. Include conditions inline when they matter.
+- Decision question: ask one sharp question. Give 2-3 meaningful options and a
+  recommendation only when the choices are genuinely discrete. For exploratory
+  or definition questions, invite a free-form answer and offer one concise
+  framing or example instead.
 
 From Question 2 onward, start by restating the previous choice in one sentence.
 
-Question format:
+Discrete decision format:
 
 ```md
 Previous: Q<N-1> = <user choice>. This means <one-sentence restatement>.
@@ -52,9 +54,20 @@ Recommended: <A/B/C>, because <one short reason; include a condition or
 alternative only if needed>.
 ```
 
+Exploratory format:
+
+```md
+Previous: <omit for Q1; otherwise one-sentence restatement>.
+
+Q<N>: <one open, high-leverage question>
+
+Framing: <one short example, boundary, or tension that helps answer>.
+```
+
 Short answers such as "yes", "use the recommendation", or "continue" confirm the
-current recommendation only when unambiguous. A/B/C answers confirm that option.
-They do not become long-term authority facts.
+current recommendation only when unambiguous. A/B/C answers confirm that option;
+free-form answers are summarized neutrally before the next question. None become
+long-term authority facts.
 
 ## Converge
 
@@ -77,9 +90,9 @@ explicitly confirmed decisions in their own artifacts.
 
 ## High-Risk Topics
 
-High risk includes security, auth, permission, privacy, billing, data deletion,
-public API, CLI, schema, config contract, migration, ADR-protected architecture
-boundaries, and workflow or agent policy change.
+Use shared-protocol risk-sensitive topics and consequence-based classification;
+workflow or agent policy text is not automatically high unless it weakens
+authorization, changes public/L1 facts, or enables irreversible action.
 
 For high-risk recommendations:
 

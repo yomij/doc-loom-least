@@ -6,7 +6,8 @@ type: architecture
 source_of_truth: code
 supersedes: []
 superseded_by: []
-last_verified: 2026-07-02
+owner: user
+last_verified: 2026-07-12
 ---
 
 # Repository And Skills
@@ -36,6 +37,11 @@ Canonical skill invocation names:
 | `setup-doc-governance` | `skills/governance/setup-doc-governance/SKILL.md` |
 | `review` | `skills/assessment/review/SKILL.md` |
 | `grill` | `skills/assessment/grill/SKILL.md` |
+
+`docloom-workflow` is the recommended human-facing doorway for persistent
+development work, status/continuation, and discovery. The other invocation
+names remain stable for explicit expert use and internal ownership, but normal
+users should not need to choose a stage skill.
 
 `review` supports explicit ad-hoc assessment and the workflow-owned read-only
 Post-execution gate invoked by `tdd-execute` under an approved eligible plan.

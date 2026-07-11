@@ -2,9 +2,13 @@
 
 | Level | Meaning | Anchoring |
 |---|---|---|
-| `low` | Documentation, local copy, non-critical tests, or behavior-preserving refactor. | Update a README section. Fix a typo in a config comment. Rename a local variable. |
-| `medium` | Normal feature work, local behavior change, internal API, or local data flow change. | Add a new CLI flag. Change an internal data structure. Add a new internal endpoint. |
-| `high` | Any High-Risk Topic from `shared-protocol.md`, destructive architecture boundary, or L1 critical fact. | Change password hashing. Add a billing tier. Remove a public API endpoint. Drop a database column. |
+| `low` | Small, reversible, local, well-verified change with no meaningful authority, public-contract, private-data, money, or destructive effect. | Update README wording. Fix a local copy error. Rename a local variable under tests. |
+| `medium` | Reversible internal behavior, workflow/Skill text, internal API/data flow, or broader local change whose failure has a bounded recovery path. | Add an internal endpoint. Change an internal data structure. Refine an internal workflow rule without weakening authorization. |
+| `high` | Security, money, private data, destructive/irreversible action, public compatibility, L1 critical fact, or any change that weakens authorization or enables such impact. | Change password hashing. Add billing behavior. Remove a public API. Drop a database column. Let plan approval authorize a new irreversible action. |
+
+Classify from consequence, reversibility, exposure, authority impact, and
+verification strength. Risk-sensitive topics still trigger `context-authority`
+even when their final execution risk is medium.
 
 Plan confirmation policy:
 

@@ -25,7 +25,7 @@ Use this output shape when multiple case candidates or follow-ups exist:
 ```md
 ## Case Candidates
 
-| ID | Case | Phase | Evidence | Next Skill | Required Input | Why Next |
+| ID | Case | Status | Evidence | Next Action | Decision Needed | Why Next |
 |---|---|---|---|---|---|---|
 ```
 
@@ -34,17 +34,18 @@ Use this output shape when multiple case candidates or follow-ups exist:
 Use next-slice discovery when the user asks what to build next, what feature
 slice should follow, or asks the agent to find the next iteration target.
 
-Required input is `docs/product/current-state.md` or equivalent current-turn
-facts. Required fields: Product Goal, Target User, Current Demo State,
-Constraints, Do Not Build Yet. Optional ranking signals: Current Bottleneck,
-Feedback / Signals.
+Preferred input is `docs/product/current-state.md` or equivalent current-turn
+facts. Target fields are Product Goal, Target User, Current Demo State,
+Constraints, and Do Not Build Yet. Optional ranking signals are Current
+Bottleneck and Feedback / Signals.
 
-If a required field is missing, do not invent a product direction. Return:
-
-```text
-Blocking issue: missing product current state.
-Required input: Product Goal, Target User, Current Demo State, Constraints, and Do Not Build Yet.
-```
+Fill missing fields only from traceable active authority, current
+implementation, README, case follow-ups, and current-turn facts. Mark each
+inference and confidence; never promote it to authority. If the available facts
+support a stable ranking, return provisional candidates and state the weakest
+assumption. Block only when a missing human fact could materially change the
+recommended candidate, then ask for that smallest fact instead of the whole
+template.
 
 Discover candidates from Product Goal minus Current Demo State, Current
 Bottleneck, Feedback / Signals, closure follow-ups, TODO/FIXME, failing checks,
@@ -69,7 +70,7 @@ Output:
 ```md
 ## Next Slice Candidates
 
-| ID | Slice | Why | Score | Route |
+| ID | Slice | Why | Score | Next Action |
 |---|---|---|---:|---|
 ```
 
@@ -79,6 +80,12 @@ Then state:
 Recommended: N1: <slice>
 Reason: <one sentence>
 Decision: reply with a candidate ID, "more", or updated product-state facts.
+```
+
+When inference was needed, add one short line:
+
+```text
+Assumption: <inferred fact> (<confidence>); update it if wrong.
 ```
 
 ## Safety

@@ -11,7 +11,7 @@ refresh this file.
 
 | Case | Phase | Evidence | Next Human Decision |
 |---|---|---|---|
-| `20260712-human-first-workflow-simplification` | Planned; entering execution | `20260712-human-first-workflow-simplification/plan.md` | None; plan v1 was approved in the current turn. |
+| `20260712-human-first-workflow-simplification` | Executing; implementation checks passed, review pending | `20260712-human-first-workflow-simplification/execution.md` | None unless review finds a material issue. |
 
 ## Waiting On Human
 

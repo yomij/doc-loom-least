@@ -3,6 +3,8 @@ Required core: Summary, Acceptance Criteria Status, Tests, Remaining Risks,
 Follow-ups, Final Status.
 Closure owns final acceptance status and final verification summary. When
 execution.md was skipped, include the full command evidence here.
+Keep Summary human-readable and concise. When execution.md exists, reference
+its commands/findings instead of copying them.
 
 Triggered sections: include each only when it has content.
 - Code Changes: Include when code was modified.
@@ -26,6 +28,10 @@ Do not keep empty headings.
 # Closure Report
 
 ## Summary
+
+- Outcome:
+- User action needed:
+- Local Git effect:
 
 ## Acceptance Criteria Status
 

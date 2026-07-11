@@ -261,29 +261,29 @@ Case evidence and derived dashboard:
 **Files:** `docloom-workflow/SKILL.md`, `README.md`, `skills/README.md`,
 `repo-and-skills.md`, `development-flow.md`.
 
-- [ ] Broaden the default-entry trigger without hijacking explanation-only,
+- [x] Broaden the default-entry trigger without hijacking explanation-only,
   one-shot review, or explicit stage-skill requests.
-- [ ] Replace default route jargon with human status/action/decision language.
-- [ ] Present stage skills as internal/advanced entry points in public docs.
+- [x] Replace default route jargon with human status/action/decision language.
+- [x] Present stage skills as internal/advanced entry points in public docs.
 
 ### Task 2: Make Fast-Path compact and Git authorization visible
 
 **Files:** shared protocol, plan/execute/close skills, plan/closure templates,
 Git and workflow authority.
 
-- [ ] Define one combined compact completion commit and remove separate
+- [x] Define one combined compact completion commit and remove separate
   Fast-Path plan/closure commit requirements.
-- [ ] Keep full-case Post-execution review and semantic commit safety unchanged.
-- [ ] Add a prominent approval summary with expected local Git actions and
+- [x] Keep full-case Post-execution review and semantic commit safety unchanged.
+- [x] Add a prominent approval summary with expected local Git actions and
   excluded publication/history actions.
 
 ### Task 3: Refine risk without weakening dangerous-change protection
 
 **Files:** agent policy, shared protocol, risk levels, context/plan wording.
 
-- [ ] Base risk on impact, reversibility, exposure, and authority consequences.
-- [ ] Keep workflow/agent policy as a mandatory context trigger.
-- [ ] Keep authorization weakening, irreversible action, public compatibility,
+- [x] Base risk on impact, reversibility, exposure, and authority consequences.
+- [x] Keep workflow/agent policy as a mandatory context trigger.
+- [x] Keep authorization weakening, irreversible action, public compatibility,
   security, billing, privacy, permission, deletion, and destructive migration
   high risk.
 
@@ -291,24 +291,24 @@ Git and workflow authority.
 
 **Files:** loop protocol, router, plan/execution/closure templates and skills.
 
-- [ ] Infer discoverable current-state fields and label assumptions/confidence.
-- [ ] Block only on material decision ambiguity.
-- [ ] Put concise human summaries first and replace repeated evidence with
+- [x] Infer discoverable current-state fields and label assumptions/confidence.
+- [x] Block only on material decision ambiguity.
+- [x] Put concise human summaries first and replace repeated evidence with
   stable references.
 
 ### Task 5: Relax grill's interaction shape
 
 **Files:** `skills/assessment/grill/SKILL.md`.
 
-- [ ] Preserve one high-leverage question at a time.
-- [ ] Use options only for genuinely discrete decisions; allow open responses.
-- [ ] Retain fact verification and non-promotion safeguards.
+- [x] Preserve one high-leverage question at a time.
+- [x] Use options only for genuinely discrete decisions; allow open responses.
+- [x] Retain fact verification and non-promotion safeguards.
 
 ### Task 6: Validate, review, and close
 
 **Files:** case execution/closure/state and derived dashboard.
 
-- [ ] Run all alternative verification and inspect the complete delta.
+- [x] Run all alternative verification and inspect the complete delta.
 - [ ] Run isolated Engineering and Spec Post-execution review.
 - [ ] Fix and re-review any material finding.
 - [ ] Sync authority/public documentation and create the declared closure commit.

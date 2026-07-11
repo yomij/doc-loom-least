@@ -1,11 +1,12 @@
 ---
 name: docloom-workflow
-description: Default entry for Doc Loom Least. Use when a user asks for a docs-first workflow but does not name a specific skill, asks for status/continue/where-we-are routing, or asks what next product or development slice should be discovered.
+description: Human-facing default entry for Doc Loom Least. Use for persistent feature, bug, refactor, workflow, or agent-policy work; docs-first development; case status or continuation; and next-slice discovery when the user does not explicitly name another owning skill. Skip explanation-only, standalone review/grill, and clearly one-shot low-risk local edits.
 ---
 
 # docloom-workflow
 
-Route to the owning skill; do not replace stage skills.
+Act as the one public doorway and route internally to the owning skill; do not
+replace stage ownership or require the user to know stage skill names.
 
 Read shared rules first when routing or creating case state:
 `references/shared-protocol.md`.
@@ -44,8 +45,9 @@ Status-only behavior:
 - Read only the git state and necessary case docs.
 - Use `docs/cases/README.md`, when present, only to narrow case artifact reads;
   verify phase, next skill, and required input from case artifacts.
-- Output current phase, evidence, route decision, next skill, blocking issue,
-  and one clarifying question if needed.
+- Output human status, evidence, what can happen next, the decision needed, and
+  one clarifying question if needed. Include internal phase/skill names only for
+  diagnosis or when the user asks for workflow detail.
 
 For multiple case candidates or follow-ups, use the Case Candidates table from
 `references/loop-protocol.md`; this is output shape only, not a new stage.
@@ -59,9 +61,10 @@ Inputs are `docs/product/current-state.md` or equivalent current-turn facts,
 case dashboard and closure follow-ups when present, minimal git state, and
 targeted repo evidence only when needed to support candidate claims.
 
-If required product-state fields are missing, do not recommend a new task. Use
-the blocking output from `references/loop-protocol.md`; if creating the file is
-the next user-approved action, use `templates/product-current-state.md`.
+When product-state fields are missing, first infer discoverable facts from
+active authority, current implementation, README, case follow-ups, and current
+turn facts. Label inferred facts and confidence. Block only when a missing human
+fact would materially change candidate ranking; see `references/loop-protocol.md`.
 
 Output Next Slice Candidates using the compact table in
 `references/loop-protocol.md`. Recommend exactly one candidate with
@@ -123,7 +126,9 @@ owner.
 
 For fast-path (row 9): `plan-confirm` writes a minimal approved plan with
 `approved_by: fast-path`, a Confirmation Log row, fast-path eligibility, and no
-task-level TDD breakdown. See `references/shared-protocol.md` → Fast-Path.
+task-level TDD breakdown or separate plan commit. The approved green change,
+compact review, closure, and closed state form one local completion commit. See
+`references/shared-protocol.md` → Fast-Path.
 
 ## Artifact Policy
 
@@ -143,14 +148,14 @@ artifacts:
 
 ## Output Contract
 
-Default response:
+Default human response:
 
 ```text
-Current phase:
-Evidence:
-Route decision:
-Next skill:
-Blocking issue:
+Status:
+What I found or completed:
+What happens next:
+Decision needed:
+Local Git effect: <only when relevant>
 ```
 
 For next-slice discovery, use compact output instead of repeating the full
@@ -163,9 +168,9 @@ Recommended:
 Decision:
 ```
 
-Do not create route artifacts. If a route decision affects a plan, it belongs
-in `plan.md` context, assumptions, or risks. If it affects closure, it belongs
-in `closure.md`.
+Do not expose internal routing by default or create route artifacts. If a route
+decision affects a plan, it belongs in `plan.md` context, assumptions, or risks.
+If it affects closure, it belongs in `closure.md`.
 
 ## Gates
 
