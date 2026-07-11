@@ -9,7 +9,9 @@ refresh this file.
 
 ## Active Cases
 
-None.
+| Case | Status | Evidence | Next Action |
+|---|---|---|---|
+| `20260712-artifact-owned-case-state` | Planned | `20260712-artifact-owned-case-state/plan.md` | Execute approved plan v1. |
 
 ## Waiting On Human
 

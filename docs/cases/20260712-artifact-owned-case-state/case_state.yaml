@@ -1,0 +1,10 @@
+case_id: 20260712-artifact-owned-case-state
+phase: planned
+case_docs: docs/cases/20260712-artifact-owned-case-state
+closure_status: open
+closure_path:
+current_plan_version: 1
+next_skill: tdd-execute
+route_reason: Plan v1 is approved for same-turn execution.
+required_input: Execute approved plan v1.
+last_updated: 2026-07-12T02:09:03+08:00
