@@ -309,9 +309,9 @@ Git and workflow authority.
 **Files:** case execution/closure/state and derived dashboard.
 
 - [x] Run all alternative verification and inspect the complete delta.
-- [ ] Run isolated Engineering and Spec Post-execution review.
-- [ ] Fix and re-review any material finding.
-- [ ] Sync authority/public documentation and create the declared closure commit.
+- [x] Run isolated Engineering and Spec Post-execution review.
+- [x] Fix and re-review any material finding.
+- [x] Sync authority/public documentation and create the declared closure commit.
 
 ## Risks
 

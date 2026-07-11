@@ -156,9 +156,45 @@ closure behavior across active authority and Skill contracts.
 - Handling: restore the concise list, validate, create one atomic review-fix
   commit, and rerun both affected axes against the accumulated final delta.
 
+### Re-review Engineering
+
+- Verdict: No material issue found.
+- Critical: None within reviewed scope.
+- Important: None within reviewed scope; F1 is resolved by the self-contained
+  sensitive-topic list in `grill`.
+- Minor: None within reviewed scope.
+- Evidence Gaps: None material.
+- Scope: accumulated delta through
+  `179ece8d6f13fc3fad1d3c73b804af84de3729cc`, exact baseline, clean worktree,
+  Skill/YAML validation, links/symlinks, semantic assertions, and Git trailers.
+
+### Re-review Spec
+
+- Verdict: No material issue found.
+- Critical: None within reviewed scope.
+- Important: None within reviewed scope; the Non-goal preserving security,
+  auth, permission, privacy, billing, deletion, migration, and public-contract
+  protection is now satisfied inside the `grill` owner.
+- Minor: None within reviewed scope.
+- Evidence Gaps: None material.
+- Scope: complete accumulated delta against plan v1 Goal, Non-goals, Decisions,
+  Acceptance Criteria, authority, and approved files.
+
+### Final Aggregate
+
+- Result: `pass`
+- Reviewed baseline: `db766193faa195c2451f840093cb0933f3c7e7f2`
+- Reviewed commits: `cc1bbedc2434e0f03887439a62ee3692f0f68b11`,
+  `fa0f7a42dbdfdc9d7302183067d6b83a5c52c728`,
+  `179ece8d6f13fc3fad1d3c73b804af84de3729cc`
+- Reviewed working tree: clean at re-review; no staged, unstaged, untracked, or
+  unrelated changes.
+- Material finding disposition: F1 resolved and both affected axes passed.
+
 ## Checkpoints / Commits
 
 | Step | Commit | Evidence |
 |---|---|---|
 | plan | `cc1bbedc2434e0f03887439a62ee3692f0f68b11` | Approved plan v1, routing state, dashboard, staged diff, and trailers. |
 | task:human-first-workflow | `fa0f7a42dbdfdc9d7302183067d6b83a5c52c728` | Complete approved implementation, validation evidence, staged diff, and trailers. |
+| review-fix:F1 | `179ece8d6f13fc3fad1d3c73b804af84de3729cc` | Restored self-contained grill risk coverage; validation and both affected review axes passed. |

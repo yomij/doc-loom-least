@@ -1,11 +1,11 @@
 case_id: 20260712-human-first-workflow-simplification
-phase: executing
+phase: closed
 case_docs: docs/cases/20260712-human-first-workflow-simplification
-closure_status: open
-closure_path:
+closure_status: Done
+closure_path: docs/cases/20260712-human-first-workflow-simplification/closure.md
 current_plan_version: 1
 review_risk: high
-next_skill: tdd-execute
-route_reason: Approved plan v1 passed execution preflight and implementation has begun.
-required_input: Approved plan v1, characterization evidence, and current workspace delta.
-last_updated: 2026-07-12T01:31:08+08:00
+next_skill:
+route_reason: Done gate passed; closure commit contains the closure path and closed state.
+required_input:
+last_updated: 2026-07-12T01:47:07+08:00

@@ -9,9 +9,7 @@ refresh this file.
 
 ## Active Cases
 
-| Case | Phase | Evidence | Next Human Decision |
-|---|---|---|---|
-| `20260712-human-first-workflow-simplification` | Executing; implementation checks passed, review pending | `20260712-human-first-workflow-simplification/execution.md` | None unless review finds a material issue. |
+None.
 
 ## Waiting On Human
 
@@ -23,6 +21,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260712-human-first-workflow-simplification` | Done | `20260712-human-first-workflow-simplification/closure.md` | Human entry, compact Fast-Path, Git disclosure, risk, discovery, summaries, and grill improvements passed review after one atomic fix. |
 | `20260710-compress-workflow-skill-text` | Done | `20260710-compress-workflow-skill-text/closure.md` | Seven contracts reduced 1,610→1,140 lines; dual-axis review passed after one atomic wording fix. |
 | `20260710-post-execution-review-atomic-commits` | Done | `20260710-post-execution-review-atomic-commits/closure.md` | Mandatory Engineering/Spec review passed after two atomic review fixes; no follow-up. |
 | `20260708-plan-approval-direct-execute` | Done with Caveats | `20260708-plan-approval-direct-execute/closure.md` | High-risk workflow-policy change verified by document/skill inspection; no automated workflow interpreter tests exist. |
