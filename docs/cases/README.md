@@ -1,17 +1,16 @@
 # Cases
 
-This file is a derived dashboard for Doc Loom case discovery. Source of truth
-remains each case's `case_state.yaml`, `plan.md`, `execution.md`, and
-`closure.md`.
+This file is a derived dashboard for Doc Loom case discovery. Current status
+comes from each case's `plan.md`, `execution.md`, and `closure.md`.
 
-If this dashboard conflicts with a case artifact, trust the case artifact and
-refresh this file.
+If this dashboard conflicts with case artifacts, follow their documented
+precedence and refresh this file.
 
 ## Active Cases
 
 | Case | Status | Evidence | Next Action |
 |---|---|---|---|
-| `20260712-artifact-owned-case-state` | Planned | `20260712-artifact-owned-case-state/plan.md` | Execute approved plan v1. |
+| `20260712-artifact-owned-case-state` | Executing | `20260712-artifact-owned-case-state/execution.md` | Complete implementation and Post-execution review. |
 
 ## Waiting On Human
 
@@ -42,7 +41,7 @@ None.
 ## Refresh Rules
 
 - Keep this file short: dashboard rows, not detailed evidence.
-- Update it from case artifacts when a case opens, changes phase, closes, or
+- Update it from case artifacts when a case opens, changes status, closes, or
   adds a follow-up candidate.
 - Do not use this file as routing truth; use it only to decide which case
   artifacts to read next.

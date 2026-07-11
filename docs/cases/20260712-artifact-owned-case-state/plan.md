@@ -221,25 +221,25 @@ Case evidence:
 **Files:** shared protocol, loop protocol, router, retrieval routing, and plan
 owner/template.
 
-- [ ] Capture the current state/cache/phase/routing-field contract.
-- [ ] Define artifact-owned statuses and deterministic precedence once.
-- [ ] Remove new-case state creation and the case-state template.
-- [ ] Preserve case identity, confirmation, artifact policy, and legacy reads.
+- [x] Capture the current state/cache/phase/routing-field contract.
+- [x] Define artifact-owned statuses and deterministic precedence once.
+- [x] Remove new-case state creation and the case-state template.
+- [x] Preserve case identity, confirmation, artifact policy, and legacy reads.
 
 ### Task 2: Align execution, closure, review, and documentation
 
 **Files:** execute/close/review owners and templates, workflow authority,
 SSOT map, shareable workflow explanation, and case dashboard.
 
-- [ ] Add stage-owned frontmatter to execution and closure artifacts.
-- [ ] Replace state writes/repairs with artifact status transitions.
-- [ ] Remove duplicate routing-state claims from active documentation.
-- [ ] Delete this case's bootstrap state file after the new contract is valid.
+- [x] Add stage-owned frontmatter to execution and closure artifacts.
+- [x] Replace state writes/repairs with artifact status transitions.
+- [x] Remove duplicate routing-state claims from active documentation.
+- [x] Delete this case's bootstrap state file after the new contract is valid.
 
 ### Task 3: Validate and review the complete delta
 
-- [ ] Run structural, semantic, stale-rule, link, symlink, and Git checks.
-- [ ] Record execution evidence and every acceptance criterion.
+- [x] Run structural, semantic, stale-rule, link, symlink, and Git checks.
+- [x] Record execution evidence and every acceptance criterion.
 - [ ] Run isolated Engineering and Spec Post-execution review.
 - [ ] Fix/re-review material findings, then close only on aggregate `pass`.
 

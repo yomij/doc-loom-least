@@ -12,7 +12,7 @@ of an older plan. A recommendation is not authorization.
 
 Read:
 
-- `references/shared-protocol.md` for state, artifacts, authority,
+- `references/shared-protocol.md` for status, artifacts, authority,
   authorization, Atomic Commit, and compatibility rules.
 - `references/tdd-exceptions.md` when `TDD Required: No` or considering an
   exception amendment.
@@ -21,7 +21,7 @@ Read:
 
 ## Preflight
 
-Read the case plan/state, required context brief, relevant code/tests, and
+Read the case plan/current artifacts, required context brief, relevant code/tests, and
 project command/package-manager instructions. Verify:
 
 - `plan.md` exists with `status: approved`, `plan_version`, `approved_by`,
@@ -35,17 +35,17 @@ project command/package-manager instructions. Verify:
 - current execution authorization exists;
 - eligible cases declare Post-Execution Review and Atomic Commit strategies;
 - any required full-flow atomic plan commit already contains the approved plan
-  and routing state; Fast-Path instead declares one combined completion commit.
+  and related case artifacts; Fast-Path instead declares one combined completion commit.
 
 If the user approves a still-draft current plan, perform the minimal approval
 writeback first and continue unless they ask to hold. Otherwise failed preflight
-returns to `plan-confirm`, except a missing state cache may be repaired locally.
+returns to `plan-confirm`.
 
 ## Workflow
 
 1. Critically check steps, commands, tests, non-goals, and acceptance.
-2. Set `phase: executing` before implementation (not for preflight-only or
-   approval-writeback-only work).
+2. Create/update `execution.md` with `status: executing` before implementation
+   (not for preflight-only or approval-writeback-only work).
 3. Red: run the smallest behavior test and observe the expected failure.
 4. Green: implement minimally and pass the target test.
 5. Refactor only as planned/necessary; rerun related tests after each change.
@@ -58,7 +58,8 @@ returns to `plan-confirm`, except a missing state cache may be repaired locally.
 9. Maintain `review_risk`; verify every acceptance criterion and final check.
 10. For eligible work, invoke `review` in Post-execution mode, persist both axes
     and aggregate result, and own the fix/re-review loop.
-11. Only after aggregate `pass`, set `phase: doc_syncing` and route to
+11. Only after aggregate `pass`, set `execution.md` to `status: ready_to_close`
+    and route to
     `doc-sync-close`.
 12. Stage/commit only within the approved strategy and shared authorization.
 
@@ -152,7 +153,7 @@ persist exact baseline, reviewed commits/worktree, verdicts, findings, evidence
 gaps, aggregate result, and re-review history. Consume the aggregate contract
 owned by `review`:
 
-- `pass`: proceed to `doc_syncing`.
+- `pass`: mark `execution.md` ready to close.
 - `insufficient_evidence`: collect material evidence, rerun the affected axis,
   then aggregate again; absence never passes.
 - `changes_required`: remain in execution; fix one smallest coherent root cause,
@@ -160,26 +161,23 @@ owned by `review`:
   one atomic `fix:` unit with `Doc-Loom-Step: review-fix:<id>`, rerun the affected
   axis, then aggregate against the accumulated final delta.
 
-Unresolved Critical/Important findings block `doc_syncing` and unqualified
+Unresolved Critical/Important findings block closure readiness and unqualified
 closure. Keep Minor findings visible for residual-risk judgment.
 
-## State
+## Artifact Status
 
-State carries phase/routing; Markdown carries evidence. On phase entry keep
-`closure_status: open`:
+`execution.md` carries execution status in frontmatter:
 
 ```yaml
-# implementation begins
-phase: executing
-closure_status: open
-
-# acceptance complete and required Post-execution result is pass
-phase: doc_syncing
-closure_status: open
+---
+case_id: <case-id>
+status: executing  # or ready_to_close after required review passes
+updated_at: <timestamp>
+---
 ```
 
-`review_risk` accepts only `low`, `medium`, or `high`; reasons live in evidence.
-If state update fails, preserve completed implementation, record the failure,
+`review_risk` accepts only `low`, `medium`, or `high`; reasons live in the body.
+If the artifact update fails, preserve completed implementation, record the failure,
 and do not claim the workflow fully synced.
 
 ## Commits
@@ -205,7 +203,7 @@ be isolated safely, stop.
 Fast-Path creates no task commit. After its compact review passes,
 `doc-sync-close` creates the single `Doc-Loom-Step: closure` completion commit
 containing the approved minimal plan, green change, verification, closure,
-closed state, and necessary dashboard sync.
+and necessary dashboard sync.
 
 After separately authorized amend/rebase/squash/history rewrite, prior hashes
 and Post-execution evidence are stale. Revalidate the exact baseline and range,

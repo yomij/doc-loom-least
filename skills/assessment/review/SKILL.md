@@ -90,8 +90,8 @@ baseline or history.
 
 Read only relevant target files/diffs, cited sources, active authority/ADR/
 contracts, related code/tests, and user-provided command/runtime evidence.
-`case_state.yaml` is routing, not evidence; read it only for state-consistency
-review. Missing evidence is a gap, never a passing claim.
+Artifact frontmatter carries current status but does not replace behavioral
+evidence. Missing evidence is a gap, never a passing claim.
 
 Follow fact authority in `references/shared-protocol.md`. Check claim clarity,
 evidence, assumptions/non-goals, verifiable success criteria, source authority,

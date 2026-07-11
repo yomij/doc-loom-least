@@ -25,6 +25,12 @@ Triggered sections: include each only when it has content.
 - History: Include when updating an existing closure report.
 Do not keep empty headings.
 -->
+---
+case_id:
+status:
+updated_at:
+---
+
 # Closure Report
 
 ## Summary
@@ -49,4 +55,5 @@ Do not keep empty headings.
 
 ## Final Status
 
-Done / Done with Caveats / Blocked / Cancelled / Superseded / Paused / Abandoned
+Must match frontmatter: Done / Done with Caveats / Blocked / Cancelled /
+Superseded / Paused / Abandoned

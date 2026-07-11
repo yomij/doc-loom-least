@@ -13,7 +13,7 @@ last_verified: 2026-07-12
 # Development Workflow
 
 Current Skill implementation owns workflow procedure. Shared ownership,
-authority order, artifacts, state, authorization, compatibility, and Fast-Path
+authority order, artifacts, status, authorization, compatibility, and Fast-Path
 rules live in `skills/_shared/references/shared-protocol.md`.
 
 ## Stage Contract
@@ -36,6 +36,11 @@ rules live in `skills/_shared/references/shared-protocol.md`.
 - `docs/cases/README.md` and `docs/product/current-state.md` are derived inputs,
   never routing or authority truth. Discovery recommendations still require
   normal case identity, planning, and approval.
+
+Case status is owned by existing artifacts: plan approval in `plan.md`,
+execution readiness in `execution.md`, and final outcome in `closure.md`. There
+is no separate routing-state artifact; legacy state files are historical
+evidence only.
 
 ## Confirmation
 
@@ -64,7 +69,7 @@ requirements when present, approved plan, independently valid green work,
 verified refactors, material review fixes, and closure. Fast-Path still performs
 a compact Engineering/Spec review but uses no separate plan/task/closure
 commits: the approved minimal plan, green delta, review evidence, closure, and
-closed state form one combined completion commit. The policy is prospective and
+final status form one combined completion commit. The policy is prospective and
 does not invalidate legacy cases.
 
 Unqualified `Done` requires met acceptance criteria, passing required review,

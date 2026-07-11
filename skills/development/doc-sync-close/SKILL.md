@@ -15,7 +15,7 @@ authority, L3 derived, or authority-change-table work.
 - Existing/required execution evidence, checks, current diff, and `review_risk`.
 - For eligible cases: final Engineering/Spec/aggregate review evidence and
   actual task/refactor/review-fix commit mapping.
-- User-provided findings; related authority/L3 docs; `case_state.yaml`.
+- User-provided findings; related authority/L3 docs; current case artifacts.
 - Governance plans only for existing blocked decisions or governance follow-up.
 
 This skill consumes an existing case. Documented closure without case docs
@@ -41,8 +41,8 @@ Use the exact closure status set in shared-protocol.
    impact without repeating the plan or interim narrative.
 4. Sync L2 operational docs and mechanically safe L3 derived docs.
 5. Handle authority as a proposal or a confirmed narrow patch.
-6. Write and validate `closure.md` without predicting its own commit hash; then
-   update `case_state.yaml`.
+6. Write and validate `closure.md` with final status frontmatter without
+   predicting its own commit hash.
 7. Refresh `docs/cases/README.md` only for dashboard-relevant closure and
    `docs/product/current-state.md` only for evidenced product-state change.
    Both remain non-authoritative; invent no product direction.
@@ -70,7 +70,7 @@ Unqualified `Done` requires all of:
 - full-flow semantic commits are verified from Git and their actual
   task/refactor/review-fix hashes are recorded; for Fast-Path, the reviewed
   green delta and complete combined unit are staged and verified before commit;
-- required closure path and closed state are committed successfully in the
+- required `closure.md` and its final status are committed successfully in the
   declared full-flow closure or Fast-Path combined completion unit, with no
   unexplained case-related worktree changes.
 
@@ -108,24 +108,24 @@ explicit confirmation of the concrete file/boundary and all
 files and boundaries counts. Structural, high-risk, conflict-heavy, new-area,
 bridge/archive, or lifecycle authority work becomes a governance batch/new case.
 
-## State And Closure Commit
+## Closure Artifact And Commit
 
-Write `closure.md` before state:
+`closure.md` owns final status:
 
 ```yaml
-phase: closed
-closure_status: Done with Caveats
-closure_path: docs/cases/<case-id>/closure.md
-last_updated: <timestamp>
+---
+case_id: <case-id>
+status: Done with Caveats
+updated_at: <timestamp>
+---
 ```
 
-If state update fails, closure remains evidence truth but the workflow is not
-fully synced. For Atomic Commit plans, uncommitted closure is incomplete: the
+For Atomic Commit plans, uncommitted closure is incomplete: the
 declared full-flow closure commit or Fast-Path combined completion commit must
-contain both closure path and closed state. The Fast-Path unit may also contain
+contain `closure.md` with its final status. The Fast-Path unit may also contain
 its already verified green implementation; it must not add unreviewed fixes. On
 commit failure, preserve recovery evidence, do not report unqualified `Done`,
-and remain `doc_syncing` until Git proves the unit.
+and report closure pending until Git proves the unit.
 
 A skipped/failed dashboard or product-state refresh does not roll back closure;
 record why. Consume final `review_risk`; change it only when new closure evidence
@@ -135,7 +135,7 @@ changes the assessment, and record its disposition.
 
 - Authority patch without concrete confirmation -> wait for user input.
 - A case that ends/pauses/blocks/cancels/is superseded requires `closure.md`.
-- Never close state before writing closure or modify plan semantics beyond a
+- Never report final closure before writing `closure.md` or modify plan semantics beyond a
   closure link/note.
 - Never change code, tests, dependencies, scripts, lockfiles, CI, acceptance, or
   plan semantics to make closure pass. Full-flow closure commits contain no

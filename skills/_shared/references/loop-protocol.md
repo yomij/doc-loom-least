@@ -15,10 +15,9 @@ development slice.
 
 ## Case Candidates
 
-Use status-only routing, shared case identity, `case_state.yaml`, and case
-artifacts to find case candidates. `docs/cases/README.md` may narrow which
-artifacts to read, but routing truth remains `case_state.yaml` and the
-artifact-derived phase rules in shared protocol.
+Use status-only routing, shared case identity, and case artifacts to find case
+candidates. `docs/cases/README.md` may narrow which artifacts to read, but
+current status follows the artifact precedence in shared protocol.
 
 Use this output shape when multiple case candidates or follow-ups exist:
 

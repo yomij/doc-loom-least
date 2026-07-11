@@ -46,14 +46,14 @@ Generated docs can be consumed as views only.
 Read existing case docs only when resuming or when the case is explicit:
 
 ```text
-case_state.yaml
 plan.md
 handoff.md
 execution.md
 closure.md
 ```
 
-For `case_state.yaml` conflicts, see shared protocol `case_state.yaml`.
+Legacy `case_state.yaml` may be read for historical diagnosis, but current
+artifacts own status and take precedence.
 
 ## Code And Tests
 

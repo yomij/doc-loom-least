@@ -21,6 +21,12 @@ Triggered sections: include each only when it has content.
 - History: Include when updating an existing report.
 Do not keep empty headings.
 -->
+---
+case_id:
+status: executing
+updated_at:
+---
+
 # Execution Report
 
 ## Human Summary

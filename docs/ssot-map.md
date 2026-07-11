@@ -13,7 +13,7 @@ This map identifies the source of truth for active Doc Loom Least facts.
 | Git commit message standard | [Git Commit Titles](authority/operations/git.md) | Active commit-title rule. |
 | Shared workflow protocol | [Development Workflow](authority/workflow/development-flow.md), [shared-protocol](../skills/_shared/references/shared-protocol.md) | Current implementation remains direct evidence. |
 | Loop-style discovery protocol | [loop-protocol](../skills/_shared/references/loop-protocol.md), [Development Workflow](authority/workflow/development-flow.md) | Implementation guidance for case candidate output and next-slice discovery; not a new workflow stage. |
-| Case discovery dashboard | [Cases README](cases/README.md), per-case artifacts under `docs/cases/<case-id>/` | Dashboard is derived; `case_state.yaml`, `plan.md`, `execution.md`, and `closure.md` win on conflict. |
+| Case discovery dashboard | [Cases README](cases/README.md), per-case artifacts under `docs/cases/<case-id>/` | Dashboard is derived; current status comes from `plan.md`, `execution.md`, and `closure.md` artifact precedence. |
 | Next-slice product input | [Product Current State](product/current-state.md), active authority docs | Operational discovery input only; authority docs and current implementation win on conflict. |
 | Per-skill runtime behavior | Each `SKILL.md` under [skills](../skills/) | Frontmatter names define invocation names. |
 | User-facing overview | [README](../README.md), [README_CN](../README_CN.md) | Entry points only; revise if they conflict with ADRs or skill files. |

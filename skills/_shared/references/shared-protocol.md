@@ -19,7 +19,7 @@ skills own their outputs.
 | Interactive pressure testing | `grill` |
 
 Ad-hoc `review`/`grill` require explicit user intent. Assessment skills write no
-case artifacts, routes, or state; only `tdd-execute` may invoke workflow-owned
+case artifacts, routes, or status; only `tdd-execute` may invoke workflow-owned
 review under an approved eligible plan.
 
 ## Execution Instruction Order
@@ -86,49 +86,39 @@ Resolve case id in order:
 Only `docloom-workflow` creates a case id and `docs/cases/<case-id>/`; later
 stage skills consume that identity.
 
-## case_state.yaml
+## Artifact-Owned Status
 
-`case_state.yaml` is routing truth for `phase` and `closure_status`; Markdown
-artifacts are evidence truth.
+Case artifacts own current workflow status; there is no separate routing-state
+artifact.
 
-- Initial fields: `case_id`, `phase`, `case_docs`, `closure_status`,
-  `last_updated`.
-- Optional routing fields: `closure_path`, `current_plan_version`,
-  `review_risk`.
-- Every route decision writes `next_skill`, `route_reason`, and
-  `required_input`. The next skill may consume the prior output without a
-  same-session reread unless resume, dirtiness, or possible state change
-  requires fresh state.
+- `plan.md`: `status: draft | approved`.
+- `execution.md`: `status: executing | ready_to_close`.
+- `closure.md`: `status` uses the final set below.
 
-Phase writers: `plan-confirm` owns `waiting_for_plan_confirmation` and
-`planned`; `tdd-execute` owns `executing`; `tdd-execute` or `doc-sync-close`
-owns `doc_syncing`; `doc-sync-close` owns `closed`.
+Derive the current position from the first reliable signal:
 
-Keep `base_commit` and `risk_level` in `plan.md` frontmatter, not state by
-default. Keep detailed evidence in Markdown.
+1. `closure.md` with valid required closure-commit evidence -> its final status.
+2. `closure.md` without required commit evidence -> closure pending.
+3. `execution.md` with `status: ready_to_close` -> closure pending.
+4. `execution.md` with `status: executing` -> executing.
+5. Approved `plan.md` -> planned.
+6. Draft `plan.md` -> waiting for plan confirmation.
+7. No clear artifact -> `needs_user_decision`.
 
-On a state/artifact conflict, report `state_cache_conflict` and derive the
-phase from the first reliable signal:
+Route decisions stay in conversation output or `handoff.md`; do not persist
+`next_skill`, route reason, or required input as a second status record. Existing
+`case_state.yaml` files are legacy evidence only: do not rewrite closed cases,
+and never let legacy state override current artifacts.
 
-1. `closure.md` exists and required closure-commit evidence is valid -> `closed`.
-2. `closure.md` but absent/failed/dirty closure commit -> `doc_syncing`.
-3. `execution.md` with completed acceptance and required Post-execution checks
-   -> `doc_syncing`.
-4. Any other `execution.md` -> `executing`.
-5. Approved `plan.md` -> `planned`.
-6. Draft `plan.md` -> `waiting_for_plan_confirmation`.
-7. No clear signal -> `needs_user_decision`.
-
-Route from the derived phase; only the owning skill may then update the cache.
-For a plan with `## Atomic Commit Strategy`, closure evidence is valid only when
-Git shows the closure path and closed state in the declared closure-step commit
-and neither remains uncommitted. Legacy plans retain artifact-based derivation.
+Keep `base_commit` and `risk_level` in `plan.md` frontmatter. For an Atomic
+Commit plan, final closure evidence is valid only when Git shows `closure.md`
+with its final status in the declared closure-step commit and no unexplained
+case work remains uncommitted.
 
 ## Artifact Policy
 
 | Artifact | Required when | Optional or skipped when | Writer |
 |---|---|---|---|
-| `case_state.yaml` | Case docs are created | Status-only without case creation | `docloom-workflow` initially; stage skills update |
 | `context-authority-brief.md` | Conflict, explicit request, continuity need, or high-risk/resume/recovery context too large for `plan.md` | Inline summary or `plan.md` is enough; high risk/resume/recovery alone does not force it | `context-authority` |
 | `plan.md` | Case enters `plan-confirm` | No persistent case workflow | `plan-confirm` |
 | `handoff.md` | A future resume point exists | Same-session flow | Current stage skill |
@@ -220,7 +210,7 @@ approved plan declares them; legacy cases remain valid.
 Fast-Path is the compact exception: it does not require separate plan,
 implementation, and closure commits. After the green change and compact review,
 one `Doc-Loom-Step: closure` commit may contain the minimal approved plan,
-implementation/verification, closure, closed state, and necessary derived
+implementation/verification, closure, and necessary derived
 dashboard sync. Its title describes the shipped change. It must still be
 coherent, independently reviewable and revertible, and contain no unrelated
 work.
@@ -270,7 +260,7 @@ Follow `development/plan-confirm/references/risk-levels.md`. `approved_by:
 fast-path` records verified conditions under the current request, not unrelated
 background permission.
 
-Compact flow: `docloom-workflow` creates only state; `plan-confirm` writes a
+Compact flow: `docloom-workflow` creates only case identity; `plan-confirm` writes a
 minimal plan with `status: approved`, `risk_level: low`, `plan_version: 1`,
 `approved_by: fast-path`, `approved_at`, `base_commit` or its unavailable
 reason, Confirmation Log and Fast-Path Conditions evidence, goal/non-goals,
@@ -278,9 +268,9 @@ acceptance/files, a human approval summary, compact review/commit strategies,
 and no task-level TDD breakdown or separate plan commit. `tdd-execute` produces
 the green change and compact Engineering/Spec review with characterization or
 build verification; `execution.md` remains optional. `doc-sync-close` writes a
-short `closure.md`, closes state, and creates one combined local completion
+short `closure.md`, records final status, and creates one combined local completion
 commit containing the approved plan, green change, review evidence, closure,
-state, and necessary dashboard sync. Any failed condition uses the full flow.
+and necessary dashboard sync. Any failed condition uses the full flow.
 
 ## Small Project Degradation
 
@@ -292,7 +282,7 @@ work; otherwise proceed with risk.
 
 ## Case Resume
 
-Across sessions, read `handoff.md` first when present, then the minimum phase
+Across sessions, read `handoff.md` first when present, then the minimum current
 artifact. Re-run `context-authority` only if authority, governance, code, or
 external dependencies may have changed, or the case is high risk,
 conflict-related, or resumed after a break.

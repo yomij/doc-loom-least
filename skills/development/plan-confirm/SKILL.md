@@ -7,7 +7,7 @@ description: Create and confirm an implementation plan before execution. Use aft
 
 Consume existing case identity; never create a case id or case docs.
 
-Read `references/shared-protocol.md` for state, artifacts, instruction order,
+Read `references/shared-protocol.md` for status, artifacts, instruction order,
 authorization, and Atomic Commit rules. Read `references/risk-levels.md` for
 risk, confirmation policy, and risk-based TDD decisions.
 
@@ -28,8 +28,8 @@ Missing case identity routes to `docloom-workflow` with
 2. Confirm case id/docs and `isolated`, `branch`, or `inline` run mode.
 3. If an explicitly requested requirements artifact exists, verify approval.
    Never commit a draft as approved. When approved, Git is available, and its
-   approval commit is missing, stage only requirements plus related routing
-   state, inspect, and commit with `Doc-Loom-Step: requirements` before planning;
+   approval commit is missing, stage only requirements plus related case
+   artifacts, inspect, and commit with `Doc-Loom-Step: requirements` before planning;
    in Git degraded mode record why it is absent.
 4. Classify `low`/`medium`/`high` risk and decide TDD applicability.
 5. Determine whether this is Fast-Path or full eligible work. Both record review
@@ -39,16 +39,15 @@ Missing case identity routes to `docloom-workflow` with
    expected results, and acceptance criteria.
 7. Lead with a short Human Approval Summary covering outcome, material scope,
    expected local Git actions/commit count, likely interruptions, and excluded
-   actions. Then write `plan.md` as `status: draft`; set state to
-   `waiting_for_plan_confirmation` with current `plan_version`.
+   actions. Then write `plan.md` as `status: draft`.
 8. Self-review coverage, placeholders, naming, buildability, and TDD integrity.
 9. Ask for confirmation unless Fast-Path conditions are verified. High risk
    requires an unambiguous current plan object; version wording is preferred,
    not mandatory.
-10. On user/Fast-Path approval, update plan, state, and handoff only when a
+10. On user/Fast-Path approval, update the plan and handoff only when a
     future resume point exists (`templates/handoff.md`).
 11. If the approved strategy requires a plan commit and Git is available, stage
-    only the approved plan, routing state, and related case artifacts; inspect
+    only the approved plan and related case artifacts; inspect
     and commit before implementation.
 12. Continue same-turn to `tdd-execute` when current-plan approval, preflight
     inputs, and the declared plan-commit condition are satisfied, unless the
@@ -102,12 +101,12 @@ category, reason, and Alternative Verification.
 `plan_version` traces plan semantics; approval need not name it when the current
 plan is unambiguous.
 
-| Event | Plan/state | Approval |
+| Event | Plan | Approval |
 |---|---|---|
-| Draft | `draft` / `waiting_for_plan_confirmation` | Empty |
-| User confirms current plan | `approved` / `planned`, then same-turn execution unless held | `approved_by: user`, `approved_at`, `base_commit` |
-| Fast-Path verified | `approved` / `planned` | `approved_by: fast-path`, `approved_at`, `base_commit` or unavailable reason |
-| Material change | `draft` / `waiting_for_plan_confirmation` | Cleared/not current |
+| Draft | `status: draft` | Empty |
+| User confirms current plan | `status: approved`, then same-turn execution unless held | `approved_by: user`, `approved_at`, `base_commit` |
+| Fast-Path verified | `status: approved` | `approved_by: fast-path`, `approved_at`, `base_commit` or unavailable reason |
+| Material change | `status: draft` | Cleared/not current |
 
 Approval records the current version in Confirmation Log and records
 `base_commit` or an unavailable reason. With `git_available: false`, leave the
@@ -120,7 +119,7 @@ baseline remains the exact pre-execution point and never attempts to contain the
 hash of its own plan commit.
 
 Fast-Path has no required plan commit. Its approved minimal plan remains in the
-working tree until the green change, compact review, closure, and state are
+working tree until the green change, compact review, and closure are
 committed together as the declared completion unit.
 
 Goal, decisions, file/responsibility scope, tests/TDD exception, risk, authority

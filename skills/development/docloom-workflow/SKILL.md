@@ -8,7 +8,7 @@ description: Human-facing default entry for Doc Loom Least. Use for persistent f
 Act as the one public doorway and route internally to the owning skill; do not
 replace stage ownership or require the user to know stage skill names.
 
-Read shared rules first when routing or creating case state:
+Read shared rules first when routing or creating case identity:
 `references/shared-protocol.md`.
 
 Read `references/loop-protocol.md` when the user asks for case candidates,
@@ -41,10 +41,9 @@ Status-only behavior:
 
 - Do not create a case.
 - Do not modify files.
-- Do not repair `case_state.yaml`.
 - Read only the git state and necessary case docs.
 - Use `docs/cases/README.md`, when present, only to narrow case artifact reads;
-  verify phase, next skill, and required input from case artifacts.
+  derive current status and next action from case artifacts.
 - Output human status, evidence, what can happen next, the decision needed, and
   one clarifying question if needed. Include internal phase/skill names only for
   diagnosis or when the user asks for workflow detail.
@@ -86,16 +85,9 @@ Create minimal case docs only when:
   resume, multi-agent, or cross-session continuity.
 - Execution, review input handling, or closure already needs to bind to a case.
 
-Minimal creation:
-
-```text
-docs/cases/<case-id>/
-docs/cases/<case-id>/case_state.yaml
-```
-
-Use `templates/case_state.yaml` for the initial case state. It contains the
-minimum routing fields: `case_id`, `phase`, `case_docs`, `closure_status`,
-`closure_path`, `last_updated`.
+Minimal creation is the directory `docs/cases/<case-id>/`. The routed owner
+writes the first authoritative artifact in the same flow; do not leave an empty
+case directory as durable state.
 
 Do not create case docs under the conditions listed in
 `references/shared-protocol.md` -> Case Creation Boundary.
@@ -127,24 +119,14 @@ owner.
 For fast-path (row 9): `plan-confirm` writes a minimal approved plan with
 `approved_by: fast-path`, a Confirmation Log row, fast-path eligibility, and no
 task-level TDD breakdown or separate plan commit. The approved green change,
-compact review, closure, and closed state form one local completion commit. See
+compact review, closure, and final status form one local completion commit. See
 `references/shared-protocol.md` → Fast-Path.
 
 ## Artifact Policy
 
 Apply the shared Artifact Policy. Stage skills write their own artifacts.
-`docloom-workflow` only creates the initial case state and records artifact
-decisions when a case is created.
-
-Allowed case-state artifact cache:
-
-```yaml
-artifacts:
-  context_brief: inline
-  handoff: not_needed
-  execution: conditional
-  closure: required
-```
+`docloom-workflow` only owns case identity; current status is carried by the
+stage artifacts themselves.
 
 ## Output Contract
 
@@ -191,6 +173,5 @@ If it affects closure, it belongs in `closure.md`.
 - Do not route or own `grill`; it requires explicit invocation.
 - Do not write files in status-only mode.
 - Do not execute or plan a next-slice candidate until the user selects it.
-- Do not silently repair state cache conflicts.
 - Do not write `base_commit` or `risk_level`; these belong to `plan.md` frontmatter.
 - Do not call a CLI backend.
