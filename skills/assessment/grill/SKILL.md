@@ -90,9 +90,12 @@ explicitly confirmed decisions in their own artifacts.
 
 ## High-Risk Topics
 
-Use shared-protocol risk-sensitive topics and consequence-based classification;
-workflow or agent policy text is not automatically high unless it weakens
-authorization, changes public/L1 facts, or enables irreversible action.
+Treat security, auth, permission, privacy, billing, data deletion, public
+API/CLI, schema, config contract, migration, ADR-protected architecture, and
+workflow or agent policy as risk-sensitive. Classify by consequence and
+reversibility; workflow or agent policy text is not automatically high unless
+it weakens authorization, changes public/L1 facts, or enables irreversible
+action.
 
 For high-risk recommendations:
 

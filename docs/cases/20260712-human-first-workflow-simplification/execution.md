@@ -2,7 +2,8 @@
 
 ## Human Summary
 
-- Status: implementing the approved human-first simplification.
+- Status: implementation commit complete; mandatory Engineering/Spec review is
+  in progress.
 - Current work: align the public entry, Fast-Path, Git disclosure, risk model,
   discovery fallback, artifact summaries, and grill interaction across their
   existing owners.
@@ -100,8 +101,64 @@ None. All edits stay within the approved files and semantic boundaries.
 reversible Markdown, but it modifies authorization, risk, Git, review, and
 closure behavior across active authority and Skill contracts.
 
+## Post-Execution Review
+
+- Exact baseline: `db766193faa195c2451f840093cb0933f3c7e7f2`
+- Initial reviewed commits: `cc1bbedc2434e0f03887439a62ee3692f0f68b11`,
+  `fa0f7a42dbdfdc9d7302183067d6b83a5c52c728`
+- Initial working-tree scope: execution evidence update only; no staged or
+  untracked files and no unrelated changes.
+
+### Initial Engineering
+
+- Verdict: Material issues found.
+- Critical: None within reviewed scope.
+- Important:
+  - `skills/assessment/grill/SKILL.md` → `High-Risk Topics`: the new text relied
+    on shared-protocol risk-sensitive topics, but `grill/references/` contains
+    no readable `shared-protocol.md` and the old inline sensitive-topic list had
+    been removed.
+    Evidence: the Skill referenced shared semantics indirectly while its only
+    local reference was `challenge-prompts.md`.
+    Impact: a standalone grill session could omit security, auth, permission,
+    privacy, billing, deletion, public-contract, schema, or migration handling.
+    Required correction: restore a concise self-contained sensitive-topic list
+    or add a valid owned reference.
+- Minor: None within reviewed scope.
+- Evidence Gaps: None material.
+- Scope: complete case delta, Git/trailers, authority/Skill contracts,
+  validators, links/symlinks, and command evidence.
+
+### Initial Spec
+
+- Verdict: Material issues found.
+- Critical: None within reviewed scope.
+- Important:
+  - The same `grill` reference defect violated the approved Non-goal to preserve
+    high-risk protection for security, auth, permission, privacy, billing,
+    deletion, destructive migration, and public compatibility.
+    Evidence: plan v1 Non-goals and Decisions require protection to remain
+    self-contained and consequence-based; the implementation removed the only
+    local enumeration without adding a readable replacement.
+    Impact: Goal 8 was implemented, but the safety preservation condition was
+    only partially met.
+    Required correction: make the sensitive-topic coverage explicit and
+    readable inside the current `grill` ownership boundary.
+- Minor: None within reviewed scope.
+- Evidence Gaps: None material.
+- Scope: Goal, Non-goals, Decisions, Acceptance Criteria, planned files, current
+  authority, and complete case delta.
+
+### Initial Aggregate
+
+- Result: `changes_required`
+- Root cause: F1, non-self-contained high-risk topic handling in `grill`.
+- Handling: restore the concise list, validate, create one atomic review-fix
+  commit, and rerun both affected axes against the accumulated final delta.
+
 ## Checkpoints / Commits
 
 | Step | Commit | Evidence |
 |---|---|---|
 | plan | `cc1bbedc2434e0f03887439a62ee3692f0f68b11` | Approved plan v1, routing state, dashboard, staged diff, and trailers. |
+| task:human-first-workflow | `fa0f7a42dbdfdc9d7302183067d6b83a5c52c728` | Complete approved implementation, validation evidence, staged diff, and trailers. |
