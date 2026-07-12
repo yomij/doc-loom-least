@@ -1,20 +1,20 @@
 ---
 case_id: 20260712-artifact-owned-case-state
 status: executing
-updated_at: 2026-07-12T02:17:36+08:00
+updated_at: 2026-07-12T12:41:15+08:00
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: the artifact-owned status implementation is complete and
-  structurally validated; the implementation commit and mandatory review remain.
+- Outcome so far: implementation commit `396ae72` is complete, but independent
+  Engineering and Spec review found material status/resume gaps.
 - What changed: new cases no longer create state, artifact templates own stage
   status, and every active consumer now follows one artifact precedence.
-- User action needed: none unless a material deviation or review finding occurs.
-- Local Git effect: plan commit `9eb8986` exists locally on
-  `codex/artifact-owned-case-state`; no push or history rewrite is authorized.
+- User action needed: none; amended plan v2 is approved.
+- Local Git effect: plan commit `9eb8986` and implementation commit `396ae72`
+  exist locally; no push or history rewrite is authorized.
 
 ## Plan Reference
 
@@ -70,16 +70,16 @@ Yes. No deviation identified at implementation start.
 | Durable routing fields removed | met | No active YAML definitions remain; only two explicit legacy-policy mentions remain. |
 | Fast-Path/full flow safeguards retained | met | Review, confirmation, commit, and Done gates remain in their owners. |
 | Historical cases unchanged | met | Complete changed-file scope contains no closed historical case. |
-| Current case removes bootstrap state | met | State file is deleted; execution frontmatter now carries status. |
+| Current case removes bootstrap state and reaches final closure through artifact status | partially met | State is deleted and execution owns current status; closure artifact/commit remain pending. |
 | No new mechanism or artifact type | met | One template deleted; existing artifacts only. |
 | Structural validity | met | Validators, parsers, links, symlinks, and diff checks pass. |
 
 ## Deviations
 
-None. `docs/authority/operations/git.md` retains the generic phrase "closed
-state" and was not changed because it is outside the approved file scope; the
-phrase remains compatible with final status in `closure.md` and does not define
-a separate artifact.
+Material deviation identified by independent review: completing the v1
+status model requires `docs/authority/operations/git.md`,
+`context-resolution.md`, and the shared handoff template, none of which were in
+v1 file scope. Approved plan v2 now authorizes the coherent review fix.
 
 ## Review Risk
 
@@ -107,3 +107,44 @@ semantics.
 | Step | Commit | Evidence |
 |---|---|---|
 | plan | `9eb8986` | Approved plan v1, old-protocol bootstrap state, and dashboard. |
+| task:artifact-state | `396ae72` | Artifact-owned status contracts, templates, authority/derived sync, validation, and bootstrap-state deletion. |
+
+## Post-Execution Review
+
+- Exact baseline: `9e6c48c4bc3eba04162cfb121d593ea42287e06e`
+- Reviewed commits: `9eb8986`, `396ae72`
+- Reviewed working tree: the case-local task commit mapping only; no cached,
+  untracked, or unrelated files.
+
+### Initial Engineering
+
+- Verdict: Material issues found.
+- Critical: None.
+- Important:
+  - F1: absolute closure precedence prevents `Paused`, `Blocked`, and
+    `Done with Caveats` cases from returning to execution.
+  - F2: Git authority still lists a separate `closed state` in Fast-Path
+    completion contents.
+- Minor:
+  - F3: handoff duplicates current phase and closure status.
+  - F4: execution summary/dashboard were stale after the implementation commit.
+- Evidence Gaps: no executable routing interpreter; behavior was reviewed from
+  the contract truth table. Validators and structural checks were rerun.
+
+### Initial Spec
+
+- Verdict: Material issues found.
+- Critical: None.
+- Important:
+  - F1: the closure-first rule contradicts the approved resumable-case contract.
+  - F5: execution narrowed and prematurely marked the closure-dependent
+    acceptance criterion as met.
+- Minor: None.
+- Evidence Gaps: exact commands were summarized rather than embedded; no
+  closure exists yet, as expected before the close stage.
+
+### Initial Aggregate
+
+- Result: `changes_required`
+- Required handling: approve plan v2, implement one coherent review fix, rerun
+  both independent axes, and aggregate again.

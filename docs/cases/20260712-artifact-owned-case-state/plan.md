@@ -1,10 +1,10 @@
 ---
 case_id: 20260712-artifact-owned-case-state
-plan_version: 1
+plan_version: 2
 status: approved
 risk_level: high
 approved_by: user
-approved_at: 2026-07-12T02:09:03+08:00
+approved_at: 2026-07-12T12:41:15+08:00
 base_commit: 9e6c48c4bc3eba04162cfb121d593ea42287e06e
 ---
 
@@ -17,11 +17,11 @@ base_commit: 9e6c48c4bc3eba04162cfb121d593ea42287e06e
 - Material scope: shared workflow protocol, five development/assessment skill
   consumers, three artifact templates, workflow authority, derived workflow
   explanations, and this case's migration evidence.
-- Decision needed: approve plan v1 or request a narrower/different first slice.
-- Expected local Git actions / commit count: after approval, create branch
-  `codex/artifact-owned-case-state` and create three planned local commits:
-  approved plan, one coherent implementation, and closure. A material review
-  finding may add one narrowly scoped `fix:` commit.
+- Decision needed: approve amended plan v2, which adds the three files required
+  to resolve independent review findings and clarifies closure-owned acceptance.
+- Expected local Git actions / commit count: the branch, v1 plan commit, and
+  implementation commit already exist. After v2 approval, create three more
+  local commits: approved plan amendment, one coherent review fix, and closure.
 - Excluded actions: no push, PR, merge, tag, release, amend, rebase, squash,
   history rewrite, dependency change, new runtime component, new skill, or
   historical-case rewrite.
@@ -107,6 +107,15 @@ Excluded context:
    file is diagnostic only.
 8. This case is created under the old protocol but deletes its own state file
    during implementation and closes under the new artifact-owned contract.
+9. `Done`, `Cancelled`, `Superseded`, and `Abandoned` closures are terminal.
+   `Paused`, `Blocked`, and `Done with Caveats` may resume when an explicitly
+   resumed `execution.md` has a later `updated_at` than `closure.md`; the newer
+   execution artifact then owns current status until the next closure.
+10. `handoff.md` records resume conditions and source artifacts, not duplicated
+    current phase or closure status.
+11. Post-execution review judges implementation readiness. A criterion requiring
+    `closure.md` and its commit remains pending until `doc-sync-close`; it is a
+    Done Gate condition, not evidence that must exist before review.
 
 ## Workspace Baseline
 
@@ -158,7 +167,8 @@ or allow premature closure.
 |---|---|---|
 | Approved plan | `docs: approve artifact-owned case state plan` | `Doc-Loom-Step: plan` |
 | Coherent implementation | `refactor: derive case state from artifacts` | `Doc-Loom-Step: task:artifact-state` |
-| Review fix, only if needed | `fix: <review root cause>` | `Doc-Loom-Step: review-fix:<id>` |
+| Approved plan amendment | `docs: approve artifact-owned case state plan v2` | `Doc-Loom-Step: plan-amendment` |
+| Review fix | `fix: complete artifact-owned status semantics` | `Doc-Loom-Step: review-fix:F1-F4` |
 | Closure | `docs: close artifact-owned case state case` | `Doc-Loom-Step: closure` |
 
 All commits use `Doc-Loom-Case: 20260712-artifact-owned-case-state`, explicit
@@ -175,6 +185,7 @@ Core contract and routing:
 - `skills/development/docloom-workflow/SKILL.md`
 - delete `skills/development/docloom-workflow/templates/case_state.yaml`
 - `skills/development/context-authority/references/retrieval-routing.md`
+- `skills/development/context-authority/references/context-resolution.md`
 - `skills/development/plan-confirm/SKILL.md`
 - `skills/development/tdd-execute/SKILL.md`
 - `skills/development/doc-sync-close/SKILL.md`
@@ -185,10 +196,12 @@ Artifact templates:
 - `skills/development/plan-confirm/templates/plan.md`
 - `skills/development/tdd-execute/templates/execution.md`
 - `skills/development/doc-sync-close/templates/closure.md`
+- `skills/_shared/templates/handoff.md`
 
 Authority and derived explanations:
 
 - `docs/authority/workflow/development-flow.md`
+- `docs/authority/operations/git.md`
 - `docs/ssot-map.md`
 - `docs/share/workflow-and-design.md`
 - `docs/cases/README.md`
@@ -210,7 +223,11 @@ Case evidence:
 | Active contracts contain no `next_skill`, `route_reason`, `required_input`, `case_docs`, or `closure_path` routing fields. | Targeted stale-rule `rg`, excluding historical cases. |
 | Fast-Path, full flow, review gates, confirmation, and Git authorization remain behaviorally intact. | Positive semantic assertions and Engineering/Spec review. |
 | Historical closed cases are not modified and their state files remain readable as legacy evidence. | Changed-file scope and legacy compatibility wording. |
-| Current case successfully removes its initial state file and closes through artifact-owned status. | Final case artifact inspection and Git evidence. |
+| Current case removes its initial state file and carries pre-closure status in `execution.md`. | Case artifact inspection before review. |
+| Final closure is completed through `closure.md` status and the declared closure commit. | `doc-sync-close` Done Gate and final Git evidence; pending until closure. |
+| Resumable closure statuses can deterministically return to execution without a second state file. | Shared resume truth table, context contract, handoff template, and derived state diagram. |
+| Git authority no longer requires a separate closed-state item. | Authority/implementation consistency review. |
+| Handoff contains no duplicate current status fields. | Template inspection and stale-field assertion. |
 | No new skill, artifact type, phase, dependency, or runtime component is introduced. | Tree/diff comparison. |
 | Modified Skills, YAML/frontmatter, links, and symlinks remain valid. | Validator, parser, link/symlink checks, `git diff --check`. |
 
@@ -240,11 +257,27 @@ SSOT map, shareable workflow explanation, and case dashboard.
 
 - [x] Run structural, semantic, stale-rule, link, symlink, and Git checks.
 - [x] Record execution evidence and every acceptance criterion.
-- [ ] Run isolated Engineering and Spec Post-execution review.
+- [x] Run isolated Engineering and Spec Post-execution review.
 - [ ] Fix/re-review material findings, then close only on aggregate `pass`.
+
+### Task 4: Resolve independent review findings
+
+- [ ] Define timestamp-based reopen semantics for resumable closure statuses.
+- [ ] Align context resume rules, handoff shape, and derived state diagram.
+- [ ] Replace the stale separate `closed state` requirement in Git authority.
+- [ ] Keep closure-dependent acceptance pending until the closure commit.
+- [ ] Refresh human summaries/dashboard, validate, commit one coherent fix, and
+  rerun both independent review axes.
+
+## Plan Amendments
+
+| When | Change | Reason | User Confirmation | Impact |
+|---|---|---|---|---|
+| 2026-07-12T02:26:04+08:00 | v2 adds deterministic reopen semantics, handoff cleanup, Git authority alignment, and closure-owned final acceptance. | Independent Engineering and Spec review returned `changes_required`. | Approved 2026-07-12T12:41:15+08:00 | Adds three files and one approved-plan-amendment commit before the review fix. |
 
 ## Confirmation Log
 
 | When | Confirmed By | Plan Version | Confirmation |
 |---|---|---|---|
 | 2026-07-12T02:09:03+08:00 | user | 1 | Approved current plan. |
+| 2026-07-12T12:41:15+08:00 | user | 2 | Continued with the current amended plan. |
