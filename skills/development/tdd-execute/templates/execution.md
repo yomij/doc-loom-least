@@ -19,6 +19,9 @@ Triggered sections: include each only when it has content.
 - Checkpoints / Commits: Include when staging or committing happened.
   Map semantic steps to actual hashes; never predict a commit's own hash.
 - History: Include when updating an existing report.
+- Resume: Include when reopening a `Paused`, `Blocked`, or `Done with Caveats`
+  closure. Record prior status, closure timestamp/commit, current authorization,
+  satisfied resume condition, and reason.
 Do not keep empty headings.
 -->
 ---

@@ -60,7 +60,7 @@ successful closure commit and no unexplained case-related working-tree changes.
 Fast-Path is the compact exception: it creates no separate plan or task commit.
 After its green delta and compact review pass, one `Doc-Loom-Step: closure`
 commit may contain the approved minimal plan, implementation/verification,
-closure, closed state, and necessary dashboard sync. Its title describes the
+`closure.md` with final status, and necessary dashboard sync. Its title describes the
 user-visible change, not closure bookkeeping.
 
 Before plan confirmation, the human-facing summary states the expected number

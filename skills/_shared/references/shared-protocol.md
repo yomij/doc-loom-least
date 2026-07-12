@@ -97,13 +97,17 @@ artifact.
 
 Derive the current position from the first reliable signal:
 
-1. `closure.md` with valid required closure-commit evidence -> its final status.
-2. `closure.md` without required commit evidence -> closure pending.
-3. `execution.md` with `status: ready_to_close` -> closure pending.
-4. `execution.md` with `status: executing` -> executing.
-5. Approved `plan.md` -> planned.
-6. Draft `plan.md` -> waiting for plan confirmation.
-7. No clear artifact -> `needs_user_decision`.
+1. A committed `Done`, `Cancelled`, `Superseded`, or `Abandoned` closure -> its
+   terminal status.
+2. A committed `Paused`, `Blocked`, or `Done with Caveats` closure -> its status,
+   unless a later `execution.md` records explicit resume evidence as defined in
+   Case Resume; then execution owns current status.
+3. `closure.md` without required commit evidence -> closure pending.
+4. `execution.md` with `status: ready_to_close` -> closure pending.
+5. `execution.md` with `status: executing` -> executing.
+6. Approved `plan.md` -> planned.
+7. Draft `plan.md` -> waiting for plan confirmation.
+8. No clear artifact -> `needs_user_decision`.
 
 Route decisions stay in conversation output or `handoff.md`; do not persist
 `next_skill`, route reason, or required input as a second status record. Existing
@@ -287,10 +291,18 @@ artifact. Re-run `context-authority` only if authority, governance, code, or
 external dependencies may have changed, or the case is high risk,
 conflict-related, or resumed after a break.
 
-A handoff records phase, last completed step, next step, resume condition,
-known issues, and source artifacts. If older than seven days, report staleness
-and ask continue/adjust/close. Verify the last step before resuming; route on
-mismatch instead of trusting stale handoff state.
+A handoff records the last completed step, next step, resume condition, known
+issues, and authoritative source artifacts; it does not duplicate current
+status. If older than seven days, report staleness and ask
+continue/adjust/close. Verify the last step before resuming.
+
+`Done`, `Cancelled`, `Superseded`, and `Abandoned` do not resume in the same case
+by default. `Paused`, `Blocked`, and `Done with Caveats` may resume only with
+current user intent and a satisfied resume condition. Before implementation,
+update `execution.md` with `status: executing`, an `updated_at` later than the
+closure, and `## Resume` evidence naming the prior status, closure timestamp or
+commit, authorization, and reason. That newer execution artifact supersedes the
+resumable closure as current status; Git retains the prior closure history.
 
 ## Git And Commands
 

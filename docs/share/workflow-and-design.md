@@ -210,7 +210,7 @@ flowchart LR
 
 ### 5.5 case 状态机
 
-case 的当前阶段由 Markdown artifact + git 状态直接推导，读取优先级为 `closure.md` → `execution.md` → `plan.md`：
+case 的当前阶段由 Markdown artifact + git 状态直接推导。终止 closure 优先；`Paused`、`Blocked`、`Done with Caveats` 在明确恢复后，由带有更新 `updated_at` 和 Resume 证据的 `execution.md` 重新取得当前状态：
 
 ```mermaid
 stateDiagram-v2
@@ -222,7 +222,8 @@ stateDiagram-v2
     Executing --> Paused: closure.md status Paused
     Executing --> Blocked: closure.md status Blocked
     Final --> [*]
-    Paused --> Executing: 恢复
+    Paused --> Executing: 明确恢复 + 新 execution Resume 证据
+    Blocked --> Executing: 条件满足 + 新 execution Resume 证据
 ```
 
 ### 5.6 快速通道（Fast-Path）

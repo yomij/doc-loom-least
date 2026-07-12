@@ -11,7 +11,7 @@ Choose the task intent before reading broadly.
 | Refactor | Target boundary, relevant modules, test coverage entry, non-touch scope | Repo map, dependency graph, ADR, module owner |
 | Documentation governance | Scope, authority/index state, historical material, blocked decisions | Governance plan, authority index, case evidence, archive |
 | Workflow / skill design | Target skill, upstream protocol, adjacent skill, constitution or authority constraints | Skill design, workflow protocol, ADR, reference skill |
-| Resume | Case state, handoff/plan/execution/closure, git state | Case docs, branch/worktree, changed files |
+| Resume | Current artifacts, handoff, and git state | Case docs, branch/worktree, changed files |
 | Incident / operations | Symptom, impact, rollback clue, runbook | Monitoring notes, rollback guide, recent release |
 
 Record intent and why it was chosen in the brief or inline context summary.
@@ -29,8 +29,9 @@ case/<case-id>
 
 If `closure.md` exists, follow shared protocol Case Resume. Do not resume
 `Done`, `Cancelled`, `Superseded`, or `Abandoned` by default. `Paused`,
-`Blocked`, and `Done with Caveats` can resume when the user asks and the resume
-condition is satisfied.
+`Blocked`, and `Done with Caveats` can resume in the same case only when the
+user asks, the resume condition is satisfied, and `execution.md` records the
+required newer Resume evidence. Otherwise keep the closure status current.
 
 ## Run Modes
 

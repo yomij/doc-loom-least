@@ -1,9 +1,5 @@
 # Handoff
 
-## Current Phase
-
-## Closure Status
-
 ## Last Completed
 
 ## Resume Condition
@@ -16,4 +12,4 @@
 
 ## Known Issues
 
-## Source of Detailed History
+## Authoritative Source

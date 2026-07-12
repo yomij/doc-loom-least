@@ -27,7 +27,8 @@ project command/package-manager instructions. Verify:
 - `plan.md` exists with `status: approved`, `plan_version`, `approved_by`,
   `approved_at`, and a matching Confirmation Log entry;
 - Fast-Path approval includes its verified conditions;
-- the case is not unrecoverably closed;
+- the case is not terminally closed; a resumable closure has current resume
+  intent and its declared condition is satisfied;
 - Goal, Non-goals, Decisions, Acceptance Criteria, and TDD Applicability are
   executable and clear;
 - staged, unstaged, and untracked changes relative to `base_commit` are
@@ -45,7 +46,9 @@ returns to `plan-confirm`.
 
 1. Critically check steps, commands, tests, non-goals, and acceptance.
 2. Create/update `execution.md` with `status: executing` before implementation
-   (not for preflight-only or approval-writeback-only work).
+   (not for preflight-only or approval-writeback-only work). When reopening a
+   resumable closure, use a later `updated_at` and add the Resume evidence
+   required by shared protocol.
 3. Red: run the smallest behavior test and observe the expected failure.
 4. Green: implement minimally and pass the target test.
 5. Refactor only as planned/necessary; rerun related tests after each change.
@@ -179,6 +182,10 @@ updated_at: <timestamp>
 `review_risk` accepts only `low`, `medium`, or `high`; reasons live in the body.
 If the artifact update fails, preserve completed implementation, record the failure,
 and do not claim the workflow fully synced.
+
+For a resumed case, `## Resume` records prior closure status, closure timestamp
+or commit, current authorization, satisfied resume condition, and reason. Its
+frontmatter `updated_at` must be later than the closure it supersedes.
 
 ## Commits
 

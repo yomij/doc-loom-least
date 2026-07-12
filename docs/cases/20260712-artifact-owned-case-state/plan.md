@@ -262,10 +262,10 @@ SSOT map, shareable workflow explanation, and case dashboard.
 
 ### Task 4: Resolve independent review findings
 
-- [ ] Define timestamp-based reopen semantics for resumable closure statuses.
-- [ ] Align context resume rules, handoff shape, and derived state diagram.
-- [ ] Replace the stale separate `closed state` requirement in Git authority.
-- [ ] Keep closure-dependent acceptance pending until the closure commit.
+- [x] Define timestamp-based reopen semantics for resumable closure statuses.
+- [x] Align context resume rules, handoff shape, and derived state diagram.
+- [x] Replace the stale separate `closed state` requirement in Git authority.
+- [x] Keep closure-dependent acceptance pending until the closure commit.
 - [ ] Refresh human summaries/dashboard, validate, commit one coherent fix, and
   rerun both independent review axes.
 
