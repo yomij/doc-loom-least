@@ -29,7 +29,8 @@ decisions/candidate selection.
 6. Write `plan.md` from `templates/plan.md` as `status: draft`; self-review for
    missing paths, placeholders, coverage, naming, buildability, and TDD integrity.
 7. Ask for confirmation unless every Fast-Path condition is verified.
-8. On approval, record approver/time/version/baseline and Confirmation Log.
+8. On approval, record approver/time/version/baseline and Confirmation Log;
+   Fast-Path also records evidence for every verified condition.
 9. For full flow, commit the approved plan/case evidence before implementation;
    Fast-Path keeps its minimal plan for the combined completion unit.
 10. Continue same-turn to execution unless the user holds, revises, or requests

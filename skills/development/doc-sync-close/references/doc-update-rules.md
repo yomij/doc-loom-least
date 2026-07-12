@@ -21,4 +21,6 @@ proposals.
 Authority tables use `Doc | Status | Change | Evidence | Risk | Next`, where
 status is proposed/applied and next is none/confirm/governance/new case. Active
 lifecycle statuses are only `active`, `draft`, `superseded`, and `archived`;
-high-impact docs never become active by agent assertion alone.
+high-impact docs never become active by agent assertion alone. High-risk
+proposals name required owner/verification metadata; promoting a task decision
+must explain why it should become durable authority.

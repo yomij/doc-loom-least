@@ -12,7 +12,8 @@ Post-execution gate. Plan approval never authorizes unrelated ad-hoc review.
 
 - `Standard`: correctness/evidence review.
 - `Complexity-only`: explicit simplification/YAGNI requests; read
-  `references/complexity-only.md`; do not substitute it for Standard concerns.
+  `references/complexity-only.md`; assess complexity only, not correctness,
+  security, performance, or coverage, and never substitute it for Standard.
 - `Dual-pass`: explicitly requested Standard plus complexity.
 - `Post-execution`: completed-work Engineering and Spec axes with aggregate.
 

@@ -271,7 +271,7 @@ execution evidence.
 
 ### Task 5: Forward-test, review, fix, and close
 
-- [ ] Run 8-12 fresh-agent task prompts covering ordinary, edge, and negative
+- [x] Run 8-12 fresh-agent task prompts covering ordinary, edge, and negative
   trigger cases without leaking expected answers.
 - [ ] Run isolated Engineering and Spec review against the complete delta.
 - [ ] Fix each material root cause in the smallest atomic commit and re-review

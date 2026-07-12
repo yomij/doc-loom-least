@@ -1,7 +1,7 @@
 ---
 case_id: 20260712-skill-context-cost-compression
 status: executing
-updated_at: 2026-07-12T13:14:03+08:00
+updated_at: 2026-07-12T13:18:40+08:00
 ---
 
 # Execution Report
@@ -87,7 +87,8 @@ proxies, not exact model-token claims.
 | plan | `db3474d` | complete |
 | refactor:shared-loading | `6429863` | complete |
 | refactor:stage-contracts | `1cad0c1` | complete |
-| task:cost-policy | pending | ready to commit |
+| task:cost-policy | `e59944a` | complete |
+| review-fix:F1-F3 | pending | ready to commit |
 | closure | pending | pending |
 
 ## Review Risk
@@ -97,7 +98,9 @@ Post-execution review axes pass.
 
 ## Deviations
 
-None.
+| Plan Boundary | Actual Change | Classification | Handling |
+|---|---|---|---|
+| Run 8-12 fresh-agent prompts | Ran 13 across three independent read-only agents. | minor | Recorded here; no scope, authority, file, or risk change. |
 
 ## Changes Made
 
@@ -155,3 +158,53 @@ None.
 | Planning/full-flow/corpus `wc -l -w` | pass | 2,912 / 5,103 / 9,045 words; all targets passed. |
 | Semantic positive anchors across owners | pass | Approval, requirements, TDD, resume, exact review target, aggregate, closure, authority, Git, and Fast-Path remain. |
 | Authority frontmatter parse and loading-policy anchors | pass | Architecture/workflow authority remain valid and narrowly synchronized. |
+
+## Forward Tests
+
+Three fresh agents received task-like prompts, no expected answers, no current
+case plan, and read-only instructions.
+
+| Group | Scenarios | Result |
+|---|---:|---|
+| Doorway/negative triggers | Explanation, one-shot typo, case continuation, next-slice discovery | 4/4 pass |
+| Planning/authorization | Small internal Skill edit, automatic-push policy, current-plan approval, ambiguous bare approval | 4/4 pass |
+| Resume/review/closure | Paused resume, Important finding, Git unavailable, ad-hoc code review, missing Fast-Path Spec evidence | 5/5 pass |
+
+Observed behavior preserved: explanations/one-shot edits avoid persistent flow;
+workflow policy still context-gates; medium Skill changes still require a plan;
+current approval remains local/case-scoped and cannot self-authorize push;
+ambiguous approval writes nothing; resumable closure needs later Resume
+evidence; material findings remain executing; Git-degraded atomic closure needs
+owner caveat; ad-hoc review stays read-only; missing Spec evidence cannot pass.
+
+## Post-Execution Review
+
+- Exact baseline: `ead85434eb6c01a8801534b92a37271899a8f055`.
+- Initial reviewed commits: `db3474d`, `6429863`, `1cad0c1`, `e59944a`.
+- Initial working-tree scope: three case-related contract corrections plus this
+  evidence; no unrelated changes.
+
+### Initial Engineering
+
+- Verdict: Material issues found.
+- Important F1: compressed `plan-confirm` required verified Fast-Path
+  conditions but did not explicitly require their evidence in the approval
+  record. Required correction: name the evidence requirement at approval.
+- Evidence Gaps: none material.
+
+### Initial Spec
+
+- Verdict: Material issues found.
+- Important F2: complexity-only mode no longer explicitly prohibited
+  correctness/security/performance/coverage findings, weakening the approved
+  mode boundary. Required correction: restore the exclusive scope.
+- Important F3: compressed document-update rules omitted high-risk authority
+  owner/verification metadata and the justification for promoting task
+  decisions. Required correction: restore both conditions concisely.
+- Evidence Gaps: none material.
+
+### Initial Aggregate
+
+- Result: `changes_required`.
+- Fix: one coherent edge-contract restoration in the three owning files,
+  followed by affected-axis and complete final re-review.
