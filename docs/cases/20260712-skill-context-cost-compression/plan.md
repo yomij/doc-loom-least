@@ -262,12 +262,12 @@ templates, and execution evidence.
 **Files:** architecture/workflow authority, `skills/README.md`, dashboard, and
 execution evidence.
 
-- [ ] Add only the narrow progressive-disclosure/single-owner principle needed
+- [x] Add only the narrow progressive-disclosure/single-owner principle needed
   to prevent immediate text-cost regression.
-- [ ] Record the current cost map and ownership route compactly in the Skill
+- [x] Record the current cost map and ownership route compactly in the Skill
   map; do not duplicate stage procedure.
-- [ ] Run complete structural, semantic, cost, and changed-file checks.
-- [ ] Commit the authority/derived sync after it independently passes.
+- [x] Run complete structural, semantic, cost, and changed-file checks.
+- [x] Commit the authority/derived sync after it independently passes.
 
 ### Task 5: Forward-test, review, fix, and close
 

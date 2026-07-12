@@ -48,6 +48,14 @@ Post-execution gate invoked by `tdd-execute` under an approved eligible plan.
 `grill` remains explicit and manual. Assessment skills do not own case state,
 workflow routing, implementation fixes, or closure.
 
+## Loading Model
+
+Skill design uses progressive disclosure: frontmatter descriptions define exact
+triggers, each `SKILL.md` keeps only its owned procedure, the shared protocol
+keeps cross-skill invariants, and references/templates load only for named
+conditions. A material workflow rule has one complete semantic owner; consumers
+retain only the local trigger, input, action, result, and gate they need.
+
 Future lifecycle groups such as `product/`, `research/`, or `design/` must not
 be created as empty roadmap placeholders. Add them only when real skills with
 clear boundaries exist.

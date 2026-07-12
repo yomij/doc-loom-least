@@ -1,16 +1,16 @@
 ---
 case_id: 20260712-skill-context-cost-compression
 status: executing
-updated_at: 2026-07-12T13:11:58+08:00
+updated_at: 2026-07-12T13:14:03+08:00
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: both implementation slices are green. The default doorway is
-  1,412 words, context-through-plan is 2,910, the full path is 5,103, and all
-  active Skill Markdown is 8,944 words.
+- Outcome so far: all planned implementation/sync slices are green. The default
+  doorway is 1,412 words, context-through-plan is 2,912, the full path is
+  5,103, and all active Skill Markdown is 9,045 words.
 - What changed: shared and stage contracts now use one semantic owner, compact
   local actions/gates, conditional references, and lean artifact templates.
 - User action needed: none unless a material deviation is found.
@@ -86,8 +86,8 @@ proxies, not exact model-token claims.
 |---|---|---|
 | plan | `db3474d` | complete |
 | refactor:shared-loading | `6429863` | complete |
-| refactor:stage-contracts | pending | ready to commit |
-| task:cost-policy | pending | pending |
+| refactor:stage-contracts | `1cad0c1` | complete |
+| task:cost-policy | pending | ready to commit |
 | closure | pending | pending |
 
 ## Review Risk
@@ -132,6 +132,15 @@ None.
 - Reduced artifact templates to artifact shape and triggered-section guidance;
   removed duplicated plan/execution/closure procedure.
 
+### Cost policy and maps
+
+- Added one architecture-level progressive-disclosure and semantic-owner rule.
+- Updated workflow authority to describe the shared protocol as a compact
+  kernel and keep stage/reference/template detail at triggered owners.
+- Added a maintainer-facing loading discipline and approved ceilings to
+  `skills/README.md` without copying stage procedure.
+- Refreshed the case dashboard from Planned to Executing.
+
 ## Commands Run
 
 | Command / check | Result | Notes |
@@ -143,5 +152,6 @@ None.
 | `git diff --check` | pass | No whitespace errors. |
 | Six modified Skill validator runs via `uv` | pass | All Skill structures/frontmatter valid. |
 | YAML parse for all Skill frontmatter and modified templates | pass | All selected YAML valid. |
-| Planning/full-flow/corpus `wc -l -w` | pass | 2,910 / 5,103 / 8,944 words; all targets passed. |
+| Planning/full-flow/corpus `wc -l -w` | pass | 2,912 / 5,103 / 9,045 words; all targets passed. |
 | Semantic positive anchors across owners | pass | Approval, requirements, TDD, resume, exact review target, aggregate, closure, authority, Git, and Fast-Path remain. |
+| Authority frontmatter parse and loading-policy anchors | pass | Architecture/workflow authority remain valid and narrowly synchronized. |

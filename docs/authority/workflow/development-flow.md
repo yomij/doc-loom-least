@@ -12,9 +12,10 @@ last_verified: 2026-07-12
 
 # Development Workflow
 
-Current Skill implementation owns workflow procedure. Shared ownership,
-authority order, artifacts, status, authorization, compatibility, and Fast-Path
-rules live in `skills/_shared/references/shared-protocol.md`.
+Current Skill implementation owns workflow procedure. The shared protocol is a
+compact kernel for cross-skill ownership, authority, status, artifacts,
+authorization, compatibility, and Fast-Path invariants. Stage procedure stays
+with its owner; detailed references and templates load only when triggered.
 
 ## Stage Contract
 

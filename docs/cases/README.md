@@ -10,7 +10,7 @@ precedence and refresh this file.
 
 | Case | Current Status | Evidence |
 |---|---|---|
-| `20260712-skill-context-cost-compression` | Planned | `20260712-skill-context-cost-compression/plan.md` |
+| `20260712-skill-context-cost-compression` | Executing | `20260712-skill-context-cost-compression/execution.md` |
 
 ## Waiting On Human
 
