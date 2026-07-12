@@ -1,18 +1,18 @@
 ---
 case_id: 20260712-skill-context-cost-compression
 status: executing
-updated_at: 2026-07-12T13:06:11+08:00
+updated_at: 2026-07-12T13:11:58+08:00
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: the first green slice compresses the shared protocol and
-  human doorway from 3,112 to 1,398 words while preserving the locked routes.
-- What changed: shared text now contains only cross-skill invariants;
-  `docloom-workflow` contains only public entry, routing, identity, output, and
-  hard gates.
+- Outcome so far: both implementation slices are green. The default doorway is
+  1,412 words, context-through-plan is 2,910, the full path is 5,103, and all
+  active Skill Markdown is 8,944 words.
+- What changed: shared and stage contracts now use one semantic owner, compact
+  local actions/gates, conditional references, and lean artifact templates.
 - User action needed: none unless a material deviation is found.
 - Local Git effect: approved plan commit `db3474d` exists locally; no push or
   history rewrite is authorized.
@@ -85,8 +85,8 @@ proxies, not exact model-token claims.
 | Step | Commit | Status |
 |---|---|---|
 | plan | `db3474d` | complete |
-| refactor:shared-loading | pending | ready to commit |
-| refactor:stage-contracts | pending | pending |
+| refactor:shared-loading | `6429863` | complete |
+| refactor:stage-contracts | pending | ready to commit |
 | task:cost-policy | pending | pending |
 | closure | pending | pending |
 
@@ -115,6 +115,23 @@ None.
 - Kept the public doorway's status-only, next-slice, context-gate, planning,
   execution, closure, review/grill, and no-backend routing behavior.
 
+### Stage contracts
+
+- Reduced context/plan path-specific files from 2,973 additional words to
+  1,498, bringing the cumulative planning path to 2,910 words.
+- Reduced execute/review/close path-specific files from 4,766 additional words
+  to 2,193, bringing the typical full path to 5,103 words.
+- Rewrote context, plan, execute, review, and close around exact trigger,
+  inputs, owned actions/output, and hard gates.
+- Made context resolution/retrieval, risk, TDD exceptions, doc update rules,
+  review, and artifact-template reads conditional by named situation.
+- Preserved requirements approval/trailer, TDD/alternative verification,
+  deviation classification, review risk, exact Post-execution Git target,
+  Engineering/Spec aggregation, review-fix loop, closure Done Gate, authority
+  candidate handling, and final completion commit.
+- Reduced artifact templates to artifact shape and triggered-section guidance;
+  removed duplicated plan/execution/closure procedure.
+
 ## Commands Run
 
 | Command / check | Result | Notes |
@@ -124,3 +141,7 @@ None.
 | Semantic anchor `rg` for artifact/resume/Fast-Path/Git/confirmation/review routes | pass | Required locked concepts remain. |
 | `find -L skills -type l -print` | pass | No broken shared-reference symlink. |
 | `git diff --check` | pass | No whitespace errors. |
+| Six modified Skill validator runs via `uv` | pass | All Skill structures/frontmatter valid. |
+| YAML parse for all Skill frontmatter and modified templates | pass | All selected YAML valid. |
+| Planning/full-flow/corpus `wc -l -w` | pass | 2,910 / 5,103 / 8,944 words; all targets passed. |
+| Semantic positive anchors across owners | pass | Approval, requirements, TDD, resume, exact review target, aggregate, closure, authority, Git, and Fast-Path remain. |

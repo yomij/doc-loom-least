@@ -1,28 +1,9 @@
 <!--
-Required core: Human Approval Summary, Goal, Non-goals, Context, Workspace
-Baseline, Risk Level, TDD Applicability, Files to Change, Acceptance Criteria,
-Tasks, Confirmation Log.
-Plan owns expected acceptance criteria and planned verification, not final
-command evidence.
-
-Triggered sections: include each only when it has content.
-- Decisions: Include when user-confirmed or plan-relevant decisions exist.
-- Assumptions: Include when non-obvious assumptions affect the plan.
-- TDD Plan: Include when TDD Required: Yes and task-level detail is needed.
-- Fast-Path Conditions: Include when approved_by is fast-path.
-- Adaptive Execution: Include when the plan or user allows same-goal amendments.
-- Plan Amendments: Include when a previously approved plan was amended.
-- Tests: Include when tests need a dedicated list beyond Tasks.
-- Post-Execution Review Strategy: Include for eligible persistent cases. Define
-  exact baseline, Engineering/Spec isolation, complete-delta evidence,
-  aggregate gate, fix/re-review behavior, and durable evidence location.
-- Atomic Commit Strategy: Include for eligible persistent cases. Define
-  semantic completion points, explicit staging scope, expected titles and
-  `Doc-Loom-Case`/`Doc-Loom-Step` trailers, verification, and excluded Git
-  actions.
-- Risks: Include when residual risks exist beyond risk level classification.
-- Documentation Impact: Include when the plan changes authority, governance, or L3 docs.
-Do not keep empty headings.
+Required: Human Approval Summary, Goal, Non-goals, Context, Workspace Baseline,
+Risk, TDD, Files, Acceptance, Tasks, Confirmation Log. Add Decisions,
+Assumptions, Fast-Path Conditions, Amendments, Tests, Post-Execution Review,
+Atomic Commits, Risks, or Docs Impact only when material. Record planned, not
+final, evidence. Remove unused headings.
 -->
 ---
 case_id:
@@ -42,6 +23,7 @@ base_commit:
 - Material scope:
 - Decision needed:
 - Expected local Git actions / commit count:
+- Likely interruptions:
 - Excluded actions:
 
 ## Goal
@@ -50,40 +32,27 @@ base_commit:
 
 ## Context
 
-- Summary / Brief:
-- Route Verdict:
-- Skipped Context Reason:
+- Summary / brief / valid skip:
+- Route verdict:
 
 ## Workspace Baseline
 
-- Base Commit:
-- Dirty Workspace:
-- Existing Changed Files:
+- Base commit:
+- Branch / run mode:
+- Dirty or existing changes:
 
 ## Risk Level
-
-<!-- Include only when approved_by is fast-path:
-## Fast-Path Conditions
-
-| Condition | Evidence |
-|---|---|
-| Risk is `low` | |
-| Small change (<= 3 files, <= 20 lines diff) | |
-| No High-Risk Topic conflict | |
-| No cross-session, multi-agent, or resume continuity need | |
--->
 
 ## TDD Applicability
 
 - TDD Required:
-- If No, Reason:
-- Alternative Verification:
+- If No, reason and alternative verification:
 
 ## Files to Change
 
 ## Acceptance Criteria
 
-| Criteria | Verification |
+| Criterion | Planned verification |
 |---|---|
 
 ## Tasks
@@ -91,21 +60,12 @@ base_commit:
 ### Task 1: Name
 
 **Files:**
-- Create:
-- Modify:
-- Test:
 
-- [ ] **Step 1: Write the failing test or verification lock**
-
-- [ ] **Step 2: Run it and record expected failure or baseline**
-
-- [ ] **Step 3: Implement the minimal change**
-
-- [ ] **Step 4: Run target verification**
-
-- [ ] **Step 5: Record checkpoint**
+- [ ] Characterize/fail as required.
+- [ ] Implement the smallest change.
+- [ ] Verify and record checkpoint.
 
 ## Confirmation Log
 
 | When | Confirmed By | Plan Version | Confirmation |
-|---|---|---|---|
+|---|---|---:|---|

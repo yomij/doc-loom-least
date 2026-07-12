@@ -251,11 +251,11 @@ Case evidence:
 **Files:** context, plan, execute, review, close, selected existing references,
 templates, and execution evidence.
 
-- [ ] Rewrite each Skill around trigger, inputs, ordered actions, owned output,
+- [x] Rewrite each Skill around trigger, inputs, ordered actions, owned output,
   and gates; delete generic model guidance and consumer restatement.
-- [ ] Make every reference/template read conditional and one level deep.
-- [ ] Tighten frontmatter descriptions without dropping trigger coverage.
-- [ ] Verify the planning/full-flow budgets and commit the coherent green unit.
+- [x] Make every reference/template read conditional and one level deep.
+- [x] Tighten frontmatter descriptions without dropping trigger coverage.
+- [x] Verify the planning/full-flow budgets and commit the coherent green unit.
 
 ### Task 4: Record the durable cost principle and validate the full surface
 

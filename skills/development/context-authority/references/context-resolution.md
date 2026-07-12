@@ -1,39 +1,22 @@
 # Context Resolution
 
-## Case Intent
+Classify intent before reading broadly:
 
-Choose the task intent before reading broadly.
+| Intent | Minimum evidence |
+|---|---|
+| Bug | Symptom/reproduction, related entry, verification path. |
+| Feature | Goal/acceptance, relevant authority/contract or explicit absence, adjacent implementation. |
+| Refactor | Target boundary, verification coverage, non-touch scope. |
+| Docs governance | Scope, authority/index state, blocked decisions/history needed. |
+| Workflow/Skill | Target owner, shared/adjacent contracts, constitution/authority constraints. |
+| Resume | Current artifacts, handoff when present, Git state. |
+| Incident | Symptom, impact, rollback/runbook evidence. |
 
-| Intent | Minimum evidence | Preferred evidence |
-|---|---|---|
-| Bug / error fix | Reproduction or error clue, related code entry, one test or verification path | Stack trace, failing test, runbook, known issue |
-| Feature | User goal, draft acceptance criteria, relevant authority/contract or explicit absence, adjacent implementation | Spec, API contract, ADR, test strategy |
-| Refactor | Target boundary, relevant modules, test coverage entry, non-touch scope | Repo map, dependency graph, ADR, module owner |
-| Documentation governance | Scope, authority/index state, historical material, blocked decisions | Governance plan, authority index, case evidence, archive |
-| Workflow / skill design | Target skill, upstream protocol, adjacent skill, constitution or authority constraints | Skill design, workflow protocol, ADR, reference skill |
-| Resume | Current artifacts, handoff, and git state | Case docs, branch/worktree, changed files |
-| Incident / operations | Symptom, impact, rollback clue, runbook | Monitoring notes, rollback guide, recent release |
+Record the chosen intent and exclude unrelated material.
 
-Record intent and why it was chosen in the brief or inline context summary.
-Exclude material unrelated to the current intent by default.
+Follow shared case-identity order. Terminal closures do not resume by default;
+`Paused`, `Blocked`, and `Done with Caveats` require user intent, satisfied
+conditions, and a later `execution.md` Resume record.
 
-## Case Resolution Order
-
-Follow the case identity resolution order in `references/shared-protocol.md`.
-
-Recommended branch shape:
-
-```text
-case/<case-id>
-```
-
-If `closure.md` exists, follow shared protocol Case Resume. Do not resume
-`Done`, `Cancelled`, `Superseded`, or `Abandoned` by default. `Paused`,
-`Blocked`, and `Done with Caveats` can resume in the same case only when the
-user asks, the resume condition is satisfied, and `execution.md` records the
-required newer Resume evidence. Otherwise keep the closure status current.
-
-## Run Modes
-
-Use shared protocol Run Modes. `context-authority` only identifies mode; it does
-not create branches, worktrees, or case docs.
+Select shared run mode (`isolated`, `branch`, or `inline`) but do not create a
+branch, worktree, case, or artifact.

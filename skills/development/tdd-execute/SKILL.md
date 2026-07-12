@@ -1,231 +1,117 @@
 ---
 name: tdd-execute
-description: Execute an approved Doc Loom case plan using TDD discipline, semantic atomic commits, and the mandatory post-execution review gate for eligible cases. Use only after plan-confirm has produced an approved plan.
+description: Execute a currently authorized approved Doc Loom plan with TDD or its confirmed exception, scoped semantic commits, execution evidence, and the required Post-execution review/fix loop. Never execute a recommendation or unapproved plan.
 ---
 
 # tdd-execute
 
-One-shot work and simple docs do not automatically enter this skill. Execute
-only with an approved current plan and current authorization: same-turn plan
-approval, execute/continue intent, valid Fast-Path, or explicit reconfirmation
-of an older plan. A recommendation is not authorization.
-
-Read:
-
-- `references/shared-protocol.md` for status, artifacts, authority,
-  authorization, Atomic Commit, and compatibility rules.
-- `references/tdd-exceptions.md` when `TDD Required: No` or considering an
-  exception amendment.
-- `../../assessment/review/SKILL.md` for an eligible or plan-declared
-  Post-execution gate.
+Read shared status/authorization/commit rules. Read `references/tdd-exceptions.md`
+only for `TDD Required: No`; read `../../assessment/review/SKILL.md` only when
+the approved plan requires Post-execution review.
 
 ## Preflight
 
-Read the case plan/current artifacts, required context brief, relevant code/tests, and
-project command/package-manager instructions. Verify:
-
-- `plan.md` exists with `status: approved`, `plan_version`, `approved_by`,
-  `approved_at`, and a matching Confirmation Log entry;
-- Fast-Path approval includes its verified conditions;
-- the case is not terminally closed; a resumable closure has current resume
-  intent and its declared condition is satisfied;
-- Goal, Non-goals, Decisions, Acceptance Criteria, and TDD Applicability are
-  executable and clear;
-- staged, unstaged, and untracked changes relative to `base_commit` are
-  explainable;
-- current execution authorization exists;
-- eligible cases declare Post-Execution Review and Atomic Commit strategies;
-- any required full-flow atomic plan commit already contains the approved plan
-  and related case artifacts; Fast-Path instead declares one combined completion commit.
-
-If the user approves a still-draft current plan, perform the minimal approval
-writeback first and continue unless they ask to hold. Otherwise failed preflight
-returns to `plan-confirm`.
+Require a non-terminal case, current approved plan/version/log/baseline,
+current execute authorization, executable scope/acceptance/TDD strategy,
+explainable working tree, eligible review/commit strategies, and the required
+full-flow plan commit. Fast-Path instead requires verified conditions and its
+combined completion strategy. A just-approved draft may receive minimal
+approval writeback first; other failures return to planning.
 
 ## Workflow
 
-1. Critically check steps, commands, tests, non-goals, and acceptance.
-2. Create/update `execution.md` with `status: executing` before implementation
-   (not for preflight-only or approval-writeback-only work). When reopening a
-   resumable closure, use a later `updated_at` and add the Resume evidence
-   required by shared protocol.
-3. Red: run the smallest behavior test and observe the expected failure.
-4. Green: implement minimally and pass the target test.
-5. Refactor only as planned/necessary; rerun related tests after each change.
-6. Run planned and obvious low-risk quality checks.
-7. In the full flow, create authorized semantic commits at independently valid
-   green task or verified refactor completion. In Fast-Path, keep the verified
-   green delta uncommitted for the combined completion unit.
-8. Update plan progress and execution evidence; write handoff only for a future
-   resume point, using `templates/handoff.md`.
-9. Maintain `review_risk`; verify every acceptance criterion and final check.
-10. For eligible work, invoke `review` in Post-execution mode, persist both axes
-    and aggregate result, and own the fix/re-review loop.
-11. Only after aggregate `pass`, set `execution.md` to `status: ready_to_close`
-    and route to
-    `doc-sync-close`.
-12. Stage/commit only within the approved strategy and shared authorization.
+1. Recheck plan, commands, non-goals, acceptance, and deviations.
+2. Write/update `execution.md` as `executing`; resumed cases add later Resume
+   evidence required by shared protocol.
+3. TDD: observe the smallest credible Red, implement Green, then only necessary
+   refactor with related checks. For an approved exception, run its alternative
+   characterization/verification.
+4. Run planned and obvious low-risk quality checks.
+5. In full flow, commit each independently valid green task/refactor. Fast-Path
+   keeps its passing delta for the combined completion unit.
+6. Record current evidence, hashes, review risk, acceptance status, and any
+   future-resume handoff.
+7. Invoke Post-execution review when eligible; own every evidence/fix/re-review
+   loop.
+8. Only aggregate `pass` may set `execution.md` to `ready_to_close` and route to
+   closure.
 
-## TDD Rules
+## TDD And Deviations
 
-Default: write the failing test first. Claim TDD only after observing the
-expected failure and later pass. If a new test passes immediately, determine
-whether the behavior already exists or the test is wrong before continuing.
+Claim TDD only after observing a relevant failure and later pass. Tests should
+assert observable behavior, cover a plausible regression, use realistic
+boundaries, and survive refactors; avoid private/call-order/coverage-only tests
+and production test hooks. An unexpected or immediately passing Red must be
+explained before continuing.
 
-Allowed Red: a new failing test, or an existing non-flaky failure that directly
-maps to current acceptance. Before accepting it:
+The approved plan owns exceptions; changing Yes to No is material.
 
-- name behavior/public contract and assert observable output, state,
-  persistence, event, side effect, or error;
-- keep one failure theme and enough setup to understand it;
-- catch a plausible regression and survive behavior-preserving refactors;
-- avoid private methods, call order, temporary/non-contract fields, mock
-  existence, coverage-only assertions, and production test-only hooks;
-- mock only understood system boundaries or slow/external/unstable dependencies,
-  with realistic data; prefer integration tests when mocks dominate.
-
-## TDD Exceptions
-
-The approved plan or a same-turn confirmed amendment must declare the exception
-and alternative verification; see `references/tdd-exceptions.md`. Changing
-`TDD Required: Yes` to `No` is material: stop and return to `plan-confirm`.
-
-## Deviations
-
-Judge actual work against Goal, Non-goals, Decisions, Files, Tasks, Acceptance,
-TDD, risk, docs impact, and command/config/dependency scope. Name the changed
-boundary before classifying it.
-
-| Class | Handling |
+| Deviation | Handling |
 |---|---|
-| `no deviation` | Continue; record normal evidence. |
-| `minor deviation` | Low-risk, same-goal/responsibility adjustment. Record in `execution.md`; when adaptive execution is allowed, also append `plan.md ## Plan Amendments` with When, Change, Reason, User Confirmation, Impact. |
-| `material deviation` | Goal, acceptance, files, risk, docs, TDD, public contract, authority, cross-module, dependency/config, or migration scope changed. Stop for a confirmed plan amendment. |
-| `hard stop` | A Non-goal/Decision would be violated, or unapproved authority, script, dependency, lockfile, CI, or test-command config would change. Stop for explicit confirmation/new plan. |
+| None | Continue and record evidence. |
+| Minor | Same goal/responsibility and low risk; record it, plus an amendment only when adaptive execution allows. |
+| Material | Goal, acceptance, files, risk, TDD, authority/public contract, dependency/config, or execution constraints changed; stop for plan amendment. |
+| Hard stop | Non-goal/decision violation or unapproved authority/script/dependency/lockfile/CI/config change; stop for explicit confirmation/new plan. |
 
-## Execution Evidence
+## Evidence And Status
 
-Write/update `execution.md` for TDD, code/behavior change, any deviation, test
-failure/retry, material `review_risk`, or continuity evidence. Docs-only,
-recovery, or trivial config may skip it when final verification fits in
-`closure.md`.
+Use `templates/execution.md` when execution evidence is required. Record actual
+commands, failures/retries, deviations, hashes, findings, and resume-critical
+facts; reference plan expectations instead of copying them. Lead with current
+human outcome/action/Git effect.
 
-Use `templates/execution.md`; keep current results in the body and a short
-History, not numbered execution directories. Record actual commands,
-deviations, failures/retries, interim findings, task/fix hashes, and
-resume-critical facts—not a copy of planned acceptance. Checkbox progress may
-change without changing plan semantics.
+Frontmatter is:
 
-Lead with `## Human Summary`: current outcome, what changed, whether the user
-must act, and relevant local Git effect. Reference plan criteria instead of
-copying plan prose; closure references this evidence rather than duplicating it.
+```yaml
+case_id: <case-id>
+status: executing | ready_to_close
+updated_at: <timestamp>
+```
 
-## Review Risk
+Keep `review_risk` high/medium/low with reasons; it never auto-triggers ad-hoc
+review and cannot be cleared until its cause is evidenced. Failed artifact sync
+blocks a claim that workflow state is fully current.
 
-`review_risk` is data, not an ad-hoc review trigger:
-
-| Value | Use |
-|---|---|
-| `low` | Local change, no public contract, tests pass. |
-| `medium` | Internal feature, moderate scope, main paths covered. |
-| `high` | High-consequence risk under the shared classification, insufficient coverage, material deviation, or pending authority proposal. |
-
-Update as evidence changes; do not clear to low until original high-risk causes
-are resolved. Closure consumes the final value. Outside an approved
-Post-execution gate, only the user may request `review`.
+Use low for local well-covered change, medium for bounded internal/broader
+change, and high for high-consequence, weakly evidenced, materially deviated,
+or pending-authority work.
 
 ## Post-Execution Review
 
-Eligible cases persistently change production code/tests, Skill behavior,
-workflow policy, public contract, executable config, or user-observable
-behavior. Explanation/status-only, standalone review, and one-shot non-case work
-are ineligible. Purely mechanical docs may use a compact inline Engineering/Spec
-check only when the approved plan says so.
+Eligible changes include production/tests, Skill behavior, workflow policy,
+public contracts, executable config, or user-visible behavior. Fast-Path uses a
+compact Engineering/Spec check; material findings leave the compact path.
 
-Fast-Path uses a compact Engineering/Spec check against its minimal plan and
-complete working-tree delta. Material findings leave Fast-Path and use the full
-fix/re-review behavior; only a passing compact check may enter the combined
-completion commit.
+Start only after implementation/checks, preliminary acceptance evidence,
+expected commits/combined delta, exact baseline, and complete explainable target
+exist. Persist separate Engineering and Spec verdicts/findings/gaps, exact
+baseline/commits/worktree, aggregate result, and re-review history.
 
-Start only when tasks, required tests/checks, preliminary acceptance evidence,
-expected full-flow task/refactor commits or the Fast-Path combined strategy,
-exact plan baseline, and explainable complete delta are all present.
+- `pass`: become ready to close.
+- `insufficient_evidence`: collect evidence and rerun affected axes.
+- `changes_required`: remain executing; fix one root cause, verify it, commit a
+  scoped `review-fix:<id>`, then rerun affected axes against the accumulated
+  final delta.
 
-Invoke `review` under the approved plan. Keep Engineering and Spec isolated and
-persist exact baseline, reviewed commits/worktree, verdicts, findings, evidence
-gaps, aggregate result, and re-review history. Consume the aggregate contract
-owned by `review`:
-
-- `pass`: mark `execution.md` ready to close.
-- `insufficient_evidence`: collect material evidence, rerun the affected axis,
-  then aggregate again; absence never passes.
-- `changes_required`: remain in execution; fix one smallest coherent root cause,
-  add/update regression coverage when appropriate, run relevant checks, commit
-  one atomic `fix:` unit with `Doc-Loom-Step: review-fix:<id>`, rerun the affected
-  axis, then aggregate against the accumulated final delta.
-
-Unresolved Critical/Important findings block closure readiness and unqualified
-closure. Keep Minor findings visible for residual-risk judgment.
-
-## Artifact Status
-
-`execution.md` carries execution status in frontmatter:
-
-```yaml
----
-case_id: <case-id>
-status: executing  # or ready_to_close after required review passes
-updated_at: <timestamp>
----
-```
-
-`review_risk` accepts only `low`, `medium`, or `high`; reasons live in the body.
-If the artifact update fails, preserve completed implementation, record the failure,
-and do not claim the workflow fully synced.
-
-For a resumed case, `## Resume` records prior closure status, closure timestamp
-or commit, current authorization, satisfied resume condition, and reason. Its
-frontmatter `updated_at` must be later than the closure it supersedes.
+Unresolved Critical/Important findings block closure; keep Minor residuals
+visible.
 
 ## Commits
 
-Do not stage/commit without current user or approved-plan authorization. Follow
-the full shared Atomic Commit Contract and authorization exclusions. For each
-authorized task/refactor/review-fix commit:
+Follow shared authorization and the plan's semantic boundaries. For each
+task/refactor/fix: stage explicit case paths, inspect staged content, run staged
+diff/checks, use repository title plus `Doc-Loom-Case`/`Doc-Loom-Step`, and
+record the resulting hash. Combine dependent changes when separation would be
+invalid; stop on an inseparable unrelated mixed file.
 
-1. Select one independently valid completion point/root cause.
-2. Include implementation, tests/alternative verification, necessary local docs,
-   and explanatory evidence for that unit.
-3. Stage explicit case paths only; isolate unrelated user/other-case changes.
-4. Inspect `git diff --cached`, run `git diff --cached --check`, and run relevant
-   checks.
-5. Use `<type>: <summary>` plus deterministic `Doc-Loom-Case` and
-   `Doc-Loom-Step` trailers.
-6. Record the resulting task/refactor/review-fix hash in `execution.md`.
-
-Combine dependent work when separation would create an invalid commit; keep an
-independently verified refactor separate when practical. If a mixed file cannot
-be isolated safely, stop.
-
-Fast-Path creates no task commit. After its compact review passes,
-`doc-sync-close` creates the single `Doc-Loom-Step: closure` completion commit
-containing the approved minimal plan, green change, verification, closure,
-and necessary dashboard sync.
-
-After separately authorized amend/rebase/squash/history rewrite, prior hashes
-and Post-execution evidence are stale. Revalidate the exact baseline and range,
-refresh commit mappings, and rerun final Engineering and Spec before closure.
+Fast-Path creates no task commit. Separately authorized history rewriting makes
+hash/review evidence stale and requires complete revalidation.
 
 ## Gates
 
-- No approved plan or matching current-version approval log -> `plan-confirm`.
-- Unrecoverable closed case needs a new case or explicit reconfirmation.
-- Required TDD without expected Red, unexpected Red, or an exception without
-  alternative verification -> no implementation.
-- Material deviation/hard stop -> apply Deviations handling.
-- Full eligible case missing strategies, required plan/task commits, or resolvable
-  exact baseline -> return to `plan-confirm` or report
-  `insufficient_evidence`; never close.
-- Fast-Path missing its combined strategy, green verification, or passing
-  compact review -> no completion commit and no unqualified closure.
-- Required Post-execution result other than `pass` -> remain in execution.
+- Missing current approval/log/baseline/authorization -> planning, not execution.
+- Invalid Red or unconfirmed/unverified exception -> stop.
+- Material/hard-stop deviation -> amendment/confirmation.
+- Missing required plan/task strategy or exact review target -> no closure.
+- Fast-Path without green verification and compact pass -> no completion unit.
+- Required Post-execution result other than `pass` -> remain executing.

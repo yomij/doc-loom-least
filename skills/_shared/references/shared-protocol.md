@@ -94,6 +94,9 @@ user says hold, revise, or review first. An older plan needs current
 execute/continue intent. High-risk approval must identify the current object;
 record its version even when the user does not name it.
 
+A short `yes`/`ok`/`continue` confirms only the immediate unambiguous
+recommendation and never creates durable authority.
+
 Before confirmation, summarize outcome, material scope, expected local Git
 actions/commit count, interruptions, and excluded actions. Approval authorizes
 only declared case paths and semantic commits. It excludes unrelated work,

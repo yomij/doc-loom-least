@@ -1,41 +1,13 @@
 # TDD Exceptions
 
-TDD exceptions are allowed only when confirmed in `plan.md` or a confirmed
-same-turn amendment. An exception never means "skip verification".
+Only an approved plan or confirmed amendment may declare an exception; it never
+removes verification.
 
-Allowed categories:
+Allowed: pure docs, config, build script, logging/telemetry, UI copy, dead-code
+deletion, exploratory spike, urgent hotfix, or an environment change that
+cannot be automated reliably.
 
-- Pure documentation change.
-- Configuration adjustment.
-- Build script repair.
-- Logging or telemetry.
-- UI copy.
-- Dead code deletion.
-- Exploratory spike.
-- Urgent hotfix.
-- Environment change that cannot be reliably automated.
-
-Required record:
-
-```md
-## TDD Applicability
-
-- TDD Required: No
-- If No, Reason:
-- Alternative Verification:
-  - manual check
-  - snapshot check
-  - build check
-  - smoke test
-  - reviewer confirmation
-```
-
-Manual verification must record steps, environment, result, and limitation.
-
-Behavior-preserving refactors should use:
-
-```text
-characterize existing behavior -> refactor -> verify no regression
-```
-
-Do not invent a meaningless failing test just to satisfy Red.
+Record category/reason and concrete alternative verification, including manual
+steps/environment/result/limitations when applicable. Behavior-preserving
+refactors use `characterize -> refactor -> verify`. Never invent a meaningless
+Red.
