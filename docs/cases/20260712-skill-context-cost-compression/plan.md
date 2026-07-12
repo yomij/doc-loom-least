@@ -273,10 +273,10 @@ execution evidence.
 
 - [x] Run 8-12 fresh-agent task prompts covering ordinary, edge, and negative
   trigger cases without leaking expected answers.
-- [ ] Run isolated Engineering and Spec review against the complete delta.
-- [ ] Fix each material root cause in the smallest atomic commit and re-review
+- [x] Run isolated Engineering and Spec review against the complete delta.
+- [x] Fix each material root cause in the smallest atomic commit and re-review
   the affected axes.
-- [ ] Map final acceptance, write closure, update dashboard, create and verify
+- [x] Map final acceptance, write closure, update dashboard, create and verify
   the closure commit, and report `Done` only when case scope is clean.
 
 ## Post-Execution Review Strategy

@@ -1,21 +1,22 @@
 ---
 case_id: 20260712-skill-context-cost-compression
-status: executing
-updated_at: 2026-07-12T13:18:40+08:00
+status: ready_to_close
+updated_at: 2026-07-12T13:20:54+08:00
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: all planned implementation/sync slices are green. The default
-  doorway is 1,412 words, context-through-plan is 2,912, the full path is
-  5,103, and all active Skill Markdown is 9,045 words.
+- Outcome so far: all planned implementation/sync slices and final independent
+  review pass. The default
+  doorway is 1,412 words, context-through-plan is 2,920, the full path is
+  5,137, and all active Skill Markdown is 9,079 words.
 - What changed: shared and stage contracts now use one semantic owner, compact
   local actions/gates, conditional references, and lean artifact templates.
-- User action needed: none unless a material deviation is found.
-- Local Git effect: approved plan commit `db3474d` exists locally; no push or
-  history rewrite is authorized.
+- User action needed: none.
+- Local Git effect: plan, two refactors, cost-policy sync, and one review-fix
+  commit exist locally; no push or history rewrite is authorized.
 
 ## Plan Reference
 
@@ -88,8 +89,8 @@ proxies, not exact model-token claims.
 | refactor:shared-loading | `6429863` | complete |
 | refactor:stage-contracts | `1cad0c1` | complete |
 | task:cost-policy | `e59944a` | complete |
-| review-fix:F1-F3 | pending | ready to commit |
-| closure | pending | pending |
+| review-fix:F1-F3 | `7226acf` | complete |
+| closure | required in the commit containing final closure evidence | pending commit |
 
 ## Review Risk
 
@@ -158,6 +159,9 @@ Post-execution review axes pass.
 | Planning/full-flow/corpus `wc -l -w` | pass | 2,912 / 5,103 / 9,045 words; all targets passed. |
 | Semantic positive anchors across owners | pass | Approval, requirements, TDD, resume, exact review target, aggregate, closure, authority, Git, and Fast-Path remain. |
 | Authority frontmatter parse and loading-policy anchors | pass | Architecture/workflow authority remain valid and narrowly synchronized. |
+| Eight Skill validators, all selected YAML, links, symlinks, final diff check | pass | Complete final delta valid. |
+| Per-file before/after comparison | pass | All 15 compressed targets shrank. |
+| Exact baseline/commit/worktree/trailer inspection | pass | Baseline valid; five declared commits; no staged, unstaged, untracked, or unrelated changes before final evidence update. |
 
 ## Forward Tests
 
@@ -208,3 +212,35 @@ owner caveat; ad-hoc review stays read-only; missing Spec evidence cannot pass.
 - Result: `changes_required`.
 - Fix: one coherent edge-contract restoration in the three owning files,
   followed by affected-axis and complete final re-review.
+
+### Final Engineering
+
+- Verdict: No material issue found.
+- Findings: None within reviewed scope.
+- Evidence Gaps: no executable workflow interpreter exists; repository Skill
+  contracts were instead checked through exact-delta inspection, semantic
+  assertions, structural validation, Git evidence, and 13 fresh-agent
+  scenarios. This is not material for the Markdown implementation surface.
+- Scope: exact baseline through `7226acf`, every approved changed file, commit
+  trailers, and the clean worktree before this final evidence update.
+
+### Final Spec
+
+- Verdict: No material issue found.
+- Findings: None within reviewed scope.
+- Evidence Gaps: none material.
+- Scope: Goal, Non-goals, Decisions, Acceptance Criteria, approved file/docs
+  impact, Constitution, active workflow/agent/architecture authority, prior
+  compression behavior, artifact-owned status, and forward-test results.
+- The 13-versus-12 prompt count is a recorded minor deviation with no semantic,
+  file, authority, or risk impact.
+
+### Final Aggregate
+
+- Result: `pass`.
+- Reviewed baseline: `ead85434eb6c01a8801534b92a37271899a8f055`.
+- Reviewed commits: `db3474d`, `6429863`, `1cad0c1`, `e59944a`, `7226acf`.
+- Reviewed working tree: clean before the final execution/plan evidence update;
+  only those closure-bound evidence updates remain afterward.
+- Residual Critical/Important/Minor findings: none.
+- Final review risk: high-risk causes are resolved; no material residual risk.

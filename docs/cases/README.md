@@ -8,9 +8,7 @@ precedence and refresh this file.
 
 ## Active Cases
 
-| Case | Current Status | Evidence |
-|---|---|---|
-| `20260712-skill-context-cost-compression` | Executing | `20260712-skill-context-cost-compression/execution.md` |
+None.
 
 ## Waiting On Human
 
@@ -22,6 +20,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260712-skill-context-cost-compression` | Done | `20260712-skill-context-cost-compression/closure.md` | Common-path Skill loading cost reduced; artifact consolidation remains a separate optional follow-up. |
 | `20260712-artifact-owned-case-state` | Done | `20260712-artifact-owned-case-state/closure.md` | Artifact-owned status shipped; dogfood it before merging execution and closure artifacts. |
 | `20260712-human-first-workflow-simplification` | Done | `20260712-human-first-workflow-simplification/closure.md` | Human entry, compact Fast-Path, Git disclosure, risk, discovery, summaries, and grill improvements passed review after one atomic fix. |
 | `20260710-compress-workflow-skill-text` | Done | `20260710-compress-workflow-skill-text/closure.md` | Seven contracts reduced 1,610→1,140 lines; dual-axis review passed after one atomic wording fix. |
@@ -38,7 +37,7 @@ None.
 | ID | Source Case | Candidate | Suggested Route | Reason |
 |---|---|---|---|---|
 | F2 | `20260703-next-slice-rubric-dogfood` | Validate compact next-slice output on the next real discovery pass before changing the rubric. | `docloom-workflow` | The first dogfood fixed output density but does not yet prove the compact format across another selection. |
-| F3 | `20260712-artifact-owned-case-state` | Dogfood artifact-owned status, then evaluate `execution.md` + `closure.md` consolidation and generic-guidance deletion. | `docloom-workflow` | This case removes the duplicate state source; the next simplification should build on observed use rather than combine migrations prematurely. |
+| F3 | `20260712-artifact-owned-case-state` | Evaluate `execution.md` + `closure.md` consolidation only if artifact ceremony remains costly after this successful dogfood cycle. | `docloom-workflow` | Generic guidance/loading cost was addressed by `20260712-skill-context-cost-compression`; artifact merging remains intentionally separate. |
 
 ## Refresh Rules
 
