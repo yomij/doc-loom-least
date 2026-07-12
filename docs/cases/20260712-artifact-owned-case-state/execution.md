@@ -1,24 +1,25 @@
 ---
 case_id: 20260712-artifact-owned-case-state
 status: executing
-updated_at: 2026-07-12T12:43:57+08:00
+updated_at: 2026-07-12T12:48:38+08:00
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: plan v2 review fixes are implemented and validated; independent
-  Engineering and Spec re-review remains.
+- Outcome so far: the first re-review resolved the status model but found a Git
+  trailer contract mismatch and stale plan/status summaries; the second fix is
+  implemented and awaits commit/re-review.
 - What changed: new cases no longer create state, artifact templates own stage
   status, and every active consumer now follows one artifact precedence.
 - User action needed: none; amended plan v2 is approved.
-- Local Git effect: plan commit `9eb8986` and implementation commit `396ae72`
+- Local Git effect: commits `9eb8986`, `396ae72`, `bf2d240`, and `9d8779b`
   exist locally; no push or history rewrite is authorized.
 
 ## Plan Reference
 
-- plan_version: 1
+- plan_version: 2
 - base_commit: `9e6c48c4bc3eba04162cfb121d593ea42287e06e`
 - adaptive_execution: no
 
@@ -134,6 +135,7 @@ git show -s --format='%H%n%s%n%b' 9eb8986 396ae72 bf2d240
 | plan | `9eb8986` | Approved plan v1, old-protocol bootstrap state, and dashboard. |
 | task:artifact-state | `396ae72` | Artifact-owned status contracts, templates, authority/derived sync, validation, and bootstrap-state deletion. |
 | plan-amendment | `bf2d240` | Approved plan v2, initial independent review evidence, and expanded review-fix scope. |
+| review-fix:F1-F4 | `9d8779b` | Deterministic resume, handoff cleanup, Git authority alignment, acceptance correction, and refreshed evidence. |
 
 ## Review Fix
 
@@ -145,6 +147,32 @@ git show -s --format='%H%n%s%n%b' 9eb8986 396ae72 bf2d240
 - F4: resolved by refreshing execution summary and dashboard.
 - F5: resolved by leaving closure-dependent acceptance partially met until the
   closure artifact and commit exist.
+
+### First Re-review Engineering
+
+- Verdict: Material issues found.
+- Important:
+  - F6: commit `bf2d240` used `Doc-Loom-Step: plan-amendment`, which the Git
+    authority enum did not yet permit.
+  - F7: execution evidence still referenced plan v1 rather than approved v2.
+- Minor:
+  - F8: human summary and dashboard lagged behind committed review-fix state.
+- Prior F1-F3: resolved. F4 required the additional refresh above.
+
+### First Re-review Spec
+
+- Verdict: No material issue found.
+- Important: None.
+- Minor: F8, the same stale summary/dashboard issue.
+- Prior closure-resume and acceptance findings: resolved.
+
+### Second Review Fix
+
+- F6: added `plan-amendment` to the authoritative trailer enum, restricted to
+  a materially changed and reconfirmed plan version.
+- F7: execution Plan Reference now identifies approved plan v2.
+- F8: summary and dashboard now reflect the four committed case steps and the
+  actual re-review state.
 
 ## Post-Execution Review
 

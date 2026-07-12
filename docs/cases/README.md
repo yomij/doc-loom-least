@@ -10,7 +10,7 @@ precedence and refresh this file.
 
 | Case | Status | Evidence | Next Action |
 |---|---|---|---|
-| `20260712-artifact-owned-case-state` | Re-review pending | `20260712-artifact-owned-case-state/execution.md` | Commit review fix and rerun independent review. |
+| `20260712-artifact-owned-case-state` | Re-review pending | `20260712-artifact-owned-case-state/execution.md` | Commit Git-evidence fix and rerun independent review. |
 
 ## Waiting On Human
 

@@ -50,8 +50,11 @@ Case commits use deterministic trailers:
 
 ```text
 Doc-Loom-Case: <case-id>
-Doc-Loom-Step: requirements | plan | task:<id> | refactor:<id> | review-fix:<id> | closure
+Doc-Loom-Step: requirements | plan | plan-amendment | task:<id> | refactor:<id> | review-fix:<id> | closure
 ```
+
+Use `plan-amendment` only for a materially changed plan version that was
+reconfirmed after the original approved plan commit.
 
 Actual task, refactor, and review-fix hashes are recorded in `execution.md`.
 `closure.md` must not predict its own commit hash. Unqualified `Done` requires a
