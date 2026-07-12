@@ -8,7 +8,9 @@ precedence and refresh this file.
 
 ## Active Cases
 
-None.
+| Case | Current Status | Evidence |
+|---|---|---|
+| `20260712-skill-context-cost-compression` | Planned | `20260712-skill-context-cost-compression/plan.md` |
 
 ## Waiting On Human
 
