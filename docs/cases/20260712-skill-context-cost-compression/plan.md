@@ -229,22 +229,22 @@ Case evidence:
 
 **Files:** plan and case dashboard.
 
-- [ ] Confirm plan v1 and record approval metadata.
-- [ ] Capture per-file counts, trigger descriptions, required-read edges, and
+- [x] Confirm plan v1 and record approval metadata.
+- [x] Capture per-file counts, trigger descriptions, required-read edges, and
   unique path totals at the exact baseline.
-- [ ] Build the semantic ownership and scenario matrix in `execution.md`.
-- [ ] Commit the approved plan as the declared plan unit.
+- [x] Build the semantic ownership and scenario matrix in `execution.md`.
+- [x] Commit the approved plan as the declared plan unit.
 
 ### Task 2: Compress the shared kernel and human doorway
 
 **Files:** shared protocol, `docloom-workflow`, and execution evidence.
 
-- [ ] Retain only cross-skill invariants in the shared kernel.
-- [ ] Reduce the doorway to start checks, mode selection, case identity,
+- [x] Retain only cross-skill invariants in the shared kernel.
+- [x] Reduce the doorway to start checks, mode selection, case identity,
   routing, output, and hard gates.
-- [ ] Preserve artifact-owned status, confirmation scope, Fast-Path, resume,
+- [x] Preserve artifact-owned status, confirmation scope, Fast-Path, resume,
   degraded Git, and no-backend boundaries at their approved owners.
-- [ ] Verify the 1,700-word doorway budget and commit the coherent green unit.
+- [x] Verify the 1,700-word doorway budget and commit the coherent green unit.
 
 ### Task 3: Compress stage contracts and conditional reads
 
