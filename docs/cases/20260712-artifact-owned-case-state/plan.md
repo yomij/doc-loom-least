@@ -258,7 +258,7 @@ SSOT map, shareable workflow explanation, and case dashboard.
 - [x] Run structural, semantic, stale-rule, link, symlink, and Git checks.
 - [x] Record execution evidence and every acceptance criterion.
 - [x] Run isolated Engineering and Spec Post-execution review.
-- [ ] Fix/re-review material findings, then close only on aggregate `pass`.
+- [x] Fix/re-review material findings, then close only on aggregate `pass`.
 
 ### Task 4: Resolve independent review findings
 
@@ -266,7 +266,7 @@ SSOT map, shareable workflow explanation, and case dashboard.
 - [x] Align context resume rules, handoff shape, and derived state diagram.
 - [x] Replace the stale separate `closed state` requirement in Git authority.
 - [x] Keep closure-dependent acceptance pending until the closure commit.
-- [ ] Refresh human summaries/dashboard, validate, commit one coherent fix, and
+- [x] Refresh human summaries/dashboard, validate, commit one coherent fix, and
   rerun both independent review axes.
 
 ## Plan Amendments

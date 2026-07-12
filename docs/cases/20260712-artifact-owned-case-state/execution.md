@@ -1,21 +1,20 @@
 ---
 case_id: 20260712-artifact-owned-case-state
-status: executing
-updated_at: 2026-07-12T12:48:38+08:00
+status: ready_to_close
+updated_at: 2026-07-12T12:52:10+08:00
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: the first re-review resolved the status model but found a Git
-  trailer contract mismatch and stale plan/status summaries; the second fix is
-  implemented and awaits commit/re-review.
+- Outcome so far: both independent review axes pass after two atomic review-fix
+  commits; execution is ready to close.
 - What changed: new cases no longer create state, artifact templates own stage
   status, and every active consumer now follows one artifact precedence.
 - User action needed: none; amended plan v2 is approved.
-- Local Git effect: commits `9eb8986`, `396ae72`, `bf2d240`, and `9d8779b`
-  exist locally; no push or history rewrite is authorized.
+- Local Git effect: commits `9eb8986`, `396ae72`, `bf2d240`, `9d8779b`, and
+  `fe29b09` exist locally; no push or history rewrite is authorized.
 
 ## Plan Reference
 
@@ -100,6 +99,9 @@ v1 file scope. Approved plan v2 now authorizes the coherent review fix.
 reversible Markdown, but it changes active workflow routing and closure status
 semantics.
 
+Disposition: resolved by the final independent Engineering and Spec verdicts;
+both report no material issue.
+
 ## Commands Run
 
 | Command / Check | Result | Notes |
@@ -136,6 +138,7 @@ git show -s --format='%H%n%s%n%b' 9eb8986 396ae72 bf2d240
 | task:artifact-state | `396ae72` | Artifact-owned status contracts, templates, authority/derived sync, validation, and bootstrap-state deletion. |
 | plan-amendment | `bf2d240` | Approved plan v2, initial independent review evidence, and expanded review-fix scope. |
 | review-fix:F1-F4 | `9d8779b` | Deterministic resume, handoff cleanup, Git authority alignment, acceptance correction, and refreshed evidence. |
+| review-fix:F6-F8 | `fe29b09` | Authoritative plan-amendment trailer, plan v2 evidence binding, and current human status. |
 
 ## Review Fix
 
@@ -173,6 +176,34 @@ git show -s --format='%H%n%s%n%b' 9eb8986 396ae72 bf2d240
 - F7: execution Plan Reference now identifies approved plan v2.
 - F8: summary and dashboard now reflect the four committed case steps and the
   actual re-review state.
+
+### Final Re-review Engineering
+
+- Verdict: No material issue found.
+- Critical: None.
+- Important: None.
+- Minor: F8 summary was one commit behind; corrected in closure evidence.
+- Evidence Gaps: no executable routing interpreter; contract truth table,
+  validators, Git metadata, YAML, symlinks, and diff checks were sufficient.
+
+### Final Re-review Spec
+
+- Verdict: No material issue found.
+- Critical: None.
+- Important: None.
+- Minor: the same stale summary, corrected before closure.
+- Evidence Gaps: closure artifact/commit intentionally belongs to the next Done
+  Gate and was not required for pre-closure Spec review.
+
+### Final Aggregate
+
+- Result: `pass`
+- Reviewed baseline: `9e6c48c4bc3eba04162cfb121d593ea42287e06e`
+- Reviewed commits: `9eb8986`, `396ae72`, `bf2d240`, `9d8779b`, `fe29b09`
+- Reviewed working tree: case-local commit mapping and dashboard status only;
+  no cached, untracked, unrelated, or unexplained changes.
+- Material finding disposition: F1-F8 resolved; the remaining repeated Minor
+  summary finding was corrected before closure.
 
 ## Post-Execution Review
 
