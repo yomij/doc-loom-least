@@ -10,7 +10,7 @@ precedence and refresh this file.
 
 | Case | Status | Evidence | Next Action |
 |---|---|---|---|
-| `20260713-skill-resource-simplification` | Approved plan | `20260713-skill-resource-simplification/plan.md` | Create the declared branch and execute plan v1. |
+| `20260713-skill-resource-simplification` | Executing | `20260713-skill-resource-simplification/execution.md` | Simplify resource topology, verify behavior, then run Post-execution review. |
 
 ## Waiting On Human
 

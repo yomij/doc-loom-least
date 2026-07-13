@@ -5,11 +5,10 @@ description: Execute a currently authorized approved Doc Loom plan with TDD or i
 
 # tdd-execute
 
-Read `references/shared-protocol.md` for shared status/authorization/commit
-rules. Read `references/tdd-exceptions.md` only for `TDD Required: No`. When an
-approved plan requires Post-execution review, invoke the installed `review`
-Skill in `Post-execution` mode. Read `templates/handoff.md` only when writing a
-real future resume point.
+Read `references/shared-protocol.md` for shared status, authorization, and
+commit rules. When an approved plan requires Post-execution review, invoke the
+installed `review` Skill in `Post-execution` mode. Read
+`templates/handoff.md` only when writing a real future resume point.
 
 ## Preflight
 
@@ -46,7 +45,9 @@ boundaries, and survive refactors; avoid private/call-order/coverage-only tests
 and production test hooks. An unexpected or immediately passing Red must be
 explained before continuing.
 
-The approved plan owns exceptions; changing Yes to No is material.
+The approved plan owns exception eligibility, category, reason, and alternative
+verification. Execution validates that recorded contract; changing Yes to No
+is material.
 
 | Deviation | Handling |
 |---|---|

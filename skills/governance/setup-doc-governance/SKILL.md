@@ -13,12 +13,11 @@ Read when trigger condition is met:
 
 - `references/shared-protocol.md` when: checking execution instruction order,
   fact authority order, risk levels, or artifact policy.
-- `references/layering-and-routing.md` when: writing authority structure, index
-  rules, entry points and authority declaration, bridge rules, or archive rules.
-- `references/verdicts.md` when: routing files or facts, writing decision
-  tables, or deciding block conditions.
-- `references/doc-update-rules.md` when: checking authority lifecycle status
-  values.
+- `references/governance-rules.md` when: defining documentation layers,
+  authority structure, routing files/facts, entries, bridges, archives, or
+  block conditions.
+- `templates/governance-plan.md` when: writing the proposed or approved
+  governance plan.
 
 ## Scope
 
@@ -122,7 +121,8 @@ superseded_by: []
 ---
 ```
 
-Allowed status values: see `references/doc-update-rules.md` -> Lifecycle Status.
+Allowed lifecycle status values are `active`, `draft`, `superseded`, and
+`archived`.
 High-risk authority docs must include `owner` and `last_verified`.
 
 ## Confirmation And Application

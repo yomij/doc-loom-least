@@ -12,8 +12,6 @@ assumptions.
 Do not create files, reports, case artifacts, workflow verdicts, or state
 changes.
 
-Read `references/challenge-prompts.md` only when you need prompt inspiration.
-
 ## Start
 
 Restate in 1-3 neutral sentences:

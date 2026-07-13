@@ -35,9 +35,17 @@ override its source.
 Security, auth, permission, privacy, billing, deletion, public API/CLI, schema,
 config contract, migration, ADR boundaries, and workflow/agent policy require a
 context check. Classify execution risk by consequence, reversibility, exposure,
-authority impact, and verification. Reversible internal Skill text is normally
-medium; authorization weakening, public compatibility, L1 critical facts, or
-irreversible impact is high.
+authority impact, and verification:
+
+- `low`: small, reversible, local, and well verified, with no meaningful
+  authority, public, private-data, money, or destructive effect.
+- `medium`: reversible internal behavior, Skill, API, data-flow, or broader
+  local change with bounded recovery.
+- `high`: security, money, private data, irreversible/destructive action,
+  public compatibility, L1 critical fact, or authorization weakening.
+
+A sensitive topic still needs context checking when final execution risk is
+medium.
 
 ## Case Identity And Status
 

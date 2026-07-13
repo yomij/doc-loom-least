@@ -8,9 +8,9 @@ description: Conditional pre-plan context and authority check for resume, case a
 Read the smallest evidence needed for a planning verdict. Do not plan, edit,
 create case identity, or resolve authority conflicts.
 
-Read `references/shared-protocol.md` only for shared authority/identity/status
-rules, `references/context-resolution.md` for intent/case/run mode, and
-`references/retrieval-routing.md` for source selection/notes.
+Read `references/shared-protocol.md` only for shared authority, identity,
+status, risk, and resume rules. Read
+`templates/context-authority-brief.md` only when persisting a real brief.
 
 ## Start
 
@@ -29,6 +29,22 @@ summary or valid low-risk skip.
 Governance initialization belongs to `setup-doc-governance`. Ad-hoc review
 still requires explicit user intent.
 
+## Intent And Minimum Evidence
+
+| Intent | Minimum evidence |
+|---|---|
+| Bug | Symptom/reproduction, related entry, verification path. |
+| Feature | Goal/acceptance, relevant authority/contract or explicit absence, adjacent implementation. |
+| Refactor | Target boundary, verification coverage, non-touch scope. |
+| Docs governance | Scope, authority/index state, blocked decisions/history needed. |
+| Workflow/Skill | Target owner, shared/adjacent contracts, constitution/authority constraints. |
+| Resume | Current artifacts, handoff when present, Git state. |
+| Incident | Symptom, impact, rollback/runbook evidence. |
+
+Record the chosen intent and exclude unrelated material. Follow shared case
+identity and terminal/resume rules. Select `isolated`, `branch`, or `inline`,
+but create no branch, worktree, case, or artifact.
+
 ## Workflow
 
 1. Classify intent and workspace.
@@ -38,6 +54,25 @@ still requires explicit user intent.
 5. Read direct code/test paths only when the intent needs them.
 6. Record included/excluded sources, trust, conflict, and risk.
 7. Return one verdict.
+
+## Evidence Routing
+
+For governance, authority, workflow/agent policy, public contract, or high-risk
+work, read the active constitution and authority index first. Then use the
+active case governance plan, newest approved or applied-with-blocks governance
+plan, and legacy governance only as context. Use only active authority facts;
+exclude archived, superseded, and generated views. Missing governance permits
+low-risk local planning with recorded risk, while public/high-risk work may
+require governance or a user decision.
+
+Read `plan.md`, `handoff.md`, `execution.md`, and `closure.md` only for an
+explicit or resumed case; legacy state files are diagnostic only. Find code and
+tests through user identifiers, authority paths, and exact `rg` searches.
+Runtime/log evidence needs a time window and trust note.
+
+Record the case or proposed slug, intent, risk, every included source with its
+layer/reason/trust, and every excluded source with its reason. Derived or
+historical evidence stays labelled.
 
 ## Verdict
 

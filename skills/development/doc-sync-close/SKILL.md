@@ -8,7 +8,8 @@ description: Close an existing Doc Loom case after execution or when blocked, pa
 Read `references/shared-protocol.md` for shared identity/status/artifact/commit
 rules. Read `references/doc-update-rules.md` only for L1 authority, L3 derived
 sync, or an authority-change table. Read `templates/handoff.md` only when
-writing a real future resume point.
+writing a real future resume point. Read `templates/closure.md` when writing or
+validating `closure.md`.
 
 ## Inputs And Workflow
 
