@@ -3,7 +3,7 @@ status: active
 authority: true
 layer: authority
 type: agent
-source_of_truth: adr
+source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
@@ -44,5 +44,6 @@ contract or L1 critical fact, or enables irreversible action.
 
 - [Constitution](../constitution.md)
 - [ADR-0002 Human-First Agent Responsibility](../../adr/ADR-0002-human-first-agent-responsibility.md)
+- [2026-07-02 Full-Repo Docs Governance](../../governance/2026-07-02-full-repo-docs-governance.md)
 - `skills/_shared/references/shared-protocol.md`
 - `skills/governance/setup-doc-governance/references/governance-rules.md`

@@ -10,7 +10,7 @@ precedence and refresh this file.
 
 | Case | Status | Evidence | Next Action |
 |---|---|---|---|
-| `20260713-skill-resource-simplification` | Executing | `20260713-skill-resource-simplification/execution.md` | Simplify resource topology, verify behavior, then run Post-execution review. |
+| `20260713-skill-resource-simplification` | Executing | `20260713-skill-resource-simplification/execution.md` | Verify review fixes, rerun Engineering/Spec, then close. |
 
 ## Waiting On Human
 

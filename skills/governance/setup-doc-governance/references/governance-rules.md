@@ -93,3 +93,6 @@ Suggested archive layout is `docs/archive/historical/`,
 traceable through `superseded_by` metadata or an archive index when useful. Any
 document under `archive/`, `old/`, or `deprecated/`, or marked deprecated, must
 carry `status: archived | superseded`; it is not current fact by default.
+
+A document without an active status is not current fact and must not enter
+current-fact context.

@@ -1,15 +1,15 @@
 ---
 case_id: 20260713-skill-resource-simplification
 status: executing
-updated_at: 2026-07-13T18:01:39+0800
+updated_at: 2026-07-13T18:22:13+0800
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: the resource topology refactor is implemented and verified;
-  authority/distribution synchronization remains before Post-execution review.
+- Outcome so far: resource topology and authority/distribution synchronization
+  are implemented, committed, and fully green before Post-execution review.
 - What changed: canonical resources are 18 -> 12, shared symlinks are 13 -> 8,
   single-owner contracts are local, mandatory context is inlined, generic/dead
   assets are removed, governance rules are co-located, and retained templates
@@ -114,7 +114,7 @@ updated_at: 2026-07-13T18:01:39+0800
     risk classification; still below 1,700);
   - context through plan: 2,894 words (129 fewer);
   - typical full persistent flow: 5,088 words (115 fewer);
-  - all active unique Skill Markdown: 8,583 words (624 fewer).
+  - all active unique Skill Markdown: 8,599 words (608 fewer).
 
 ### Authority and distribution sync
 
@@ -145,16 +145,16 @@ updated_at: 2026-07-13T18:01:39+0800
 | `_shared` only multi-owner contracts | met | Final `_shared` has one reference and one template. |
 | Retained references have justified branches/rulebooks | met | Six references map to shared kernel, named branches, or one governance rulebook. |
 | Retained templates have exact producer pointers | met | Exact pointer/schema assertions pass for all six templates. |
-| Behavior contracts unchanged | met | Semantic anchor and stale-path assertions pass; focused final scenarios pending. |
+| Behavior contracts unchanged | met | Final semantic anchors, canonical discovery, pointer resolution, and focused ownership assertions pass. |
 | Merge/copy installs readable | met | No broken symlink; copy-mode resource assertions and two `skillshare` audits pass. |
-| Loading costs within ceilings | met | Final 1,488 / 2,894 / 5,088 / 8,583. |
+| Loading costs within ceilings | met | Final 1,488 / 2,894 / 5,088 / 8,599. |
 | Authority/distribution current | met | Active authority, Skill layout, and install guidance match final paths and ownership. |
 | Engineering/Spec review passes | executing | Post-execution gate pending. |
 
 ## Review Risk
 
-Low. Resource paths, semantic anchors, copy behavior, audits, costs, authority,
-and distribution checks pass; final Engineering/Spec review remains.
+Medium. Initial review found two material governance-contract issues; fixes are
+applied and verification/re-review are in progress.
 
 ## Commands Run
 
@@ -175,12 +175,85 @@ and distribution checks pass; final Engineering/Spec review remains.
 | Copy-style `cp -RL` simulation | pass | Every required local file exists; removed consumer-only files stay absent. |
 | `skillshare audit ./skills --format json` | pass | Clean; risk score 0. |
 | `skillshare audit ./skills --analyzer cross-skill --format json` | pass | Clean; risk score 0. |
-| Final unique-path and corpus `wc -w` | pass | 1,488 / 2,894 / 5,088 / 8,583; all ceilings pass. |
+| Final unique-path and corpus `wc -w` | pass | 1,488 / 2,894 / 5,088 / 8,599; all ceilings pass. |
 | `git diff --check` | pass | No whitespace errors in the resource delta. |
 | Git blame/log provenance for Agent Instruction Governance | pass | Standalone section originated in `b5bb4a3`; current durable rule is already in agent authority and owning Skill procedure. |
 | Active stale-path search | pass | Removed shared/local reference and old governance-template paths are absent from authority, Skills, README, and INSTALL. |
 | Authority YAML parse and source-path assertions | pass | Five modified authority docs remain active mappings and all cited current Skill paths exist. |
 | Authority/distribution semantic assertions | pass | Every-invocation, local ownership, template pointer, shared protocol, and governance-rule claims are present. |
+| Exact baseline-to-HEAD Git target | pass | Commits `a219c53`, `6dd5251`, and `35adb8a`; no implementation change remains unstaged. |
+| Final eight Skill validators | pass | All canonical Skill structures valid after authority sync. |
+| Canonical frontmatter-name assertion | pass | Exactly eight expected invocation names, no duplicate. |
+| Final Skill pointer/symlink resolver | pass | Every named local resource exists; no broken symlink. |
+| Full-tree copy simulation | pass | Dereferenced copy has no symlink and retains every required resource. |
+| Final full and cross-skill audits | pass | Both clean, risk score 0. |
+| Review-fix governance gate assertion | pass | The explicit no-active-status current-fact rule is restored in the owning rulebook. |
+| Review-fix authority provenance assertion | pass | Agent policy is user-confirmed and cites the approved governance batch. |
+| Review-fix validators/audit/cost recheck | pass | Eight Skills valid; cross-skill audit clean; 1,488 / 2,894 / 5,088 / 8,599. |
+
+## Fresh-Agent Scenarios
+
+An independent evidence/complexity review subagent evaluated the changed
+contracts without editing repository state:
+
+| Scenario | Result | Evidence |
+|---|---|---|
+| Context bug, high-risk, and resume routing | pass | Inlined intent/source/run-mode rules plus shared identity/status/resume remain sufficient. |
+| Plan with `TDD Required: No` | pass | Planning loads its local exception criteria and records category/reason/verification. |
+| Execute an approved TDD exception | pass | Execution consumes and validates the approved plan contract without a criteria-file dependency. |
+| Documentation governance routing and plan | pass | Governance owner loads one rulebook and the exact `governance-plan.md` template. |
+| Closure authority sync and closure artifact | pass | Closure loads local document-update rules and the exact closure template. |
+| Next-slice discovery | pass | Doorway loads the local loop reference only for discovery. |
+| Explicit grill | pass | Core question loop produces high-leverage questions without a generic prompt asset. |
+| Dereferenced copy install | pass | Required local resources remain readable and removed consumer-only paths remain absent. |
+
+## Post-Execution Review
+
+- Exact baseline: `a353e47d366abdcc30cb59cd8d2e9bdc8f102db2`.
+- Review commits: `a219c53`, `6dd5251`, and `35adb8a`.
+- Working-tree scope: only this execution-evidence refresh; no staged,
+  untracked, unrelated, or pending implementation change.
+- Review arrangement: independent Engineering and Spec subagents, plus a
+  separate evidence/complexity audit; the main reviewer owns severity,
+  deduplication, aggregate, and any fix/re-review loop.
+
+### Initial Engineering
+
+- Verdict: `changes_required`.
+- Important F1: the merged governance rulebook retained archive-path status
+  rules but dropped the baseline invariant that a document without an active
+  status is not current fact.
+- Evidence gap: focused fresh-agent scenarios were not yet persisted.
+
+### Initial Spec
+
+- Verdict: `changes_required`.
+- Important F1: same governance current-fact admission regression.
+- Important F2: `docs/authority/agent/policy.md` declared
+  `source_of_truth: adr`, although the thin-adapter rule was promoted through
+  the user-approved 2026-07-02 governance batch and ADR-0002 does not contain
+  that rule.
+- Important F3: behavior preservation was marked met before fresh-agent
+  scenario evidence was persisted.
+- Minor F4: the active-case dashboard next action was stale.
+
+### Initial Aggregate
+
+- Result: `changes_required`.
+- Handling: restore the current-fact status gate, correct agent-policy source
+  attribution and source chain, persist the independent scenario evidence,
+  refresh the dashboard, verify, commit `review-fix:F1-F2`, then rerun affected
+  Engineering and Spec axes.
+
+### Review Fix
+
+- F1: restored the explicit no-active-status current-fact gate in
+  `governance-rules.md`.
+- F2: changed agent policy to `source_of_truth: user_confirmed` and cited the
+  approved governance batch alongside Constitution/ADR/Skill sources.
+- F3: persisted eight independent fresh-agent scenarios above.
+- F4: refreshed the derived dashboard next action.
+- Re-review: pending.
 
 ## Commits
 
@@ -188,5 +261,6 @@ and distribution checks pass; final Engineering/Spec review remains.
 |---|---|---|
 | plan | `a219c53ebd310d13025a21f0bc5ef647bc977ef7` | complete |
 | task:resource-topology | `6dd5251` | complete |
-| task:resource-docs | pending | not started |
+| task:resource-docs | `35adb8a` | complete |
+| review-fix:F1-F2 | pending | verification in progress |
 | closure | pending | not started |
