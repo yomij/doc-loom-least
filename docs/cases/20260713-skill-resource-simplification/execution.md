@@ -1,15 +1,15 @@
 ---
 case_id: 20260713-skill-resource-simplification
-status: executing
-updated_at: 2026-07-13T18:22:13+0800
+status: ready_to_close
+updated_at: 2026-07-13T18:32:27+0800
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: resource topology and authority/distribution synchronization
-  are implemented, committed, and fully green before Post-execution review.
+- Outcome so far: implementation, verification, review fixes, and independent
+  Engineering/Spec re-review are complete; execution is ready to close.
 - What changed: canonical resources are 18 -> 12, shared symlinks are 13 -> 8,
   single-owner contracts are local, mandatory context is inlined, generic/dead
   assets are removed, governance rules are co-located, and retained templates
@@ -149,12 +149,12 @@ updated_at: 2026-07-13T18:22:13+0800
 | Merge/copy installs readable | met | No broken symlink; copy-mode resource assertions and two `skillshare` audits pass. |
 | Loading costs within ceilings | met | Final 1,488 / 2,894 / 5,088 / 8,599. |
 | Authority/distribution current | met | Active authority, Skill layout, and install guidance match final paths and ownership. |
-| Engineering/Spec review passes | executing | Post-execution gate pending. |
+| Engineering/Spec review passes | met | Final Engineering and Spec verdicts pass; aggregate `pass`. |
 
 ## Review Risk
 
-Medium. Initial review found two material governance-contract issues; fixes are
-applied and verification/re-review are in progress.
+Low. Initial material findings are fixed, all verification is green, and final
+Engineering/Spec plus supporting evidence/complexity re-review pass.
 
 ## Commands Run
 
@@ -210,9 +210,9 @@ contracts without editing repository state:
 ## Post-Execution Review
 
 - Exact baseline: `a353e47d366abdcc30cb59cd8d2e9bdc8f102db2`.
-- Review commits: `a219c53`, `6dd5251`, and `35adb8a`.
-- Working-tree scope: only this execution-evidence refresh; no staged,
-  untracked, unrelated, or pending implementation change.
+- Review commits: `a219c53`, `6dd5251`, `35adb8a`, and `f3f5572`.
+- Working-tree scope at final re-review: clean; no staged, unstaged, untracked,
+  unrelated, or pending implementation change.
 - Review arrangement: independent Engineering and Spec subagents, plus a
   separate evidence/complexity audit; the main reviewer owns severity,
   deduplication, aggregate, and any fix/re-review loop.
@@ -253,7 +253,44 @@ contracts without editing repository state:
   approved governance batch alongside Constitution/ADR/Skill sources.
 - F3: persisted eight independent fresh-agent scenarios above.
 - F4: refreshed the derived dashboard next action.
-- Re-review: pending.
+- Commit: `f3f5572313bbace7ec02ffba9810ae85e26567b8`.
+
+### Final Engineering
+
+- Verdict: `pass`.
+- Findings: none within reviewed scope.
+- F1 disposition: resolved; the exact no-active-status current-fact invariant
+  is restored.
+- Evidence gaps: none material.
+- Scope: complete accumulated delta through `f3f5572`, final resource topology,
+  pointers/symlinks, costs, copy behavior, audits, authority provenance,
+  scenarios, commit trailers, and clean Git isolation.
+
+### Final Spec
+
+- Verdict: `pass`.
+- Findings: none within reviewed scope.
+- F1-F4 disposition: all resolved; governance behavior, authority provenance,
+  scenario evidence, and dashboard state match the approved plan.
+- Evidence gaps: none material.
+- Scope: approved plan v1 Goal, Non-goals, Decisions, Files, Acceptance,
+  Constitution, active authority, install contract, and complete accumulated
+  delta through `f3f5572`.
+
+### Evidence And Complexity Support
+
+- Verdict: `pass`.
+- Independently reproduced 12 resources, 8 symlinks, 2 `_shared` real files,
+  1,488 / 2,894 / 5,088 / 8,599 word costs, eight scenarios, clean audits, and
+  dereferenced-copy behavior.
+- No remaining avoidable resource complexity or material evidence gap.
+
+### Final Aggregate
+
+- Result: `pass`.
+- Exact baseline: `a353e47d366abdcc30cb59cd8d2e9bdc8f102db2`.
+- Reviewed commits: `a219c53`, `6dd5251`, `35adb8a`, and `f3f5572`.
+- Final review worktree: clean and isolated.
 
 ## Commits
 
@@ -262,5 +299,4 @@ contracts without editing repository state:
 | plan | `a219c53ebd310d13025a21f0bc5ef647bc977ef7` | complete |
 | task:resource-topology | `6dd5251` | complete |
 | task:resource-docs | `35adb8a` | complete |
-| review-fix:F1-F2 | pending | verification in progress |
-| closure | pending | not started |
+| review-fix:F1-F2 | `f3f5572313bbace7ec02ffba9810ae85e26567b8` | complete |

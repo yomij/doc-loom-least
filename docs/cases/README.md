@@ -8,9 +8,7 @@ precedence and refresh this file.
 
 ## Active Cases
 
-| Case | Status | Evidence | Next Action |
-|---|---|---|---|
-| `20260713-skill-resource-simplification` | Executing | `20260713-skill-resource-simplification/execution.md` | Verify review fixes, rerun Engineering/Spec, then close. |
+None.
 
 ## Waiting On Human
 
@@ -22,6 +20,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260713-skill-resource-simplification` | Done | `20260713-skill-resource-simplification/closure.md` | Resources 18 -> 12, symlinks 13 -> 8, all review axes pass; no follow-up. |
 | `20260713-skill-dependency-boundaries` | Done | `20260713-skill-dependency-boundaries/closure.md` | Skill-name invocation, shared contracts, local privacy, and handoff ownership are explicit; no follow-up. |
 | `20260712-skill-context-cost-compression` | Done | `20260712-skill-context-cost-compression/closure.md` | Common-path Skill loading cost reduced; artifact consolidation remains a separate optional follow-up. |
 | `20260712-artifact-owned-case-state` | Done | `20260712-artifact-owned-case-state/closure.md` | Artifact-owned status shipped; dogfood it before merging execution and closure artifacts. |
