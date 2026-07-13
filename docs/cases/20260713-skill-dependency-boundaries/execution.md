@@ -1,23 +1,24 @@
 ---
 case_id: 20260713-skill-dependency-boundaries
-status: executing
-updated_at: 2026-07-13T17:26:35+0800
+status: ready_to_close
+updated_at: 2026-07-13T17:29:59+0800
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: dependency-boundary implementation and planned structural,
-  distribution, content-equivalence, cost, and scenario checks pass; the task
-  commit and Post-execution review remain.
+- Outcome so far: dependency-boundary implementation, review fix, complete
+  verification, and final Engineering/Spec review pass; execution is ready for
+  closure.
 - What changed: cross-Skill runtime composition now uses Skill names; TDD and
   document-update contracts moved to `_shared` with local consumer symlinks;
   unused symlinks were removed; handoff ownership and distribution policy are
   explicit.
 - User action needed: none unless execution reaches a declared material stop.
 - Local Git effect: branch `codex/skill-dependency-boundaries`; approved plan
-  commit `23450b8` and task commit `74b5d84`; no push or history rewrite.
+  `23450b8`, task `74b5d84`, and review fix `66c7c61`; no push or history
+  rewrite.
 
 ## Plan Reference
 
@@ -137,14 +138,13 @@ updated_at: 2026-07-13T17:26:35+0800
 | Supported distribution remains valid | met | Full and cross-skill-only `skillshare audit` pass clean; copy-style dereference and canonical discovery pass. |
 | Context-cost ceilings remain satisfied | met | Final 1,445 / 3,023 / 5,203 / 9,207 words; small named growth adds explicit loading and ownership contracts. |
 | Authority/distribution accurately describe final model | met | Architecture/distribution frontmatter parses and their text matches the implemented tree. |
-| Engineering and Spec review pass | not_verified | Post-execution gate pending completed delta. |
+| Engineering and Spec review pass | met | Final complete-delta Engineering and affected/full Spec re-review pass; aggregate `pass`. |
 
 ## Review Risk
 
-Medium. The change is bounded and reversible but touches active Skill loading,
-required Post-execution review, shared contract packaging, and code-backed
-architecture/distribution authority. Risk remains medium until exact checks and
-both review axes pass.
+Low. The original medium causes are resolved by exact contract-equivalence,
+path/symlink/copy verification, clean `skillshare` audits, bounded cost,
+review-fix F1, final aggregate `pass`, and clean pre-evidence worktree scope.
 
 ## Deviations
 
@@ -215,11 +215,44 @@ both review axes pass.
   structural/distribution/cost checks, commit `review-fix:F1`, and re-review the
   Spec axis plus final aggregate.
 
+### Final Engineering
+
+- Verdict: No material issue found.
+- Findings: None within reviewed scope.
+- Evidence gaps: no executable workflow interpreter and no authorized fresh
+  subagent run; direct semantic assertions, eight Skill validators, YAML,
+  content equivalence, symlink/copy checks, two `skillshare` audit modes, exact
+  Git evidence, and cost verification are sufficient for this repository's
+  Markdown/symlink implementation surface.
+- Scope: exact baseline through `66c7c61`, all approved source/authority/
+  distribution/case files, commit modes/trailers, and clean worktree before this
+  final evidence update.
+
+### Final Spec
+
+- Verdict: No material issue found.
+- Findings: None within reviewed scope.
+- F1 disposition: resolved. Both distribution authority and `INSTALL.md` list
+  all four shared reference files and identify `loop-protocol.md` as the
+  explicit single-consumer discovery reference.
+- Evidence gaps: none material.
+- Scope: plan v2 Goal, Non-goals, Decisions, Files, Acceptance, amendment,
+  Constitution, architecture/workflow/distribution authority, supported
+  install contract, and the complete accumulated delta.
+
+### Final Aggregate
+
+- Result: `pass`.
+- Exact reviewed baseline: `17f783f20cb4a168a2f07ece341b2df272384a7d`.
+- Reviewed commits: `23450b8`, `74b5d84`, `66c7c61`.
+- Working-tree scope before this final evidence update: no staged, unstaged,
+  untracked, or unrelated change.
+
 ## Commits
 
 | Step | Commit | Status |
 |---|---|---|
 | plan | `23450b88843cc13504d5eb9d0db602a617c5d01f` | complete |
 | task:dependency-boundaries | `74b5d8454b43f0c941b0229a7e49a7af688ddee8` | complete |
-| review-fix | n/a unless findings require it | pending review |
+| review-fix:F1 | `66c7c61896206a5cd7dbb378f7250d2c24109fb4` | complete |
 | closure | pending | not started |

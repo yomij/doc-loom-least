@@ -20,6 +20,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260713-skill-dependency-boundaries` | Done | `20260713-skill-dependency-boundaries/closure.md` | Skill-name invocation, shared contracts, local privacy, and handoff ownership are explicit; no follow-up. |
 | `20260712-skill-context-cost-compression` | Done | `20260712-skill-context-cost-compression/closure.md` | Common-path Skill loading cost reduced; artifact consolidation remains a separate optional follow-up. |
 | `20260712-artifact-owned-case-state` | Done | `20260712-artifact-owned-case-state/closure.md` | Artifact-owned status shipped; dogfood it before merging execution and closure artifacts. |
 | `20260712-human-first-workflow-simplification` | Done | `20260712-human-first-workflow-simplification/closure.md` | Human entry, compact Fast-Path, Git disclosure, risk, discovery, summaries, and grill improvements passed review after one atomic fix. |
