@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-12
+last_verified: 2026-07-13
 ---
 
 # Repository And Skills
@@ -55,6 +55,18 @@ triggers, each `SKILL.md` keeps only its owned procedure, the shared protocol
 keeps cross-skill invariants, and references/templates load only for named
 conditions. A material workflow rule has one complete semantic owner; consumers
 retain only the local trigger, input, action, result, and gate they need.
+
+Cross-Skill composition has two forms. Runtime routing or invocation uses the
+callee's stable frontmatter `name`; callers do not import another Skill's
+`SKILL.md` or private filesystem path. File contracts needed by multiple owners
+live under `_shared` and are exposed through readable local
+`references/`/`templates/` paths; other local assets are private by default.
+Workflow control flow may return to an earlier owner, but physical cross-Skill
+file imports must not form dependencies or cycles.
+
+Shared templates own artifact shape, while the stage producing a concrete
+artifact owns its content. Consumers may read that artifact for routing or
+revalidation without acquiring its workflow-state ownership.
 
 Future lifecycle groups such as `product/`, `research/`, or `design/` must not
 be created as empty roadmap placeholders. Add them only when real skills with

@@ -17,8 +17,8 @@ Read when trigger condition is met:
   rules, entry points and authority declaration, bridge rules, or archive rules.
 - `references/verdicts.md` when: routing files or facts, writing decision
   tables, or deciding block conditions.
-- `../../development/doc-sync-close/references/doc-update-rules.md` when: checking authority
-  lifecycle status values.
+- `references/doc-update-rules.md` when: checking authority lifecycle status
+  values.
 
 ## Scope
 
@@ -122,8 +122,7 @@ superseded_by: []
 ---
 ```
 
-Allowed status values: see `../../development/doc-sync-close/references/doc-update-rules.md`
--> Lifecycle Status.
+Allowed status values: see `references/doc-update-rules.md` -> Lifecycle Status.
 High-risk authority docs must include `owner` and `last_verified`.
 
 ## Confirmation And Application

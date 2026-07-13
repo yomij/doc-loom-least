@@ -6,7 +6,7 @@ type: operations
 source_of_truth: code
 supersedes: []
 superseded_by: []
-last_verified: 2026-07-02
+last_verified: 2026-07-13
 ---
 
 # Distribution
@@ -30,13 +30,17 @@ reference skills are no longer kept under `docs/archive/raw/reference/`.
 `.skillignore` excludes `docs/archive/**`, so archived or imported evidence is
 not published as canonical skills if it contains skill files.
 
-Shared protocol files are exposed into per-skill references through symlinks to
-`skills/_shared/references/shared-protocol.md`. Shared handoff templates are
-exposed through symlinks to `skills/_shared/templates/handoff.md`.
+Multi-owner file contracts are stored under `skills/_shared/` and exposed to
+each consumer through local relative symlinks. Current shared references are
+`shared-protocol.md`, `tdd-exceptions.md`, and `doc-update-rules.md`. The shared
+handoff template is exposed only to its direct writers, `tdd-execute` and
+`doc-sync-close`. Runtime companion-Skill relationships use canonical
+frontmatter names and rely on the supported repository-wide installation, not
+cross-Skill filesystem imports.
 
 ## Sources
 
 - [INSTALL.md](../../../INSTALL.md)
 - [.skillignore](../../../.skillignore)
-- Current symlinks under `skills/**/references/shared-protocol.md`
-- Current symlinks under `skills/**/templates/handoff.md`
+- Current symlinks under `skills/**/references/*.md`
+- Current writer symlinks under `skills/**/templates/handoff.md`

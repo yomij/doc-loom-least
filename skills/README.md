@@ -22,6 +22,12 @@ Future domains such as `product/`, `research/`, and `design/` should be added on
   explicit/internal stage owners.
 - Keep cross-skill invariants in `_shared`; keep complete procedure at one
   semantic owner.
+- Route or invoke another Skill by its stable frontmatter `name`, never by
+  importing its `SKILL.md` or private filesystem path.
+- Put a multi-owner file contract in `_shared` and expose a readable local path
+  to each consumer. Treat other local `references/` and `templates/` as private.
+- Allow intentional workflow return routes, but keep physical file dependencies
+  free of cross-Skill edges and cycles.
 - Load references/templates only for their named condition; do not move prose
   from one mandatory path to another.
 - Recalculate unique required files, not only total lines, after a workflow

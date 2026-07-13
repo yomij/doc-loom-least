@@ -73,7 +73,7 @@ case-related work.
 |---|---|---|
 | `context-authority-brief.md` | Conflict, explicit request, or continuity context too large for the plan | `context-authority` |
 | `plan.md` | A persistent case enters planning | `plan-confirm` |
-| `handoff.md` | A future resume point exists | Current stage |
+| `handoff.md` | A future resume point exists | Producing `tdd-execute` or `doc-sync-close` stage |
 | `execution.md` | TDD/behavior change, failure/retry/deviation, material review risk, or continuity evidence | `tdd-execute` |
 | `closure.md` | A case ends, pauses, blocks, cancels, or is superseded | `doc-sync-close` |
 
@@ -137,5 +137,10 @@ or conflict may have changed. Handoffs older than seven days are stale.
 Terminal closures do not resume in the same case by default. A resumable
 closure requires current authorization, satisfied resume conditions, and a
 later `execution.md` Resume section naming prior status/evidence and reason.
+
+`skills/_shared/templates/handoff.md` owns the handoff shape. The producing
+stage owns a concrete file's content; `docloom-workflow` and
+`context-authority` may consume it for resume routing/revalidation. A handoff
+never owns or overrides case status.
 
 Follow project-local command, package-manager, and editing instructions.

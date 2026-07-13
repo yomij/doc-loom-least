@@ -127,13 +127,18 @@ skillshare target codex --mode copy
 skillshare sync --force
 ```
 
-Doc Loom Least keeps the source of truth for shared workflow rules at
-`skills/_shared/references/shared-protocol.md`. Each grouped skill that needs
-those rules exposes `references/shared-protocol.md` as a relative symlink to
-that source. In `merge` mode, the symlink remains connected to the tracked
-repository. In `copy` mode, `skillshare` copies the symlink target as a real
-file into each copied skill, so the reference remains readable even when the
-target does not support symlinks.
+Doc Loom Least keeps multi-owner file contracts under `skills/_shared/`.
+Current shared references are `shared-protocol.md`, `tdd-exceptions.md`, and
+`doc-update-rules.md`; the shared handoff template is exposed only to its direct
+writers. Each consumer uses a local relative symlink. In `merge` mode, symlinks
+remain connected to the tracked repository. In `copy` mode, `skillshare` copies
+each symlink target as a real file into the copied Skill, so references remain
+readable when the target does not support symlinks.
+
+Runtime companion Skills are invoked by canonical frontmatter name, not by
+filesystem path. The supported repository installation discovers all canonical
+Skills together, including the `tdd-execute` -> `review` Post-execution
+relationship.
 
 ## Notes
 

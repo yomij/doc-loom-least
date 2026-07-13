@@ -5,9 +5,11 @@ description: Execute a currently authorized approved Doc Loom plan with TDD or i
 
 # tdd-execute
 
-Read shared status/authorization/commit rules. Read `references/tdd-exceptions.md`
-only for `TDD Required: No`; read `../../assessment/review/SKILL.md` only when
-the approved plan requires Post-execution review.
+Read `references/shared-protocol.md` for shared status/authorization/commit
+rules. Read `references/tdd-exceptions.md` only for `TDD Required: No`. When an
+approved plan requires Post-execution review, invoke the installed `review`
+Skill in `Post-execution` mode. Read `templates/handoff.md` only when writing a
+real future resume point.
 
 ## Preflight
 

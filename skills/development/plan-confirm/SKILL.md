@@ -6,8 +6,9 @@ description: Write, version, and confirm a Doc Loom implementation plan after ca
 # plan-confirm
 
 Consume an existing case; missing identity returns to `docloom-workflow`.
-Read shared status/authorization/commit rules and `references/risk-levels.md`.
-Read TDD exceptions only when planning `TDD Required: No`.
+Read `references/shared-protocol.md` for shared status/authorization/commit
+rules and `references/risk-levels.md` for risk classification. Read
+`references/tdd-exceptions.md` only when planning `TDD Required: No`.
 
 ## Inputs
 
