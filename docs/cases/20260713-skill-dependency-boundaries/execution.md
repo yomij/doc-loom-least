@@ -1,7 +1,7 @@
 ---
 case_id: 20260713-skill-dependency-boundaries
 status: executing
-updated_at: 2026-07-13T17:22:40+0800
+updated_at: 2026-07-13T17:26:35+0800
 ---
 
 # Execution Report
@@ -17,7 +17,7 @@ updated_at: 2026-07-13T17:22:40+0800
   explicit.
 - User action needed: none unless execution reaches a declared material stop.
 - Local Git effect: branch `codex/skill-dependency-boundaries`; approved plan
-  commit `23450b8`; no push or history rewrite.
+  commit `23450b8` and task commit `74b5d84`; no push or history rewrite.
 
 ## Plan Reference
 
@@ -112,8 +112,8 @@ updated_at: 2026-07-13T17:22:40+0800
 - Architecture authority and `skills/README.md` now distinguish runtime
   Skill-name invocation from shared file contracts and private local assets.
 - Distribution authority and `INSTALL.md` now describe all current shared
-  contracts, writer-only handoff exposure, and repository-wide companion-Skill
-  installation.
+  reference files, distinguish the explicit single-consumer loop reference,
+  and retain writer-only handoff plus repository-wide companion-Skill rules.
 
 ## TDD Applicability
 
@@ -171,12 +171,55 @@ both review axes pass.
 | Canonical name discovery plus eight scenario assertions | pass | Eight expected Skill names and all dependency/authorization/handoff assertions pass. |
 | Final unique-path and corpus `wc -w` | pass | 1,445 / 3,023 / 5,203 / 9,207, all below approved ceilings. |
 | `git diff --check` and exact-delta inspection | pass | No whitespace error; changes match approved paths and decisions. |
+| F1 shared-reference inventory and YAML checks | pass | Authority/INSTALL list all four shared references; `loop-protocol.md` is identified as the explicit single-consumer reference. |
+| F1 cross-skill audit and cost recheck | pass | Audit remains clean; Skill costs remain 1,445 doorway and 9,207 corpus words. |
+
+## Post-Execution Review
+
+- Exact baseline: `17f783f20cb4a168a2f07ece341b2df272384a7d`.
+- Reviewed commits: `23450b8` plan and `74b5d84` task.
+- Working-tree scope at initial review: only this execution evidence update;
+  no staged or untracked file and no unrelated change.
+
+### Initial Engineering
+
+- Verdict: No material issue found.
+- Findings: None within reviewed scope.
+- Evidence gaps: fresh-agent delegation was unavailable under environment
+  policy; deterministic scenario assertions, direct contract inspection,
+  validators, audits, and copy simulation provide sufficient evidence for the
+  Markdown/symlink implementation surface.
+- Scope: complete exact-baseline delta, symlink/file modes, local/copy
+  readability, canonical discovery, audit results, cost, and Git isolation.
+
+### Initial Spec
+
+- Verdict: Material issues found.
+- Important F1: `docs/authority/operations/distribution.md` and `INSTALL.md`
+  said the current shared references were only `shared-protocol.md`,
+  `tdd-exceptions.md`, and `doc-update-rules.md`, but the final tree also has
+  the active symlinked `loop-protocol.md` reference.
+  Evidence: direct `_shared/references/` and symlink inventory contradicts the
+  exhaustive wording.
+  Impact: active distribution authority and installation guidance do not fully
+  describe the implemented shared-reference model, failing the approved Spec
+  acceptance criterion.
+  Required correction: list `loop-protocol.md` and distinguish it as the
+  explicit single-consumer discovery reference.
+- Evidence gaps: none material.
+
+### Initial Aggregate
+
+- Result: `changes_required`.
+- Handling: correct F1 in the two approved distribution paths, rerun relevant
+  structural/distribution/cost checks, commit `review-fix:F1`, and re-review the
+  Spec axis plus final aggregate.
 
 ## Commits
 
 | Step | Commit | Status |
 |---|---|---|
 | plan | `23450b88843cc13504d5eb9d0db602a617c5d01f` | complete |
-| task:dependency-boundaries | pending | not started |
+| task:dependency-boundaries | `74b5d8454b43f0c941b0229a7e49a7af688ddee8` | complete |
 | review-fix | n/a unless findings require it | pending review |
 | closure | pending | not started |

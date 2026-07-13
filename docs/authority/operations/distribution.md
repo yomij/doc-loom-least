@@ -31,12 +31,13 @@ reference skills are no longer kept under `docs/archive/raw/reference/`.
 not published as canonical skills if it contains skill files.
 
 Multi-owner file contracts are stored under `skills/_shared/` and exposed to
-each consumer through local relative symlinks. Current shared references are
-`shared-protocol.md`, `tdd-exceptions.md`, and `doc-update-rules.md`. The shared
-handoff template is exposed only to its direct writers, `tdd-execute` and
-`doc-sync-close`. Runtime companion-Skill relationships use canonical
-frontmatter names and rely on the supported repository-wide installation, not
-cross-Skill filesystem imports.
+each consumer through local relative symlinks. Current shared reference files
+are `shared-protocol.md`, `loop-protocol.md`, `tdd-exceptions.md`, and
+`doc-update-rules.md`; `loop-protocol.md` remains the explicit single-consumer
+discovery reference. The shared handoff template is exposed only to its direct
+writers, `tdd-execute` and `doc-sync-close`. Runtime companion-Skill
+relationships use canonical frontmatter names and rely on the supported
+repository-wide installation, not cross-Skill filesystem imports.
 
 ## Sources
 
