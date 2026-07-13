@@ -93,18 +93,3 @@ Suggested archive layout is `docs/archive/historical/`,
 traceable through `superseded_by` metadata or an archive index when useful. Any
 document under `archive/`, `old/`, or `deprecated/`, or marked deprecated, must
 carry `status: archived | superseded`; it is not current fact by default.
-
-## Agent Instruction Governance
-
-AI instructions belong to executable AI context. Prefer one canonical policy
-with thin adapters. Default authority hosts are:
-
-```text
-docs/authority/agent/policy.md
-docs/authority/agent/adapters.md
-```
-
-Adapter files such as `CLAUDE.md` or editor-specific instructions are derived
-unless the project explicitly defines otherwise. When the active constitution
-changes, point adapters to it and the authority index; do not copy clauses or
-workflow protocol into adapters.

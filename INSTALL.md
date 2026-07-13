@@ -127,15 +127,14 @@ skillshare target codex --mode copy
 skillshare sync --force
 ```
 
-Doc Loom Least keeps multi-owner file contracts under `skills/_shared/`.
-Current shared reference files are `shared-protocol.md`, `loop-protocol.md`,
-`tdd-exceptions.md`, and `doc-update-rules.md`; `loop-protocol.md` remains the
-explicit single-consumer discovery reference. The shared handoff template is
-exposed only to its direct writers. Each consumer uses a local relative
-symlink. In `merge` mode, symlinks remain connected to the tracked repository.
-In `copy` mode, `skillshare` copies each symlink target as a real file into the
-copied Skill, so references remain readable when the target does not support
-symlinks.
+Doc Loom Least keeps only multi-owner file contracts under `skills/_shared/`.
+The cross-Skill shared protocol is exposed to its consumers through local
+relative symlinks; the shared handoff template is exposed only to its direct
+writers. Single-owner references and templates are real private files inside
+their owning Skill. In `merge` mode, shared symlinks remain connected to the
+tracked repository. In `copy` mode, `skillshare` copies each symlink target as a
+real file into the copied Skill, so all required resources remain readable when
+the target does not support symlinks.
 
 Runtime companion Skills are invoked by canonical frontmatter name, not by
 filesystem path. The supported repository installation discovers all canonical

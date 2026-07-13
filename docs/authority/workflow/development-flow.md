@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-12
+last_verified: 2026-07-13
 ---
 
 # Development Workflow
@@ -82,12 +82,11 @@ unexplained case-related worktree changes.
 - `skills/_shared/references/shared-protocol.md`
 - `skills/development/docloom-workflow/SKILL.md`
 - `skills/development/context-authority/SKILL.md`
-- `skills/development/context-authority/references/retrieval-routing.md`
 - `skills/development/plan-confirm/SKILL.md`
-- `skills/development/plan-confirm/references/risk-levels.md`
+- `skills/development/plan-confirm/references/tdd-exceptions.md`
 - `skills/development/tdd-execute/SKILL.md`
 - `skills/development/doc-sync-close/SKILL.md`
-- `skills/_shared/references/loop-protocol.md`
+- `skills/development/docloom-workflow/references/loop-protocol.md`
 - `docs/product/current-state.md`
 - `skills/assessment/review/SKILL.md`
 - `skills/assessment/grill/SKILL.md`

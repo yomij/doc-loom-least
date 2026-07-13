@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-02
+last_verified: 2026-07-13
 ---
 
 # Documentation Governance
@@ -71,6 +71,6 @@ non-blocked decisions and keep blocked topics visible.
 ## Sources
 
 - `skills/governance/setup-doc-governance/SKILL.md`
-- `skills/governance/setup-doc-governance/references/layering-and-routing.md`
-- `skills/governance/setup-doc-governance/references/verdicts.md`
+- `skills/governance/setup-doc-governance/references/governance-rules.md`
+- `skills/governance/setup-doc-governance/templates/governance-plan.md`
 - `skills/development/doc-sync-close/references/doc-update-rules.md`

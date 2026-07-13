@@ -56,11 +56,18 @@ keeps cross-skill invariants, and references/templates load only for named
 conditions. A material workflow rule has one complete semantic owner; consumers
 retain only the local trigger, input, action, result, and gate they need.
 
+Material needed by every invocation stays in `SKILL.md`; a local reference
+exists only for a named branch or a substantial co-located rulebook. A retained
+template has an exact producer pointer and artifact owner. Generic inspiration,
+unbound templates, and single-consumer files under `_shared` are removed rather
+than preserved as speculative structure.
+
 Cross-Skill composition has two forms. Runtime routing or invocation uses the
 callee's stable frontmatter `name`; callers do not import another Skill's
 `SKILL.md` or private filesystem path. File contracts needed by multiple owners
 live under `_shared` and are exposed through readable local
-`references/`/`templates/` paths; other local assets are private by default.
+`references/`/`templates/` paths. Single-owner contracts and other local assets
+stay real private files under their owning Skill.
 Workflow control flow may return to an earlier owner, but physical cross-Skill
 file imports must not form dependencies or cycles.
 

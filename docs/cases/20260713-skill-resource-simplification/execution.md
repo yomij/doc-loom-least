@@ -1,7 +1,7 @@
 ---
 case_id: 20260713-skill-resource-simplification
 status: executing
-updated_at: 2026-07-13T17:55:44+0800
+updated_at: 2026-07-13T18:01:39+0800
 ---
 
 # Execution Report
@@ -94,6 +94,12 @@ updated_at: 2026-07-13T17:55:44+0800
   archive, and adapter rules into `governance-rules.md`.
 - Renamed the governance template to `governance-plan.md` and added direct
   pointers for it, the context brief, and closure templates.
+- A user provenance check traced the standalone "Agent Instruction Governance"
+  section to repository initialization commit `b5bb4a3`, not Constitution or an
+  ADR. Its durable thin-adapter rule is already authority in
+  `docs/authority/agent/policy.md`, and its execution steps already belong to
+  `setup-doc-governance`; the duplicate standalone reference section was
+  removed.
 
 ### Final resource topology
 
@@ -108,7 +114,18 @@ updated_at: 2026-07-13T17:55:44+0800
     risk classification; still below 1,700);
   - context through plan: 2,894 words (129 fewer);
   - typical full persistent flow: 5,088 words (115 fewer);
-  - all active unique Skill Markdown: 8,616 words (591 fewer).
+  - all active unique Skill Markdown: 8,583 words (624 fewer).
+
+### Authority and distribution sync
+
+- Updated existing architecture authority with the every-invocation,
+  branch/rulebook, exact-template-pointer, and real-local-file boundaries.
+- Updated workflow/governance/agent authority source paths to current owners.
+- Updated distribution authority and install guidance so `_shared` describes
+  only true multi-owner contracts and private local assets are not exhaustively
+  listed.
+- Updated `skills/README.md` with the corresponding maintainer rules; no new
+  authority area, workflow outcome, or installation mode was added.
 
 ## TDD Applicability
 
@@ -130,14 +147,14 @@ updated_at: 2026-07-13T17:55:44+0800
 | Retained templates have exact producer pointers | met | Exact pointer/schema assertions pass for all six templates. |
 | Behavior contracts unchanged | met | Semantic anchor and stale-path assertions pass; focused final scenarios pending. |
 | Merge/copy installs readable | met | No broken symlink; copy-mode resource assertions and two `skillshare` audits pass. |
-| Loading costs within ceilings | met | Final 1,488 / 2,894 / 5,088 / 8,616. |
-| Authority/distribution current | executing | Final source sync pending. |
+| Loading costs within ceilings | met | Final 1,488 / 2,894 / 5,088 / 8,583. |
+| Authority/distribution current | met | Active authority, Skill layout, and install guidance match final paths and ownership. |
 | Engineering/Spec review passes | executing | Post-execution gate pending. |
 
 ## Review Risk
 
-Medium. Resource paths, semantic anchors, copy behavior, audits, and costs pass;
-authority synchronization and final Engineering/Spec review remain.
+Low. Resource paths, semantic anchors, copy behavior, audits, costs, authority,
+and distribution checks pass; final Engineering/Spec review remains.
 
 ## Commands Run
 
@@ -158,14 +175,18 @@ authority synchronization and final Engineering/Spec review remain.
 | Copy-style `cp -RL` simulation | pass | Every required local file exists; removed consumer-only files stay absent. |
 | `skillshare audit ./skills --format json` | pass | Clean; risk score 0. |
 | `skillshare audit ./skills --analyzer cross-skill --format json` | pass | Clean; risk score 0. |
-| Final unique-path and corpus `wc -w` | pass | 1,488 / 2,894 / 5,088 / 8,616; all ceilings pass. |
+| Final unique-path and corpus `wc -w` | pass | 1,488 / 2,894 / 5,088 / 8,583; all ceilings pass. |
 | `git diff --check` | pass | No whitespace errors in the resource delta. |
+| Git blame/log provenance for Agent Instruction Governance | pass | Standalone section originated in `b5bb4a3`; current durable rule is already in agent authority and owning Skill procedure. |
+| Active stale-path search | pass | Removed shared/local reference and old governance-template paths are absent from authority, Skills, README, and INSTALL. |
+| Authority YAML parse and source-path assertions | pass | Five modified authority docs remain active mappings and all cited current Skill paths exist. |
+| Authority/distribution semantic assertions | pass | Every-invocation, local ownership, template pointer, shared protocol, and governance-rule claims are present. |
 
 ## Commits
 
 | Step | Commit | Status |
 |---|---|---|
 | plan | `a219c53ebd310d13025a21f0bc5ef647bc977ef7` | complete |
-| task:resource-topology | pending | not started |
+| task:resource-topology | `6dd5251` | complete |
 | task:resource-docs | pending | not started |
 | closure | pending | not started |

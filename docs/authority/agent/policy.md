@@ -7,7 +7,7 @@ source_of_truth: adr
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-12
+last_verified: 2026-07-13
 ---
 
 # Agent Policy
@@ -45,4 +45,4 @@ contract or L1 critical fact, or enables irreversible action.
 - [Constitution](../constitution.md)
 - [ADR-0002 Human-First Agent Responsibility](../../adr/ADR-0002-human-first-agent-responsibility.md)
 - `skills/_shared/references/shared-protocol.md`
-- `skills/governance/setup-doc-governance/references/layering-and-routing.md`
+- `skills/governance/setup-doc-governance/references/governance-rules.md`

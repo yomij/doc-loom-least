@@ -26,6 +26,9 @@ Future domains such as `product/`, `research/`, and `design/` should be added on
   importing its `SKILL.md` or private filesystem path.
 - Put a multi-owner file contract in `_shared` and expose a readable local path
   to each consumer. Treat other local `references/` and `templates/` as private.
+- Keep material used by every invocation in `SKILL.md`; disclose only a named
+  branch or substantial co-located rulebook.
+- Retain a template only with an exact producer pointer and artifact owner.
 - Allow intentional workflow return routes, but keep physical file dependencies
   free of cross-Skill edges and cycles.
 - Load references/templates only for their named condition; do not move prose
