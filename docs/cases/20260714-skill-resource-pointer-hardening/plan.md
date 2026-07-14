@@ -1,10 +1,10 @@
 ---
 case_id: 20260714-skill-resource-pointer-hardening
-plan_version: 1
+plan_version: 2
 status: approved
 risk_level: medium
 approved_by: user
-approved_at: 2026-07-14T20:05:17+0800
+approved_at: 2026-07-14T20:09:43+0800
 base_commit: b0505d15c0cae72740f2a3e54a0c48002db13b36
 ---
 
@@ -12,9 +12,9 @@ base_commit: b0505d15c0cae72740f2a3e54a0c48002db13b36
 
 ## Human Approval Summary
 
-- Outcome: every canonical Doc Loom Skill resolves local references and
-  templates predictably from its own `SKILL.md` directory, using explicit
-  Markdown links instead of ambiguous bare path prose.
+- Outcome: every canonical Doc Loom Skill names local references and templates
+  with explicit `./references/...` or `./templates/...` Markdown links instead
+  of ambiguous bare path prose.
 - Material scope: harden local resource pointers in the seven canonical Skills
   that currently load references/templates, record the authoring convention in
   `skills/README.md`, and verify link, symlink, copy-install, and unchanged
@@ -43,13 +43,11 @@ guessed directory instead of from the directory containing the active
 
 The durable authoring contract is:
 
-1. each Skill states that local resource links resolve from its own `SKILL.md`
-   directory;
-2. each resource is named by a direct Markdown link beginning with
+1. each resource is named by a direct Markdown link beginning with
    `./references/` or `./templates/`;
-3. trigger wording states when the resource must be read and before which
+2. trigger wording states when the resource must be read and before which
    action;
-4. shared canonical files remain single-source resources exposed through the
+3. shared canonical files remain single-source resources exposed through the
    existing local symlinks.
 
 ## Non-goals
@@ -151,11 +149,21 @@ Case evidence and derived dashboard:
 - `docs/cases/20260714-skill-resource-pointer-hardening/closure.md`
 - `docs/cases/README.md`
 
+## Plan Amendment
+
+- Version 2 removes the repeated per-Skill sentence that explicitly restated
+  the `SKILL.md` resource base. The user identified it as unnecessary after
+  seeing the implementation wording.
+- Direct `./references/...` and `./templates/...` Markdown targets carry the
+  local base mechanically; the single maintainer convention remains in
+  `skills/README.md`.
+- Goal, files, risk, conditional read triggers, verification, commits, and
+  exclusions are unchanged.
+
 ## Acceptance Criteria
 
 | Criterion | Planned verification |
 |---|---|
-| Every canonical Skill-local reference/template pointer has an explicit owning-directory base. | Inspect all eight canonical Skills and assert every resource-consuming Skill contains the standard local-resource-base instruction. |
 | Resource targets use direct `./references/...` or `./templates/...` Markdown links rather than bare code-span paths. | Search all canonical `SKILL.md` files; require zero remaining bare local resource pointers and enumerate every Markdown resource link. |
 | Every linked resource resolves from the directory containing its owning `SKILL.md`. | Extract the Markdown targets, join each with its Skill directory, and require `test -e` plus successful `realpath`. |
 | Shared contracts remain single-source and all existing symlinks remain valid. | Compare pre/post symlink graph and run `find -L skills -type l -print`, expecting no broken link. |
@@ -181,8 +189,6 @@ case execution evidence.
 
 **Files:** seven resource-consuming canonical Skills and `skills/README.md`.
 
-- [ ] Add the smallest positive resource-base instruction needed for reliable
-  execution.
 - [ ] Convert each local resource pointer to a direct relative Markdown link
   while preserving its existing mandatory/conditional trigger.
 - [ ] Record the portable authoring convention without changing resource
@@ -232,3 +238,4 @@ mutation remain excluded.
 | When | Confirmed By | Plan Version | Confirmation |
 |---|---|---:|---|
 | 2026-07-14T20:05:17+0800 | user | 1 | User replied “执行” after the plan v1 approval summary, authorizing the declared local branch, commits, implementation, verification, review, and closure scope. |
+| 2026-07-14T20:09:43+0800 | user | 2 | User explicitly rejected the repeated “Resolve every local resource link…” sentence; plan v2 removes that no-op while retaining direct `./` Markdown links and the single maintainer convention. |
