@@ -1,16 +1,15 @@
 ---
 case_id: 20260714-skill-resource-pointer-hardening
-status: executing
-updated_at: 2026-07-14T20:32:37+0800
+status: ready_to_close
+updated_at: 2026-07-14T20:40:29+0800
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: plan v5 is approved and committed; all canonical local
-  resource pointers now use direct `./references/...` or `./templates/...`
-  Markdown links and the focused verification suite passes.
+- Outcome so far: implementation, review fix, exact-format verification, and
+  independent Engineering/Spec re-review all pass. The case is ready to close.
 - What changed: seven resource-consuming canonical Skills now expose 18 exact
   Markdown links while preserving their existing read triggers. One portable
   authoring convention was added to `skills/README.md`; resource files and
@@ -96,9 +95,9 @@ updated_at: 2026-07-14T20:32:37+0800
 | Every target resolves from owning Skill | met | All 18 extracted targets pass `test -e` and canonical resolution. |
 | Shared single-source and symlink integrity | met | Eight unchanged symlinks; no broken link. |
 | Copy installation readability | met | `cp -RL` simulation contains no symlink and resolves all 18 links. |
-| Workflow semantics unchanged | pending re-review | Initial review found the plan-template condition broadened from draft writing to validation; review fix restores the exact baseline condition. |
+| Workflow semantics unchanged | met | F1 restored the exact plan-template draft-writing condition; re-review confirms all 18 triggers preserve baseline semantics. |
 | Portable maintainer guidance | met | One convention in `skills/README.md`; no absolute or direct `_shared` consumer path. |
-| Post-execution review | pending | Starts after implementation and verification. |
+| Post-execution review | met | Independent subagent and main-agent re-review: Engineering pass, Spec pass, aggregate pass, no remaining finding or material gap. |
 
 ## Commands Run
 
@@ -124,9 +123,9 @@ updated_at: 2026-07-14T20:32:37+0800
 
 ## Review Risk
 
-`medium`: initial Engineering passed, but initial Spec review found one
-Important conditional-loading drift. The correction is applied and risk remains
-until re-review passes.
+`low`: initial Important F1 and three Minor issues/evidence gaps were corrected
+in `7c984b4`; independent and main re-review pass with no remaining finding or
+material gap.
 
 ## Post-Execution Review Strategy
 
@@ -148,6 +147,7 @@ until re-review passes.
 | plan-amendment v4 | `e8d0bf5` |
 | plan-amendment v5 | `95f9d05` |
 | task:pointer-hardening | `27d76331c9c9aacf71ded9238cdeb99633143e8f` |
+| review-fix:F1-F3 | `7c984b487fc876516ae86697295e99abdcc7abc5` |
 
 ## Reproducible Verification
 
@@ -218,4 +218,10 @@ Review-fix disposition:
 - F2: replaced the pseudo-path with valid reference and template examples.
 - F3: removed the duplicate execution-template sentence.
 - Engineering evidence gap: added the reproducible commands above.
-- Re-review: pending after the scoped review-fix commit.
+- Review-fix commit: `7c984b487fc876516ae86697295e99abdcc7abc5`.
+- Re-review: Engineering `pass`, Spec `pass`, aggregate `pass` against exact
+  baseline `95f9d0560cbc22b1e939a34c3eba64ec2890dbac` through task
+  `27d76331c9c9aacf71ded9238cdeb99633143e8f` and review fix
+  `7c984b487fc876516ae86697295e99abdcc7abc5`.
+- Final findings: none within reviewed scope.
+- Final evidence gaps: none material.

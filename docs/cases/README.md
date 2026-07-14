@@ -8,9 +8,7 @@ precedence and refresh this file.
 
 ## Active Cases
 
-| Case | Status | Evidence | Next Action |
-|---|---|---|---|
-| `20260714-skill-resource-pointer-hardening` | executing | `20260714-skill-resource-pointer-hardening/execution.md` | Commit the green pointer change, run Post-execution review, and close. |
+None.
 
 ## Waiting On Human
 
@@ -22,6 +20,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260714-skill-resource-pointer-hardening` | Done | `20260714-skill-resource-pointer-hardening/closure.md` | Source fix passes review; publication and Skillshare update remain separately authorized follow-up work. |
 | `20260713-skill-resource-simplification` | Done | `20260713-skill-resource-simplification/closure.md` | Resources 18 -> 12, symlinks 13 -> 8, all review axes pass; no follow-up. |
 | `20260713-skill-dependency-boundaries` | Done | `20260713-skill-dependency-boundaries/closure.md` | Skill-name invocation, shared contracts, local privacy, and handoff ownership are explicit; no follow-up. |
 | `20260712-skill-context-cost-compression` | Done | `20260712-skill-context-cost-compression/closure.md` | Common-path Skill loading cost reduced; artifact consolidation remains a separate optional follow-up. |
