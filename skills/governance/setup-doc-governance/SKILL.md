@@ -11,13 +11,13 @@ Each independent governance batch gets its own plan file.
 
 Read when trigger condition is met:
 
-- `references/shared-protocol.md` when: checking execution instruction order,
-  fact authority order, risk levels, or artifact policy.
-- `references/governance-rules.md` when: defining documentation layers,
-  authority structure, routing files/facts, entries, bridges, archives, or
-  block conditions.
-- `templates/governance-plan.md` when: writing the proposed or approved
-  governance plan.
+- [Shared protocol](./references/shared-protocol.md): checking execution
+  instruction order, fact authority order, risk levels, or artifact policy.
+- [Governance rules](./references/governance-rules.md): defining documentation
+  layers, authority structure, routing files/facts, entries, bridges, archives,
+  or block conditions.
+- [Governance plan template](./templates/governance-plan.md): writing the
+  proposed or approved governance plan.
 
 ## Scope
 

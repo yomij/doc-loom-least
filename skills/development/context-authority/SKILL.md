@@ -8,9 +8,12 @@ description: Conditional pre-plan context and authority check for resume, case a
 Read the smallest evidence needed for a planning verdict. Do not plan, edit,
 create case identity, or resolve authority conflicts.
 
-Read `references/shared-protocol.md` only for shared authority, identity,
-status, risk, and resume rules. Read
-`templates/context-authority-brief.md` only when persisting a real brief.
+Read when trigger condition is met:
+
+- [Shared protocol](./references/shared-protocol.md): shared authority,
+  identity, status, risk, or resume rules only.
+- [Context-authority brief template](./templates/context-authority-brief.md):
+  persisting a real brief only.
 
 ## Start
 

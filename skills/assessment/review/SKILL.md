@@ -8,12 +8,18 @@ description: Read-only evidence review for explicit code, docs, design, proposal
 Enter only by explicit user review intent or `tdd-execute` invoking an approved
 Post-execution gate. Plan approval never authorizes unrelated ad-hoc review.
 
+Read when trigger condition is met:
+
+- [Complexity-only rules](./references/complexity-only.md): `Complexity-only`,
+  the complexity section of `Dual-pass`, or the unnecessary-complexity check
+  inside Post-execution Engineering.
+
 ## Modes And Boundary
 
 - `Standard`: correctness/evidence review.
-- `Complexity-only`: explicit simplification/YAGNI requests; read
-  `references/complexity-only.md`; assess complexity only, not correctness,
-  security, performance, or coverage, and never substitute it for Standard.
+- `Complexity-only`: explicit simplification/YAGNI requests; assess complexity
+  only, not correctness, security, performance, or coverage, and never
+  substitute it for Standard.
 - `Dual-pass`: explicitly requested Standard plus complexity.
 - `Post-execution`: completed-work Engineering and Spec axes with aggregate.
 

@@ -6,9 +6,14 @@ description: Write, version, and confirm a Doc Loom implementation plan after ca
 # plan-confirm
 
 Consume an existing case; missing identity returns to `docloom-workflow`.
-Read `references/shared-protocol.md` for shared status, risk, authorization, and
-commit rules. Read `references/tdd-exceptions.md` only when planning
-`TDD Required: No`.
+
+Read when trigger condition is met:
+
+- [Shared protocol](./references/shared-protocol.md): shared status, risk,
+  authorization, or commit rules.
+- [TDD exceptions](./references/tdd-exceptions.md): planning
+  `TDD Required: No` only.
+- [Plan template](./templates/plan.md): writing or validating `plan.md`.
 
 ## Inputs
 
@@ -27,8 +32,9 @@ decisions/candidate selection.
    review/commit strategies when eligible.
 5. Lead with a Human Approval Summary: outcome, material scope, decision,
    local Git actions/commit count, interruptions, and excluded actions.
-6. Write `plan.md` from `templates/plan.md` as `status: draft`; self-review for
-   missing paths, placeholders, coverage, naming, buildability, and TDD integrity.
+6. Write `plan.md` from the plan template as `status: draft`; self-review for
+   missing paths, placeholders, coverage, naming, buildability, and TDD
+   integrity.
 7. Ask for confirmation unless every Fast-Path condition is verified.
 8. On approval, record approver/time/version/baseline and Confirmation Log;
    Fast-Path also records evidence for every verified condition.

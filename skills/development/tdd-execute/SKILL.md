@@ -5,10 +5,17 @@ description: Execute a currently authorized approved Doc Loom plan with TDD or i
 
 # tdd-execute
 
-Read `references/shared-protocol.md` for shared status, authorization, and
-commit rules. When an approved plan requires Post-execution review, invoke the
-installed `review` Skill in `Post-execution` mode. Read
-`templates/handoff.md` only when writing a real future resume point.
+Read when trigger condition is met:
+
+- [Shared protocol](./references/shared-protocol.md): shared status,
+  authorization, or commit rules.
+- [Handoff template](./templates/handoff.md): writing a real future resume
+  point only.
+- [Execution template](./templates/execution.md): execution evidence is
+  required.
+
+When an approved plan requires Post-execution review, invoke the installed
+`review` Skill in `Post-execution` mode.
 
 ## Preflight
 
@@ -58,7 +65,7 @@ is material.
 
 ## Evidence And Status
 
-Use `templates/execution.md` when execution evidence is required. Record actual
+Use the execution template when execution evidence is required. Record actual
 commands, failures/retries, deviations, hashes, findings, and resume-critical
 facts; reference plan expectations instead of copying them. Lead with current
 human outcome/action/Git effect.

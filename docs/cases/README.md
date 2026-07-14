@@ -10,7 +10,7 @@ precedence and refresh this file.
 
 | Case | Status | Evidence | Next Action |
 |---|---|---|---|
-| `20260714-skill-resource-pointer-hardening` | approved plan | `20260714-skill-resource-pointer-hardening/plan.md` | Execute plan v1 on the declared case branch. |
+| `20260714-skill-resource-pointer-hardening` | executing | `20260714-skill-resource-pointer-hardening/execution.md` | Commit the green pointer change, run Post-execution review, and close. |
 
 ## Waiting On Human
 

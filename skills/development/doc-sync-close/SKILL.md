@@ -5,11 +5,16 @@ description: Close an existing Doc Loom case after execution or when blocked, pa
 
 # doc-sync-close
 
-Read `references/shared-protocol.md` for shared identity/status/artifact/commit
-rules. Read `references/doc-update-rules.md` only for L1 authority, L3 derived
-sync, or an authority-change table. Read `templates/handoff.md` only when
-writing a real future resume point. Read `templates/closure.md` when writing or
-validating `closure.md`.
+Read when trigger condition is met:
+
+- [Shared protocol](./references/shared-protocol.md): shared identity, status,
+  artifact, or commit rules.
+- [Document update rules](./references/doc-update-rules.md): L1 authority, L3
+  derived sync, or an authority-change table only.
+- [Handoff template](./templates/handoff.md): writing a real future resume
+  point only.
+- [Closure template](./templates/closure.md): writing or validating
+  `closure.md`.
 
 ## Inputs And Workflow
 

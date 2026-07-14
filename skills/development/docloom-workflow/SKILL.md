@@ -8,8 +8,12 @@ description: Default human entry for persistent Doc Loom development work, case 
 Act as the public doorway and case-identity owner; do not plan, execute, close,
 or require users to name stage Skills.
 
-Read `references/shared-protocol.md` before routing or creating identity. Read
-`references/loop-protocol.md` only for candidate/next-slice discovery.
+Read when trigger condition is met:
+
+- [Shared protocol](./references/shared-protocol.md): before routing or
+  creating identity.
+- [Loop protocol](./references/loop-protocol.md): candidate/next-slice
+  discovery only.
 
 ## Start
 
