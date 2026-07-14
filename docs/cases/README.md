@@ -8,7 +8,9 @@ precedence and refresh this file.
 
 ## Active Cases
 
-None.
+| Case | Status | Evidence | Next Action |
+|---|---|---|---|
+| `20260714-skill-resource-pointer-hardening` | approved plan | `20260714-skill-resource-pointer-hardening/plan.md` | Execute plan v1 on the declared case branch. |
 
 ## Waiting On Human
 
