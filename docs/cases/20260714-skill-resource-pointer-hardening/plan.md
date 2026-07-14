@@ -1,10 +1,10 @@
 ---
 case_id: 20260714-skill-resource-pointer-hardening
-plan_version: 3
+plan_version: 4
 status: approved
 risk_level: medium
 approved_by: user
-approved_at: 2026-07-14T20:15:05+0800
+approved_at: 2026-07-14T20:19:11+0800
 base_commit: b0505d15c0cae72740f2a3e54a0c48002db13b36
 ---
 
@@ -161,6 +161,10 @@ Case evidence and derived dashboard:
   `read the [descriptive label](./references/file.md)` wording. Reference body
   structure remains content-driven rather than receiving a redundant common
   wrapper.
+- Version 4 supersedes the version 3 prose form. Every resource-consuming Skill
+  now follows `setup-doc-governance`: a `Read when trigger condition is met:`
+  label followed by `[Resource](./references/or/templates/file.md): trigger`
+  bullets, with no repeated `Read the` text and no duplicate body link.
 - Goal, files, risk, conditional read triggers, verification, commits, and
   exclusions are otherwise unchanged.
 
@@ -168,7 +172,7 @@ Case evidence and derived dashboard:
 
 | Criterion | Planned verification |
 |---|---|
-| Resource targets use descriptive Markdown labels with direct `./references/...` or `./templates/...` targets rather than bare code-span paths. | Search all canonical `SKILL.md` files; require zero remaining bare local resource pointers, enumerate every Markdown resource link, and inspect consistent `read the [label](target)` wording. |
+| Resource targets use the `setup-doc-governance` list format with descriptive Markdown labels and direct `./references/...` or `./templates/...` targets. | Search all canonical `SKILL.md` files; require zero bare local paths, zero `Read the` pointer prose, one resource-condition label per consumer, and valid `[label](target): trigger` bullets. |
 | Every linked resource resolves from the directory containing its owning `SKILL.md`. | Extract the Markdown targets, join each with its Skill directory, and require `test -e` plus successful `realpath`. |
 | Shared contracts remain single-source and all existing symlinks remain valid. | Compare pre/post symlink graph and run `find -L skills -type l -print`, expecting no broken link. |
 | Repository-wide copy installation remains readable. | Run a temporary `cp -RL` simulation and repeat local target existence checks in the dereferenced copy. |
@@ -244,3 +248,4 @@ mutation remain excluded.
 | 2026-07-14T20:05:17+0800 | user | 1 | User replied “执行” after the plan v1 approval summary, authorizing the declared local branch, commits, implementation, verification, review, and closure scope. |
 | 2026-07-14T20:09:43+0800 | user | 2 | User explicitly rejected the repeated “Resolve every local resource link…” sentence; plan v2 removes that no-op while retaining direct `./` Markdown links and the single maintainer convention. |
 | 2026-07-14T20:15:05+0800 | user | 3 | User requested consistent reference formatting; plan v3 standardizes descriptive Markdown reference pointers without forcing uniform reference-body prose. |
+| 2026-07-14T20:19:11+0800 | user | 4 | User selected `setup-doc-governance/SKILL.md` as the exact formatting baseline and rejected `Read the`; plan v4 applies its resource-condition list form to every consumer. |
