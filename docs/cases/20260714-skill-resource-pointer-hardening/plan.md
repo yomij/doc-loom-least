@@ -1,10 +1,10 @@
 ---
 case_id: 20260714-skill-resource-pointer-hardening
-plan_version: 2
+plan_version: 3
 status: approved
 risk_level: medium
 approved_by: user
-approved_at: 2026-07-14T20:09:43+0800
+approved_at: 2026-07-14T20:15:05+0800
 base_commit: b0505d15c0cae72740f2a3e54a0c48002db13b36
 ---
 
@@ -157,14 +157,18 @@ Case evidence and derived dashboard:
 - Direct `./references/...` and `./templates/...` Markdown targets carry the
   local base mechanically; the single maintainer convention remains in
   `skills/README.md`.
+- Version 3 standardizes reference pointer form as grammatical
+  `read the [descriptive label](./references/file.md)` wording. Reference body
+  structure remains content-driven rather than receiving a redundant common
+  wrapper.
 - Goal, files, risk, conditional read triggers, verification, commits, and
-  exclusions are unchanged.
+  exclusions are otherwise unchanged.
 
 ## Acceptance Criteria
 
 | Criterion | Planned verification |
 |---|---|
-| Resource targets use direct `./references/...` or `./templates/...` Markdown links rather than bare code-span paths. | Search all canonical `SKILL.md` files; require zero remaining bare local resource pointers and enumerate every Markdown resource link. |
+| Resource targets use descriptive Markdown labels with direct `./references/...` or `./templates/...` targets rather than bare code-span paths. | Search all canonical `SKILL.md` files; require zero remaining bare local resource pointers, enumerate every Markdown resource link, and inspect consistent `read the [label](target)` wording. |
 | Every linked resource resolves from the directory containing its owning `SKILL.md`. | Extract the Markdown targets, join each with its Skill directory, and require `test -e` plus successful `realpath`. |
 | Shared contracts remain single-source and all existing symlinks remain valid. | Compare pre/post symlink graph and run `find -L skills -type l -print`, expecting no broken link. |
 | Repository-wide copy installation remains readable. | Run a temporary `cp -RL` simulation and repeat local target existence checks in the dereferenced copy. |
@@ -239,3 +243,4 @@ mutation remain excluded.
 |---|---|---:|---|
 | 2026-07-14T20:05:17+0800 | user | 1 | User replied “执行” after the plan v1 approval summary, authorizing the declared local branch, commits, implementation, verification, review, and closure scope. |
 | 2026-07-14T20:09:43+0800 | user | 2 | User explicitly rejected the repeated “Resolve every local resource link…” sentence; plan v2 removes that no-op while retaining direct `./` Markdown links and the single maintainer convention. |
+| 2026-07-14T20:15:05+0800 | user | 3 | User requested consistent reference formatting; plan v3 standardizes descriptive Markdown reference pointers without forcing uniform reference-body prose. |
