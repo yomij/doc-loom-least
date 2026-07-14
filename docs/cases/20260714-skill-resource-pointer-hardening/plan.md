@@ -1,10 +1,10 @@
 ---
 case_id: 20260714-skill-resource-pointer-hardening
-plan_version: 4
+plan_version: 5
 status: approved
 risk_level: medium
 approved_by: user
-approved_at: 2026-07-14T20:19:11+0800
+approved_at: 2026-07-14T20:22:27+0800
 base_commit: b0505d15c0cae72740f2a3e54a0c48002db13b36
 ---
 
@@ -165,6 +165,9 @@ Case evidence and derived dashboard:
   now follows `setup-doc-governance`: a `Read when trigger condition is met:`
   label followed by `[Resource](./references/or/templates/file.md): trigger`
   bullets, with no repeated `Read the` text and no duplicate body link.
+- Version 5 adds the user's explicit request for an independent review
+  subagent. The main agent still owns evidence completeness, severity,
+  deduplication, final Engineering/Spec verdicts, fixes, and closure routing.
 - Goal, files, risk, conditional read triggers, verification, commits, and
   exclusions are otherwise unchanged.
 
@@ -223,6 +226,9 @@ case execution evidence.
   all canonical local resources follow the same convention, workflow behavior
   and single-source ownership remain unchanged, and excluded publication work
   stayed excluded.
+- An independent review subagent receives the approved plan, exact committed
+  delta, case evidence, and relevant authority without the intended answer;
+  its findings are supporting evidence for the main review owner.
 - Review baseline is the approved-plan commit; aggregate must pass before
   closure.
 
@@ -249,3 +255,4 @@ mutation remain excluded.
 | 2026-07-14T20:09:43+0800 | user | 2 | User explicitly rejected the repeated “Resolve every local resource link…” sentence; plan v2 removes that no-op while retaining direct `./` Markdown links and the single maintainer convention. |
 | 2026-07-14T20:15:05+0800 | user | 3 | User requested consistent reference formatting; plan v3 standardizes descriptive Markdown reference pointers without forcing uniform reference-body prose. |
 | 2026-07-14T20:19:11+0800 | user | 4 | User selected `setup-doc-governance/SKILL.md` as the exact formatting baseline and rejected `Read the`; plan v4 applies its resource-condition list form to every consumer. |
+| 2026-07-14T20:22:27+0800 | user | 5 | User explicitly requested a review subagent; plan v5 adds an independent supporting review while retaining main-agent ownership. |
