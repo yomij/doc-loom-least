@@ -65,10 +65,9 @@ is material.
 
 ## Evidence And Status
 
-Use the execution template when execution evidence is required. Record actual
-commands, failures/retries, deviations, hashes, findings, and resume-critical
-facts; reference plan expectations instead of copying them. Lead with current
-human outcome/action/Git effect.
+Record actual commands, failures/retries, deviations, hashes, findings, and
+resume-critical facts; reference plan expectations instead of copying them.
+Lead with current human outcome/action/Git effect.
 
 Frontmatter is:
 

@@ -1,7 +1,7 @@
 ---
 case_id: 20260714-skill-resource-pointer-hardening
 status: executing
-updated_at: 2026-07-14T20:23:32+0800
+updated_at: 2026-07-14T20:32:37+0800
 ---
 
 # Execution Report
@@ -20,7 +20,9 @@ updated_at: 2026-07-14T20:23:32+0800
   plan commits `0d0b9c31b0a4f33f1eebc4508587524db6b01702` and
   `7667aebfde747735466a5d532d8dc4429f95202c`, plus reference-format amendment
   `67d4b68`, exact-format amendment `e8d0bf5`, and review-strategy amendment
-  `95f9d05`. No push or installed-cache update is authorized.
+  `95f9d05`. Green task commit:
+  `27d76331c9c9aacf71ded9238cdeb99633143e8f`. No push or installed-cache update
+  is authorized.
 
 ## Plan Reference
 
@@ -94,7 +96,7 @@ updated_at: 2026-07-14T20:23:32+0800
 | Every target resolves from owning Skill | met | All 18 extracted targets pass `test -e` and canonical resolution. |
 | Shared single-source and symlink integrity | met | Eight unchanged symlinks; no broken link. |
 | Copy installation readability | met | `cp -RL` simulation contains no symlink and resolves all 18 links. |
-| Workflow semantics unchanged | met preliminarily | Required routing, authority, planning, TDD, review, governance, and closure anchors remain; final review pending. |
+| Workflow semantics unchanged | pending re-review | Initial review found the plan-template condition broadened from draft writing to validation; review fix restores the exact baseline condition. |
 | Portable maintainer guidance | met | One convention in `skills/README.md`; no absolute or direct `_shared` consumer path. |
 | Post-execution review | pending | Starts after implementation and verification. |
 
@@ -117,13 +119,14 @@ updated_at: 2026-07-14T20:23:32+0800
 | Semantic-anchor and forbidden-path checks | passed | Required workflow anchors remain; no absolute path or direct `_shared` consumer instruction. |
 | `git diff --check` | passed | No whitespace error. |
 | Exact `setup-doc-governance` format check | passed | Seven condition labels, 18 resource bullets, 18 resolved targets, zero rejected pointer forms. |
+| Task stage/diff/check/commit sequence | passed | Green task commit `27d76331c9c9aacf71ded9238cdeb99633143e8f`; explicit paths only. |
+| `skillshare audit ./skills --format json --yes` | passed | Clean; risk score 0 and no finding. |
 
 ## Review Risk
 
-`medium`: structural checks are green and the delta is bounded, but all
-canonical workflow resource consumers must preserve their mandatory/conditional
-loading semantics. Risk remains until exact-baseline Engineering/Spec review
-passes.
+`medium`: initial Engineering passed, but initial Spec review found one
+Important conditional-loading drift. The correction is applied and risk remains
+until re-review passes.
 
 ## Post-Execution Review Strategy
 
@@ -134,3 +137,85 @@ passes.
   verdict.
 - The main agent verifies the complete target, owns Engineering/Spec severity
   and deduplication, persists review evidence, and runs any fix/re-review loop.
+
+## Commits
+
+| Step | Commit |
+|---|---|
+| plan | `0d0b9c31b0a4f33f1eebc4508587524db6b01702` |
+| plan-amendment v2 | `7667aebfde747735466a5d532d8dc4429f95202c` |
+| plan-amendment v3 | `67d4b68` |
+| plan-amendment v4 | `e8d0bf5` |
+| plan-amendment v5 | `95f9d05` |
+| task:pointer-hardening | `27d76331c9c9aacf71ded9238cdeb99633143e8f` |
+
+## Reproducible Verification
+
+Pointer shape and target resolution:
+
+```zsh
+test "$(rg -l '\]\(\./(?:references|templates)/' skills/**/SKILL.md | wc -l | tr -d ' ')" -eq 7
+test "$(rg -l '^Read when trigger condition is met:$' skills/**/SKILL.md | wc -l | tr -d ' ')" -eq 7
+test "$(rg -n '^- \[[^]]+\]\(\./(?:references|templates)/[^)]+\):' skills/**/SKILL.md | wc -l | tr -d ' ')" -eq 18
+! rg -n '`(?:references|templates)/[^`]+`|Read the \[[^]]+\]\(\./(?:references|templates)/' skills/**/SKILL.md
+
+for skill in $(find skills -name SKILL.md -type f | sort); do
+  dir=${skill%/*}
+  while IFS= read -r target; do
+    test -n "$target" || continue
+    test -e "$dir/${target#./}"
+  done < <(rg -o '\]\(\./(?:references|templates)/[^)]+\)' "$skill" | sed -E 's/^\]\((.*)\)$/\1/' || true)
+done
+```
+
+Distribution and validation:
+
+```zsh
+test -z "$(find -L skills -type l -print)"
+test "$(find skills -type l -print | wc -l | tr -d ' ')" -eq 8
+
+tmp=$(mktemp -d)
+cp -RL skills "$tmp/skills"
+test -z "$(find "$tmp/skills" -type l -print)"
+for skill in $(find "$tmp/skills" -name SKILL.md -type f | sort); do
+  dir=${skill%/*}
+  while IFS= read -r target; do
+    test -n "$target" || continue
+    test -e "$dir/${target#./}"
+  done < <(rg -o '\]\(\./(?:references|templates)/[^)]+\)' "$skill" | sed -E 's/^\]\((.*)\)$/\1/' || true)
+done
+rm -rf "$tmp"
+
+for skill_dir in $(find skills -name SKILL.md -type f -exec dirname {} \; | sort); do
+  uv run --quiet --with pyyaml python /Users/yomi/.codex/skills/.system/skill-creator/scripts/quick_validate.py "$skill_dir"
+done
+
+skillshare audit ./skills --format json --yes
+git diff --check
+```
+
+## Post-Execution Review
+
+Initial independent subagent review against exact baseline
+`95f9d0560cbc22b1e939a34c3eba64ec2890dbac`:
+
+| Axis | Verdict | Findings / gaps |
+|---|---|---|
+| Engineering | pass | No Critical/Important. Minor: execution evidence named harnesses without exact reproducible commands. |
+| Spec | changes_required | Important F1: `plan-confirm` expanded the plan-template condition to validation, violating the unchanged conditional-loading boundary. |
+| Aggregate | changes_required | F1 blocks readiness; axes do not compensate. |
+
+Main-agent additions:
+
+- Minor F2: `skills/README.md` used the invalid illustrative path
+  `./references/or/templates/file.md`.
+- Minor F3: `tdd-execute` repeated the execution-template condition after the
+  new resource list.
+
+Review-fix disposition:
+
+- F1: restored `Plan template` to writing `plan.md` as `status: draft`.
+- F2: replaced the pseudo-path with valid reference and template examples.
+- F3: removed the duplicate execution-template sentence.
+- Engineering evidence gap: added the reproducible commands above.
+- Re-review: pending after the scoped review-fix commit.

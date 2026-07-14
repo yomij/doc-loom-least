@@ -13,7 +13,7 @@ Read when trigger condition is met:
   authorization, or commit rules.
 - [TDD exceptions](./references/tdd-exceptions.md): planning
   `TDD Required: No` only.
-- [Plan template](./templates/plan.md): writing or validating `plan.md`.
+- [Plan template](./templates/plan.md): writing `plan.md` as `status: draft`.
 
 ## Inputs
 

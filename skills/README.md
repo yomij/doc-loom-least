@@ -30,8 +30,9 @@ Future domains such as `product/`, `research/`, and `design/` should be added on
   branch or substantial co-located rulebook.
 - Format local resource pointers like `setup-doc-governance`: use
   `Read when trigger condition is met:` followed by
-  `- [Resource](./references/or/templates/file.md): trigger`. Resolve targets
-  from the owning `SKILL.md` directory and keep links out of later body prose.
+  `- [Resource](./references/file.md): trigger`; templates use
+  `./templates/file.md`. Resolve targets from the owning `SKILL.md` directory
+  and keep links out of later body prose.
 - Retain a template only with an exact producer pointer and artifact owner.
 - Allow intentional workflow return routes, but keep physical file dependencies
   free of cross-Skill edges and cycles.
