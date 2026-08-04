@@ -320,9 +320,9 @@ changelog, and case dashboard.
 
 - [x] Run semantic, frontmatter, Skill, link, symlink, word-cost, diff, and Git
   scope verification.
-- [ ] Invoke mandatory Post-execution Engineering/Spec review for this guarded
+- [x] Invoke mandatory Post-execution Engineering/Spec review for this guarded
   authority-changing case.
-- [ ] Fix all material findings in coherent independently valid batches,
+- [x] Fix all material findings in coherent independently valid batches,
   re-review, sync dashboard, and create the declared closure commit.
 
 ## Post-Execution Review

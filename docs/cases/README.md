@@ -8,9 +8,7 @@ precedence and refresh this file.
 
 ## Active Cases
 
-| Case | Status | Evidence | Next Action |
-|---|---|---|---|
-| `20260804-proportional-workflow-simplification` | executing | `20260804-proportional-workflow-simplification/execution.md` | Validate the proportional contracts, complete exact-baseline review, then close. |
+None.
 
 ## Waiting On Human
 
@@ -22,6 +20,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260804-proportional-workflow-simplification` | Done | `20260804-proportional-workflow-simplification/closure.md` | Proportional routing and assurance pass exact-baseline review; dogfood direct/compact/guarded cost signals next. |
 | `20260714-skill-resource-pointer-hardening` | Done | `20260714-skill-resource-pointer-hardening/closure.md` | Source fix passes review; publication and Skillshare update remain separately authorized follow-up work. |
 | `20260713-skill-resource-simplification` | Done | `20260713-skill-resource-simplification/closure.md` | Resources 18 -> 12, symlinks 13 -> 8, all review axes pass; no follow-up. |
 | `20260713-skill-dependency-boundaries` | Done | `20260713-skill-dependency-boundaries/closure.md` | Skill-name invocation, shared contracts, local privacy, and handoff ownership are explicit; no follow-up. |
@@ -42,7 +41,7 @@ None.
 | ID | Source Case | Candidate | Suggested Route | Reason |
 |---|---|---|---|---|
 | F2 | `20260703-next-slice-rubric-dogfood` | Validate compact next-slice output on the next real discovery pass before changing the rubric. | `docloom-workflow` | The first dogfood fixed output density but does not yet prove the compact format across another selection. |
-| F3 | `20260712-artifact-owned-case-state` | Evaluate `execution.md` + `closure.md` consolidation only if artifact ceremony remains costly after this successful dogfood cycle. | `docloom-workflow` | Generic guidance/loading cost was addressed by `20260712-skill-context-cost-compression`; artifact merging remains intentionally separate. |
+| F4 | `20260804-proportional-workflow-simplification` | Dogfood representative direct, compact persistent, and guarded work and compare plan revisions, artifact lines, standalone plan/closure commits, and review-fix product-code share. | `docloom-workflow` | Real-case evidence justified proportional policy; observed usage must now confirm lower ceremony without guarded under-classification. |
 
 ## Refresh Rules
 

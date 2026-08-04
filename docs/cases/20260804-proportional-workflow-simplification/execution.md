@@ -1,25 +1,26 @@
 ---
 case_id: 20260804-proportional-workflow-simplification
-status: executing
-updated_at: 2026-08-04T15:59:22+08:00
+status: ready_to_close
+updated_at: 2026-08-04T16:02:00+08:00
 ---
 
 # Execution Report
 
 ## Human Summary
 
-- Outcome so far: the proportional workflow implementation and pre-commit
-  validation are complete; the declared implementation commit and guarded
-  Engineering/Spec review remain.
+- Outcome so far: implementation, declared task/review-fix commits, validation,
+  and exact-baseline Engineering/Spec review are complete and passing; closure
+  is ready.
 - What changed: active routing now separates persistence from assurance;
   approval binds an outcome envelope; execution evidence, deep review, and
   case commits are conditional while guarded protections remain mandatory.
-- User action needed: none unless an escalation trigger or material review
-  finding appears.
+- User action needed: none.
 - Local Git effect: approved plan commit
   `b1007977051a479e72012916a890867ccd7cb3ad` exists locally; implementation
-  and closure commits remain planned. Push, PR, merge, release, and history
-  rewriting remain excluded.
+  `8b09499c810ad560a2aff850e7562bd0c8f17fae` and review-fix commit
+  `198fd33ccfa848ce7f33620d1b1dbe52ac84633a` exist locally. The declared
+  closure commit remains; push, PR, merge, release, and history rewriting remain
+  excluded.
 
 ## Plan Reference
 
@@ -85,11 +86,11 @@ guarded-assurance predicates while preserving high-risk protections.
 | Deep review is selective and guarded here | met | Authority, executor, review, and close contracts align; this case remains guarded. |
 | Complete finding set and coherent fix batches | met | Review/executor contracts no longer couple finding and commit counts. |
 | Bookkeeping commits are optional | met | Shared, Git, plan, executor, and close agree; this case's declared commits remain gates. |
-| High-risk safeguards retained | met pending review | Positive safeguard assertions pass; Engineering review remains. |
+| High-risk safeguards retained | met | Positive safeguards and Engineering re-review pass. |
 | Public/derived docs synchronized | met | English/Chinese README and design guide describe all paths; images captioned guarded. |
 | No new stage/Skill/artifact/risk/runtime | met | Diff/tree scope adds only the required case execution artifact. |
 | Structural and semantic validation | met | Skill/YAML/link/symlink/word/diff checks pass. |
-| Exact-baseline Engineering/Spec review | pending | Required before closure. |
+| Exact-baseline Engineering/Spec review | met | Initial complete findings were fixed coherently; both affected axes pass. |
 
 ## Commands Run
 
@@ -102,8 +103,9 @@ guarded-assurance predicates while preserving high-risk protections.
 | YAML/frontmatter and local Markdown link scan through `uv` | pass | 13 modified frontmatters, all Skill metadata, and 47 local links pass. |
 | Semantic positive assertions and scoped stale-rule search | pass | 12 required contracts present; no active numeric shortcut wording remains. |
 | Shared symlink and `find -L` check | pass | All shared resource links resolve; no broken symlink. |
-| Skill loading-cost check | pass | Default doorway 1,685 words ≤ 1,700; all active Skill Markdown 9,238 ≤ 11,100. |
+| Skill loading-cost check | pass | Default doorway 1,685 words ≤ 1,700; all active Skill Markdown 9,243 ≤ 11,100. |
 | `git diff --check` and planned-path scope inspection | pass | No whitespace error or out-of-plan implementation path. |
+| Review-fix validation and accumulated exact-baseline re-review | pass | F1–F3 resolved; six Skill validators, YAML, 47 links, symlinks, stale rules, semantics, word ceilings, Git scope, and both axes pass. |
 
 ## Deviations
 
@@ -115,9 +117,10 @@ change.
 
 ## Review Risk
 
-`high` until both required review axes pass. The files are reversible Markdown,
-but the implementation deliberately relaxes authorization, artifact, review,
-commit, and completion gates.
+`low`. The guarded initial risk was resolved by exact-baseline review, complete
+finding disposition, passing re-review, structural/semantic validation, and
+clean Git isolation. Residual product risk is limited to future dogfood of the
+new proportional defaults.
 
 ## Post-Execution Review
 
@@ -175,9 +178,48 @@ commit, and completion gates.
 - Handling: one coherent contract/public-wording review-fix batch, validation,
   then affected Engineering/Spec re-review against the accumulated delta.
 
+### Re-review Engineering
+
+- Verdict: No material issue found.
+- Critical: None within reviewed scope.
+- Important: None within reviewed scope; F1 is resolved by limiting the
+  artifact trigger to deep-review findings.
+- Minor: None within reviewed scope; F2 consistently labels GIF/PNG usage
+  illustrations as guarded-case paths, and F3 includes weak verification in the
+  authority trigger summary.
+- Evidence Gaps: None material.
+- Scope: accumulated exact-baseline delta through
+  `198fd33ccfa848ce7f33620d1b1dbe52ac84633a`, clean worktree, active
+  authority/Skill/public contracts, safeguards, complexity, validators, links,
+  symlinks, word ceilings, and Git trailers.
+
+### Re-review Spec
+
+- Verdict: No material issue found.
+- Critical: None within reviewed scope.
+- Important: None; Decision 6 now uses the exact approved execution-artifact
+  triggers and all other Decisions/Acceptance Criteria remain satisfied.
+- Minor: None; F2 and F3 are resolved without expanding scope.
+- Evidence Gaps: None material.
+- Scope: full Goal, Non-goals, Decisions, amendment, acceptance, current
+  Constitution/ADR/authority, and approved target.
+
+### Final Aggregate
+
+- Result: `pass`
+- Reviewed baseline: `fd9de8de043b8831346604930fd13312efff8df8`
+- Reviewed commits: `b1007977051a479e72012916a890867ccd7cb3ad`,
+  `8b09499c810ad560a2aff850e7562bd0c8f17fae`,
+  `198fd33ccfa848ce7f33620d1b1dbe52ac84633a`
+- Reviewed working tree: clean before closure evidence; no staged, unstaged,
+  untracked, mixed, or unrelated changes.
+- Finding disposition: F1 Important and F2/F3 Minor resolved in one coherent
+  review-fix batch; both affected axes passed.
+
 ## Checkpoints / Commits
 
 | Step | Commit | Evidence |
 |---|---|---|
 | plan | `b1007977051a479e72012916a890867ccd7cb3ad` | Approved plan v1 and required trailers. |
 | task:proportional-workflow | `8b09499c810ad560a2aff850e7562bd0c8f17fae` | Complete implementation target, declared trailers, and pre-review checks. |
+| review-fix:F1-F3 | `198fd33ccfa848ce7f33620d1b1dbe52ac84633a` | Exact execution trigger and public/authority wording aligned; affected axes passed. |
