@@ -7,7 +7,7 @@ source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-13
+last_verified: 2026-08-04
 ---
 
 # Agent Policy
@@ -39,6 +39,19 @@ destructive operations, irreversible migration, and public compatibility are
 presumptively high. Reversible internal workflow or Skill text is normally
 medium, but remains high when it weakens authorization, changes a public
 contract or L1 critical fact, or enables irreversible action.
+
+Risk classification and workflow persistence are independent. Medium risk
+alone does not require a case or another confirmation. Create durable workflow
+only for continuity, durable human decisions, explicit case requests, or
+guarded execution; add guarded assurance for high/public/authority-sensitive,
+irreversible/destructive, or weakly verified work.
+
+Plan authorization is outcome-based. Agents may discover internal files, add
+tests, and choose ordinary implementation details inside the approved Goal,
+Guardrails/Non-goals, Acceptance, and Escalation Triggers. They must stop for a
+changed outcome/non-goal, risk escalation, authority/public-contract effect,
+dependency/config/CI/schema effect, external resource, irreversible action, or
+another protected boundary.
 
 ## Sources
 

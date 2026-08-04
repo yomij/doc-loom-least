@@ -7,7 +7,7 @@ source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-12
+last_verified: 2026-08-04
 ---
 
 # Git Commit Titles
@@ -40,7 +40,7 @@ action. Use a single English colon between `type` and `summary`.
 
 ## Case Commit Policy
 
-When an approved plan declares atomic commits, each commit represents one
+When an approved plan declares commits, each commit represents one
 coherent, verified, independently reviewable and revertible semantic completion
 point. It excludes unrelated changes and leaves relevant checks passing. Shared
 protocol defines completion points and authorization; stage Skills define
@@ -56,19 +56,19 @@ Doc-Loom-Step: requirements | plan | plan-amendment | task:<id> | refactor:<id> 
 Use `plan-amendment` only for a materially changed plan version that was
 reconfirmed after the original approved plan commit.
 
-Actual task, refactor, and review-fix hashes are recorded in `execution.md`.
-`closure.md` must not predict its own commit hash. Unqualified `Done` requires a
-successful closure commit and no unexplained case-related working-tree changes.
+Actual task, refactor, and review-fix hashes are recorded in `execution.md` when
+that artifact exists. `closure.md` must not predict its own commit hash.
 
-Fast-Path is the compact exception: it creates no separate plan or task commit.
-After its green delta and compact review pass, one `Doc-Loom-Step: closure`
-commit may contain the approved minimal plan, implementation/verification,
-`closure.md` with final status, and necessary dashboard sync. Its title describes the
-user-visible change, not closure bookkeeping.
+Local commits follow user/project intent and semantic value. Ordinary case
+bookkeeping does not require standalone plan or closure commits. A guarded plan
+may declare them when durable approval or auditability justifies the cost.
+Review findings may be fixed in coherent batches; finding count does not dictate
+commit count. Unqualified `Done` requires commit success only for commits the
+approved plan declared, plus no unexplained case-related working-tree changes.
 
-Before plan confirmation, the human-facing summary states the expected number
-and purpose of local commits and makes clear that push, PR, merge, release, and
-history rewriting are excluded unless separately authorized.
+Before guarded plan confirmation, the human-facing summary states expected
+local Git actions and makes clear that push, PR, merge, release, and history
+rewriting are excluded unless separately authorized.
 
 Plan approval does not authorize publication or history rewriting. When the
 user separately authorizes a rewrite, affected hashes and review evidence are

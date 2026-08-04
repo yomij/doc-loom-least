@@ -28,6 +28,10 @@ These diagrams summarize the repo-native architecture and the normal usage path.
 
 [PNG preview](docs/share/diagrams/doc-loom-usage-loop-en.png)
 
+This static illustration shows the guarded-case path. Reversible one-turn
+low/medium work now runs directly, while compact persistent cases omit
+untriggered execution, deep-review, and commit ceremony.
+
 ## Why Doc Loom Least?
 
 AI agents are capable, but they forget. In development work they drift from context, skip confirmation on risky changes, and leave no record of what they did or why.
@@ -58,12 +62,15 @@ These boundaries are what keep the project minimal:
 - No CLI backend or daemon
 - No heavy orchestrator skill
 - No automatic ad-hoc review triggers or treating `review_risk` as authorization
-- No separate review phase or mandatory `review.md`; eligible approved cases
-  run the read-only Post-execution gate inside `tdd-execute`
+- No separate review phase or mandatory `review.md`; guarded, materially
+  deviated, weakly verified, public/authority-sensitive, or explicitly
+  requested work runs the read-only Post-execution gate inside `tdd-execute`
 
-Simple doc edits and low-risk local changes take the minimum path. Small
-persistent work may use compact Fast-Path; broader or riskier development uses
-the full plan, execution, review, and closure evidence flow.
+Workflow cost follows two independent questions: whether continuity or a
+durable decision needs a case, and whether consequences or weak verification
+need guarded assurance. Reversible one-turn low/medium work is direct; compact
+persistent work uses a concise plan and closure; guarded work adds explicit
+current-plan confirmation, exact-baseline review, and durable evidence.
 
 ## Skills
 
@@ -77,9 +84,9 @@ entry points and implementation owners.
 | `docloom-workflow` | Recommended human-facing entry. Handles persistent feature/bug/refactor requests, status, continuation, and discovery, then routes internally. |
 | `setup-doc-governance` | Governance init and maintenance. Scans docs, extracts facts, produces governance plans. |
 | `context-authority` | Conditional fact authority gate. Reads minimal context, resolves conflicts, issues a routing verdict. |
-| `plan-confirm` | Planning gate. Generates risk, TDD, review, and commit strategies, then surfaces or records the applicable confirmation boundary. |
-| `tdd-execute` | Execution gate. Runs Red-Green-Refactor or a recorded exception, creates approved semantic commits, and owns the review/fix loop. |
-| `doc-sync-close` | Closure gate. Syncs docs, records final evidence, and creates the full-flow closure or compact Fast-Path completion commit. |
+| `plan-confirm` | Planning gate. Defines the outcome envelope, risk, TDD, and conditional review/commit strategy, then surfaces or records the applicable confirmation boundary. |
+| `tdd-execute` | Execution gate for cases. Runs Red-Green-Refactor or a recorded exception, keeps evidence proportional, and owns triggered review/fix loops. |
+| `doc-sync-close` | Closure gate. Syncs docs, records final evidence, and creates a completion commit only when declared. |
 | `review` | Read-only ad-hoc review plus the workflow-owned Engineering/Spec Post-execution gate. |
 | `grill` | Manual interactive stress-test of requirements, designs, or claims. |
 
@@ -108,9 +115,11 @@ entry points and implementation owners.
 
 ## Typical Usage
 
-### Quick doc edits (no case needed)
+### One-shot reversible work (no case needed)
 
-For one-off, low-risk documentation changes, read the [Constitution](docs/authority/constitution.md) and then edit the target doc directly. No case, no plan, no execution record.
+For reversible one-turn low/medium work, read the relevant project authority
+and instructions, implement and verify directly, then report the result. No
+case, plan, or execution artifact is required.
 
 ### Document governance
 
@@ -128,25 +137,30 @@ setup-doc-governance
 
 Default scope is `docs-only`. Only escalate to `full-repo` when authority claims need code or test evidence.
 
-### Persistent development case
+### Proportional development paths
 
-For tasks that need planning, execution, acceptance, and a closure record:
+First decide whether the work needs a durable case, then independently decide
+whether it needs guarded assurance:
 
 ```
-Ask Doc Loom to handle the persistent feature, bug, or refactor
-  → docloom-workflow routes internally
-  → context-authority (when context gate is needed)
-  → plan-confirm
-  → you see scope + expected local Git actions, then approve the plan
-  → atomic plan commit for the full flow
-  → tdd-execute → green task commits
-  → Engineering + Spec review → fix commit + re-review when needed
-  → doc-sync-close → atomic closure commit
+Direct: reversible one-turn low/medium work
+  → normal repository execution + verification + final report; no case
+
+Compact persistent: continuity, durable decision, or explicit case
+  → concise plan → tdd-execute → closure
+  → execution.md, deep review, and commits only when triggered
+
+Guarded: high/public/authority-sensitive/irreversible/weakly verified
+  → context-authority → plan-confirm → explicit current-plan approval
+  → tdd-execute → Engineering + Spec review
+  → coherent finding-fix batches + re-review when needed
+  → doc-sync-close with declared durable evidence/commits
 ```
 
-For a verified small low-risk Fast-Path case, the minimal plan, green change,
-compact review, closure, and closed state are committed once instead of creating
-separate plan/task/closure commits.
+Medium risk alone does not create a case or require another confirmation.
+Approval binds the Goal, Guardrails/Non-goals, Acceptance, and Escalation
+Triggers; internal file discovery, tests, and ordinary implementation choices
+adapt inside that envelope.
 
 `docloom-workflow` routes internally—it never replaces stage ownership, and
 normal users do not need to invoke those stages themselves.
@@ -164,10 +178,11 @@ Ad-hoc `review` and `grill` run only when you explicitly ask:
 - `review`: read-only assessment with findings and evidence gaps. No files written, no state changed.
 - `grill`: interactive challenge of claims, one question at a time. No artifacts, no workflow routing.
 
-Separately, an approved eligible persistent case automatically runs
-`review`'s read-only Post-execution mode before closure. It reports Engineering
-and Spec verdicts independently; material findings return to execution for an
-atomic fix commit and re-review.
+Separately, guarded, materially deviated, weakly verified, public/authority-
+sensitive, or explicitly requested work runs `review`'s read-only
+Post-execution mode before closure. It returns the complete current Engineering
+and Spec finding set; execution fixes coherent batches and re-reviews affected
+axes.
 
 ## Installation
 

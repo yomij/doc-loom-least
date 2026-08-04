@@ -89,11 +89,12 @@ Assumption: <inferred fact> (<confidence>); update it if wrong.
 
 ## Safety
 
-- A recommendation is not execution authorization and does not approve a plan.
-  After selection, plan through case identity and `plan-confirm`; execute only
-  through `tdd-execute` after the plan is approved.
+- A recommendation is not execution authorization. After selection, apply the
+  shared two-question model: direct reversible one-turn work needs no case;
+  persistent or guarded work resolves case identity and uses `plan-confirm`
+  before `tdd-execute`.
 - Shared-protocol routing and confirmation rules still apply, including no
   auto-trigger of ad-hoc `review` or `grill`, no silent authority promotion,
   and `context-authority` for high-risk, authority-touching, or conflict
-  candidates. A later approved eligible plan may authorize `tdd-execute` to run
-  the workflow-owned Post-execution review gate.
+  candidates. A later authorized execution may run workflow-owned
+  Post-execution review only when a guarded-review trigger exists.

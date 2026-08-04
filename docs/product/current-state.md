@@ -13,17 +13,21 @@ Skills and Markdown artifacts.
 ## Target User
 
 A solo builder or small-team maintainer using AI agents for development work
-who needs durable context, explicit confirmations, and clean closure records
-without adopting a CLI backend or pipeline product.
+who needs durable context and guarded confirmation only when consequences call
+for them, without adopting a CLI backend or pipeline product.
 
 ## Current Demo State
 
 - Development workflow skills exist for routing, context authority, planning,
   TDD execution, and closure.
-- `review` supports explicit ad-hoc assessment and the approved workflow-owned
-  Post-execution Engineering/Spec gate; `grill` remains conversation-only.
-- Eligible plans authorize semantic task/fix commits and require a closure
-  commit before unqualified `Done`.
+- Direct reversible one-turn low/medium work runs without a case; compact
+  persistent cases retain concise plan/closure evidence; guarded work adds
+  explicit confirmation and exact-baseline review.
+- `review` supports explicit ad-hoc assessment and selectively triggered
+  workflow-owned Post-execution Engineering/Spec review; `grill` remains
+  conversation-only.
+- Execution artifacts and semantic commits are conditional. Unqualified `Done`
+  waits for commit success only when the approved plan declared that commit.
 - `docs/cases/README.md` provides a derived dashboard for current and recent
   cases.
 - `docloom-workflow` can perform read-only next-slice discovery from this file,
@@ -34,11 +38,12 @@ without adopting a CLI backend or pipeline product.
 
 ## Current Bottleneck
 
-Next-slice discovery has now been dogfooded on a real small feature. The
-scoring rubric found a useful next target, but the first default output was too
-wide for a quick human decision. The next bottleneck is validating the compact
-candidate output on the next real discovery pass before strengthening the
-rubric.
+Real-project evidence showed workflow ceremony dominating ordinary delivery:
+51 sampled cases contain 10,614 lines of case Markdown, 39/47 classified plans
+are medium risk, and none used the former numeric shortcut. The proportional
+model now needs dogfooding to confirm that direct/compact work reduces plan
+revisions, case-document churn, and bookkeeping-only commits while guarded
+work keeps its assurance.
 
 ## Feedback / Signals
 
@@ -51,15 +56,19 @@ rubric.
   the default decision view.
 - The project constitution requires the smallest useful workflow contract and
   rejects heavy orchestration.
+- Real case history showed that medium risk commonly paid the full persistent
+  workflow cost and that numeric shortcut eligibility did not translate into
+  actual usage.
 
 ## Constraints
 
 - No CLI backend, daemon, scheduler, MCP server, GitHub Actions loop runner, or
   centralized orchestrator.
-- Keep ad-hoc `review` and `grill` manual-only; keep mandatory Post-execution
+- Keep ad-hoc `review` and `grill` manual-only; keep triggered Post-execution
   review inside `tdd-execute`, without a new phase or artifact.
 - Keep `docloom-workflow` a thin router and discovery entry, not an executor.
-- Preserve plan confirmation and TDD execution gates.
+- Preserve explicit current-plan confirmation for guarded work and TDD or its
+  recorded verification exception for case execution.
 
 ## Do Not Build Yet
 

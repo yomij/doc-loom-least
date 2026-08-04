@@ -1,6 +1,6 @@
 ---
 name: context-authority
-description: Conditional pre-plan context and authority check for resume, case ambiguity, conflicts, public/high-risk work, workflow/agent policy, or missing planning context. Skip explanations and routine low-risk work.
+description: Conditional pre-plan context and authority check for resume, case ambiguity, conflicts, guarded/public/authority-sensitive work, workflow/agent policy, weak verification, or missing planning context. Skip explanations and routine direct work.
 ---
 
 # context-authority
@@ -24,10 +24,10 @@ Without Git, continue context work and record `git_available: false`.
 ## Use Boundary
 
 Run before planning when resume/identity is ambiguous, authority or evidence may
-conflict, the task touches public/high-risk or ADR boundaries, workflow/agent
-policy is changing, or planning lacks safe context. Skip clear one-step work,
-mechanical docs, explanations, and work already supported by an inline context
-summary or valid low-risk skip.
+conflict, the task is guarded or touches public/ADR boundaries, workflow/agent
+policy is changing, verification is weak, or planning lacks safe context. Skip
+direct one-turn work, mechanical docs, explanations, and work already supported
+by an inline context summary or valid skip. Medium risk alone is not a trigger.
 
 Governance initialization belongs to `setup-doc-governance`. Ad-hoc review
 still requires explicit user intent.

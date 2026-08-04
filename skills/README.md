@@ -47,7 +47,7 @@ Current verified word-cost ceilings:
 |---|---:|
 | Default doorway | 1,700 |
 | Context through plan | 3,700 |
-| Typical full persistent flow | 7,200 |
+| Guarded persistent flow | 7,200 |
 | All active `skills/**` Markdown | 11,100 |
 
 Skillshare discovers canonical skills recursively from this tree. `.skillignore` excludes `docs/archive/**`, and archived reference skills are no longer kept under `docs/archive/raw/reference/`.

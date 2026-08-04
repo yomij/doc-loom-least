@@ -1,0 +1,126 @@
+---
+case_id: 20260804-proportional-workflow-simplification
+status: executing
+updated_at: 2026-08-04T15:55:53+08:00
+---
+
+# Execution Report
+
+## Human Summary
+
+- Outcome so far: the proportional workflow implementation and pre-commit
+  validation are complete; the declared implementation commit and guarded
+  Engineering/Spec review remain.
+- What changed: active routing now separates persistence from assurance;
+  approval binds an outcome envelope; execution evidence, deep review, and
+  case commits are conditional while guarded protections remain mandatory.
+- User action needed: none unless an escalation trigger or material review
+  finding appears.
+- Local Git effect: approved plan commit
+  `b1007977051a479e72012916a890867ccd7cb3ad` exists locally; implementation
+  and closure commits remain planned. Push, PR, merge, release, and history
+  rewriting remain excluded.
+
+## Plan Reference
+
+- plan_version: 1
+- base_commit: `fd9de8de043b8831346604930fd13312efff8df8`
+- adaptive_execution: no material deviation
+
+## Plan Followed
+
+Yes. The current user instruction explicitly authorized execution of approved
+plan v1. The branch, exact baseline, scope, and excluded actions match the plan.
+
+## Changes Made
+
+- Replaced numeric shortcut/medium-case escalation with direct, compact
+  persistent, and guarded execution behavior derived from two questions.
+- Aligned workflow, agent, Git, and repository/Skill authority with outcome-
+  envelope authorization and narrow reapproval triggers.
+- Updated router, context, plan, execute, close, review, templates, and shared
+  protocol so artifacts, review, and commits are condition-generated.
+- Updated English/Chinese entry docs, detailed workflow/design guide, Skill map,
+  product state, changelog, and case dashboard. Existing usage images are now
+  identified as guarded-case illustrations.
+- Preserved security/auth/permission/privacy/billing/deletion/public/schema/
+  migration/authority protections, publication/history exclusions, and TDD or
+  credible alternative verification.
+
+## TDD Applicability
+
+- TDD Required: No.
+- Exception: pure Markdown authority, Agent Skill, template, and derived/public
+  documentation changes; the repository has no runtime workflow interpreter or
+  behavior test suite.
+- Alternative verification: pre-change characterization, semantic positive and
+  stale-rule assertions, YAML/frontmatter parsing through `uv`, Skill
+  validation, Markdown link and symlink checks, word-cost checks, Git diff
+  checks, and exact-baseline Engineering/Spec review.
+
+## Characterization
+
+Pre-change searches confirm that active contracts currently:
+
+- create cases for medium-risk execution and distinguish a numeric Fast-Path;
+- bind approval to declared paths and treat material file/test discovery as a
+  possible amendment;
+- require execution evidence for ordinary behavior/TDD work;
+- require Post-execution Engineering/Spec review and standalone plan/closure
+  commits for eligible persistent cases;
+- gate unqualified `Done` on a closure or combined completion commit.
+
+The approved change replaces these coupled defaults with continuity and
+guarded-assurance predicates while preserving high-risk protections.
+
+## Acceptance Criteria Status
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Active numeric shortcut/size gate removed | met | Scoped stale-rule search is clean outside history/cases/archive. |
+| Medium alone does not create case/confirmation | met | Shared, router, context, and authority semantic assertions pass. |
+| Two questions produce direct/compact/guarded behavior | met | Shared, workflow authority, router, README, and design guide align. |
+| Approval binds outcome envelope | met | Plan/execute/review contracts keep files/tests adaptive and escalation narrow. |
+| Execution evidence is conditional | met | Shared artifact table, executor, and template use the approved triggers. |
+| Deep review is selective and guarded here | met | Authority, executor, review, and close contracts align; this case remains guarded. |
+| Complete finding set and coherent fix batches | met | Review/executor contracts no longer couple finding and commit counts. |
+| Bookkeeping commits are optional | met | Shared, Git, plan, executor, and close agree; this case's declared commits remain gates. |
+| High-risk safeguards retained | met pending review | Positive safeguard assertions pass; Engineering review remains. |
+| Public/derived docs synchronized | met | English/Chinese README and design guide describe all paths; images captioned guarded. |
+| No new stage/Skill/artifact/risk/runtime | met | Diff/tree scope adds only the required case execution artifact. |
+| Structural and semantic validation | met | Skill/YAML/link/symlink/word/diff checks pass. |
+| Exact-baseline Engineering/Spec review | pending | Required before closure. |
+
+## Commands Run
+
+| Command / Check | Result | Notes |
+|---|---|---|
+| Git branch/status/log preflight | pass | Approved-plan commit is `HEAD`; worktree was clean. |
+| Plan and case artifact inspection | pass | Plan v1 is approved against the declared exact baseline. |
+| Scoped pre-change `rg` characterization | pass | Located active Fast-Path, case, artifact, review, commit, and Done rules. |
+| Six modified Skill `quick_validate.py` runs through `uv` | pass | Frontmatter and Skill structure are valid. |
+| YAML/frontmatter and local Markdown link scan through `uv` | pass | 13 modified frontmatters, all Skill metadata, and 47 local links pass. |
+| Semantic positive assertions and scoped stale-rule search | pass | 12 required contracts present; no active numeric shortcut wording remains. |
+| Shared symlink and `find -L` check | pass | All shared resource links resolve; no broken symlink. |
+| Skill loading-cost check | pass | Default doorway 1,685 words ≤ 1,700; all active Skill Markdown 9,238 ≤ 11,100. |
+| `git diff --check` and planned-path scope inspection | pass | No whitespace error or out-of-plan implementation path. |
+
+## Deviations
+
+None material. A user-requested commit-history evidence section clarified the
+approved optimization rationale without changing the outcome envelope. The
+first custom link scan treated a documented inline link example as real; the
+checker was corrected to ignore fenced/inline code, then passed without a repo
+change.
+
+## Review Risk
+
+`high` until both required review axes pass. The files are reversible Markdown,
+but the implementation deliberately relaxes authorization, artifact, review,
+commit, and completion gates.
+
+## Checkpoints / Commits
+
+| Step | Commit | Evidence |
+|---|---|---|
+| plan | `b1007977051a479e72012916a890867ccd7cb3ad` | Approved plan v1 and required trailers. |

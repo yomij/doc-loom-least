@@ -7,15 +7,16 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-13
+last_verified: 2026-08-04
 ---
 
 # Development Workflow
 
 Current Skill implementation owns workflow procedure. The shared protocol is a
 compact kernel for cross-skill ownership, authority, status, artifacts,
-authorization, compatibility, and Fast-Path invariants. Stage procedure stays
-with its owner; detailed references and templates load only when triggered.
+authorization, compatibility, and proportional-assurance invariants. Stage
+procedure stays with its owner; detailed references and templates load only
+when triggered.
 
 ## Stage Contract
 
@@ -25,9 +26,10 @@ with its owner; detailed references and templates load only when triggered.
 - `context-authority` is a conditional pre-plan gate for resume, ambiguity,
   authority, conflict, public-contract, and high-risk work. It reads the active
   constitution first when discoverable.
-- `plan-confirm` writes and confirms the current versioned plan. It owns
-  approved requirements and plan commits; current approval allows same-turn
-  execution unless the user asks to hold, revise, or review first.
+- `plan-confirm` writes and confirms the current versioned plan. It owns the
+  outcome envelope and any declared approval/plan commit evidence; current
+  authorization allows same-turn execution unless the user asks to hold,
+  revise, or review first.
 - `tdd-execute` requires current execution authorization, defaults to TDD, and
   records confirmed exceptions with alternative verification.
 - `doc-sync-close` owns closure, safe L2/L3 sync, and confirmed narrow authority
@@ -35,47 +37,68 @@ with its owner; detailed references and templates load only when triggered.
 - `review` is read-only and supports explicit ad-hoc assessment plus the
   workflow-owned Post-execution gate. `grill` remains explicit and manual.
 - `docs/cases/README.md` and `docs/product/current-state.md` are derived inputs,
-  never routing or authority truth. Discovery recommendations still require
-  normal case identity, planning, and approval.
+  never routing or authority truth. After candidate selection, apply the same
+  two questions; direct work does not acquire case ceremony merely because it
+  came from discovery.
 
 Case status is owned by existing artifacts: plan approval in `plan.md`,
-execution readiness in `execution.md`, and final outcome in `closure.md`. There
-is no separate routing-state artifact; legacy state files are historical
-evidence only.
+execution readiness in `execution.md` when that artifact is triggered, and
+final outcome in `closure.md`. There is no separate routing-state artifact;
+legacy state files are historical evidence only.
 
-## Confirmation
+## Proportional Paths And Confirmation
 
-Use the smallest path: one-shot low-risk work needs no case; verified Fast-Path
-cases may use `approved_by: fast-path`; other persistent work requires current
-plan confirmation, and high-risk work requires an unambiguous current object.
+Answer two independent questions: whether continuity, a durable decision,
+explicit case request, or guarded execution requires a case; and whether
+consequence, irreversibility, exposure, authority impact, or weak verification
+requires guarded assurance.
 
-Current-plan approval authorizes only its declared case-scoped semantic commits.
-It excludes publication, history rewriting, material deviations, unrelated
-changes, and unlisted high-risk scope; see shared protocol for the full boundary.
-An approved plan is not a standing grant for a later session.
+- Direct reversible one-turn low/medium work uses normal execution,
+  verification, and final reporting without a case.
+- Compact persistent work uses a concise plan and closure; the current
+  unambiguous execute request may be recorded as approval without another
+  prompt.
+- Guarded work requires explicit confirmation of the written current plan,
+  exact-baseline deep review, and durable closure evidence.
 
-The confirmation surface must summarize the human outcome, material scope,
+Medium risk alone does not create a case or trigger confirmation.
+All paths retain applicable TDD or a credible recorded alternative verification.
+
+Approval binds Goal, Guardrails/Non-goals, Acceptance, Escalation Triggers, and
+specifically protected boundaries. Internal file discovery, added tests, and
+ordinary implementation choices may adapt within that outcome envelope.
+Publication, history rewriting, unrelated changes, risk escalation,
+authority/public-contract changes, dependency/config/CI/schema effects,
+external resources, irreversible actions, and other declared protected
+boundaries require separate authorization. An approved plan is not a standing
+grant for a later session.
+
+Before guarded confirmation, summarize the human outcome, material scope,
 expected local Git actions/commit count, likely interruptions, and excluded
-publication/history actions before asking for approval.
+publication/history actions.
 
 ## Required Quality Outcomes
 
-Eligible persistent cases must complete Post-execution review before successful
-closure. `tdd-execute` invokes `review`; Engineering and Spec remain separate,
-missing material evidence cannot pass, and material findings return to a
-verified atomic fix and re-review. This adds no case phase or `review.md`.
+Deep Post-execution Engineering/Spec review is required for guarded work,
+material deviations, weak verification, public/authority-sensitive changes,
+or an explicit plan/user request. `tdd-execute` invokes `review`; axes remain
+separate and missing material evidence cannot pass. Other work receives the
+executor's compact acceptance/test/diff/scope completion check. This adds no
+case phase or `review.md`.
 
-Full plans declaring atomic commits use semantic completion points: approved
-requirements when present, approved plan, independently valid green work,
-verified refactors, material review fixes, and closure. Fast-Path still performs
-a compact Engineering/Spec review but uses no separate plan/task/closure
-commits: the approved minimal plan, green delta, review evidence, closure, and
-final status form one combined completion commit. The policy is prospective and
-does not invalidate legacy cases.
+Review returns the complete current finding set. Execution fixes findings in
+the smallest coherent, independently valid/revertible batches and re-reviews
+affected axes; finding count does not dictate commit count.
 
-Unqualified `Done` requires met acceptance criteria, passing required review,
-a successful declared full-flow closure or Fast-Path completion commit, and no
-unexplained case-related worktree changes.
+Local commits follow user/project intent and semantic value. Ordinary case
+bookkeeping does not require standalone plan or closure commits. Guarded plans
+may declare them when auditability justifies the cost. The policy is prospective
+and does not invalidate legacy cases.
+
+Unqualified `Done` requires met acceptance criteria, passing review when
+triggered, complete closure evidence, and no unexplained case-related worktree
+changes. Commit success is an additional terminal gate only when the approved
+plan declared that commit.
 
 ## Sources
 

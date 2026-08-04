@@ -21,7 +21,8 @@ AI agent 很强，但在开发任务中有三类通病，几乎人人都踩过�
 
 > **不是 CLI，不是流水线产品，而是一组在对话里就能驱动的角色（skill）+ 轻量 Markdown 产物。**
 
-机制越小越好——只在关键节点（计划、执行、收尾）设 gate，再加一套共享协议让事实、任务状态和产物在跨会话间保持一致。
+机制越小越好——先判断是否需要持久 Case，再判断是否需要 guarded
+assurance；只在真实触发的计划、审查和收尾边界设 gate。
 
 ---
 
@@ -36,18 +37,18 @@ AI agent 很强，但在开发任务中有三类通病，几乎人人都踩过�
 | **Human-Semantic 设计** | 每份文档、prompt、输出都要可读、易懂、美观，意义优先于机械 |
 | **Human Experience Comes First** | Agent 承担可发现、可执行的工作，只在真实决策或高风险边界打断用户 |
 
-从这三条延伸出几条贯穿全局的态度，理解了它们就理解了所有具体规则为什么这么定：
+从这四条延伸出几条贯穿全局的态度，理解了它们就理解了所有具体规则为什么这么定：
 
 - **历史文档是证据，不是权威**。旧需求、旧设计、会议记录默认不能当当前事实用——它们是抽取事实的原材料。
 - **过期文档比缺失文档更危险**。一份看着像权威、实则已与代码脱节的文档，会把 agent 引向错误实现；没有文档时 agent 至少会去读代码或发问。所以治理的目标是**可信知识密度**，不是文档数量——过期的就该降级或归档。
-- **确认 gate 保护真实边界**。高风险、public contract、workflow/agent policy 等边界必须显式确认；低风险任务走最小路径，满足 Fast-Path 条件的持久 case 可由 agent 记录 `approved_by: fast-path`。
+- **确认 gate 保护真实边界**。guarded、高风险、public contract、workflow/agent policy 等边界必须显式确认；medium 风险本身不建 case，也不增加确认。
 - **TDD 是默认纪律，但允许记录化例外**。纯文档、配置、spike、hotfix 不会被流程卡死，但必须记录替代验证方式。
-- **不比它所治理的改动更大**。简单文档编辑走最小路径，只有持续开发才进入完整 case 流程。
+- **不比它所治理的改动更大**。Case 只为连续性、持久决策、显式请求或 guarded 执行存在；artifact、Review 和 commit 都由各自触发条件决定。
 - **生命周期扩展按真实边界发生**。未来的产品、调研、设计等领域，只有在出现清晰工作流和 skill 边界时才进入系统，不提前创建占位阶段。
 
 ```mermaid
 flowchart LR
-    P1["从最小路径进入"] --> C1["简单编辑走 fast-path<br/>不为仪式加流程"]
+    P1["从最小路径进入"] --> C1["Direct / Compact / Guarded<br/>按后果增加保证"]
     P2["不成为复杂流水线"] --> C2["thin router 不做 orchestrator<br/>无 CLI backend"]
     P3["Human-Semantic"] --> C3["Markdown 为人类主记录<br/>yaml 只是路由信号"]
     P1 & P3 --> C4["历史文档=证据<br/>authority=治理后权威"]
@@ -62,14 +63,15 @@ flowchart LR
 
 ### 3.1 文档即一切
 
-整个闭环的每个环节都落在 Markdown 上：
+持久 Case 闭环的每个环节都落在 Markdown 上；Direct 工作不为此创建
+Case artifact：
 
 | 环节 | 驱动它的文档 |
 |---|---|
-| 当前进度是什么 | `plan.md` / `execution.md` / `closure.md` 的状态与证据 |
+| 当前进度是什么 | 持久 case 的 `plan.md` / 条件化 `execution.md` / `closure.md` |
 | 事实该信什么 | L1 authority 文档 + 代码 + 测试 |
 | 这次要做什么 | `plan.md`（带版本、风险、TDD 策略） |
-| 做了什么、偏没偏离 | `execution.md`（TDD log、偏离、验收） |
+| 做了什么、偏没偏离 | 触发时用 `execution.md`；否则 closure 保留精简验收/测试/diff/scope 证据 |
 | 结果如何 | `closure.md`（最终状态、残留风险、后续） |
 | 下次怎么接 | `handoff.md`（仅在有恢复点时） |
 
@@ -86,9 +88,9 @@ agent 进入一个 workspace，不需要查询任何外部系统——读最小�
 
 > **Markdown artifact 同时承载人类可读证据和当前状态。**
 
-`plan.md`、`execution.md`、`closure.md` 各自只拥有本阶段的状态；agent 按固定优先级读取最新可靠 artifact，并用 git 证据确认 closure 是否真正完成。没有需要修复或同步的第二份状态缓存。
+`plan.md`、条件生成的 `execution.md`、`closure.md` 各自只拥有本阶段的状态；agent 按固定优先级读取最新可靠 artifact，并检查计划声明的完成证据。没有需要修复或同步的第二份状态缓存。
 
-文档驱动不等于"什么都写文档"。Artifact Policy 规定产物**按需生成**：`execution.md` 只在有代码变更/偏离/恢复需求时写，`handoff.md` 只在存在未来恢复点时写。文档驱动的是关键决策和证据，不是把每个动作都落盘——否则就违背了最小路径原则。
+文档驱动不等于"什么都写文档"。Artifact Policy 规定产物**按需生成**：`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding/证据或显式请求时写，`handoff.md` 只在存在未来恢复点时写。普通行为变化或一次正常 TDD 循环本身不强制落盘。
 
 ### 3.4 两个容易踩的坑
 
@@ -111,25 +113,27 @@ agent 进入一个 workspace，不需要查询任何外部系统——读最小�
 | `docloom-workflow` | **入口 + 轻量路由器**：解析状态、延迟创建 case、持有 Artifact Policy |
 | `setup-doc-governance` | 文档治理：扫描抽取事实，生成治理计划，一次确认后执行 |
 | `context-authority` | 按需上下文 gate：读最小上下文、判权威、输出路由 verdict |
-| `plan-confirm` | 计划 gate：生成版本/风险/TDD/Review/原子提交策略，等用户确认 |
-| `tdd-execute` | 执行 gate：红绿重构 + 证据记录 + 授权的原子提交 + Review/修复循环 |
-| `doc-sync-close` | 收尾 gate：同步文档、记录最终证据、创建 closure commit |
-| `review` | 只读审查：临时审查由用户触发；Post-execution 模式由已批准的执行流调用 |
+| `plan-confirm` | 计划 gate：定义 outcome envelope、风险/TDD 和条件化 Review/提交策略 |
+| `tdd-execute` | Case 执行 gate：红绿重构或例外验证 + 按需证据 + 触发后的 Review/修复循环 |
+| `doc-sync-close` | 收尾 gate：同步文档、记录最终证据、按计划声明创建 completion commit |
+| `review` | 只读审查：临时审查由用户触发；满足 guarded-review 条件时由执行流调用 Post-execution 模式 |
 | `grill` | 手动交互拷问（一次一问，纯对话） |
 
 关键设计抉择：**`docloom-workflow` 只路由，不替代任何阶段 skill。** 它读最小 git 状态、推导 case、判定该进哪个阶段，但绝不自己生成计划或执行代码。这样它才能保持"thin"，不会退化成一个无所不能的 orchestrator——那正是"不成为复杂流水线"原则要避免的。
 
-临时 `review` 和 `grill` 被排除在 workflow 路由之外，只在用户明确点名时触发。符合条件的持久 Case 则由 `tdd-execute` 在已批准计划下调用 `review` 的只读 Post-execution 模式；`review` 自身仍不写状态或产物，最终证据由 `execution.md` 和 `closure.md` 承载，因此无需增加新阶段或 `review.md`。
+临时 `review` 和 `grill` 被排除在 workflow 路由之外，只在用户明确点名时触发。guarded、实质偏离、弱验证、public/authority-sensitive 或显式要求的工作，由 `tdd-execute` 调用 `review` 的只读 Post-execution 模式；`review` 自身仍不写状态或产物，因此无需增加新阶段或 `review.md`。
 
 ```mermaid
 flowchart TD
     User([用户意图]) --> Entry{docloom-workflow<br/>thin router}
     Entry -->|治理/重建| GOV[setup-doc-governance]
     Entry -->|需要上下文 gate| CTX[context-authority]
-    Entry -->|计划| PLAN[plan-confirm]
-    PLAN -->|用户确认| TDD[tdd-execute]
-    TDD --> POST[review<br/>Post-execution]
-    POST -->|pass| CLOSE[doc-sync-close]
+    Entry -->|direct| DIRECT[正常执行/验证/报告<br/>不建 case]
+    Entry -->|compact / guarded| PLAN[plan-confirm]
+    PLAN --> TDD[tdd-execute]
+    TDD -->|guarded-review trigger| POST[review<br/>Post-execution]
+    TDD -->|无 trigger| CLOSE[doc-sync-close]
+    POST -->|pass| CLOSE
     POST -->|重要问题| TDD
     Entry -.临时只读审查.-> ADHOC[review<br/>ad-hoc]
     Entry -.交互拷问.-> GRILL[grill]
@@ -144,45 +148,42 @@ flowchart TD
 
 ## 5. 核心工作流
 
-### 5.1 主流程泳道
+### 5.1 两个判断，三种执行结果
 
-一个需要计划、执行、验收、收尾的持续开发任务，默认走这条路：
+流程先回答两个互不替代的问题：是否因连续性、持久决策、显式 case 或
+guarded execution 需要 case；是否因后果、不可逆性、暴露、authority 影响或
+弱验证需要 guarded assurance。
 
 ```mermaid
 flowchart LR
-    A[docloom-workflow<br/>解析状态/延迟建 case] --> B{需要上下文 gate?}
-    B -->|是| CTX[context-authority<br/>读最小上下文/判权威]
-    B -->|否| C
-    CTX --> C[plan-confirm<br/>生成计划 vN]
-    C --> GATE{{🛑 用户确认计划}}
-    GATE -->|未确认| C
-    GATE -->|确认| P[原子 plan commit]
-    P --> D[tdd-execute<br/>红绿重构/绿色任务提交]
-    D --> R[Engineering + Spec Review]
-    R -->|changes required| F[修复 + 原子 fix commit]
-    F --> R
-    R -->|pass| E[doc-sync-close<br/>同步文档/closure commit]
-
-    classDef gate fill:#ffd,stroke:#c90
-    class GATE gate
+    A[用户任务] --> C{需要持久 case?}
+    C -->|否| DIRECT[Direct<br/>正常执行/验证/报告]
+    C -->|是| G{需要 guarded assurance?}
+    G -->|否| COMPACT[Compact persistent<br/>精简 plan + closure]
+    G -->|是| GUARDED[Guarded<br/>显式确认 + 精确基线深审 + 持久证据]
+    COMPACT --> EXEC[执行<br/>artifact/review/commit 按触发生成]
+    GUARDED --> EXEC
 ```
 
-持久 case 的硬 gate 是：**没有用户确认的当前计划，不准进入 `tdd-execute`。** 任何普通文档或派生说明都不能放宽它。
+这三种是同一套现有 stage 的执行结果，不是新 stage 或 risk level。Medium
+风险本身不建 case，也不要求重复确认。compact persistent 计划可记录当前
+明确的“执行”请求；guarded 计划必须展示书面当前对象并获得显式确认。
 
 ### 5.2 计划确认绑定
 
-`plan-confirm` 不只是写个计划，它要绑定六个东西，让"确认对象"可追溯：
+`plan-confirm` 绑定的是 outcome envelope，而不是冻结实现清单：
 
-- `risk_level`：low / medium / high（high 涉及权限、安全、计费、public API、schema migration 等）
-- `plan_version`：计划内容实质变化就递增；执行中更新 checkbox 不算实质变化
-- `base_commit`：确认时的代码基线，事后出现无法解释的 diff 必须重新评估
-- `## Decisions`：用户在讨论中明确确认的执行约束，落进 plan.md
-- `## Post-Execution Review Strategy`：双轴范围、证据和修复/复审 gate
-- `## Atomic Commit Strategy`：语义完成点、显式 staging、标题/trailer 和禁止动作
+- Goal
+- Guardrails / Non-goals
+- Acceptance Criteria
+- Escalation Triggers
+- 明确保护的特殊边界
 
-`plan_version` 是内部追溯字段，不是用户批准话术要求。用户确认对象清楚时，`plan-confirm` 负责把当前版本写入 `Confirmation Log`；只有确认对象不清楚时才要求补充说明。
-
-执行阶段允许**轻量 adaptive execution**：低风险、同目标、同责任边界的小改动写进 `Plan Amendments`，不递增 version、不重新审批。但目标、验收标准、风险等级、TDD 策略、public contract 一旦变化，必须重新确认。
+`risk_level`、`plan_version` 和 `base_commit` 继续提供追溯。文件清单、补充测试和
+普通实现选择是计划证据，可在 envelope 内自适应，不触发升版。只有 outcome/
+non-goal/acceptance 变化、风险升级、authority/public contract 变化、依赖/
+lockfile/CI/schema/config effect、外部资源或不可逆动作、其他受保护边界变化时，
+才停止并重新确认。
 
 ### 5.3 TDD 执行与例外
 
@@ -190,9 +191,17 @@ flowchart LR
 
 例外 ≠ 跳过验证，必须记录替代验证方式（manual / snapshot / build / smoke / reviewer）。无行为变化的重构不强行造失败测试，改用 characterization 锁定现有行为 → 重构 → 验证无回归。
 
-符合条件的持久 Case 在执行和最终验证完成后，必须进行两次相互独立的只读检查：Engineering 关注正确性、错误路径、测试可信度、标准/契约、高风险项和不必要复杂度；Spec 对照 Goal、Non-goals、Decisions、Acceptance Criteria 与 amendments，检查遗漏、错误实现和 scope creep。任一轴有 Critical/Important finding 就回到执行，按根因完成最小修复、验证、原子 fix commit，再复审。缺少关键证据不能当作通过。
+guarded、实质偏离、弱验证、public/authority-sensitive 或显式要求的工作，
+必须进行两次相互独立的只读检查。Engineering 关注正确性、错误路径、测试
+可信度、标准/契约、高风险项和不必要复杂度；Spec 对照 outcome envelope、
+确认决策和权威检查遗漏、错误实现和 scope creep。一次 Review 返回当前完整
+finding set；执行按独立有效性和可回滚性组成最小 coherent batch，验证后再
+复审受影响轴。finding 数量不决定 commit 数量，缺少关键证据不能当作通过。
 
-计划批准同时授权计划中声明的 Case 范围内语义原子提交，不需要每次重复询问。原子指一个可独立验证、审查、回滚的完整意图，不等于每个 checkbox 一个 commit；Red 状态、失败尝试、空阶段和纯时间戳不提交。授权不包含无关文件、push、发布、amend/rebase/squash 或实质计划偏离。
+其他工作由执行者完成精简的 acceptance/test/diff/scope check。提交遵循用户/
+项目意图和语义价值；普通 case 不强制独立 plan/closure bookkeeping commit。
+只有计划明确声明的提交才是完成门禁。授权始终不包含无关文件、push、发布、
+amend/rebase/squash 或 escalation trigger。
 
 ### 5.4 收尾与状态
 
@@ -200,13 +209,16 @@ flowchart LR
 
 | 状态 | 含义 |
 |---|---|
-| `Done` | 验收标准满足，双轴 Review 通过，closure commit 成功 |
+| `Done` | 验收标准满足；触发的 Review 通过；closure 证据完整；声明的提交成功 |
 | `Done with Caveats` | 主目标完成，有明确残留风险 |
 | `Blocked` | 依赖/权限/信息不足，无法继续 |
 | `Cancelled` / `Superseded` | 取消 / 被另一方案替代 |
 | `Paused` / `Abandoned` | 暂停待恢复 / 长期未续 |
 
-验收未满足、双轴 Review 未通过或 closure commit 未成功，都不能报告无保留 `Done`。Authority 文档更新默认只生成 proposal，必须用户明确确认后才执行窄 patch；结构性、高风险或冲突型更新走治理计划。
+验收未满足、触发的双轴 Review 未通过、closure 证据不完整，或计划声明的提交
+未成功，都不能报告无保留 `Done`。没有声明 completion commit 时，完整
+closure artifact 本身即为终态证据。Authority 文档更新默认只生成 proposal，
+必须用户明确确认后才执行窄 patch；结构性、高风险或冲突型更新走治理计划。
 
 ### 5.5 case 状态机
 
@@ -216,9 +228,10 @@ case 的当前阶段由 Markdown artifact + git 状态直接推导。终止 clos
 stateDiagram-v2
     [*] --> Draft: plan.md status draft
     Draft --> Approved: 用户确认
-    Approved --> Executing: execution.md status executing
-    Executing --> ReadyToClose: Review pass
-    ReadyToClose --> Final: closure.md + closure commit
+    Approved --> Executing: 触发 execution.md 时
+    Approved --> Final: 无 execution trigger，直接 closure
+    Executing --> ReadyToClose: 触发的完成 gate 通过
+    ReadyToClose --> Final: closure.md + 计划声明的完成证据
     Executing --> Paused: closure.md status Paused
     Executing --> Blocked: closure.md status Blocked
     Final --> [*]
@@ -226,14 +239,18 @@ stateDiagram-v2
     Blocked --> Executing: 条件满足 + 新 execution Resume 证据
 ```
 
-### 5.6 快速通道（Fast-Path）
+### 5.6 为什么不用数字捷径
 
-不是所有任务都要走全套。当**全部**满足时，可跳过大部分阶段直接执行：
+文件数和行数不能稳定代表后果、连续性或验证强度；一个两行权限改动可能需要
+guarded assurance，一个跨多个内部文件的机械修改也可能是 direct。流程不再用
+数字阈值判断“够不够简单”，而是直接判断是否需要持久性与 guarded assurance。
 
-- 风险 `low`、改动小（≤3 文件、≤20 行）、无高风险主题、无跨会话/多 agent 接续需求
-
-此时 `plan-confirm` 跳过详细 TDD 拆解、`execution.md` 可选，summary 内联进 `closure.md`；实现可压成一个绿色提交，但仍执行精简 Engineering/Spec Review 和 closure commit。任何一条不满足 → 回到完整流程。这正体现了"最小路径"原则。
-`approved_by: fast-path` 表示 agent 在当前用户请求下验证并记录了 Fast-Path 条件，不代表后台自动执行任意低风险工作。
+真实 Git 历史也显示，问题不在“提交太多”本身，而在提交形状：27 个带标准
+trailer 的样本 Case 共 117 个提交，其中 plan/closure 占 65 个（55.6%），
+55 个提交只改 `docs/cases/*.md`；17 个 review-fix 则没有纯 Case 文档提交，
+约 94% 的 churn 在 Case 文档之外。因此优化目标是让 commit 表示可独立验证、
+审查和回滚的交付单元，而不是工作流状态跳转。55.6% 是历史样本的理论压缩
+上限，不是新的 KPI 或门槛；guarded evidence 仍然允许承担必要成本。
 
 ---
 
@@ -307,8 +324,8 @@ flowchart TD
 
 - **Fact Authority Order**：判断"当前事实是什么"的优先级（active authority > 生产代码 > 测试 > 已接受 ADR > 用户本轮新信息 > L2…L5）。代码与 authority 冲突必须停下来报告。
 - **Execution Instruction Order**：判断"本次任务怎么执行"的优先级，与上面分开，避免把用户临时指令误当长期事实。
-- **Artifact Policy**：产物按需生成而非每阶段铺满。`execution.md` 只在有代码变更/偏离/失败重试/恢复需求时写；`handoff.md` 只在存在未来恢复点时写。
-- **Standalone vs Case 双上下文**：想要计划/TDD 纪律但不留持久产物时，用 standalone 模式只输出对话证据；需要接续/多 agent/持久证据时才建 case。
+- **Artifact Policy**：产物按需生成而非每阶段铺满。`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding/证据或显式请求时写；`handoff.md` 只在存在未来恢复点时写。
+- **Direct vs Case 双上下文**：可逆单轮工作在正常仓库执行中保留验证和最终报告；只有连续性、持久决策、显式请求或 guarded 执行需要 Case。
 - **三种运行模式**：isolated（worktree+branch，大/并行/高风险）、branch（普通开发）、inline（小改动，不切分支）。branch/worktree 是推荐机制不是强制前置。
 - **Canonical Once, Adapt Everywhere**：多 AI 工具（Claude / Codex / Copilot / Cursor）的指令文件名和作用域各不相同，手写四套必然漂移。正确做法是只维护一份规范源，再编译到各工具的适配层——和 authority 体系同一套逻辑：单一真相源 + 多个派生视图。
 - **能机器校验的不要只写 prose**：API 用 OpenAPI、DB 用 migration、规范用 lint、流程用 workflow、AI 行为用 prompt/agent policy。能落到可执行资产的，就不要只留在散文里。
@@ -342,7 +359,7 @@ flowchart TD
 > **可追溯，但不繁琐。**
 > **文档优先，但不脱离代码。**
 > **TDD 默认，但允许记录化例外。**
-> **确认 gate 保护真实决策边界，Fast-Path 保护最小路径。**
+> **确认 gate 保护真实决策边界，比例化 assurance 保护最小路径。**
 > **历史文档作为证据，authority 文档作为治理后的权威。**
 
 它不追求覆盖所有场景，而是用最小的机制在关键节点设 gate：让 agent 该停时停、该记时记、该问时问。剩下的事，交给人和 agent 在对话里解决。

@@ -110,6 +110,51 @@ Excluded sources:
 - `rp-pi-1` business correctness: the sample is process evidence only.
 - Static usage-flow images as authority: they are derived illustrations.
 
+### Git Commit Evidence And Optimization Rationale
+
+The 27 `rp-pi-1` cases with standard Doc Loom Git trailers contain 117
+classified commits:
+
+| Commit class | Count | Share | Per sampled case |
+|---|---:|---:|---:|
+| Plan | 38 | 32.5% | 1.41 |
+| Closure | 27 | 23.1% | 1.00 |
+| Implementation | 34 | 29.1% | 1.26 |
+| Review fix | 17 | 14.5% | 0.63 |
+| Handoff | 1 | 0.9% | 0.04 |
+
+The history shows a commit-shape problem rather than a general need to squash:
+
+- plan and closure account for 65/117 commits (55.6%), exceeding
+  implementation plus review-fix commits; 55/117 commits (47.0%) change only
+  `docs/cases/*.md`;
+- 38 plan commits across 27 sampled cases show repeated plan/reapproval churn,
+  while one mandatory closure commit is paid for nearly every case regardless
+  of independent rollback value;
+- review-fix commits retain strong delivery value: none are case-doc-only and
+  about 94% of their churn is outside case documentation;
+- this repository's own dogfood history corroborates the pattern with 48
+  commits across nine tracked cases and a median of six commits per case.
+
+Optimization therefore targets history signal, not a numeric commit quota:
+
+- a commit represents a coherent, independently valid and revertible delivery
+  unit, not a workflow-stage transition;
+- direct work produces no case-document commits, compact cases require no
+  standalone plan/closure commits by default, and guarded cases retain declared
+  approval/closure commits when their audit value justifies them;
+- implementation and review-fix boundaries remain semantic; findings may be
+  batched coherently but are not squashed merely to reduce the count;
+- future evaluation should compare standalone plan/closure commits, case-doc-
+  only commit share, and median commits per case by path while preserving the
+  product-code share of review fixes.
+
+Eliminating or absorbing every sampled plan/closure commit would be a 55.6%
+theoretical upper bound, not a target: guarded evidence remains intentionally
+more expensive. The trailer sample is directional rather than a universal
+forecast, so the policy uses consequence and semantic value instead of a fixed
+commit-count threshold.
+
 ## Decisions
 
 1. Remove `Fast-Path` from active workflow terminology and delete its LOC/file
@@ -240,22 +285,22 @@ Case evidence:
 
 **Files:** shared protocol; workflow, agent, Git, and architecture authority.
 
-- [ ] Replace Fast-Path and medium-case rules with continuity and guarded-risk
+- [x] Replace Fast-Path and medium-case rules with continuity and guarded-risk
   predicates.
-- [ ] Define outcome-envelope authorization, conditional artifacts, selective
+- [x] Define outcome-envelope authorization, conditional artifacts, selective
   review, optional semantic commits, and conditional commit-gated closure.
-- [ ] Preserve every high-risk and publication/history safeguard.
+- [x] Preserve every high-risk and publication/history safeguard.
 
 ### Task 2: Align stage owners and compact templates
 
 **Files:** router/context/plan/execute/close/review Skills, loop protocol, and
 plan/execution/closure templates.
 
-- [ ] Route direct work outside durable case machinery and keep persistent
+- [x] Route direct work outside durable case machinery and keep persistent
   identity creation conditional.
-- [ ] Make plan details adaptive inside the approved envelope and narrow
+- [x] Make plan details adaptive inside the approved envelope and narrow
   amendment triggers.
-- [ ] Make execution/report/review/closure behavior proportional and remove
+- [x] Make execution/report/review/closure behavior proportional and remove
   duplicate default sections.
 
 ### Task 3: Synchronize current human-facing documentation
@@ -263,17 +308,17 @@ plan/execution/closure templates.
 **Files:** README/README_CN, current state, workflow/design guide, Skill map,
 changelog, and case dashboard.
 
-- [ ] Explain the two questions and three outcomes in human language.
-- [ ] Reframe existing static usage images as guarded-case illustrations rather
+- [x] Explain the two questions and three outcomes in human language.
+- [x] Reframe existing static usage images as guarded-case illustrations rather
   than the universal normal path.
-- [ ] Remove active prose that promises mandatory full-flow commits/review for
+- [x] Remove active prose that promises mandatory full-flow commits/review for
   ordinary work.
 
 ### Task 4: Validate, review, fix, and close
 
 **Files:** complete approved target plus case execution/closure evidence.
 
-- [ ] Run semantic, frontmatter, Skill, link, symlink, word-cost, diff, and Git
+- [x] Run semantic, frontmatter, Skill, link, symlink, word-cost, diff, and Git
   scope verification.
 - [ ] Invoke mandatory Post-execution Engineering/Spec review for this guarded
   authority-changing case.
@@ -304,6 +349,14 @@ After approval:
 
 All use `Doc-Loom-Case: 20260804-proportional-workflow-simplification` and
 explicit staging. No publication or history rewriting is authorized.
+
+## Amendments
+
+- 2026-08-04: at the user's request, added the observed Git commit distribution,
+  diagnosis, optimization rationale, and future evaluation signals. This
+  clarifies Decisions 8–10 without changing the approved outcome envelope,
+  risk, file scope, acceptance, or Git authorization; plan v1 approval remains
+  current.
 
 ## Confirmation Log
 

@@ -8,7 +8,9 @@ precedence and refresh this file.
 
 ## Active Cases
 
-None.
+| Case | Status | Evidence | Next Action |
+|---|---|---|---|
+| `20260804-proportional-workflow-simplification` | executing | `20260804-proportional-workflow-simplification/execution.md` | Validate the proportional contracts, complete exact-baseline review, then close. |
 
 ## Waiting On Human
 

@@ -28,6 +28,9 @@ Doc Loom Least 帮你和 AI 助手在工作流里始终对齐三件事：
 
 [PNG 预览](docs/share/diagrams/doc-loom-usage-loop-cn.png)
 
+这张静态图展示的是 guarded case 路径。可逆、单轮的 low/medium 工作直接
+执行；compact persistent case 不承担未触发的执行记录、深度审查和提交仪式。
+
 ## 为什么需要 Doc Loom Least？
 
 AI 助手能力很强，但容易忘事。做开发时，它们会偏离上下文，跳过风险变更的确认，也不留记录说明做了什么、为什么这么做。
@@ -58,10 +61,14 @@ Doc Loom Least 现阶段用尽可能小的机制来解决这些问题：一组�
 - 不依赖 CLI 后端或守护进程
 - 不把入口 Skill 做成重型编排器
 - 不自动触发临时 Review，也不把 `review_risk` 当作 Review 授权
-- 不新增 Review 阶段或强制 `review.md`；符合条件且已批准的 Case 由
-  `tdd-execute` 在内部执行只读 Post-execution Review
+- 不新增 Review 阶段或强制 `review.md`；guarded、实质偏离、弱验证、
+  public/authority-sensitive 或显式要求的工作，由 `tdd-execute` 在内部
+  执行只读 Post-execution Review
 
-简单文档修改和低风险局部变更走最小路径即可。只有进入持久化 Case 工作流时，才需要创建计划、执行记录和收尾文档。
+流程成本由两个独立问题决定：是否因连续性或持久决策需要 Case，以及是否因
+后果或弱验证需要 guarded assurance。可逆、单轮的 low/medium 工作直接
+执行；compact persistent 工作只保留精简计划和收尾；guarded 工作才增加
+当前计划显式确认、精确基线审查和持久证据。
 
 ## Skill 列表
 
@@ -70,9 +77,9 @@ Doc Loom Least 现阶段用尽可能小的机制来解决这些问题：一组�
 | `docloom-workflow` | 入口与轻量路由。解析任务状态，报告 Case 状态，发现下一切片候选，并路由到对应阶段 Skill |
 | `setup-doc-governance` | 文档治理的初始化与维护。扫描文档、抽取事实、生成治理计划 |
 | `context-authority` | 按需的事实权威把关。读取最小必要上下文，解决冲突，输出路由裁决 |
-| `plan-confirm` | 计划把关。生成风险、TDD、Review 和原子提交策略，等你确认 |
-| `tdd-execute` | 执行把关。执行 Red-Green-Refactor 或已记录的例外，创建已授权的语义原子提交，并负责 Review/修复循环 |
-| `doc-sync-close` | 收尾把关。同步文档、记录最终证据，并在需要时创建原子 closure commit |
+| `plan-confirm` | 计划把关。定义 outcome envelope、风险、TDD 和条件化 Review/提交策略，在适用的边界记录或请求确认 |
+| `tdd-execute` | Case 执行把关。执行 Red-Green-Refactor 或已记录的例外，按需留证，并负责触发后的 Review/修复循环 |
+| `doc-sync-close` | 收尾把关。同步文档、记录最终证据，仅在计划声明时创建 completion commit |
 | `review` | 只读临时审查，以及工作流内部的 Engineering/Spec Post-execution gate |
 | `grill` | 手动交互式压力测试。逐问挑战需求、设计或文档主张 |
 
@@ -101,9 +108,9 @@ Doc Loom Least 现阶段用尽可能小的机制来解决这些问题：一组�
 
 ## 典型使用路径
 
-### 一次性文档修改（无需创建 Case）
+### 一次性可逆工作（无需创建 Case）
 
-低风险的一次性文档变更：先读[宪法文档](docs/authority/constitution.md)，再直接改目标文档就行。不用建 Case，不用写计划，也不用留执行记录。
+可逆、单轮的 low/medium 工作：读取相关项目权威和指令后直接实现、验证并报告即可。不用建 Case，不用写计划，也不用留执行记录。
 
 ### 文档治理
 
@@ -121,20 +128,28 @@ setup-doc-governance
 
 默认范围是 `docs-only`。只有当权威声明需要代码或测试证据时，才升级到 `full-repo`。
 
-### 持久化开发 Case
+### 按比例选择开发路径
 
-需要计划、执行、验收和收尾记录的开发任务：
+先判断是否需要持久 Case，再独立判断是否需要 guarded assurance：
 
 ```
-docloom-workflow
-  → context-authority（需要上下文把关时）
-  → plan-confirm
-  → 你确认计划
-  → 原子 plan commit
-  → tdd-execute → 绿色任务提交
-  → Engineering + Spec Review → 必要时修复提交并复审
-  → doc-sync-close → 原子 closure commit
+Direct：可逆、单轮的 low/medium 工作
+  → 正常执行 + 验证 + 最终报告；不建 Case
+
+Compact persistent：需要连续性、持久决策或显式 Case
+  → 精简 plan → tdd-execute → closure
+  → execution.md、深度 Review 和提交按触发条件生成
+
+Guarded：high/public/authority-sensitive/不可逆/弱验证
+  → context-authority → plan-confirm → 显式确认当前计划
+  → tdd-execute → Engineering + Spec Review
+  → 按 coherent batch 修复 findings 并复审
+  → doc-sync-close，保留计划声明的持久证据/提交
 ```
+
+Medium 风险本身不建 Case，也不要求再次确认。批准绑定 Goal、
+Guardrails/Non-goals、Acceptance 和 Escalation Triggers；内部文件发现、
+补测试和普通实现选择可在这个 envelope 内自适应。
 
 `docloom-workflow` 只做路由，不替代任何阶段 Skill。
 
@@ -142,7 +157,7 @@ docloom-workflow
 
 想知道当前进展时，可以让 `docloom-workflow` 读取派生 Case dashboard 和相关 Case 产物，然后报告当前阶段、已有证据、下一步该用哪个 Skill，以及需要你补什么输入。
 
-问“下一步做什么”时，它会结合 [`docs/product/current-state.md`](docs/product/current-state.md)、Case 后续项和有针对性的仓库证据，给出排序后的下一切片候选。注意，推荐不等于执行授权：你选定一个候选后，仍然要走完整的 Case 身份、计划、批准、执行和收尾流程。
+问“下一步做什么”时，它会结合 [`docs/product/current-state.md`](docs/product/current-state.md)、Case 后续项和有针对性的仓库证据，给出排序后的下一切片候选。注意，推荐不等于执行授权：选定候选后仍要应用上述两个判断；direct 工作不为候选强制创建 Case。
 
 ### 审查与压力测试
 
@@ -151,9 +166,9 @@ docloom-workflow
 - `review`：只读评估，输出 findings 和 evidence gaps，不写文件、不改状态。
 - `grill`：逐问挑战当前主张，不生成产物、不进入工作流路由。
 
-另外，符合条件且已批准的持久 Case 会在收尾前自动运行 `review` 的只读
-Post-execution 模式，分别给出 Engineering 和 Spec 结论；重要问题会返回
-执行阶段，产生原子修复提交后再复审。
+另外，guarded、实质偏离、弱验证、public/authority-sensitive 或显式要求的
+工作会在收尾前运行 `review` 的只读 Post-execution 模式，一次返回当前完整的
+Engineering 和 Spec finding set；执行阶段按 coherent batch 修复并复审。
 
 ## 安装
 

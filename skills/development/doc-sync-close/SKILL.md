@@ -1,6 +1,6 @@
 ---
 name: doc-sync-close
-description: Close an existing Doc Loom case after execution or when blocked, paused, cancelled, superseded, or abandoned. Own final acceptance/status, safe docs sync, authority proposals or approved narrow patches, and the declared closure/completion commit.
+description: Close an existing Doc Loom case after execution or when blocked, paused, cancelled, superseded, or abandoned. Own final acceptance/status, safe docs sync, authority proposals or approved narrow patches, and any declared completion commit.
 ---
 
 # doc-sync-close
@@ -18,10 +18,10 @@ Read when trigger condition is met:
 
 ## Inputs And Workflow
 
-Consume plan goal/non-goals/decisions/acceptance/docs impact, execution/checks/
-diff/review risk, required Engineering/Spec aggregate, actual task/fix hashes,
-user findings, current artifacts, and relevant authority/derived docs. Missing
-case identity returns to the doorway.
+Consume plan outcome envelope/docs impact, execution or compact completion
+checks, required Engineering/Spec aggregate when triggered, actual declared
+commit hashes, user findings, current artifacts, and relevant authority/derived
+docs. Missing case identity returns to the doorway.
 
 1. Choose a shared final-status candidate from evidence and user instruction.
 2. Map every criterion to `met`, `partially_met`, `not_met`, `not_verified`, or
@@ -32,8 +32,9 @@ case identity returns to the doorway.
    approved narrow patch.
 5. Write/validate `closure.md` with final status; refresh dashboard and only
    evidenced product state.
-6. Stage/inspect/check/commit the declared full-flow closure or Fast-Path
-   combined unit; verify title/trailers and clean case scope.
+6. If the plan declares a completion commit, stage/inspect/check/commit it and
+   verify title/trailers. Otherwise validate complete artifact evidence and
+   explain remaining case scope without adding bookkeeping-only Git work.
 7. Write handoff only for a real future resume point.
 
 ## Done Gate
@@ -41,14 +42,14 @@ case identity returns to the doorway.
 Unqualified `Done` requires:
 
 - every criterion met or explained out of scope;
-- required execution evidence, or full verification in closure when optional;
+- triggered execution evidence, or compact verification in closure when absent;
 - confirmed deviations and resolved material user findings;
 - resolved high review risk;
-- for eligible cases, exact baseline, separate Engineering/Spec verdicts,
-  aggregate `pass`, finding/re-review disposition, and residual caveats;
-- verified planned semantic task/refactor/fix commits, or the reviewed
-  Fast-Path green combined unit;
-- successful declared closure/completion commit containing final `closure.md`;
+- when deep review is triggered, exact baseline, separate Engineering/Spec
+  verdicts, aggregate `pass`, finding/re-review disposition, and residual
+  caveats;
+- every semantic commit explicitly declared by the plan;
+- successful closure/completion commit only when the plan declared one;
 - no unexplained case-related worktree change.
 
 `not_verified` needs verification, a user caveat, or non-Done status;
@@ -74,10 +75,10 @@ governance or a new case.
 ## Closure And Gates
 
 `closure.md` frontmatter contains `case_id`, final shared `status`, and
-`updated_at`; never predict its own commit hash. Uncommitted atomic closure is
-pending. Fast-Path may include only the already reviewed green delta; full-flow
-closure contains no implementation fix. Commit failure preserves evidence and
-blocks unqualified Done.
+`updated_at`; never predict its own commit hash. Its complete artifact evidence
+is terminal unless the approved plan declared a completion commit. A declared
+commit remains pending until successful; its failure preserves evidence and
+blocks unqualified Done. Closure contains no implementation fix.
 
 A skipped/failed dashboard or product-state refresh is recorded but does not
 roll back an otherwise valid closure.
@@ -88,4 +89,5 @@ roll back an otherwise valid closure.
 - Do not change code, tests, scripts, dependencies, lockfiles, CI, acceptance,
   or plan semantics to make closure pass.
 - A failed Done Gate condition blocks an unqualified Done report.
-- Report Done only after commit success and clean case scope.
+- Report Done after complete closure evidence, every triggered gate and declared
+  commit pass, and no case-scope change remains unexplained.

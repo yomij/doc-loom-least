@@ -3,6 +3,17 @@
 ## Unreleased
 
 ### Changed
+- Replaced the unused numeric Fast-Path and medium-risk full-flow default with
+  independent persistence and guarded-assurance decisions: direct reversible
+  work creates no case, compact cases keep conditional evidence, and guarded
+  work retains explicit confirmation and exact-baseline review.
+- Bound plan approval to an outcome envelope, allowing internal file/test and
+  ordinary implementation discovery without plan-version churn while retaining
+  explicit escalation triggers for risk, public/authority, dependency/config,
+  external-resource, and irreversible effects.
+- Made `execution.md`, deep Engineering/Spec review, and plan/closure commits
+  conditional; required review now returns the complete current finding set and
+  permits coherent fix batches.
 - Added workflow-owned Post-execution review with separate Engineering and Spec
   axes, material finding fix/re-review, and no new review phase or artifact.
 - Added approved case-scoped semantic atomic commits for plans, green tasks,

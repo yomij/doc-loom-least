@@ -1,12 +1,14 @@
 ---
 name: review
-description: Read-only evidence review for explicit code, docs, design, proposal, test, diff, or case-review requests, plus the approved workflow-owned Post-execution gate. Use complexity-only mode only for explicit simplification, deletion, YAGNI, or over-engineering requests.
+description: Read-only evidence review for explicit code, docs, design, proposal, test, diff, or case-review requests, plus workflow-owned Post-execution review when guarded-review triggers apply. Use complexity-only mode only for explicit simplification, deletion, YAGNI, or over-engineering requests.
 ---
 
 # review
 
-Enter only by explicit user review intent or `tdd-execute` invoking an approved
-Post-execution gate. Plan approval never authorizes unrelated ad-hoc review.
+Enter only by explicit user review intent or `tdd-execute` invoking an
+authorized Post-execution gate for guarded work, material deviation, weak
+verification, public/authority-sensitive change, or explicit plan/user request.
+Plan approval never authorizes unrelated ad-hoc review.
 
 Read when trigger condition is met:
 
@@ -35,7 +37,7 @@ Completed.
 
 Post-execution requires:
 
-1. project instructions, approved plan/amendments, and case evidence;
+1. project instructions, authorized plan/amendments, and case evidence;
 2. verified exact `base_commit` (never substitute merge-base/three-dot);
 3. complete target from `git diff <base>..HEAD`, `git log <base>..HEAD`,
    `git diff --cached`, `git diff`, and relevant paths from
@@ -66,10 +68,12 @@ for the target.
 
 ### Spec
 
-Compare the complete target with Goal, Non-goals, Decisions, Acceptance,
-approved file/responsibility boundaries/amendments, and directly relevant
-authority/contracts/requirements. Find missing/partial/wrong/unrequested
-behavior, scope creep, and unsupported acceptance; cite the governing source.
+Compare the complete target with Goal, Guardrails/Non-goals, Decisions,
+Acceptance, Escalation Triggers/protected boundaries, amendments, and directly
+relevant authority/contracts/requirements. Treat file lists and tests as
+adaptive evidence unless specifically protected. Find missing/partial/wrong/
+unrequested behavior, scope creep, and unsupported acceptance; cite the
+governing source.
 
 ## Aggregate
 
@@ -79,8 +83,9 @@ behavior, scope creep, and unsupported acceptance; cite the governing source.
 | Material judgment lacks evidence | `insufficient_evidence` |
 | Both axes have only Minor/none | `pass` |
 
-Do not let axes compensate. Return the aggregate only; execution owns fixes,
-commits, readiness, and routing.
+Do not let axes compensate. Return the complete current finding set in one
+review, not one finding per cycle. Return the aggregate only; execution owns
+fix batches, commits, readiness, and routing.
 
 ## Output
 
@@ -90,7 +95,7 @@ evidence gaps, scope, mode/maturity, reviewed/not-reviewed sources.
 Include reason and trust/freshness when source authority is not obvious.
 
 Post-execution records each axis verdict/findings/gaps/scope, then aggregate,
-exact baseline, commits, and working-tree scope.
+exact baseline, commits when any, and working-tree scope.
 
 Finding format:
 
@@ -107,7 +112,8 @@ links, or redundancy. Use `None within reviewed scope` when empty.
 
 ## Gates
 
-- Ad-hoc modes need explicit intent; Post-execution needs approved invocation.
+- Ad-hoc modes need explicit intent; Post-execution needs an authorized
+  triggered invocation.
 - Missing material evidence never passes.
 - Output no route, ready-to-close/closure verdict, authority proposal, or fix.
 - Use review subagents only when the user explicitly requests them; the main

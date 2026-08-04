@@ -1,9 +1,9 @@
 <!--
-Required: Human Approval Summary, Goal, Non-goals, Context, Workspace Baseline,
-Risk, TDD, Files, Acceptance, Tasks, Confirmation Log. Add Decisions,
-Assumptions, Fast-Path Conditions, Amendments, Tests, Post-Execution Review,
-Atomic Commits, Risks, or Docs Impact only when material. Record planned, not
-final, evidence. Remove unused headings.
+Required: Goal, Guardrails/Non-goals, Acceptance, Escalation Triggers, Context,
+Workspace Baseline, Risk/assurance, TDD, likely Files, Tasks, Confirmation Log.
+Guarded plans also require Human Approval Summary and Post-Execution Review.
+Add Decisions, Assumptions, Amendments, Tests, Commits, Risks, or Docs Impact
+only when material. Record planned, not final, evidence. Remove unused headings.
 -->
 ---
 case_id:
@@ -17,7 +17,7 @@ base_commit:
 
 # Implementation Plan
 
-## Human Approval Summary
+## Human Approval Summary (guarded only)
 
 - Outcome:
 - Material scope:
@@ -28,7 +28,7 @@ base_commit:
 
 ## Goal
 
-## Non-goals
+## Guardrails / Non-goals
 
 ## Context
 
@@ -43,6 +43,9 @@ base_commit:
 
 ## Risk Level
 
+- Guarded assurance required:
+- Reason:
+
 ## TDD Applicability
 
 - TDD Required:
@@ -54,6 +57,14 @@ base_commit:
 
 | Criterion | Planned verification |
 |---|---|
+
+## Escalation Triggers
+
+- Changed outcome, non-goal, or acceptance:
+- Risk / authority / public contract:
+- Dependency, lockfile, CI, schema, or config contract:
+- External resource or irreversible action:
+- Other protected boundary:
 
 ## Tasks
 

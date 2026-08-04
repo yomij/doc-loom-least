@@ -7,7 +7,7 @@ source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-02
+last_verified: 2026-08-04
 ---
 
 # Authority Index
@@ -44,8 +44,9 @@ Authority order:
 
 ## Workflow Policy Notes
 
-Low-risk work follows the smallest applicable path: one-shot local changes do
-not create case docs, Fast-Path persistent cases may use
-`approved_by: fast-path`, non-Fast-Path low/medium work requires user
-confirmation, and high-risk work requires explicit confirmation of the current
-object.
+Workflow assurance is proportional. Reversible one-turn low/medium work is
+direct and creates no case. Continuity, a durable decision, or an explicit case
+request uses a compact persistent case. High-risk, public/authority-sensitive,
+irreversible, destructive, or weakly verified work is guarded and requires
+explicit confirmation of the written current plan. Medium risk alone does not
+create a case or another confirmation.

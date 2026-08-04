@@ -11,26 +11,24 @@ procedure belongs to its owner.
 | Governance rebuild | `setup-doc-governance` |
 | Context and authority verdict | `context-authority` |
 | Plan, risk, baseline, confirmation | `plan-confirm` |
-| TDD, execution evidence, task/fix commits, review loop | `tdd-execute` |
-| Closure, closure commit, safe docs sync | `doc-sync-close` |
+| TDD, conditional execution evidence, execution checks, review loop | `tdd-execute` |
+| Closure, conditional completion commit, safe docs sync | `doc-sync-close` |
 | Read-only evidence review | `review` |
 | Interactive challenge | `grill` |
 
-Ad-hoc `review` and `grill` require explicit user intent. Only an approved
-eligible execution may invoke workflow-owned Post-execution review.
+Ad-hoc `review` and `grill` require explicit user intent. Only an authorized
+execution with a guarded-review trigger may invoke workflow-owned
+Post-execution review.
 
 ## Authority
 
-Follow current-turn instructions, then an approved governance plan when one
-exists, active Skill rules, active authority, implementation, tests, case
-evidence, derived docs, history, and scratch material. User instructions may
-change the current task but do not silently rewrite durable workflow, authority,
-contract, or agent facts.
-
-For factual claims prefer active authority, implementation, tests, accepted
-ADR/migration/release evidence, current-turn pending facts, case evidence,
-derived views, history, then scratch. Generated and historical material cannot
-override its source.
+Execution instructions follow current-turn instructions, an approved governance
+plan, active Skills/authority, implementation/tests, case evidence, derived
+docs, history, then scratch. Current requests do not silently rewrite durable
+workflow, authority, contract, or agent facts. Factual claims prefer active
+authority, implementation/tests, accepted decisions/releases, current-turn
+pending facts, case evidence, derived views, history, then scratch. Generated or
+historical material cannot override its source.
 
 Security, auth, permission, privacy, billing, deletion, public API/CLI, schema,
 config contract, migration, ADR boundaries, and workflow/agent policy require a
@@ -47,6 +45,31 @@ authority impact, and verification:
 A sensitive topic still needs context checking when final execution risk is
 medium.
 
+## Proportional Path
+
+Answer two independent questions before entering durable workflow machinery:
+
+1. Does the work need continuity, a durable human decision, an explicit case,
+   or guarded execution?
+2. Do consequence, irreversibility, exposure, authority impact, or weak
+   verification require guarded assurance?
+
+These are execution behaviors, not new stages or risk levels:
+
+- **Direct:** reversible, one-turn low/medium work uses normal repository
+  execution, verification, and final reporting without a case.
+- **Compact persistent:** continuity, durable decision, or explicit case need
+  creates a concise plan and closure. Execution evidence, deep review, and
+  commits are conditional.
+- **Guarded:** high-risk, public/authority-sensitive, irreversible, destructive,
+  or weakly verified work requires an explicit current-plan confirmation,
+  exact baseline, deep Engineering/Spec review, and durable closure evidence.
+
+Medium risk alone triggers neither case nor confirmation. Sensitive medium work
+still gets the context check needed to verify its classification.
+Every path preserves applicable project TDD; when TDD does not fit, use a
+credible alternative verification rather than skipping evidence.
+
 ## Case Identity And Status
 
 Resolve identity in order: user-specified case, current worktree/case branch,
@@ -61,19 +84,18 @@ Artifacts own current status:
 
 Derive status in this order:
 
-1. A committed `Done`, `Cancelled`, `Superseded`, or `Abandoned` closure is
-   terminal.
-2. A committed `Paused`, `Blocked`, or `Done with Caveats` closure remains
-   current unless a later authorized `execution.md` contains the required
-   Resume evidence.
-3. An uncommitted closure, or `ready_to_close` execution, is closure pending.
+1. A valid `Done`, `Cancelled`, `Superseded`, or `Abandoned` closure is terminal
+   when its declared completion evidence is present.
+2. A valid `Paused`, `Blocked`, or `Done with Caveats` closure remains current
+   unless a later authorized `execution.md` contains required Resume evidence.
+3. A closure missing a commit explicitly required by its approved plan, or a
+   `ready_to_close` execution, is closure pending.
 4. Otherwise use `executing`, approved plan, draft plan, then
    `needs_user_decision`.
 
-Do not persist route output as a second status record. Legacy
-`case_state.yaml` is diagnostic history only. Atomic completion requires the
-final closure artifact/status in its declared commit and no unexplained
-case-related work.
+Do not persist a second route/status record; legacy `case_state.yaml` is
+diagnostic only. Completion needs valid final artifact evidence and no
+unexplained case-related work, plus any commit declared by the approved plan.
 
 ## Artifacts
 
@@ -82,14 +104,13 @@ case-related work.
 | `context-authority-brief.md` | Conflict, explicit request, or continuity context too large for the plan | `context-authority` |
 | `plan.md` | A persistent case enters planning | `plan-confirm` |
 | `handoff.md` | A future resume point exists | Producing `tdd-execute` or `doc-sync-close` stage |
-| `execution.md` | TDD/behavior change, failure/retry/deviation, material review risk, or continuity evidence | `tdd-execute` |
+| `execution.md` | Resume evidence, material deviation, meaningful failure/retry history, deep-review findings/evidence, or explicit request | `tdd-execute` |
 | `closure.md` | A case ends, pauses, blocks, cancels, or is superseded | `doc-sync-close` |
 
 Create no other case artifact without user or approved-governance authority.
-Dashboards and product-state views are optional derived inputs, never routing
-or fact authority. Plan records expected evidence; execution records actual
-commands, deviations, hashes, and review; closure records final acceptance,
-residuals, commit range, and final verification.
+Dashboards/product-state views are derived inputs, never routing or fact
+authority. Plan records expectations; execution records triggered actual
+evidence; closure records final acceptance, residuals, commits, and checks.
 
 Final statuses are `Done`, `Done with Caveats`, `Blocked`, `Cancelled`,
 `Superseded`, `Paused`, and `Abandoned`. Unmet acceptance or a required
@@ -97,51 +118,55 @@ non-passing Post-execution review cannot be unqualified `Done`.
 
 ## Confirmation And Git Scope
 
-Approval of the current plan normally authorizes same-turn execution unless the
-user says hold, revise, or review first. An older plan needs current
-execute/continue intent. High-risk approval must identify the current object;
-record its version even when the user does not name it.
+Compact persistent work may record a current unambiguous execute request as
+approval. Guarded work requires explicit confirmation of the written current
+plan. Older plans need current execute/continue intent; guarded approval names
+the current object/version.
 
 A short `yes`/`ok`/`continue` confirms only the immediate unambiguous
 recommendation and never creates durable authority.
 
-Before confirmation, summarize outcome, material scope, expected local Git
-actions/commit count, interruptions, and excluded actions. Approval authorizes
-only declared case paths and semantic commits. It excludes unrelated work,
-another case, push, PR, merge, tag, release, amend, rebase, squash, history
-rewrite, material deviation, and unlisted dependency, lockfile, CI, schema,
-config-contract, or authority changes. A narrow authority patch must name the
-document and concrete change.
+Approval binds an outcome envelope: Goal, Guardrails/Non-goals, Acceptance,
+Escalation Triggers, and any specifically protected boundary. Exact file lists,
+added tests, and ordinary internal implementation choices are planning
+evidence; they may adapt inside that envelope without reapproval.
 
-When a plan declares atomic commits, commit independently valid completion
-points only: approved requirements/plan, green task, verified refactor,
-material review fix, and closure. Never commit failed attempts or bookkeeping
-alone. Use repository title rules, explicit staging, passing checks, and
-`Doc-Loom-Case` / `Doc-Loom-Step` trailers. Execution records actual task/fix
-hashes; closure never predicts its own hash.
+Before guarded confirmation, summarize outcome, material scope, local Git
+effects, interruptions, and exclusions. Authorization excludes unrelated work,
+another case, publication/history rewriting, and escalation triggers. Reconfirm
+for outcome/non-goal change, risk escalation, authority/public contract,
+dependency/lockfile/CI/schema/config-contract effect, external resource,
+irreversible action, or another protected boundary. A narrow authority patch
+names the document and concrete change.
 
-Fast-Path is the low-risk exception: at most three files/twenty lines, no
-high-risk conflict, and no continuity need. It uses a minimal approved plan,
-green verification, compact Engineering/Spec review, and one coherent
-`Doc-Loom-Step: closure` completion commit containing plan, change, evidence,
-closure, and necessary dashboard sync. Any failed condition uses the full flow.
+Declared commits contain independently valid/revertible completion points:
+approved requirements/plan, green task, verified refactor, material review-fix
+batch, or closure. Boundaries follow semantics, not artifact/finding count.
+Never commit failed attempts or bookkeeping alone. Use repository title rules,
+explicit staging, passing checks, and `Doc-Loom-Case` / `Doc-Loom-Step`
+trailers. Execution records actual hashes when present; otherwise closure does.
+Closure never predicts its own hash.
+
+Ordinary cases do not require standalone plan or closure bookkeeping commits.
+A guarded plan may declare them when durable approval/auditability justifies
+the cost; only a declared commit gates closure and unqualified `Done`.
 
 If Git is unavailable, continue safe document/assessment work but omit invented
-baselines, staging, and commits. An eligible atomic case without required Git
-evidence can become `Done with Caveats` only by explicit owner decision.
+baselines, staging, and commits. A guarded case missing required Git evidence
+can become `Done with Caveats` only by explicit owner decision.
 
 Run modes are `isolated` (new branch/worktree for large, parallel, or high-risk
 work), `branch` (normal development), and `inline` (small existing-branch work).
 
 ## Boundaries And Resume
 
-Create a case for persistent workflow, medium/high-risk execution, or required
-continuity. Do not create one for explanation/status-only, standalone
-review/grill, or clearly one-shot low-risk work.
+Do not create a case for explanation/status-only, standalone review/grill, or
+reversible one-turn low/medium work; the proportional path owns positive
+triggers.
 
 Across sessions, read `handoff.md` when present, then the minimum current
-artifact. Recheck context when authority, implementation, dependencies, risk,
-or conflict may have changed. Handoffs older than seven days are stale.
+artifact. Recheck changed authority, implementation, dependencies, risk, or
+conflict. Handoffs older than seven days are stale.
 Terminal closures do not resume in the same case by default. A resumable
 closure requires current authorization, satisfied resume conditions, and a
 later `execution.md` Resume section naming prior status/evidence and reason.

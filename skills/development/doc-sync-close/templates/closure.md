@@ -2,8 +2,8 @@
 Required: Summary, Acceptance, Tests, Risks, Follow-ups, Final Status. Add code/
 docs/knowledge/decision/finding/review/commit/authority/lifecycle/confirmation/
 history sections only when triggered. Reference execution evidence instead of
-copying it; when execution is absent include full commands. Never predict the
-closure commit hash.
+copying it; when execution is absent include compact acceptance/test/diff/scope
+evidence. Never predict a closure commit hash.
 -->
 ---
 case_id:
