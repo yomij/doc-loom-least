@@ -31,7 +31,7 @@ minimal approval writeback first; other failures return to planning.
 1. Recheck Goal, Guardrails/Non-goals, Acceptance, Escalation Triggers, commands,
    and working-tree scope.
 2. Write/update `execution.md` only for resume evidence, material deviation,
-   meaningful failure/retry history, deep-review evidence/findings, or explicit
+   meaningful failure/retry history, deep-review findings, or explicit
    request. Resumed cases add the later Resume evidence required by shared
    protocol.
 3. TDD: observe the smallest credible Red, implement Green, then only necessary

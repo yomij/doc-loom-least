@@ -1,6 +1,6 @@
 <!--
 Create this artifact only for resume evidence, material deviation, meaningful
-failure/retry history, deep-review evidence/findings, or explicit request. Once
+failure/retry history, deep-review findings, or explicit request. Once
 created, required sections are Human Summary, Plan Reference, Changes,
 TDD/exception, Acceptance, and Commands. Add TDD Log, Deviations, Issues,
 Review Risk, Post-Execution Review, Commits, History, or Resume only when

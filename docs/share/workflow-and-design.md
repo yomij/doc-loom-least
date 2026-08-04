@@ -90,7 +90,7 @@ agent 进入一个 workspace，不需要查询任何外部系统——读最小�
 
 `plan.md`、条件生成的 `execution.md`、`closure.md` 各自只拥有本阶段的状态；agent 按固定优先级读取最新可靠 artifact，并检查计划声明的完成证据。没有需要修复或同步的第二份状态缓存。
 
-文档驱动不等于"什么都写文档"。Artifact Policy 规定产物**按需生成**：`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding/证据或显式请求时写，`handoff.md` 只在存在未来恢复点时写。普通行为变化或一次正常 TDD 循环本身不强制落盘。
+文档驱动不等于"什么都写文档"。Artifact Policy 规定产物**按需生成**：`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding 或显式请求时写，`handoff.md` 只在存在未来恢复点时写。普通行为变化、一次正常 TDD 循环或无 finding 的深度 Review 本身不强制落盘。
 
 ### 3.4 两个容易踩的坑
 
@@ -324,7 +324,7 @@ flowchart TD
 
 - **Fact Authority Order**：判断"当前事实是什么"的优先级（active authority > 生产代码 > 测试 > 已接受 ADR > 用户本轮新信息 > L2…L5）。代码与 authority 冲突必须停下来报告。
 - **Execution Instruction Order**：判断"本次任务怎么执行"的优先级，与上面分开，避免把用户临时指令误当长期事实。
-- **Artifact Policy**：产物按需生成而非每阶段铺满。`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding/证据或显式请求时写；`handoff.md` 只在存在未来恢复点时写。
+- **Artifact Policy**：产物按需生成而非每阶段铺满。`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding 或显式请求时写；`handoff.md` 只在存在未来恢复点时写。
 - **Direct vs Case 双上下文**：可逆单轮工作在正常仓库执行中保留验证和最终报告；只有连续性、持久决策、显式请求或 guarded 执行需要 Case。
 - **三种运行模式**：isolated（worktree+branch，大/并行/高风险）、branch（普通开发）、inline（小改动，不切分支）。branch/worktree 是推荐机制不是强制前置。
 - **Canonical Once, Adapt Everywhere**：多 AI 工具（Claude / Codex / Copilot / Cursor）的指令文件名和作用域各不相同，手写四套必然漂移。正确做法是只维护一份规范源，再编译到各工具的适配层——和 authority 体系同一套逻辑：单一真相源 + 多个派生视图。

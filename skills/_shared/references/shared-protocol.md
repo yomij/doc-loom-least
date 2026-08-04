@@ -104,7 +104,7 @@ unexplained case-related work, plus any commit declared by the approved plan.
 | `context-authority-brief.md` | Conflict, explicit request, or continuity context too large for the plan | `context-authority` |
 | `plan.md` | A persistent case enters planning | `plan-confirm` |
 | `handoff.md` | A future resume point exists | Producing `tdd-execute` or `doc-sync-close` stage |
-| `execution.md` | Resume evidence, material deviation, meaningful failure/retry history, deep-review findings/evidence, or explicit request | `tdd-execute` |
+| `execution.md` | Resume evidence, material deviation, meaningful failure/retry history, deep-review findings, or explicit request | `tdd-execute` |
 | `closure.md` | A case ends, pauses, blocks, cancels, or is superseded | `doc-sync-close` |
 
 Create no other case artifact without user or approved-governance authority.

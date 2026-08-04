@@ -1,7 +1,7 @@
 ---
 case_id: 20260804-proportional-workflow-simplification
 status: executing
-updated_at: 2026-08-04T15:55:53+08:00
+updated_at: 2026-08-04T15:59:22+08:00
 ---
 
 # Execution Report
@@ -119,8 +119,65 @@ change.
 but the implementation deliberately relaxes authorization, artifact, review,
 commit, and completion gates.
 
+## Post-Execution Review
+
+- Exact baseline: `fd9de8de043b8831346604930fd13312efff8df8`
+- Reviewed commits: `b1007977051a479e72012916a890867ccd7cb3ad`,
+  `8b09499c810ad560a2aff850e7562bd0c8f17fae`
+- Working-tree scope at review start: clean; no staged, unstaged, untracked, or
+  unrelated changes.
+
+### Initial Engineering
+
+- Verdict: Material issues found.
+- Critical: None within reviewed scope.
+- Important:
+  - F1, conditional execution evidence: shared/executor/template/design wording
+    uses `deep-review evidence/findings`, broader than the approved
+    `deep-review findings` trigger.
+    Evidence: plan v1 Decision 6 limits the artifact to resume, material
+    deviation, meaningful failure/retry, deep-review finding, or explicit
+    request; the implementation would force it for any passing guarded review.
+    Impact: guarded cases would retain an unnecessary execution-document cost,
+    weakening the proportional artifact policy.
+    Required correction: remove evidence-only review as an execution-artifact
+    trigger while retaining findings and this case's explicitly planned record.
+- Minor:
+  - F2, public image framing: README prefaces still call the old usage graphic
+    the normal/daily path, and captions say only the static illustration is
+    guarded even though the embedded GIF shows the same flow.
+  - F3, authority trigger summary: the development-flow stage contract omits
+    weak verification from `context-authority` even though the proportional
+    section and Skill include it.
+- Evidence Gaps: None material.
+- Scope: complete exact-baseline delta, active authority/Skill contracts,
+  public/derived docs, case evidence, validators, links/symlinks, cost ceilings,
+  Git isolation, and unnecessary complexity.
+
+### Initial Spec
+
+- Verdict: Material issues found.
+- Critical: None within reviewed scope.
+- Important: F1 violates Decision 6's exact conditional-artifact trigger and
+  partially misses the acceptance criterion that execution evidence not become
+  a default cost.
+- Minor: F2 partially contradicts the Non-goal/acceptance requirement to frame
+  existing usage images as guarded-case illustrations; F3 is an incomplete
+  cross-owner trigger summary.
+- Evidence Gaps: None material.
+- Scope: Goal, Non-goals, Decisions 1–10, amendments, all acceptance criteria,
+  current Constitution/ADR/authority, and the complete approved file set.
+
+### Initial Aggregate
+
+- Result: `changes_required`
+- Complete current finding set: F1 Important; F2 and F3 Minor.
+- Handling: one coherent contract/public-wording review-fix batch, validation,
+  then affected Engineering/Spec re-review against the accumulated delta.
+
 ## Checkpoints / Commits
 
 | Step | Commit | Evidence |
 |---|---|---|
 | plan | `b1007977051a479e72012916a890867ccd7cb3ad` | Approved plan v1 and required trailers. |
+| task:proportional-workflow | `8b09499c810ad560a2aff850e7562bd0c8f17fae` | Complete implementation target, declared trailers, and pre-review checks. |

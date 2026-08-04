@@ -14,7 +14,8 @@ Doc Loom Least 帮你和 AI 助手在工作流里始终对齐三件事：
 
 ## 架构与使用流程
 
-下面两张图概览当前 repo-native 架构和日常使用路径。README 中直接嵌入动态 GIF，并在每张图下方提供静态 PNG 预览。
+下面两张图概览当前 repo-native 架构和 guarded case 使用路径。README 中直接
+嵌入动态 GIF，并在每张图下方提供静态 PNG 预览。
 
 ### 系统架构
 
@@ -28,7 +29,7 @@ Doc Loom Least 帮你和 AI 助手在工作流里始终对齐三件事：
 
 [PNG 预览](docs/share/diagrams/doc-loom-usage-loop-cn.png)
 
-这张静态图展示的是 guarded case 路径。可逆、单轮的 low/medium 工作直接
+使用流程图展示的是 guarded case 路径。可逆、单轮的 low/medium 工作直接
 执行；compact persistent case 不承担未触发的执行记录、深度审查和提交仪式。
 
 ## 为什么需要 Doc Loom Least？

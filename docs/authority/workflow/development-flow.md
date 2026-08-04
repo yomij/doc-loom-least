@@ -24,8 +24,8 @@ when triggered.
   owner. It routes stage ownership internally and does not plan, execute,
   auto-trigger ad-hoc review, or call a backend.
 - `context-authority` is a conditional pre-plan gate for resume, ambiguity,
-  authority, conflict, public-contract, and high-risk work. It reads the active
-  constitution first when discoverable.
+  authority, conflict, public-contract, high-risk, and weakly verified work. It
+  reads the active constitution first when discoverable.
 - `plan-confirm` writes and confirms the current versioned plan. It owns the
   outcome envelope and any declared approval/plan commit evidence; current
   authorization allows same-turn execution unless the user asks to hold,

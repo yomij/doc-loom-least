@@ -14,7 +14,9 @@ It does that with a small set of Agent Skills and lightweight Markdown artifacts
 
 ## Architecture and Usage Flow
 
-These diagrams summarize the repo-native architecture and the normal usage path. The animated GIFs are embedded for quick reading, with static PNG previews linked below each diagram.
+These diagrams summarize the repo-native architecture and the guarded-case
+usage path. The animated GIFs are embedded for quick reading, with static PNG
+previews linked below each diagram.
 
 ### Architecture
 
@@ -28,7 +30,7 @@ These diagrams summarize the repo-native architecture and the normal usage path.
 
 [PNG preview](docs/share/diagrams/doc-loom-usage-loop-en.png)
 
-This static illustration shows the guarded-case path. Reversible one-turn
+The usage illustration shows the guarded-case path. Reversible one-turn
 low/medium work now runs directly, while compact persistent cases omit
 untriggered execution, deep-review, and commit ceremony.
 
