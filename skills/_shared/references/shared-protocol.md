@@ -59,11 +59,13 @@ These are execution behaviors, not new stages or risk levels:
 - **Direct:** reversible, one-turn low/medium work uses normal repository
   execution, verification, and final reporting without a case.
 - **Compact persistent:** continuity, durable decision, or explicit case need
-  creates a concise plan and closure. Execution evidence, deep review, and
-  commits are conditional.
+  creates a concise plan. Terminal status is recorded on that plan when the
+  case ends. Execution evidence, deep review, commits, and a separate
+  `closure.md` are not required on the compact path.
 - **Guarded:** high-risk, public/authority-sensitive, irreversible, destructive,
   or weakly verified work requires an explicit current-plan confirmation,
-  exact baseline, deep Engineering/Spec review, and durable closure evidence.
+  exact baseline, deep Engineering/Spec review, and a thin `closure.md` as
+  terminal evidence.
 
 Medium risk alone triggers neither case nor confirmation. Sensitive medium work
 still gets the context check needed to verify its classification.
@@ -78,43 +80,52 @@ current branch, one obvious open case, context-proposed slug, then a new
 
 Artifacts own current status:
 
-- `plan.md`: `draft | approved`.
-- `execution.md`: `executing | ready_to_close`.
-- `closure.md`: a final status below.
+- `plan.md`: `draft | approved`, plus compact terminal fields when closed
+  without `closure.md` (`final_status`, `closed_at`).
+- `execution.md`: `executing | ready_to_close` when that artifact exists.
+- `closure.md`: Guarded (or legacy) terminal status below.
 
 Derive status in this order:
 
-1. A valid `Done`, `Cancelled`, `Superseded`, or `Abandoned` closure is terminal
-   when its declared completion evidence is present.
-2. A valid `Paused`, `Blocked`, or `Done with Caveats` closure remains current
-   unless a later authorized `execution.md` contains required Resume evidence.
-3. A closure missing a commit explicitly required by its approved plan, or a
-   `ready_to_close` execution, is closure pending.
-4. Otherwise use `executing`, approved plan, draft plan, then
+1. A valid `closure.md` with `Done`, `Cancelled`, `Superseded`, or `Abandoned`
+   is terminal when any commit it requires is present (legacy and Guarded).
+2. Else a valid plan `final_status` of those same values is terminal for
+   Compact when any commit the plan requires is present.
+3. A valid `Paused`, `Blocked`, or `Done with Caveats` on `closure.md`, else on
+   plan `final_status`, remains current unless a later authorized
+   `execution.md` contains required Resume evidence.
+4. A terminal carrier missing a commit explicitly required by its approved
+   plan, or a `ready_to_close` execution, is closure pending.
+5. Otherwise use `executing`, approved plan, draft plan, then
    `needs_user_decision`.
 
 Do not persist a second route/status record; legacy `case_state.yaml` is
 diagnostic only. Completion needs valid final artifact evidence and no
 unexplained case-related work, plus any commit declared by the approved plan.
+Existing historical `closure.md` files remain valid terminal carriers.
 
 ## Artifacts
 
 | Artifact | Required when | Owner |
 |---|---|---|
 | `context-authority-brief.md` | Conflict, explicit request, or continuity context too large for the plan | `context-authority` |
-| `plan.md` | A persistent case enters planning | `plan-confirm` |
+| `plan.md` | A persistent case enters planning; Compact terminal status when the case ends without Guarded thin closure | `plan-confirm` writes plan; `doc-sync-close` writes Compact terminal fields |
 | `handoff.md` | A future resume point exists | Producing `tdd-execute` or `doc-sync-close` stage |
 | `execution.md` | Resume evidence, material deviation, meaningful failure/retry history, deep-review findings, or explicit request | `tdd-execute` |
-| `closure.md` | A case ends, pauses, blocks, cancels, or is superseded | `doc-sync-close` |
+| `closure.md` | Guarded case ends, pauses, blocks, cancels, or is superseded; also valid for legacy cases | `doc-sync-close` |
 
 Create no other case artifact without user or approved-governance authority.
 Dashboards/product-state views are derived inputs, never routing or fact
-authority. Plan records expectations; execution records triggered actual
-evidence; closure records final acceptance, residuals, commits, and checks.
+authority. Plan records expectations and, on Compact close, the terminal
+verdict. Execution records triggered actual evidence. Thin `closure.md` is the
+Guarded terminal verdict (acceptance summary, residuals, follow-ups); it must
+not restate full command or review narratives already in execution.
 
 Final statuses are `Done`, `Done with Caveats`, `Blocked`, `Cancelled`,
 `Superseded`, `Paused`, and `Abandoned`. Unmet acceptance or a required
-non-passing Post-execution review cannot be unqualified `Done`.
+non-passing Post-execution review cannot be unqualified `Done`. Writing only
+Compact terminal fields (`final_status`, `closed_at`, optional Final status
+body) is not an escalation and does not require plan reapproval.
 
 ## Confirmation And Git Scope
 
@@ -141,11 +152,12 @@ names the document and concrete change.
 
 Declared commits contain independently valid/revertible completion points:
 approved requirements/plan, green task, verified refactor, material review-fix
-batch, or closure. Boundaries follow semantics, not artifact/finding count.
-Never commit failed attempts or bookkeeping alone. Use repository title rules,
-explicit staging, passing checks, and `Doc-Loom-Case` / `Doc-Loom-Step`
-trailers. Execution records actual hashes when present; otherwise closure does.
-Closure never predicts its own hash.
+batch, or terminal completion. Boundaries follow semantics, not
+artifact/finding count. Never commit failed attempts or bookkeeping alone. Use
+repository title rules, explicit staging, passing checks, and `Doc-Loom-Case` /
+`Doc-Loom-Step` trailers. Execution records actual hashes when present;
+otherwise the terminal carrier does. Terminal carriers never predict their own
+commit hash.
 
 Ordinary cases do not require standalone plan or closure bookkeeping commits.
 A guarded plan may declare them when durable approval/auditability justifies

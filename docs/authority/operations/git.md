@@ -7,7 +7,7 @@ source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-08-04
+last_verified: 2026-08-06
 ---
 
 # Git Commit Titles
@@ -57,7 +57,8 @@ Use `plan-amendment` only for a materially changed plan version that was
 reconfirmed after the original approved plan commit.
 
 Actual task, refactor, and review-fix hashes are recorded in `execution.md` when
-that artifact exists. `closure.md` must not predict its own commit hash.
+that artifact exists. Terminal carriers (`closure.md` or Compact plan close
+fields) must not predict their own completion commit hash.
 
 Local commits follow user/project intent and semantic value. Ordinary case
 bookkeeping does not require standalone plan or closure commits. A guarded plan

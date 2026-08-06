@@ -1,9 +1,14 @@
 <!--
-Required: Summary, Acceptance, Tests, Risks, Follow-ups, Final Status. Add code/
-docs/knowledge/decision/finding/review/commit/authority/lifecycle/confirmation/
-history sections only when triggered. Reference execution evidence instead of
-copying it; when execution is absent include compact acceptance/test/diff/scope
-evidence. Never predict a closure commit hash.
+Guarded thin terminal carrier only. Compact cases close on plan.md instead.
+
+Required: Summary, Acceptance, Remaining Risks, Follow-ups, Final Status.
+Add authority/knowledge sections only when triggered.
+
+Do not copy full tests tables, full Post-execution narratives, or commit
+chronicles from execution.md. Point to execution or declare a compact
+acceptance/test/diff/scope check when execution is absent.
+
+Target about forty body lines. Never predict a closure commit hash.
 -->
 ---
 case_id:
@@ -22,11 +27,6 @@ updated_at:
 ## Acceptance Criteria Status
 
 | Criterion | Status | Evidence |
-|---|---|---|
-
-## Tests
-
-| Command | Result | Notes |
 |---|---|---|
 
 ## Remaining Risks

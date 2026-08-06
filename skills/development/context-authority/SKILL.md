@@ -68,9 +68,10 @@ exclude archived, superseded, and generated views. Missing governance permits
 low-risk local planning with recorded risk, while public/high-risk work may
 require governance or a user decision.
 
-Read `plan.md`, `handoff.md`, `execution.md`, and `closure.md` only for an
-explicit or resumed case; legacy state files are diagnostic only. Find code and
-tests through user identifiers, authority paths, and exact `rg` searches.
+Read `plan.md` (including Compact `final_status` / `closed_at`), `handoff.md`,
+`execution.md`, and `closure.md` when present only for an explicit or resumed
+case; legacy state files are diagnostic only. Find code and tests through user
+identifiers, authority paths, and exact `rg` searches.
 Runtime/log evidence needs a time window and trust note.
 
 Record the case or proposed slug, intent, risk, every included source with its

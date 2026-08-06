@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-08-04
+last_verified: 2026-08-06
 ---
 
 # Development Workflow
@@ -32,8 +32,9 @@ when triggered.
   revise, or review first.
 - `tdd-execute` requires current execution authorization, defaults to TDD, and
   records confirmed exceptions with alternative verification.
-- `doc-sync-close` owns closure, safe L2/L3 sync, and confirmed narrow authority
-  patches; structural authority work remains governance work.
+- `doc-sync-close` owns path-correct terminal status, safe L2/L3 sync, and
+  confirmed narrow authority patches; structural authority work remains
+  governance work.
 - `review` is read-only and supports explicit ad-hoc assessment plus the
   workflow-owned Post-execution gate. `grill` remains explicit and manual.
 - `docs/cases/README.md` and `docs/product/current-state.md` are derived inputs,
@@ -43,8 +44,9 @@ when triggered.
 
 Case status is owned by existing artifacts: plan approval in `plan.md`,
 execution readiness in `execution.md` when that artifact is triggered, and
-final outcome in `closure.md`. There is no separate routing-state artifact;
-legacy state files are historical evidence only.
+final outcome either in thin `closure.md` (Guarded or legacy) or in Compact
+plan terminal fields (`final_status`, `closed_at`). There is no separate
+routing-state artifact; legacy state files are historical evidence only.
 
 ## Proportional Paths And Confirmation
 
@@ -55,11 +57,12 @@ requires guarded assurance.
 
 - Direct reversible one-turn low/medium work uses normal execution,
   verification, and final reporting without a case.
-- Compact persistent work uses a concise plan and closure; the current
-  unambiguous execute request may be recorded as approval without another
-  prompt.
+- Compact persistent work uses a concise plan and records terminal status on
+  that plan when the case ends; the current unambiguous execute request may be
+  recorded as approval without another prompt. Compact does not require a
+  separate `closure.md`.
 - Guarded work requires explicit confirmation of the written current plan,
-  exact-baseline deep review, and durable closure evidence.
+  exact-baseline deep review, and thin `closure.md` terminal evidence.
 
 Medium risk alone does not create a case or trigger confirmation.
 All paths retain applicable TDD or a credible recorded alternative verification.
@@ -96,9 +99,10 @@ may declare them when auditability justifies the cost. The policy is prospective
 and does not invalidate legacy cases.
 
 Unqualified `Done` requires met acceptance criteria, passing review when
-triggered, complete closure evidence, and no unexplained case-related worktree
-changes. Commit success is an additional terminal gate only when the approved
-plan declared that commit.
+triggered, complete path-correct terminal evidence (Compact plan fields or
+Guarded thin `closure.md`), and no unexplained case-related worktree changes.
+Commit success is an additional terminal gate only when the approved plan
+declared that commit.
 
 ## Sources
 

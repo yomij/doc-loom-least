@@ -68,8 +68,8 @@ Doc Loom Least 现阶段用尽可能小的机制来解决这些问题：一组�
 
 流程成本由两个独立问题决定：是否因连续性或持久决策需要 Case，以及是否因
 后果或弱验证需要 guarded assurance。可逆、单轮的 low/medium 工作直接
-执行；compact persistent 工作只保留精简计划和收尾；guarded 工作才增加
-当前计划显式确认、精确基线审查和持久证据。
+执行；compact persistent 工作只保留精简计划，并在计划上记录终态；guarded
+工作才增加当前计划显式确认、精确基线审查和薄 `closure.md`。
 
 ## Skill 列表
 

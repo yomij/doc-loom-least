@@ -21,8 +21,9 @@ for them, without adopting a CLI backend or pipeline product.
 - Development workflow skills exist for routing, context authority, planning,
   TDD execution, and closure.
 - Direct reversible one-turn low/medium work runs without a case; compact
-  persistent cases retain concise plan/closure evidence; guarded work adds
-  explicit confirmation and exact-baseline review.
+  persistent cases retain a concise plan and plan-owned terminal status;
+  guarded work adds explicit confirmation, exact-baseline review, and thin
+  `closure.md`.
 - `review` supports explicit ad-hoc assessment and selectively triggered
   workflow-owned Post-execution Engineering/Spec review; `grill` remains
   conversation-only.
@@ -38,12 +39,10 @@ for them, without adopting a CLI backend or pipeline product.
 
 ## Current Bottleneck
 
-Real-project evidence showed workflow ceremony dominating ordinary delivery:
-51 sampled cases contain 10,614 lines of case Markdown, 39/47 classified plans
-are medium risk, and none used the former numeric shortcut. The proportional
-model now needs dogfooding to confirm that direct/compact work reduces plan
-revisions, case-document churn, and bookkeeping-only commits while guarded
-work keeps its assurance.
+Proportional Direct/Compact/Guarded paths and plan-owned Compact terminal
+status are in active skills. The remaining bottleneck is real-project dogfood:
+confirm fewer plan revisions, less case-document churn, and fewer bookkeeping
+commits on ordinary work while guarded cases keep thin terminal evidence.
 
 ## Feedback / Signals
 

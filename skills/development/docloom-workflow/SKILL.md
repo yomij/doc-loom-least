@@ -88,6 +88,8 @@ recommendation and decision request.
   approved execution.
 - Use shared persistence/guarded triggers, never numeric size or medium risk
   alone.
-- Record material routing assumptions in the owning plan/closure, not a route
-  artifact.
+- Record material routing assumptions in the owning plan or terminal carrier,
+  not a route artifact.
+- Derive case status from shared order: existing `closure.md`, else plan
+  `final_status`, else execution/plan draft state.
 - Do not write plan risk/baseline, add pipeline stages, or call a backend.

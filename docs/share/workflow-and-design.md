@@ -68,11 +68,11 @@ Case artifact：
 
 | 环节 | 驱动它的文档 |
 |---|---|
-| 当前进度是什么 | 持久 case 的 `plan.md` / 条件化 `execution.md` / `closure.md` |
+| 当前进度是什么 | 持久 case 的 `plan.md` / 条件化 `execution.md` / 终态载体 |
 | 事实该信什么 | L1 authority 文档 + 代码 + 测试 |
 | 这次要做什么 | `plan.md`（带版本、风险、TDD 策略） |
-| 做了什么、偏没偏离 | 触发时用 `execution.md`；否则 closure 保留精简验收/测试/diff/scope 证据 |
-| 结果如何 | `closure.md`（最终状态、残留风险、后续） |
+| 做了什么、偏没偏离 | 触发时用 `execution.md`；否则终态载体保留精简验收/测试/diff/scope 证据 |
+| 结果如何 | Compact：`plan.md` 的 `final_status`；Guarded/legacy：薄 `closure.md` |
 | 下次怎么接 | `handoff.md`（仅在有恢复点时） |
 
 agent 进入一个 workspace，不需要查询任何外部系统——读最小一组文档 + git 状态，就能推导出当前阶段、下一步、已知问题。**状态是从文档推导出来的，不是被某个中心服务持有的。**
@@ -88,9 +88,9 @@ agent 进入一个 workspace，不需要查询任何外部系统——读最小�
 
 > **Markdown artifact 同时承载人类可读证据和当前状态。**
 
-`plan.md`、条件生成的 `execution.md`、`closure.md` 各自只拥有本阶段的状态；agent 按固定优先级读取最新可靠 artifact，并检查计划声明的完成证据。没有需要修复或同步的第二份状态缓存。
+`plan.md`、条件生成的 `execution.md`、以及 Guarded/legacy 的薄 `closure.md` 各自只拥有本阶段的状态；Compact 终态写在 `plan.md`。agent 按固定优先级读取最新可靠 artifact，并检查计划声明的完成证据。没有需要修复或同步的第二份状态缓存。
 
-文档驱动不等于"什么都写文档"。Artifact Policy 规定产物**按需生成**：`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding 或显式请求时写，`handoff.md` 只在存在未来恢复点时写。普通行为变化、一次正常 TDD 循环或无 finding 的深度 Review 本身不强制落盘。
+文档驱动不等于"什么都写文档"。Artifact Policy 规定产物**按需生成**：`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding 或显式请求时写，`closure.md` 只在 Guarded 收尾（或历史 case）时写，`handoff.md` 只在存在未来恢复点时写。普通行为变化、一次正常 TDD 循环或无 finding 的深度 Review 本身不强制落盘。
 
 ### 3.4 两个容易踩的坑
 
@@ -222,18 +222,18 @@ closure artifact 本身即为终态证据。Authority 文档更新默认只生�
 
 ### 5.5 case 状态机
 
-case 的当前阶段由 Markdown artifact + git 状态直接推导。终止 closure 优先；`Paused`、`Blocked`、`Done with Caveats` 在明确恢复后，由带有更新 `updated_at` 和 Resume 证据的 `execution.md` 重新取得当前状态：
+case 的当前阶段由 Markdown artifact + git 状态直接推导。终止载体优先读已有 `closure.md`，否则读 plan `final_status`；`Paused`、`Blocked`、`Done with Caveats` 在明确恢复后，由带有更新 `updated_at` 和 Resume 证据的 `execution.md` 重新取得当前状态：
 
 ```mermaid
 stateDiagram-v2
     [*] --> Draft: plan.md status draft
     Draft --> Approved: 用户确认
     Approved --> Executing: 触发 execution.md 时
-    Approved --> Final: 无 execution trigger，直接 closure
+    Approved --> Final: 无 execution trigger，直接写终态载体
     Executing --> ReadyToClose: 触发的完成 gate 通过
-    ReadyToClose --> Final: closure.md + 计划声明的完成证据
-    Executing --> Paused: closure.md status Paused
-    Executing --> Blocked: closure.md status Blocked
+    ReadyToClose --> Final: Compact plan final_status 或 Guarded thin closure.md
+    Executing --> Paused: 终态载体 status Paused
+    Executing --> Blocked: 终态载体 status Blocked
     Final --> [*]
     Paused --> Executing: 明确恢复 + 新 execution Resume 证据
     Blocked --> Executing: 条件满足 + 新 execution Resume 证据

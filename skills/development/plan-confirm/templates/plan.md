@@ -4,6 +4,10 @@ Workspace Baseline, Risk/assurance, TDD, likely Files, Tasks, Confirmation Log.
 Guarded plans also require Human Approval Summary and Post-Execution Review.
 Add Decisions, Assumptions, Amendments, Tests, Commits, Risks, or Docs Impact
 only when material. Record planned, not final, evidence. Remove unused headings.
+
+Compact terminal close (no closure.md): doc-sync-close sets final_status and
+closed_at on this frontmatter and may add a short ## Final status body.
+Guarded terminal close uses thin closure.md instead.
 -->
 ---
 case_id:
@@ -13,6 +17,8 @@ risk_level:
 approved_by:
 approved_at:
 base_commit:
+final_status:
+closed_at:
 ---
 
 # Implementation Plan
@@ -80,3 +86,8 @@ base_commit:
 
 | When | Confirmed By | Plan Version | Confirmation |
 |---|---|---:|---|
+
+## Final status
+
+<!-- Compact close only. Guarded cases use thin closure.md. Keep short:
+outcome, acceptance summary, residuals/follow-ups, evidence pointers. -->

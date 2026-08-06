@@ -1,7 +1,8 @@
 # Cases
 
 This file is a derived dashboard for Doc Loom case discovery. Current status
-comes from each case's `plan.md`, `execution.md`, and `closure.md`.
+comes from each case's artifacts in shared order: `closure.md` when present,
+else plan `final_status` / `closed_at`, else `execution.md` / `plan.md`.
 
 If this dashboard conflicts with case artifacts, follow their documented
 precedence and refresh this file.
@@ -20,6 +21,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260806-p1-terminal-status-carrier` | Done | `20260806-p1-terminal-status-carrier/closure.md` | Compact closes on plan fields; Guarded keeps thin `closure.md`. Dogfood a Compact plan-only close next. |
 | `20260804-proportional-workflow-simplification` | Done | `20260804-proportional-workflow-simplification/closure.md` | Proportional routing and assurance pass exact-baseline review; dogfood direct/compact/guarded cost signals next. |
 | `20260714-skill-resource-pointer-hardening` | Done | `20260714-skill-resource-pointer-hardening/closure.md` | Source fix passes review; publication and Skillshare update remain separately authorized follow-up work. |
 | `20260713-skill-resource-simplification` | Done | `20260713-skill-resource-simplification/closure.md` | Resources 18 -> 12, symlinks 13 -> 8, all review axes pass; no follow-up. |
@@ -42,6 +44,7 @@ None.
 |---|---|---|---|---|
 | F2 | `20260703-next-slice-rubric-dogfood` | Validate compact next-slice output on the next real discovery pass before changing the rubric. | `docloom-workflow` | The first dogfood fixed output density but does not yet prove the compact format across another selection. |
 | F4 | `20260804-proportional-workflow-simplification` | Dogfood representative direct, compact persistent, and guarded work and compare plan revisions, artifact lines, standalone plan/closure commits, and review-fix product-code share. | `docloom-workflow` | Real-case evidence justified proportional policy; observed usage must now confirm lower ceremony without guarded under-classification. |
+| F5 | `20260806-p1-terminal-status-carrier` | Dogfood one Compact case that closes only via plan `final_status`/`closed_at` with no `closure.md`. | `docloom-workflow` | P1 shipped by contract; agent habit still needs a real Compact close sample. |
 
 ## Refresh Rules
 

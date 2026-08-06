@@ -71,8 +71,9 @@ These boundaries are what keep the project minimal:
 Workflow cost follows two independent questions: whether continuity or a
 durable decision needs a case, and whether consequences or weak verification
 need guarded assurance. Reversible one-turn low/medium work is direct; compact
-persistent work uses a concise plan and closure; guarded work adds explicit
-current-plan confirmation, exact-baseline review, and durable evidence.
+persistent work uses a concise plan and terminal status on that plan; guarded
+work adds explicit current-plan confirmation, exact-baseline review, and a thin
+`closure.md`.
 
 ## Skills
 
