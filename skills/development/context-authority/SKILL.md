@@ -1,12 +1,12 @@
 ---
 name: context-authority
-description: Conditional pre-plan context and authority check for resume, case ambiguity, conflicts, guarded/public/authority-sensitive work, workflow/agent policy, weak verification, or missing planning context. Skip explanations and routine direct work.
+description: Conditional pre-plan context/authority check for resume, case ambiguity, conflict, guarded/public/authority-sensitive work, workflow/agent policy, weak verification, or missing context. Skip explanations and routine direct work.
 ---
 
 # context-authority
 
-Read the smallest evidence needed for a planning verdict. Do not plan, edit,
-create case identity, or resolve authority conflicts.
+Read the least evidence needed for a planning verdict. Do not plan, edit,
+create case identity, or resolve authority conflict.
 
 Read when trigger condition is met:
 
@@ -17,17 +17,17 @@ Read when trigger condition is met:
 
 ## Start
 
-Reuse the router's workspace snapshot or run the three minimal Git checks. Read
-changed paths only for dirtiness, resume, case matching, or the coming baseline.
-Without Git, continue context work and record `git_available: false`.
+Reuse the router snapshot or run its three Git checks. Inspect changed paths
+only for dirtiness, resume, case match, or baseline. Without Git, continue and
+record `git_available: false`.
 
 ## Use Boundary
 
-Run before planning when resume/identity is ambiguous, authority or evidence may
-conflict, the task is guarded or touches public/ADR boundaries, workflow/agent
-policy is changing, verification is weak, or planning lacks safe context. Skip
-direct one-turn work, mechanical docs, explanations, and work already supported
-by an inline context summary or valid skip. Medium risk alone is not a trigger.
+Run before planning for ambiguous resume/identity, possible authority/evidence
+conflict, guarded or public/ADR work, workflow/agent-policy change, weak
+verification, or insufficient safe context. Skip direct one-turn work,
+mechanical docs, explanations, and work with an inline summary or valid skip.
+Medium risk alone is not a trigger.
 
 Governance initialization belongs to `setup-doc-governance`. Ad-hoc review
 still requires explicit user intent.
@@ -44,39 +44,33 @@ still requires explicit user intent.
 | Resume | Current artifacts, handoff when present, Git state. |
 | Incident | Symptom, impact, rollback/runbook evidence. |
 
-Record the chosen intent and exclude unrelated material. Follow shared case
-identity and terminal/resume rules. Select `isolated`, `branch`, or `inline`,
-but create no branch, worktree, case, or artifact.
+Record intent and exclude unrelated material. Follow shared identity and
+terminal/resume rules. Select `isolated`, `branch`, or `inline` without creating
+a branch, worktree, case, or artifact.
 
 ## Workflow
 
-1. Classify intent and workspace.
-2. Resolve an existing case or propose a slug; never create it.
-3. Read active constitution/authority/governance by relevance.
-4. Read case artifacts only for explicit/resumed cases.
-5. Read direct code/test paths only when the intent needs them.
-6. Record included/excluded sources, trust, conflict, and risk.
-7. Return one verdict.
+Classify intent/workspace; resolve an existing case or propose a slug; read
+relevant active constitution/authority/governance; read artifacts only for an
+explicit/resumed case and code/tests only when needed; record source inclusion,
+exclusion, trust, conflict, and risk; return one verdict. Never create the case.
 
 ## Evidence Routing
 
 For governance, authority, workflow/agent policy, public contract, or high-risk
-work, read the active constitution and authority index first. Then use the
-active case governance plan, newest approved or applied-with-blocks governance
-plan, and legacy governance only as context. Use only active authority facts;
-exclude archived, superseded, and generated views. Missing governance permits
-low-risk local planning with recorded risk, while public/high-risk work may
-require governance or a user decision.
+work, read the active constitution and authority index first; then the active
+case governance plan, newest approved/applied-with-blocks governance plan, and
+legacy governance as context only. Exclude archived, superseded, and generated
+views from current facts. Missing governance permits recorded-risk local
+low-risk planning; public/high-risk work may need governance or user decision.
 
-Read `plan.md` (including Compact `final_status` / `closed_at`), `handoff.md`,
-`execution.md`, and `closure.md` when present only for an explicit or resumed
-case; legacy state files are diagnostic only. Find code and tests through user
-identifiers, authority paths, and exact `rg` searches.
-Runtime/log evidence needs a time window and trust note.
+For an explicit/resumed case, read present `plan.md` (including Compact terminal
+fields), `handoff.md`, `execution.md`, and `closure.md`; legacy state is
+diagnostic. Find code/tests through user identifiers, authority paths, and exact
+`rg`. Runtime/log evidence needs a time window and trust note.
 
-Record the case or proposed slug, intent, risk, every included source with its
-layer/reason/trust, and every excluded source with its reason. Derived or
-historical evidence stays labelled.
+Record case/proposed slug, intent, risk, included sources with layer/reason/
+trust, and exclusions with reasons. Label derived/historical evidence.
 
 ## Verdict
 
@@ -89,15 +83,14 @@ historical evidence stays labelled.
 | `run_setup_doc_governance` | Authority/governance must be established first. |
 | `blocked_by_authority_conflict` | Active authority, implementation, tests, or confirmed facts conflict materially. |
 
-Default output is an inline summary consumed by `plan-confirm` but not copied
-into the plan body. Persist `context-authority-brief.md` only for conflict,
-explicit request, continuity, or supporting context that must survive
-independently; high risk/resume alone does not require it.
+Default to an inline summary for `plan-confirm`, not plan-body copy. Persist
+`context-authority-brief.md` only for conflict, explicit request, continuity, or
+independently durable support; high risk/resume alone does not require it.
 
-Blocking conflicts include high-risk authority disagreement, recent
-owner-confirmed fact conflict, code/test disagreement, material missing
-coverage, or unconfirmed workflow/agent-policy change. Low-authority internal
-drift may proceed only when reversible, non-public, and recorded as risk.
+Block on high-risk authority disagreement, recent owner-confirmed fact conflict,
+code/test disagreement, material coverage gaps, or unconfirmed workflow/agent-
+policy change. Low-authority internal drift may proceed only if reversible,
+non-public, and recorded as risk.
 
 ## Gates
 

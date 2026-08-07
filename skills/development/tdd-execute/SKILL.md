@@ -1,6 +1,6 @@
 ---
 name: tdd-execute
-description: Execute a currently authorized Doc Loom plan with TDD or its confirmed exception, proportional evidence and commits, and a Post-execution review/fix loop when guarded-review triggers apply. Never execute a recommendation or unauthorized plan.
+description: Execute an authorized Doc Loom plan with TDD/confirmed exception, proportional evidence and commits, and triggered Post-execution review/fixes. Never execute a recommendation or unauthorized plan.
 ---
 
 # tdd-execute
@@ -14,71 +14,57 @@ Read when trigger condition is met:
 - [Execution template](./templates/execution.md): writing triggered execution
   evidence only.
 
-When current policy, Constraints, or execution evidence triggers
-Post-execution review, invoke the installed `review` Skill in `Post-execution`
-mode.
+When policy, Constraints, or evidence triggers review, invoke `review` in
+`Post-execution` mode.
 
 ## Preflight
 
-Require a non-terminal case, current authorized plan/version/confirmation/
-baseline, current execute intent when resuming, executable Goal/Success
-Criteria/Constraints, and explainable working tree. Derive the implementation,
-TDD/verification, review, and commit path from current policy and Constraints.
-Also require an exact target when a guarded-review trigger applies, plus any
-commit required as a precondition by user/project policy or a Constraint. A
-just-authorized draft may receive minimal approval writeback first; other
-failures return to planning.
+Require a non-terminal case, authorized contract/version/confirmation/baseline,
+resume intent when applicable, explainable worktree, any required precondition
+commit, and an exact target for triggered review. Derive the adaptive path from
+policy/Constraints. A just-authorized draft may receive minimal approval
+writeback; other failures return to planning.
 
 ## Workflow
 
-1. Recheck Goal, Success Criteria, Constraints, and working-tree scope; choose
-   and adapt the implementation path without writing it back to the plan.
-2. Write/update `execution.md` only for resume evidence, material deviation,
-   meaningful failure/retry history, deep-review findings, or explicit
-   request. Resumed cases add the later Resume evidence required by shared
-   protocol.
-3. TDD: observe the smallest credible Red, implement Green, then only necessary
-   refactor with related checks. For an approved exception, run its alternative
-   characterization/verification.
+1. Recheck contract/worktree; choose the adaptive path without changing plan.
+2. Write `execution.md` only for resume, material deviation, meaningful
+   failure/retry, deep-review evidence, or explicit request. Resume records the
+   shared required evidence.
+3. Observe credible Red, implement Green, then necessary refactor/checks; an
+   approved exception uses its alternative evidence.
 4. Run required and obvious low-risk quality checks.
-5. Create commits only when user/project intent or a Constraint requires or
-   permits a semantic completion point; do not create bookkeeping-only commits.
-6. Record current evidence where triggered; otherwise retain a compact final
-   Success-Criteria/test/diff/scope check for closure.
-7. Invoke Post-execution review for guarded work, material deviation, weak
-   verification, public/authority-sensitive change, or explicit Constraint/
-   user request; own every evidence/fix/re-review loop.
-8. Required review needs aggregate `pass` before closure. Without that trigger,
-   the compact completion check is sufficient. Set existing `execution.md` to
-   `ready_to_close` when one exists.
+5. Commit only authorized semantic points, never bookkeeping.
+6. Record triggered evidence; otherwise retain a compact criteria/test/diff/
+   scope check for closure.
+7. Invoke Post-execution review for Guarded work, material deviation, weak
+   evidence, public/authority effect, or explicit Constraint/user request; own
+   evidence/fix/re-review.
+8. Required review needs aggregate `pass`; otherwise the compact check suffices.
+   Set existing execution evidence `ready_to_close` when ready.
 
 ## TDD And Deviations
 
-Claim TDD only after observing a relevant failure and later pass. Tests should
-assert observable behavior, cover a plausible regression, use realistic
-boundaries, and survive refactors; avoid private/call-order/coverage-only tests
-and production test hooks. An unexpected or immediately passing Red must be
-explained before continuing.
+Claim TDD only after relevant failure then pass. Tests assert observable
+behavior and plausible regression through realistic, refactor-stable seams;
+avoid private/call-order/coverage-only checks and production hooks. Explain an
+unexpected or immediately passing Red.
 
-A TDD exception must be an approved Constraint naming eligibility/category and
-the evidence standard that replaces a meaningful Red. Execution chooses and
-records the concrete alternative verification; adding an exception is a
-Constraint change and returns to planning.
+A TDD exception is an approved Constraint naming category/reason/evidence
+standard. Execution records its concrete verification; adding one changes plan.
 
 | Deviation | Handling |
 |---|---|
 | None | Continue and record evidence. |
-| Adaptive | Files, tasks, commands, sequencing, run mode, tests, verification, review invocation, commit organization, or another ordinary implementation choice inside the outcome contract; continue and record only when useful. |
-| Material | Goal, Success Criterion, Constraint, risk, authority/public contract, dependency/lockfile/CI/schema/config contract, external resource, irreversible action, or protected effect changed; stop for plan amendment. |
+| Adaptive | Shared adaptive-path choice; continue, record only when useful. |
+| Material | Shared protected change; stop for plan amendment. |
 | Hard stop | Constraint violation, destructive/unapproved external action, or unexplained mixed work; stop for explicit confirmation/new plan. |
 
 ## Evidence And Status
 
-When execution evidence is triggered, record actual commands, meaningful
-failures/retries, deviations, hashes, findings, and resume-critical facts;
-reference Success Criteria/Constraints instead of copying them. Lead with current human
-outcome/action/Git effect. A normal behavior change or TDD cycle alone does not
-force the artifact.
+Triggered evidence records actual commands, meaningful failures/retries,
+deviations, hashes, findings, and resume facts; reference rather than copy the
+contract. Lead with outcome/action/Git. Normal TDD alone creates no artifact.
 
 Frontmatter is:
 
@@ -88,25 +74,20 @@ status: executing | ready_to_close
 updated_at: <timestamp>
 ```
 
-Keep `review_risk` high/medium/low with reasons; it never auto-triggers ad-hoc
-review and cannot be cleared until its cause is evidenced. Failed artifact sync
-blocks a claim that workflow state is fully current.
-
-Use low for local well-covered change, medium for bounded internal/broader
-change, and high for high-consequence, weakly evidenced, materially deviated,
-or pending-authority work.
+Record reasoned `review_risk`: low local/well-covered; medium bounded internal/
+broader; high high-consequence, weak evidence, material deviation, or pending
+authority. It never authorizes ad-hoc review and clears only with evidence.
+Failed artifact sync blocks fully-current status.
 
 ## Post-Execution Review
 
-Deep-review triggers are guarded work, material deviations, weak verification,
-public/authority-sensitive changes, or explicit Constraint/user request. Other work
-uses the executor's compact Success-Criteria/test/diff/scope check and does not
-persist dual axes.
+Deep-review triggers: Guarded work, material deviation, weak evidence,
+public/authority effect, or explicit Constraint/user request. Other work uses
+the compact check without persisted axes.
 
-Start only after implementation/checks, preliminary Success Criteria evidence,
-required commits/current delta, exact baseline, and a complete explainable
-target exist. Persist separate Engineering and Spec verdicts/findings/gaps,
-exact baseline/commits/worktree, aggregate result, and re-review history.
+Start after implementation/checks, preliminary criteria evidence, required
+commits/current delta, exact baseline, and complete target. Persist separate
+Engineering/Spec verdicts/findings/gaps, target, aggregate, and re-review.
 
 - `pass`: become ready to close.
 - `insufficient_evidence`: collect evidence and rerun affected axes.
@@ -120,14 +101,11 @@ visible.
 
 ## Commits
 
-Follow shared authorization and any commit requirement in user/project policy
-or Constraints. For each chosen semantic commit: stage explicit paths, inspect
-staged content, run staged diff/checks, use repository title plus
-`Doc-Loom-Case`/`Doc-Loom-Step`, and record the resulting hash when execution
-evidence exists. Combine dependent changes when separation would be invalid;
-finding count never dictates commit count. Stop on an inseparable unrelated
-mixed file. Separately authorized history rewriting makes hash/review evidence
-stale and requires complete revalidation.
+For each authorized semantic commit: stage explicit paths; inspect/check staged
+content; use repository title and Case/Step trailers; record triggered hash
+evidence. Combine inseparable changes; finding count never sets commit count.
+Stop on unrelated mixed files. Authorized history rewriting invalidates hashes/
+review and requires full revalidation.
 
 ## Gates
 

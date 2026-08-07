@@ -1,6 +1,6 @@
 ---
 name: doc-sync-close
-description: Close an existing Doc Loom case after execution or when blocked, paused, cancelled, superseded, or abandoned. Own final Success Criteria evidence/status, safe docs sync, authority proposals or approved narrow patches, and any explicitly required completion commit.
+description: Close a Doc Loom case after execution or interruption. Own final criteria/status, safe docs sync, authority proposals/approved narrow patches, and required completion commit.
 ---
 
 # doc-sync-close
@@ -18,24 +18,20 @@ Read when trigger condition is met:
 
 ## Inputs And Workflow
 
-Consume the plan Goal/Success Criteria/Constraints, execution or compact
-completion checks, required Engineering/Spec aggregate when triggered, actual
-required-commit hashes, user findings, current artifacts, and relevant
-authority/derived docs. Missing case identity returns to the doorway.
+Consume contract, execution/compact checks, triggered review aggregate,
+required-commit hashes, user findings, current artifacts, and relevant docs.
+Missing identity returns to the doorway.
 
-1. Choose a shared final-status candidate from evidence and user instruction.
-2. Map every Success Criterion to `met`, `partially_met`, `not_met`,
-   `not_verified`, or `out_of_scope`, with evidence; apply the Done Gate.
-3. Summarize final changes/checks/unrun work/commits/risks without repeating
-   plan or interim narrative.
+1. Choose a shared final status from evidence/user instruction.
+2. Map each criterion with evidence to `met`, `partially_met`, `not_met`,
+   `not_verified`, or `out_of_scope`; apply Done Gate.
+3. Summarize changes, checks, unrun work, commits, and risks without repetition.
 4. Sync L2 and mechanically safe L3; propose authority or apply only the exact
    approved narrow patch.
-5. Write the terminal carrier for this path (below); refresh dashboard and only
-   evidenced product state.
-6. If user/project policy or a Constraint requires a completion commit,
-   stage/inspect/check/commit it and verify title/trailers. Otherwise validate
-   complete artifact evidence and explain remaining case scope without adding
-   bookkeeping-only Git work.
+5. Write path-correct terminal evidence; refresh dashboard and evidenced state.
+6. When policy/Constraint requires completion commit, stage/inspect/check/
+   commit and verify title/trailers; otherwise validate artifacts without
+   bookkeeping Git work.
 7. Write handoff only for a real future resume point.
 
 ## Terminal Carrier
@@ -46,67 +42,52 @@ authority/derived docs. Missing case identity returns to the doorway.
 | Guarded | Write thin `closure.md` as terminal SSOT | Restate full tests/review/commit chronicles from execution |
 | Legacy case that already has `closure.md` | Keep updating that file as terminal SSOT | Force migration onto plan fields |
 
-Compact close leaves `plan.md` `status: approved` while `final_status` holds the
-shared final status. Readers use shared status derivation. Updating criterion
-Status/Evidence and terminal metadata is proof writeback, not plan reapproval;
-Goal, criterion semantics, and Constraints remain unchanged.
+Compact leaves plan `approved`; shared readers use `final_status`. Criterion
+evidence and terminal metadata are proof, not contract change.
 
-Guarded thin `closure.md` default body is Summary, Success Criteria status table
-or pointers, Remaining Risks, Follow-ups, and Final Status. Target about forty
-body lines. Reference execution for commands and deep-review detail. When
-execution is absent, keep a compact Success-Criteria/test/diff/scope check in the
-terminal carrier.
+Guarded closure contains Summary, criteria/pointers, Remaining Risks,
+Follow-ups, and Final Status (about 40 lines). Reference execution detail; if
+absent, include a compact criteria/test/diff/scope check.
 
 ## Done Gate
 
 Unqualified `Done` requires:
 
-- every Success Criterion met or explained out of scope;
-- triggered execution evidence, or compact verification in the terminal
-  carrier when execution is absent;
+- every criterion met or explained out of scope;
+- triggered execution evidence, or compact terminal verification;
 - confirmed deviations and resolved material user findings;
 - resolved high review risk;
-- when deep review is triggered, exact baseline, separate Engineering/Spec
-  verdicts, aggregate `pass`, finding/re-review disposition, and residual
-  caveats;
-- every semantic commit explicitly required by user/project policy or a
-  Constraint;
-- successful closure/completion commit only when explicitly required;
+- triggered deep review has exact target, separate axes, aggregate `pass`, and
+  finding/re-review/residual disposition;
+- every explicitly required semantic/completion commit succeeded;
 - no unexplained case-related worktree change;
 - a complete terminal carrier for the path (plan fields or thin `closure.md`).
 
-`not_verified` needs verification, a user caveat, or non-Done status;
-`partially_met` cannot be Done and needs an accepted follow-up for caveated
-closure; `not_met` normally blocks/pauses/cancels/supersedes; `out_of_scope`
-must explain the boundary. Missing optional execution alone does not downgrade.
+`not_verified` needs evidence, user caveat, or non-Done; `partially_met` needs
+accepted follow-up and cannot be Done; `not_met` normally interrupts;
+`out_of_scope` explains why. Missing optional execution alone does not downgrade.
 
-Use `Done with Caveats` for a complete main goal with accepted residual risk or
-follow-up. Other shared statuses state their specific reason.
+Use `Done with Caveats` only for a completed main goal with accepted residual
+risk or follow-up.
 
 ## Knowledge And Authority
 
-Classify reusable knowledge as `authority_candidate`, `ADR_candidate`,
+Classify knowledge as `authority_candidate`, `ADR_candidate`,
 `regression_candidate`, `runbook_candidate`, `derived_sync`, `case_local`, or
-`none`. Never silently promote it. An unresolved authority candidate is
-residual risk and prevents unqualified Done.
+`none`; never silently promote. Unresolved authority candidate blocks Done.
 
-Authority defaults to proposal. Apply only an existing-boundary narrow patch
-explicitly confirmed by user or exact approved plan and satisfying the update
-rules. Structural/high-risk/conflicting/new-area/lifecycle work becomes
-governance or a new case.
+Authority defaults to proposal. Apply only a confirmed, rule-compliant,
+existing-boundary narrow patch; structural/high-risk/conflicting/new-area work
+becomes governance/new case.
 
 ## Closure And Gates
 
-Guarded `closure.md` frontmatter contains `case_id`, final shared `status`, and
-`updated_at`; never predict its own commit hash. Compact plan terminal fields
-never predict a completion commit hash. Complete terminal evidence is terminal
-unless user/project policy or a Constraint requires a completion commit. A
-required commit remains pending until successful; its failure preserves
-evidence and blocks unqualified Done. Terminal carriers contain no
-implementation fix.
+Guarded closure frontmatter is `case_id`, final `status`, `updated_at`; no
+terminal carrier predicts its own hash or contains fixes. Complete evidence is
+terminal unless a required commit remains pending; failure preserves evidence
+and blocks Done.
 
-A skipped/failed dashboard or product-state refresh is recorded but does not
-roll back an otherwise valid close.
+Record failed derived refresh without rolling back valid close.
 
 - Every ended/paused/blocked/cancelled/superseded case needs a path-correct
   terminal carrier; Compact uses plan fields, Guarded uses thin `closure.md`.

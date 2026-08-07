@@ -1,12 +1,12 @@
 ---
 name: docloom-workflow
-description: Default human entry for persistent Doc Loom development work, case status/continuation, and next-slice discovery. Route internally unless the user explicitly invokes another owner. Skip explanation-only, standalone review/grill, and reversible one-turn low/medium work.
+description: Default human entry for persistent Doc Loom development, case status/continuation, and next-slice discovery. Route internally unless another owner is explicitly invoked. Skip explanations, standalone review/grill, and reversible one-turn low/medium work.
 ---
 
 # docloom-workflow
 
-Act as the public doorway and case-identity owner; do not plan, execute, close,
-or require users to name stage Skills.
+Own public entry and case identity; do not plan, execute, close, or make users
+name stage Skills.
 
 Read when trigger condition is met:
 
@@ -17,18 +17,18 @@ Read when trigger condition is met:
 ## Start
 
 Run `git rev-parse --show-toplevel`, `git branch --show-current`, and
-`git status --short`. Read changed paths only for dirtiness, resume, case
-matching, or baseline. Without Git, continue safe work and record
+`git status --short`. Inspect changed paths only for dirtiness, resume, case
+match, or baseline. Without Git, continue safe work and record
 `git_available: false`.
 
 ## Modes
 
 | Intent | Action |
 |---|---|
-| Status, continuation, or ambiguity | Read only minimal case/Git evidence; derive status from artifacts; create or repair nothing. |
-| Next work/candidate discovery | Use current product facts, authority/implementation, dashboard/follow-ups, and `loop-protocol.md`; infer labeled facts; recommend exactly one candidate or none. Create no case/plan until selection. |
-| Direct selected work | Return to normal repository execution with no case; preserve project instructions, verification, and final reporting. |
-| Persistent selected work | Gather/skip context as allowed, resolve/create identity, then route to the owning stage. |
+| Status, continuation, ambiguity | Read minimal case/Git evidence; derive status; create or repair nothing. |
+| Candidate discovery | Use current product facts, authority/implementation, dashboard/follow-ups, and `loop-protocol.md`; label inference; recommend one candidate or none. Create no case/plan before selection. |
+| Direct selected work | Execute normally without a case, preserving project instructions, verification, and reporting. |
+| Persistent selected work | Gather or validly skip context, resolve/create identity, and route to its owner. |
 
 Status output gives evidence, next action/decision, and Git effect. Internal
 phase/Skill names are diagnostic only.
@@ -36,9 +36,9 @@ phase/Skill names are diagnostic only.
 ## Case Identity
 
 Apply the shared two-question model. Create `docs/cases/<case-id>/` only for a
-shared persistence trigger and only when immediately routing to planning,
-persisting required context, or binding already-needed execution/review/closure
-evidence. The routed owner writes the first artifact; leave no empty case.
+persistence trigger when immediately routing to planning, persisting required
+context, or binding needed execution/review/closure evidence. Its owner writes
+the first artifact; leave no empty case.
 
 ## Routing
 
@@ -57,9 +57,9 @@ gate routes elsewhere.
 | Persistent work with context or valid skip | `plan-confirm` |
 | Execution complete or user requests closure/sync | `doc-sync-close` |
 
-`context-authority` verdicts may instead require governance, a user decision,
-case selection, or conflict resolution. A selected next slice still follows
-normal identity, context, planning, and confirmation.
+`context-authority` may instead require governance, user decision, case
+selection, or conflict resolution. Selected slices still follow normal
+identity, context, planning, and confirmation.
 
 ## Output
 
@@ -79,18 +79,17 @@ recommendation and decision request.
 ## Gates
 
 - Status-only and unselected discovery are read-only.
-- Persistent work needs context summary/brief or an explicit valid skip before
-  planning; direct work does not enter case stages.
+- Persistent work needs a context summary/brief or valid skip before planning;
+  direct work does not enter case stages.
 - A compact persistent plan may record the current unambiguous execute request
   as approval. Guarded work requires explicit confirmation of the written
   current plan; older approval always needs current intent.
 - Do not auto-trigger ad-hoc review or grill; workflow-owned review belongs to
   approved execution.
-- Use shared persistence/guarded triggers, never numeric size or medium risk
-  alone.
-- Convert only assumptions that bind authorization into Constraints. Persist
-  supporting context in a triggered brief, handoff, execution, or terminal
-  carrier; never add it as another plan-body concern or route artifact.
+- Use shared persistence/guarded triggers, never size or medium risk alone.
+- Only authorization-binding assumptions become Constraints. Put durable
+  support in a triggered brief, handoff, execution, or terminal carrier—not a
+  new plan concern or route artifact.
 - Derive case status from shared order: existing `closure.md`, else plan
   `final_status`, else execution/plan draft state.
 - Do not write plan risk/baseline, add pipeline stages, or call a backend.
