@@ -10,7 +10,7 @@ procedure belongs to its owner.
 | Human entry, case identity, status/discovery routing | `docloom-workflow` |
 | Governance rebuild | `setup-doc-governance` |
 | Context and authority verdict | `context-authority` |
-| Plan, risk, baseline, confirmation | `plan-confirm` |
+| Outcome contract, risk/assurance metadata, baseline, confirmation | `plan-confirm` |
 | TDD, conditional execution evidence, execution checks, review loop | `tdd-execute` |
 | Closure, conditional completion commit, safe docs sync | `doc-sync-close` |
 | Read-only evidence review | `review` |
@@ -59,7 +59,7 @@ These are execution behaviors, not new stages or risk levels:
 - **Direct:** reversible, one-turn low/medium work uses normal repository
   execution, verification, and final reporting without a case.
 - **Compact persistent:** continuity, durable decision, or explicit case need
-  creates a concise plan. Terminal status is recorded on that plan when the
+  creates a concise outcome contract. Terminal status is recorded on that plan when the
   case ends. Execution evidence, deep review, commits, and a separate
   `closure.md` are not required on the compact path.
 - **Guarded:** high-risk, public/authority-sensitive, irreversible, destructive,
@@ -88,44 +88,44 @@ Artifacts own current status:
 Derive status in this order:
 
 1. A valid `closure.md` with `Done`, `Cancelled`, `Superseded`, or `Abandoned`
-   is terminal when any commit it requires is present (legacy and Guarded).
+   is terminal when any explicitly required commit is present (legacy and Guarded).
 2. Else a valid plan `final_status` of those same values is terminal for
-   Compact when any commit the plan requires is present.
+   Compact when any explicitly required commit is present.
 3. A valid `Paused`, `Blocked`, or `Done with Caveats` on `closure.md`, else on
    plan `final_status`, remains current unless a later authorized
    `execution.md` contains required Resume evidence.
-4. A terminal carrier missing a commit explicitly required by its approved
-   plan, or a `ready_to_close` execution, is closure pending.
+4. A terminal carrier missing a commit required by project policy or an
+   approved Constraint, or a `ready_to_close` execution, is closure pending.
 5. Otherwise use `executing`, approved plan, draft plan, then
    `needs_user_decision`.
 
 Do not persist a second route/status record; legacy `case_state.yaml` is
 diagnostic only. Completion needs valid final artifact evidence and no
-unexplained case-related work, plus any commit declared by the approved plan.
+unexplained case-related work, plus any explicitly required commit.
 Existing historical `closure.md` files remain valid terminal carriers.
 
 ## Artifacts
 
 | Artifact | Required when | Owner |
 |---|---|---|
-| `context-authority-brief.md` | Conflict, explicit request, or continuity context too large for the plan | `context-authority` |
-| `plan.md` | A persistent case enters planning; Compact terminal status when the case ends without Guarded thin closure | `plan-confirm` writes plan; `doc-sync-close` writes Compact terminal fields |
+| `context-authority-brief.md` | Conflict, explicit request, continuity, or supporting context that must survive independently | `context-authority` |
+| `plan.md` | A persistent case enters planning; Compact terminal status when the case ends without Guarded thin closure | `plan-confirm` writes Goal/Success Criteria/Constraints; `doc-sync-close` writes Compact criterion evidence and terminal fields |
 | `handoff.md` | A future resume point exists | Producing `tdd-execute` or `doc-sync-close` stage |
 | `execution.md` | Resume evidence, material deviation, meaningful failure/retry history, deep-review findings, or explicit request | `tdd-execute` |
 | `closure.md` | Guarded case ends, pauses, blocks, cancels, or is superseded; also valid for legacy cases | `doc-sync-close` |
 
 Create no other case artifact without user or approved-governance authority.
 Dashboards/product-state views are derived inputs, never routing or fact
-authority. Plan records expectations and, on Compact close, the terminal
-verdict. Execution records triggered actual evidence. Thin `closure.md` is the
-Guarded terminal verdict (acceptance summary, residuals, follow-ups); it must
+authority. Plan records the outcome contract and, on Compact close, the terminal
+verdict. Execution records triggered implementation-path evidence. Thin `closure.md` is the
+Guarded terminal verdict (Success Criteria summary, residuals, follow-ups); it must
 not restate full command or review narratives already in execution.
 
 Final statuses are `Done`, `Done with Caveats`, `Blocked`, `Cancelled`,
-`Superseded`, `Paused`, and `Abandoned`. Unmet acceptance or a required
+`Superseded`, `Paused`, and `Abandoned`. Unmet Success Criteria or a required
 non-passing Post-execution review cannot be unqualified `Done`. Writing only
-Compact terminal fields (`final_status`, `closed_at`, optional Final status
-body) is not an escalation and does not require plan reapproval.
+Compact Success Criteria status/evidence and terminal fields (`final_status`,
+`closed_at`) is not an escalation and does not require plan reapproval.
 
 ## Confirmation And Git Scope
 
@@ -137,35 +137,39 @@ the current object/version.
 A short `yes`/`ok`/`continue` confirms only the immediate unambiguous
 recommendation and never creates durable authority.
 
-Approval binds an outcome envelope: Goal, Guardrails/Non-goals, Acceptance,
-Escalation Triggers, and any specifically protected boundary. Exact file lists,
-added tests, and ordinary internal implementation choices are planning
-evidence; they may adapt inside that envelope without reapproval.
+Approval binds the complete outcome contract: Goal, Success Criteria, and
+Constraints. Constraints carry guardrails, non-goals, protected effects,
+reapproval triggers, excluded actions, and owner-mandated restrictions. Files,
+tasks, commands, sequencing, run mode, tests, TDD/verification choice, review
+invocation, and commit organization are execution choices and never belong in
+the plan body.
 
 Before guarded confirmation, summarize outcome, material scope, local Git
 effects, interruptions, and exclusions. Authorization excludes unrelated work,
-another case, publication/history rewriting, and escalation triggers. Reconfirm
-for outcome/non-goal change, risk escalation, authority/public contract,
-dependency/lockfile/CI/schema/config-contract effect, external resource,
-irreversible action, or another protected boundary. A narrow authority patch
-names the document and concrete change.
+another case, publication/history rewriting, and Constraint violations.
+Reconfirm for Goal, Success Criterion, or Constraint change; risk escalation;
+authority/public contract; dependency/lockfile/CI/schema/config-contract
+effect; external resource; irreversible action; or another protected effect. A
+narrow authority patch names the document and concrete change.
 
-Declared commits contain independently valid/revertible completion points:
-approved requirements/plan, green task, verified refactor, material review-fix
+When user/project policy or an approved Constraint requires a commit, it must
+be an independently valid/revertible semantic completion point: approved
+requirements/plan, green behavior, verified refactor, material review-fix
 batch, or terminal completion. Boundaries follow semantics, not
 artifact/finding count. Never commit failed attempts or bookkeeping alone. Use
 repository title rules, explicit staging, passing checks, and `Doc-Loom-Case` /
-`Doc-Loom-Step` trailers. Execution records actual hashes when present;
-otherwise the terminal carrier does. Terminal carriers never predict their own
-commit hash.
+`Doc-Loom-Step` trailers. Execution chooses commit organization and records
+actual hashes when evidence is triggered; otherwise the terminal carrier does.
+Terminal carriers never predict their own commit hash.
 
-Ordinary cases do not require standalone plan or closure bookkeeping commits.
-A guarded plan may declare them when durable approval/auditability justifies
-the cost; only a declared commit gates closure and unqualified `Done`.
+The plan body never carries a commit strategy. Ordinary cases do not require
+standalone plan or closure bookkeeping commits. Only a commit explicitly
+required by user/project policy or an approved Constraint gates closure and
+unqualified `Done`.
 
 If Git is unavailable, continue safe document/assessment work but omit invented
-baselines, staging, and commits. A guarded case missing required Git evidence
-can become `Done with Caveats` only by explicit owner decision.
+baselines, staging, and commits. A guarded case missing explicitly required Git
+evidence can become `Done with Caveats` only by explicit owner decision.
 
 Run modes are `isolated` (new branch/worktree for large, parallel, or high-risk
 work), `branch` (normal development), and `inline` (small existing-branch work).

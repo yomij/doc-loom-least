@@ -71,9 +71,9 @@ These boundaries are what keep the project minimal:
 Workflow cost follows two independent questions: whether continuity or a
 durable decision needs a case, and whether consequences or weak verification
 need guarded assurance. Reversible one-turn low/medium work is direct; compact
-persistent work uses a concise plan and terminal status on that plan; guarded
-work adds explicit current-plan confirmation, exact-baseline review, and a thin
-`closure.md`.
+persistent work uses a concise outcome contract and terminal status on that
+plan; guarded work adds explicit current-plan confirmation, exact-baseline
+review, and a thin `closure.md`.
 
 ## Skills
 
@@ -87,9 +87,9 @@ entry points and implementation owners.
 | `docloom-workflow` | Recommended human-facing entry. Handles persistent feature/bug/refactor requests, status, continuation, and discovery, then routes internally. |
 | `setup-doc-governance` | Governance init and maintenance. Scans docs, extracts facts, produces governance plans. |
 | `context-authority` | Conditional fact authority gate. Reads minimal context, resolves conflicts, issues a routing verdict. |
-| `plan-confirm` | Planning gate. Defines the outcome envelope, risk, TDD, and conditional review/commit strategy, then surfaces or records the applicable confirmation boundary. |
+| `plan-confirm` | Outcome-contract gate. Writes and confirms only Goal, Success Criteria, and Constraints; execution owns the path. |
 | `tdd-execute` | Execution gate for cases. Runs Red-Green-Refactor or a recorded exception, keeps evidence proportional, and owns triggered review/fix loops. |
-| `doc-sync-close` | Closure gate. Syncs docs, records final evidence, and creates a completion commit only when declared. |
+| `doc-sync-close` | Closure gate. Syncs docs, maps final Success Criteria evidence, and creates a completion commit only when explicitly required. |
 | `review` | Read-only ad-hoc review plus the workflow-owned Engineering/Spec Post-execution gate. |
 | `grill` | Manual interactive stress-test of requirements, designs, or claims. |
 
@@ -150,20 +150,21 @@ Direct: reversible one-turn low/medium work
   → normal repository execution + verification + final report; no case
 
 Compact persistent: continuity, durable decision, or explicit case
-  → concise plan → tdd-execute → closure
+  → Goal + Success Criteria + Constraints → tdd-execute → terminal status on plan
   → execution.md, deep review, and commits only when triggered
 
 Guarded: high/public/authority-sensitive/irreversible/weakly verified
   → context-authority → plan-confirm → explicit current-plan approval
   → tdd-execute → Engineering + Spec review
   → coherent finding-fix batches + re-review when needed
-  → doc-sync-close with declared durable evidence/commits
+  → doc-sync-close with required durable evidence/commits
 ```
 
 Medium risk alone does not create a case or require another confirmation.
-Approval binds the Goal, Guardrails/Non-goals, Acceptance, and Escalation
-Triggers; internal file discovery, tests, and ordinary implementation choices
-adapt inside that envelope.
+Approval binds Goal, Success Criteria, and Constraints. The plan says what
+result is authorized and what proves completion; context, files, tasks,
+commands, sequencing, tests, TDD/verification, review invocation, and commit
+organization remain execution choices inside that contract.
 
 `docloom-workflow` routes internally—it never replaces stage ownership, and
 normal users do not need to invoke those stages themselves.

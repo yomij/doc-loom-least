@@ -37,7 +37,7 @@ still requires explicit user intent.
 | Intent | Minimum evidence |
 |---|---|
 | Bug | Symptom/reproduction, related entry, verification path. |
-| Feature | Goal/acceptance, relevant authority/contract or explicit absence, adjacent implementation. |
+| Feature | Goal/success conditions, relevant authority/contract or explicit absence, adjacent implementation. |
 | Refactor | Target boundary, verification coverage, non-touch scope. |
 | Docs governance | Scope, authority/index state, blocked decisions/history needed. |
 | Workflow/Skill | Target owner, shared/adjacent contracts, constitution/authority constraints. |
@@ -89,9 +89,10 @@ historical evidence stays labelled.
 | `run_setup_doc_governance` | Authority/governance must be established first. |
 | `blocked_by_authority_conflict` | Active authority, implementation, tests, or confirmed facts conflict materially. |
 
-Default output is an inline summary for `plan-confirm`. Persist
-`context-authority-brief.md` only for conflict, explicit request, continuity, or
-context too large for the plan; high risk/resume alone does not require it.
+Default output is an inline summary consumed by `plan-confirm` but not copied
+into the plan body. Persist `context-authority-brief.md` only for conflict,
+explicit request, continuity, or supporting context that must survive
+independently; high risk/resume alone does not require it.
 
 Blocking conflicts include high-risk authority disagreement, recent
 owner-confirmed fact conflict, code/test disagreement, material missing

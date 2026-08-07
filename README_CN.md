@@ -68,7 +68,7 @@ Doc Loom Least 现阶段用尽可能小的机制来解决这些问题：一组�
 
 流程成本由两个独立问题决定：是否因连续性或持久决策需要 Case，以及是否因
 后果或弱验证需要 guarded assurance。可逆、单轮的 low/medium 工作直接
-执行；compact persistent 工作只保留精简计划，并在计划上记录终态；guarded
+执行；compact persistent 工作只保留精简结果契约，并在计划上记录终态；guarded
 工作才增加当前计划显式确认、精确基线审查和薄 `closure.md`。
 
 ## Skill 列表
@@ -78,9 +78,9 @@ Doc Loom Least 现阶段用尽可能小的机制来解决这些问题：一组�
 | `docloom-workflow` | 入口与轻量路由。解析任务状态，报告 Case 状态，发现下一切片候选，并路由到对应阶段 Skill |
 | `setup-doc-governance` | 文档治理的初始化与维护。扫描文档、抽取事实、生成治理计划 |
 | `context-authority` | 按需的事实权威把关。读取最小必要上下文，解决冲突，输出路由裁决 |
-| `plan-confirm` | 计划把关。定义 outcome envelope、风险、TDD 和条件化 Review/提交策略，在适用的边界记录或请求确认 |
+| `plan-confirm` | 结果契约把关。只写并确认目标、成功判据和约束；执行路径由模型负责 |
 | `tdd-execute` | Case 执行把关。执行 Red-Green-Refactor 或已记录的例外，按需留证，并负责触发后的 Review/修复循环 |
-| `doc-sync-close` | 收尾把关。同步文档、记录最终证据，仅在计划声明时创建 completion commit |
+| `doc-sync-close` | 收尾把关。同步文档、映射成功判据证据，仅在明确要求时创建 completion commit |
 | `review` | 只读临时审查，以及工作流内部的 Engineering/Spec Post-execution gate |
 | `grill` | 手动交互式压力测试。逐问挑战需求、设计或文档主张 |
 
@@ -138,19 +138,19 @@ Direct：可逆、单轮的 low/medium 工作
   → 正常执行 + 验证 + 最终报告；不建 Case
 
 Compact persistent：需要连续性、持久决策或显式 Case
-  → 精简 plan → tdd-execute → closure
+  → 目标 + 成功判据 + 约束 → tdd-execute → 在 plan 上记录终态
   → execution.md、深度 Review 和提交按触发条件生成
 
 Guarded：high/public/authority-sensitive/不可逆/弱验证
   → context-authority → plan-confirm → 显式确认当前计划
   → tdd-execute → Engineering + Spec Review
   → 按 coherent batch 修复 findings 并复审
-  → doc-sync-close，保留计划声明的持久证据/提交
+  → doc-sync-close，保留明确要求的持久证据/提交
 ```
 
-Medium 风险本身不建 Case，也不要求再次确认。批准绑定 Goal、
-Guardrails/Non-goals、Acceptance 和 Escalation Triggers；内部文件发现、
-补测试和普通实现选择可在这个 envelope 内自适应。
+Medium 风险本身不建 Case，也不要求再次确认。批准绑定目标、成功判据和约束。
+Plan 只说明授权什么结果、如何证明完成；上下文、文件、任务、命令、顺序、
+测试、TDD/替代验证、Review 调用和提交组织都由模型在契约内自主决定。
 
 `docloom-workflow` 只做路由，不替代任何阶段 Skill。
 

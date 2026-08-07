@@ -1,12 +1,12 @@
 <!--
 Guarded thin terminal carrier only. Compact cases close on plan.md instead.
 
-Required: Summary, Acceptance, Remaining Risks, Follow-ups, Final Status.
+Required: Summary, Success Criteria, Remaining Risks, Follow-ups, Final Status.
 Add authority/knowledge sections only when triggered.
 
 Do not copy full tests tables, full Post-execution narratives, or commit
 chronicles from execution.md. Point to execution or declare a compact
-acceptance/test/diff/scope check when execution is absent.
+Success-Criteria/test/diff/scope check when execution is absent.
 
 Target about forty body lines. Never predict a closure commit hash.
 -->
@@ -24,7 +24,7 @@ updated_at:
 - User action needed:
 - Local Git effect:
 
-## Acceptance Criteria Status
+## Success Criteria Status
 
 | Criterion | Status | Evidence |
 |---|---|---|

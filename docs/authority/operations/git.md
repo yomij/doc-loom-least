@@ -7,7 +7,7 @@ source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-08-06
+last_verified: 2026-08-07
 ---
 
 # Git Commit Titles
@@ -40,11 +40,13 @@ action. Use a single English colon between `type` and `summary`.
 
 ## Case Commit Policy
 
-When an approved plan declares commits, each commit represents one
-coherent, verified, independently reviewable and revertible semantic completion
-point. It excludes unrelated changes and leaves relevant checks passing. Shared
-protocol defines completion points and authorization; stage Skills define
-procedure.
+When user/project policy or an approved Constraint requires or permits commits,
+each commit represents one coherent, verified, independently reviewable and
+revertible semantic completion point. It excludes unrelated changes and leaves
+relevant checks passing. The plan body never carries commit strategy;
+`tdd-execute` chooses organization inside the authorized outcome contract.
+Shared protocol defines completion points and authorization; stage Skills
+define procedure.
 
 Case commits use deterministic trailers:
 
@@ -60,12 +62,12 @@ Actual task, refactor, and review-fix hashes are recorded in `execution.md` when
 that artifact exists. Terminal carriers (`closure.md` or Compact plan close
 fields) must not predict their own completion commit hash.
 
-Local commits follow user/project intent and semantic value. Ordinary case
-bookkeeping does not require standalone plan or closure commits. A guarded plan
-may declare them when durable approval or auditability justifies the cost.
-Review findings may be fixed in coherent batches; finding count does not dictate
-commit count. Unqualified `Done` requires commit success only for commits the
-approved plan declared, plus no unexplained case-related working-tree changes.
+Local commits follow user/project intent, approved Constraints, and semantic
+value. Ordinary case bookkeeping does not require standalone plan or closure
+commits. Review findings may be fixed in coherent batches; finding count does
+not dictate commit count. Unqualified `Done` requires commit success only when
+user/project policy or an approved Constraint explicitly requires it, plus no
+unexplained case-related working-tree changes.
 
 Before guarded plan confirmation, the human-facing summary states expected
 local Git actions and makes clear that push, PR, merge, release, and history

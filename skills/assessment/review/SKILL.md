@@ -68,11 +68,12 @@ for the target.
 
 ### Spec
 
-Compare the complete target with Goal, Guardrails/Non-goals, Decisions,
-Acceptance, Escalation Triggers/protected boundaries, amendments, and directly
-relevant authority/contracts/requirements. Treat file lists and tests as
-adaptive evidence unless specifically protected. Find missing/partial/wrong/
-unrequested behavior, scope creep, and unsupported acceptance; cite the
+Compare the complete target with the approved Goal, Success Criteria, and
+Constraints plus confirmed amendments and directly relevant authority,
+contracts, or requirements. Files, tasks, commands, sequencing, tests, and
+other implementation choices are adaptive execution evidence unless an owner
+made one a Constraint. Find missing/partial/wrong/unrequested behavior, scope
+creep, Constraint violations, and unsupported success claims; cite the
 governing source.
 
 ## Aggregate

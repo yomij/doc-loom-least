@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-08-06
+last_verified: 2026-08-07
 ---
 
 # Development Workflow
@@ -26,10 +26,11 @@ when triggered.
 - `context-authority` is a conditional pre-plan gate for resume, ambiguity,
   authority, conflict, public-contract, high-risk, and weakly verified work. It
   reads the active constitution first when discoverable.
-- `plan-confirm` writes and confirms the current versioned plan. It owns the
-  outcome envelope and any declared approval/plan commit evidence; current
-  authorization allows same-turn execution unless the user asks to hold,
-  revise, or review first.
+- `plan-confirm` writes and confirms the current versioned outcome contract. Its
+  plan body contains only Goal, Success Criteria, and Constraints; risk,
+  assurance, baseline, approval, and terminal status remain concise metadata.
+  Current authorization allows same-turn execution unless the user asks to
+  hold, revise, or review first.
 - `tdd-execute` requires current execution authorization, defaults to TDD, and
   records confirmed exceptions with alternative verification.
 - `doc-sync-close` owns path-correct terminal status, safe L2/L3 sync, and
@@ -57,24 +58,26 @@ requires guarded assurance.
 
 - Direct reversible one-turn low/medium work uses normal execution,
   verification, and final reporting without a case.
-- Compact persistent work uses a concise plan and records terminal status on
-  that plan when the case ends; the current unambiguous execute request may be
-  recorded as approval without another prompt. Compact does not require a
-  separate `closure.md`.
+- Compact persistent work uses a concise outcome contract and records terminal
+  status/evidence on that plan when the case ends; the current unambiguous
+  execute request may be recorded as approval without another prompt. Compact
+  does not require a separate `closure.md`.
 - Guarded work requires explicit confirmation of the written current plan,
   exact-baseline deep review, and thin `closure.md` terminal evidence.
 
 Medium risk alone does not create a case or trigger confirmation.
 All paths retain applicable TDD or a credible recorded alternative verification.
 
-Approval binds Goal, Guardrails/Non-goals, Acceptance, Escalation Triggers, and
-specifically protected boundaries. Internal file discovery, added tests, and
-ordinary implementation choices may adapt within that outcome envelope.
-Publication, history rewriting, unrelated changes, risk escalation,
-authority/public-contract changes, dependency/config/CI/schema effects,
-external resources, irreversible actions, and other declared protected
-boundaries require separate authorization. An approved plan is not a standing
-grant for a later session.
+Approval binds Goal, Success Criteria, and Constraints. Constraints carry
+guardrails, non-goals, protected effects, reapproval triggers, exclusions, and
+owner-mandated restrictions. Context, files, tasks, commands, sequencing, run
+mode, tests, TDD/verification choice, review invocation, and commit
+organization stay with execution and may adapt inside that contract.
+Publication, history rewriting, unrelated changes, Goal/criterion/Constraint
+changes, risk escalation, authority/public-contract changes,
+dependency/config/CI/schema effects, external resources, irreversible actions,
+and other protected effects require separate authorization. An approved plan
+is not a standing grant for a later session.
 
 Before guarded confirmation, summarize the human outcome, material scope,
 expected local Git actions/commit count, likely interruptions, and excluded
@@ -84,25 +87,26 @@ publication/history actions.
 
 Deep Post-execution Engineering/Spec review is required for guarded work,
 material deviations, weak verification, public/authority-sensitive changes,
-or an explicit plan/user request. `tdd-execute` invokes `review`; axes remain
+or an explicit Constraint/user request. `tdd-execute` invokes `review`; axes remain
 separate and missing material evidence cannot pass. Other work receives the
-executor's compact acceptance/test/diff/scope completion check. This adds no
+executor's compact Success-Criteria/test/diff/scope completion check. This adds no
 case phase or `review.md`.
 
 Review returns the complete current finding set. Execution fixes findings in
 the smallest coherent, independently valid/revertible batches and re-reviews
 affected axes; finding count does not dictate commit count.
 
-Local commits follow user/project intent and semantic value. Ordinary case
-bookkeeping does not require standalone plan or closure commits. Guarded plans
-may declare them when auditability justifies the cost. The policy is prospective
-and does not invalidate legacy cases.
+Local commits follow user/project intent, approved Constraints, and semantic
+value; their organization is an execution choice and never a plan-body
+strategy. Ordinary case bookkeeping does not require standalone plan or
+closure commits. The policy is prospective and does not invalidate legacy
+cases.
 
-Unqualified `Done` requires met acceptance criteria, passing review when
+Unqualified `Done` requires met Success Criteria, passing review when
 triggered, complete path-correct terminal evidence (Compact plan fields or
 Guarded thin `closure.md`), and no unexplained case-related worktree changes.
-Commit success is an additional terminal gate only when the approved plan
-declared that commit.
+Commit success is an additional terminal gate only when user/project policy or
+an approved Constraint explicitly requires it.
 
 ## Sources
 

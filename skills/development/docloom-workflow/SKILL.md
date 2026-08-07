@@ -88,8 +88,9 @@ recommendation and decision request.
   approved execution.
 - Use shared persistence/guarded triggers, never numeric size or medium risk
   alone.
-- Record material routing assumptions in the owning plan or terminal carrier,
-  not a route artifact.
+- Convert only assumptions that bind authorization into Constraints. Persist
+  supporting context in a triggered brief, handoff, execution, or terminal
+  carrier; never add it as another plan-body concern or route artifact.
 - Derive case status from shared order: existing `closure.md`, else plan
   `final_status`, else execution/plan draft state.
 - Do not write plan risk/baseline, add pipeline stages, or call a backend.

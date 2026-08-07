@@ -7,7 +7,7 @@ source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-08-04
+last_verified: 2026-08-07
 ---
 
 # Agent Policy
@@ -46,12 +46,14 @@ only for continuity, durable human decisions, explicit case requests, or
 guarded execution; add guarded assurance for high/public/authority-sensitive,
 irreversible/destructive, or weakly verified work.
 
-Plan authorization is outcome-based. Agents may discover internal files, add
-tests, and choose ordinary implementation details inside the approved Goal,
-Guardrails/Non-goals, Acceptance, and Escalation Triggers. They must stop for a
-changed outcome/non-goal, risk escalation, authority/public-contract effect,
-dependency/config/CI/schema effect, external resource, irreversible action, or
-another protected boundary.
+Plan authorization is outcome-based. The plan body contains only Goal, Success
+Criteria, and Constraints; it does not prescribe implementation paths. Agents
+own context use, file discovery, task decomposition, commands, sequencing, run
+mode, tests, TDD/verification choice, review invocation, and commit
+organization inside that contract. They must stop for a Goal, Success
+Criterion, or Constraint change; risk escalation; authority/public-contract
+effect; dependency/config/CI/schema effect; external resource; irreversible
+action; or another protected effect.
 
 ## Sources
 

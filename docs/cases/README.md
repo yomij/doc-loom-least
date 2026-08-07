@@ -21,6 +21,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260807-outcome-only-plan-contract` | Done | `20260807-outcome-only-plan-contract/closure.md` | Outcome-only plan contract shipped; installed/distributed Skill sync remains separately authorized. |
 | `20260806-p1-terminal-status-carrier` | Done | `20260806-p1-terminal-status-carrier/closure.md` | Compact closes on plan fields; Guarded keeps thin `closure.md`. Dogfood a Compact plan-only close next. |
 | `20260804-proportional-workflow-simplification` | Done | `20260804-proportional-workflow-simplification/closure.md` | Proportional routing and assurance pass exact-baseline review; dogfood direct/compact/guarded cost signals next. |
 | `20260714-skill-resource-pointer-hardening` | Done | `20260714-skill-resource-pointer-hardening/closure.md` | Source fix passes review; publication and Skillshare update remain separately authorized follow-up work. |

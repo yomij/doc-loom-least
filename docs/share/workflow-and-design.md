@@ -70,8 +70,8 @@ Case artifact：
 |---|---|
 | 当前进度是什么 | 持久 case 的 `plan.md` / 条件化 `execution.md` / 终态载体 |
 | 事实该信什么 | L1 authority 文档 + 代码 + 测试 |
-| 这次要做什么 | `plan.md`（带版本、风险、TDD 策略） |
-| 做了什么、偏没偏离 | 触发时用 `execution.md`；否则终态载体保留精简验收/测试/diff/scope 证据 |
+| 这次要实现什么结果 | `plan.md`（目标、成功判据、约束；带最小授权元数据） |
+| 做了什么、偏没偏离 | 触发时用 `execution.md`；否则终态载体保留精简成功判据/测试/diff/scope 证据 |
 | 结果如何 | Compact：`plan.md` 的 `final_status`；Guarded/legacy：薄 `closure.md` |
 | 下次怎么接 | `handoff.md`（仅在有恢复点时） |
 
@@ -88,7 +88,7 @@ agent 进入一个 workspace，不需要查询任何外部系统——读最小�
 
 > **Markdown artifact 同时承载人类可读证据和当前状态。**
 
-`plan.md`、条件生成的 `execution.md`、以及 Guarded/legacy 的薄 `closure.md` 各自只拥有本阶段的状态；Compact 终态写在 `plan.md`。agent 按固定优先级读取最新可靠 artifact，并检查计划声明的完成证据。没有需要修复或同步的第二份状态缓存。
+`plan.md`、条件生成的 `execution.md`、以及 Guarded/legacy 的薄 `closure.md` 各自只拥有本阶段的状态；Compact 终态写在 `plan.md`。agent 按固定优先级读取最新可靠 artifact，并检查成功判据的完成证据。没有需要修复或同步的第二份状态缓存。
 
 文档驱动不等于"什么都写文档"。Artifact Policy 规定产物**按需生成**：`execution.md` 只在恢复、实质偏离、重要失败/重试、深度 Review finding 或显式请求时写，`closure.md` 只在 Guarded 收尾（或历史 case）时写，`handoff.md` 只在存在未来恢复点时写。普通行为变化、一次正常 TDD 循环或无 finding 的深度 Review 本身不强制落盘。
 
@@ -113,9 +113,9 @@ agent 进入一个 workspace，不需要查询任何外部系统——读最小�
 | `docloom-workflow` | **入口 + 轻量路由器**：解析状态、延迟创建 case、持有 Artifact Policy |
 | `setup-doc-governance` | 文档治理：扫描抽取事实，生成治理计划，一次确认后执行 |
 | `context-authority` | 按需上下文 gate：读最小上下文、判权威、输出路由 verdict |
-| `plan-confirm` | 计划 gate：定义 outcome envelope、风险/TDD 和条件化 Review/提交策略 |
+| `plan-confirm` | 结果契约 gate：只写并确认目标、成功判据和约束；路径由执行模型决定 |
 | `tdd-execute` | Case 执行 gate：红绿重构或例外验证 + 按需证据 + 触发后的 Review/修复循环 |
-| `doc-sync-close` | 收尾 gate：同步文档、记录最终证据、按计划声明创建 completion commit |
+| `doc-sync-close` | 收尾 gate：同步文档、映射成功判据证据、按明确要求创建 completion commit |
 | `review` | 只读审查：临时审查由用户触发；满足 guarded-review 条件时由执行流调用 Post-execution 模式 |
 | `grill` | 手动交互拷问（一次一问，纯对话） |
 
@@ -159,7 +159,7 @@ flowchart LR
     A[用户任务] --> C{需要持久 case?}
     C -->|否| DIRECT[Direct<br/>正常执行/验证/报告]
     C -->|是| G{需要 guarded assurance?}
-    G -->|否| COMPACT[Compact persistent<br/>精简 plan + closure]
+    G -->|否| COMPACT[Compact persistent<br/>精简结果契约 + plan 终态]
     G -->|是| GUARDED[Guarded<br/>显式确认 + 精确基线深审 + 持久证据]
     COMPACT --> EXEC[执行<br/>artifact/review/commit 按触发生成]
     GUARDED --> EXEC
@@ -169,39 +169,41 @@ flowchart LR
 风险本身不建 case，也不要求重复确认。compact persistent 计划可记录当前
 明确的“执行”请求；guarded 计划必须展示书面当前对象并获得显式确认。
 
-### 5.2 计划确认绑定
+### 5.2 结果契约绑定
 
-`plan-confirm` 绑定的是 outcome envelope，而不是冻结实现清单：
+`plan-confirm` 只绑定三个问题：
 
-- Goal
-- Guardrails / Non-goals
-- Acceptance Criteria
-- Escalation Triggers
-- 明确保护的特殊边界
+- **目标**：最终要变成什么状态，为什么值得做。
+- **成功判据**：哪些可观察、可证伪的事实成立时才能算做完，每项声明需要什么证据。
+- **约束**：哪些结果不能发生，哪些影响受保护，什么变化必须停下重新确认。
 
-`risk_level`、`plan_version` 和 `base_commit` 继续提供追溯。文件清单、补充测试和
-普通实现选择是计划证据，可在 envelope 内自适应，不触发升版。只有 outcome/
-non-goal/acceptance 变化、风险升级、authority/public contract 变化、依赖/
-lockfile/CI/schema/config effect、外部资源或不可逆动作、其他受保护边界变化时，
-才停止并重新确认。
+“给目标而不给步骤”不等于少写。它把信息密度从“准备怎么做”移到“怎么算
+做完”：成功判据可以很细，覆盖正向结果、必须保留的性质、失败条件和证据
+标准；但 plan 不保存文件、任务、命令、顺序、run mode、测试方案、TDD 路径、
+Review 调用或提交组织。
+
+`risk_level`、`assurance_mode`、`plan_version` 和 `base_commit` 只作为授权元数据
+提供追溯。执行模型在结果契约内自主发现上下文、文件和验证路径。目标、判据或
+约束语义变化，或者风险、authority/public contract、依赖/lockfile/CI/schema/
+config、外部资源、不可逆动作、其他受保护影响发生变化时，才停止并重新确认。
 
 ### 5.3 TDD 执行与例外
 
-默认走 Red → Green → Refactor → Quality Check。但 TDD 不是教条——以下任务可记录例外：纯文档、配置、构建脚本、UI 文案、删除死代码、探索 spike、紧急 hotfix。
+执行模型默认走 Red → Green → Refactor → Quality Check，但具体路径不写进 plan。TDD 不是教条——纯文档、配置、构建脚本、UI 文案、删除死代码、探索 spike、紧急 hotfix 等可以例外。
 
 例外 ≠ 跳过验证，必须记录替代验证方式（manual / snapshot / build / smoke / reviewer）。无行为变化的重构不强行造失败测试，改用 characterization 锁定现有行为 → 重构 → 验证无回归。
 
 guarded、实质偏离、弱验证、public/authority-sensitive 或显式要求的工作，
 必须进行两次相互独立的只读检查。Engineering 关注正确性、错误路径、测试
-可信度、标准/契约、高风险项和不必要复杂度；Spec 对照 outcome envelope、
+可信度、标准/契约、高风险项和不必要复杂度；Spec 对照目标、成功判据和约束，
 确认决策和权威检查遗漏、错误实现和 scope creep。一次 Review 返回当前完整
 finding set；执行按独立有效性和可回滚性组成最小 coherent batch，验证后再
 复审受影响轴。finding 数量不决定 commit 数量，缺少关键证据不能当作通过。
 
-其他工作由执行者完成精简的 acceptance/test/diff/scope check。提交遵循用户/
-项目意图和语义价值；普通 case 不强制独立 plan/closure bookkeeping commit。
-只有计划明确声明的提交才是完成门禁。授权始终不包含无关文件、push、发布、
-amend/rebase/squash 或 escalation trigger。
+其他工作由执行者完成精简的 success/test/diff/scope check。提交遵循用户/
+项目意图、已批准约束和语义价值；普通 case 不强制独立 plan/closure
+bookkeeping commit。只有用户/项目策略或约束明确要求的提交才是完成门禁。
+授权始终不包含无关文件、push、发布、amend/rebase/squash 或约束违规。
 
 ### 5.4 收尾与状态
 
@@ -209,15 +211,15 @@ amend/rebase/squash 或 escalation trigger。
 
 | 状态 | 含义 |
 |---|---|
-| `Done` | 验收标准满足；触发的 Review 通过；closure 证据完整；声明的提交成功 |
+| `Done` | 成功判据满足；触发的 Review 通过；终态证据完整；明确要求的提交成功 |
 | `Done with Caveats` | 主目标完成，有明确残留风险 |
 | `Blocked` | 依赖/权限/信息不足，无法继续 |
 | `Cancelled` / `Superseded` | 取消 / 被另一方案替代 |
 | `Paused` / `Abandoned` | 暂停待恢复 / 长期未续 |
 
-验收未满足、触发的双轴 Review 未通过、closure 证据不完整，或计划声明的提交
-未成功，都不能报告无保留 `Done`。没有声明 completion commit 时，完整
-closure artifact 本身即为终态证据。Authority 文档更新默认只生成 proposal，
+成功判据未满足、触发的双轴 Review 未通过、终态证据不完整，或明确要求的提交
+未成功，都不能报告无保留 `Done`。没有明确要求 completion commit 时，完整
+终态载体本身即为终态证据。Authority 文档更新默认只生成 proposal，
 必须用户明确确认后才执行窄 patch；结构性、高风险或冲突型更新走治理计划。
 
 ### 5.5 case 状态机

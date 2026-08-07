@@ -7,18 +7,18 @@
   independent persistence and guarded-assurance decisions: direct reversible
   work creates no case, compact cases keep conditional evidence, and guarded
   work retains explicit confirmation and exact-baseline review.
-- Bound plan approval to an outcome envelope, allowing internal file/test and
-  ordinary implementation discovery without plan-version churn while retaining
-  explicit escalation triggers for risk, public/authority, dependency/config,
-  external-resource, and irreversible effects.
+- Reduced the plan body to Goal, Success Criteria, and Constraints. Plans now
+  define the authorized result and completion evidence while execution owns
+  context use, files, tasks, commands, sequencing, TDD/verification, review,
+  and commit organization.
 - Made `execution.md`, deep Engineering/Spec review, and plan/closure commits
   conditional; required review now returns the complete current finding set and
   permits coherent fix batches.
 - Added workflow-owned Post-execution review with separate Engineering and Spec
   axes, material finding fix/re-review, and no new review phase or artifact.
-- Added approved case-scoped semantic atomic commits for plans, green tasks,
-  review fixes, and closure; unqualified `Done` now waits for closure-commit
-  success in cases that declare the policy.
+- Added approved case-scoped semantic atomic commits for plans, green behavior,
+  review fixes, and closure; unqualified `Done` waits for commit success only
+  when user/project policy or an approved Constraint explicitly requires it.
 - Repositioned Doc Loom Least as a repo-native personal product workflow
   substrate whose current supported lifecycle domain is development.
 - Grouped canonical skills under `skills/development/`, `skills/governance/`,
