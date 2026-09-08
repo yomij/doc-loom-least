@@ -78,9 +78,9 @@ Artifacts own current status:
 Derive status in this order:
 
 1. A valid `closure.md` with `Done`, `Cancelled`, `Superseded`, or `Abandoned`
-   is terminal when any explicitly required commit is present (legacy and Guarded).
+   is terminal when all explicitly required commits are present (legacy and Guarded).
 2. Else a valid plan `final_status` of those same values is terminal for
-   Compact when any explicitly required commit is present.
+   Compact when all explicitly required commits are present.
 3. A valid `Paused`, `Blocked`, or `Done with Caveats` on `closure.md`, else on
    plan `final_status`, remains current unless a later authorized
    `execution.md` contains required Resume evidence.
