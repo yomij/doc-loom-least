@@ -7,6 +7,9 @@ context narration, or another body section.
 Compact close updates Success Criteria Status/Evidence plus final_status and
 closed_at. It does not add a Final Status section. Guarded close uses thin
 closure.md and leaves plan criteria as the approved target.
+
+Terminal evidence states the outcome, verification conclusion, and material
+residuals; point to execution evidence instead of copying it.
 -->
 ---
 case_id:

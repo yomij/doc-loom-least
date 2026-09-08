@@ -50,6 +50,11 @@ final outcome either in thin `closure.md` (Guarded or legacy) or in Compact
 plan terminal fields (`final_status`, `closed_at`). There is no separate
 routing-state artifact; legacy state files are historical evidence only.
 
+Durable result retention is minimal: outcome, success-criteria result,
+verification conclusion, and material residuals or resume information. Keep
+process detail in triggered execution evidence and do not duplicate it across
+artifacts or dashboards.
+
 ## Proportional Paths And Confirmation
 
 Answer two independent questions: whether continuity, a durable decision,

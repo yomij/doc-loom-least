@@ -1,7 +1,8 @@
 <!--
 Guarded thin terminal carrier only. Compact cases close on plan.md instead.
 
-Required: Summary, Success Criteria, Remaining Risks, Follow-ups, Final Status.
+Required: Outcome, Success Criteria, Verification, Remaining Risks, Follow-ups,
+Final Status.
 Add authority/knowledge sections only when triggered.
 
 Do not copy full tests tables, full Post-execution narratives, or commit
@@ -18,11 +19,17 @@ updated_at:
 
 # Closure Report
 
-## Summary
+## Outcome
 
 - Outcome:
 - User action needed:
 - Local Git effect:
+
+## Verification
+
+- Conclusion:
+- Evidence pointers:
+- Material limitations:
 
 ## Success Criteria Status
 

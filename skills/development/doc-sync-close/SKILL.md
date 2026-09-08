@@ -20,6 +20,9 @@ Assess each criterion as `met`, `partially_met`, `not_met`, `not_verified`, or
 | Guarded | Thin `closure.md` using `templates/closure.md`. |
 | Legacy with closure | Keep `closure.md` as terminal authority. |
 
+The terminal record states the outcome, criteria result, verification
+conclusion, and material residuals or follow-ups. Point to execution evidence.
+
 `Done` needs supported criteria, resolved material findings/deviations and high
 review risk, passing triggered review, complete terminal evidence, all explicitly
 required commits, and no unexplained case changes. Missing optional execution

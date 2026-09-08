@@ -105,8 +105,15 @@ and every explicitly required commit. Historical closures remain valid.
 
 Create no other case artifact without user or governance authority. Dashboards
 and product-state views are derived inputs only. Plan records the contract and
-Compact verdict; execution records triggered path evidence; thin Guarded
-closure records criteria, residuals, and follow-ups without repeating execution.
+Compact terminal result; execution records only triggered process evidence; thin
+Guarded closure records the final result and residuals without repeating detail.
+
+## Result Retention
+
+Keep only what a later agent needs to understand the outcome, verify success, or
+resume: outcome, criteria result, verification conclusion, and material
+residuals. Point to code, tests, commands, review, or execution evidence;
+do not copy it across plan, execution, closure, dashboard, and handoff.
 
 Final statuses: `Done`, `Done with Caveats`, `Blocked`, `Cancelled`,
 `Superseded`, `Paused`, `Abandoned`. Unmet criteria or required non-passing
