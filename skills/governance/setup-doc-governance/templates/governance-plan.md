@@ -1,3 +1,4 @@
+<!-- Omit unused sections. File decisions include bridges, archives, and entry updates. -->
 ---
 status: proposed
 plan_version: 1
@@ -11,44 +12,22 @@ approved_at:
 
 ## Scope
 
-## Authority Structure To Create
+## File And Entry Decisions
 
-## File Routing Decisions
-
-| Source | Current Role | Verdict | Target | Reason | Requires Confirmation |
-|---|---|---|---|---|---|
+| Source | Verdict | Target / entry role | Reason |
+|---|---|---|---|
 
 ## Fact Decisions
 
-| Fact | Source | Type | Verdict | Target Authority Doc | Evidence | Risk |
-|---|---|---|---|---|---|---|
-
-## Bridge Decisions
-
-| Old Entry | Bridge Target | Reason |
-|---|---|---|
-
-## Archive Decisions
-
-| Source | Archive Target | Reason |
-|---|---|---|
-
-## Entry Point Decisions
-
-| Path | Decision | Type (repo/docs-route/local/agent-summary/none) | Authority / Conflict | Reason |
+| Fact | Source / evidence | Verdict | Authority target | Risk |
 |---|---|---|---|---|
 
-## Blocked Decisions
+## Blocked Decisions / Follow-ups
 
-| Topic | Sources | Why Blocked | Needed Decision |
-|---|---|---|---|
-
-## Follow-ups
-
-| Follow-up | Reason | Suggested Owner |
+| Topic | Reason | Needed decision / next action |
 |---|---|---|
 
 ## Applied Result
 
-| When | Change | Result | Evidence |
-|---|---|---|---|
+| Change | Result | Evidence |
+|---|---|---|

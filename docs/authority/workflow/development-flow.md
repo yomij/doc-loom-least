@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-08-07
+last_verified: 2026-09-08
 ---
 
 # Development Workflow
@@ -31,8 +31,9 @@ when triggered.
   assurance, baseline, approval, and terminal status remain concise metadata.
   Current authorization allows same-turn execution unless the user asks to
   hold, revise, or review first.
-- `tdd-execute` requires current execution authorization, defaults to TDD, and
-  records confirmed exceptions with alternative verification.
+- `tdd-execute` requires current execution authorization. The agent chooses the
+  smallest sufficient verification, including whether to add tests or use TDD.
+  No new tests needs no exception approval; Success Criteria still need evidence.
 - `doc-sync-close` owns path-correct terminal status, safe L2/L3 sync, and
   confirmed narrow authority patches; structural authority work remains
   governance work.
@@ -66,7 +67,7 @@ requires guarded assurance.
   exact-baseline deep review, and thin `closure.md` terminal evidence.
 
 Medium risk alone does not create a case or trigger confirmation.
-All paths retain applicable TDD or a credible recorded alternative verification.
+All paths require credible verification; tests and TDD are execution choices.
 
 Approval binds Goal, Success Criteria, and Constraints. Constraints carry
 guardrails, non-goals, protected effects, reapproval triggers, exclusions, and
@@ -114,7 +115,6 @@ an approved Constraint explicitly requires it.
 - `skills/development/docloom-workflow/SKILL.md`
 - `skills/development/context-authority/SKILL.md`
 - `skills/development/plan-confirm/SKILL.md`
-- `skills/development/plan-confirm/references/tdd-exceptions.md`
 - `skills/development/tdd-execute/SKILL.md`
 - `skills/development/doc-sync-close/SKILL.md`
 - `skills/development/docloom-workflow/references/loop-protocol.md`

@@ -88,7 +88,7 @@ entry points and implementation owners.
 | `setup-doc-governance` | Governance init and maintenance. Scans docs, extracts facts, produces governance plans. |
 | `context-authority` | Conditional fact authority gate. Reads minimal context, resolves conflicts, issues a routing verdict. |
 | `plan-confirm` | Outcome-contract gate. Writes and confirms only Goal, Success Criteria, and Constraints; execution owns the path. |
-| `tdd-execute` | Execution gate for cases. Runs Red-Green-Refactor or a recorded exception, keeps evidence proportional, and owns triggered review/fix loops. |
+| `tdd-execute` | Execution gate for cases. Chooses sufficient verification, keeps evidence proportional, and owns triggered review/fix loops. |
 | `doc-sync-close` | Closure gate. Syncs docs, maps final Success Criteria evidence, and creates a completion commit only when explicitly required. |
 | `review` | Read-only ad-hoc review plus the workflow-owned Engineering/Spec Post-execution gate. |
 | `grill` | Manual interactive stress-test of requirements, designs, or claims. |

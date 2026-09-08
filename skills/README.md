@@ -28,26 +28,15 @@ Future domains such as `product/`, `research/`, and `design/` should be added on
   to each consumer. Treat other local `references/` and `templates/` as private.
 - Keep material used by every invocation in `SKILL.md`; disclose only a named
   branch or substantial co-located rulebook.
-- Format local resource pointers like `setup-doc-governance`: use
-  `Read when trigger condition is met:` followed by
-  `- [Resource](./references/file.md): trigger`; templates use
-  `./templates/file.md`. Resolve targets from the owning `SKILL.md` directory
-  and keep links out of later body prose.
+- Name each local resource and when to read it; resolve its path from the
+  owning Skill directory. No fixed pointer format is required.
 - Retain a template only with an exact producer pointer and artifact owner.
 - Allow intentional workflow return routes, but keep physical file dependencies
   free of cross-Skill edges and cycles.
 - Load references/templates only for their named condition; do not move prose
   from one mandatory path to another.
-- Recalculate unique required files, not only total lines, after a workflow
-  contract change.
-
-Current verified word-cost ceilings:
-
-| Path | Ceiling |
-|---|---:|
-| Default doorway | 1,700 |
-| Context through plan | 3,700 |
-| Guarded persistent flow | 7,200 |
-| All active `skills/**` Markdown | 11,100 |
+- Keep the smallest instructions sufficient for the task. Remove model-known
+  knowledge, repeated rules, fixed scripts for conversation, and unnecessary
+  restrictions; do not relocate that prose into references.
 
 Skillshare discovers canonical skills recursively from this tree. `.skillignore` excludes `docs/archive/**`, and archived reference skills are no longer kept under `docs/archive/raw/reference/`.

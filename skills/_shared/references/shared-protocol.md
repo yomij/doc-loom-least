@@ -11,7 +11,7 @@ procedure belongs to its owner.
 | Governance rebuild | `setup-doc-governance` |
 | Context and authority verdict | `context-authority` |
 | Outcome contract, risk/assurance metadata, baseline, confirmation | `plan-confirm` |
-| TDD, conditional execution evidence, execution checks, review loop | `tdd-execute` |
+| Verification choices, conditional execution evidence, review loop | `tdd-execute` |
 | Closure, conditional completion commit, safe docs sync | `doc-sync-close` |
 | Read-only evidence review | `review` |
 | Interactive challenge | `grill` |
@@ -59,8 +59,8 @@ These are behaviors, not stages or risk levels:
   or weakly verified work requires an explicit current-plan confirmation,
   exact-baseline Engineering/Spec review, and thin `closure.md` evidence.
 
-Medium risk alone triggers neither case nor confirmation. Every path preserves
-applicable TDD or a credible alternative verification.
+Medium risk alone triggers neither case nor confirmation. Every path uses the smallest credible verification sufficient for its risks
+and success criteria; the agent decides whether tests or TDD add value.
 
 ## Case Identity And Status
 

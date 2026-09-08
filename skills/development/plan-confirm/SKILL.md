@@ -1,81 +1,37 @@
 ---
 name: plan-confirm
-description: Write, version, and authorize a Compact or Guarded outcome contract after case identity and context/valid skip. Own contract, risk/assurance, baseline, and approval; execution owns the path.
+description: Write and authorize a Compact or Guarded outcome contract after case identity and context are resolved. Execution owns the implementation path.
 ---
 
 # plan-confirm
 
-Consume an existing case; missing identity returns to `docloom-workflow`.
+Read `references/shared-protocol.md` for assurance, authorization, and protected
+changes. Require case identity, context or valid skip, and an exact baseline;
+return missing identity to `docloom-workflow`.
 
-Read when trigger condition is met:
+Write `plan.md` using `templates/plan.md`. Its body contains only:
 
-- [Shared protocol](./references/shared-protocol.md): shared status, risk,
-  authorization, or commit rules.
-- [TDD exceptions](./references/tdd-exceptions.md): validating a proposed
-  TDD-exception Constraint only.
-- [Plan template](./templates/plan.md): writing `plan.md` as `status: draft`.
+- **Goal:** desired result and purpose.
+- **Success Criteria:** claims and required evidence, with close-time columns.
+- **Constraints:** guardrails, non-goals, protected effects, and owner mandates.
 
-## Inputs
+Keep implementation choices out of the plan. `tdd-execute` chooses tests and
+verification; TDD and new tests need no exception mechanism. Explicit required
+checks remain Constraints. Supporting context stays inline or in a triggered
+brief.
 
-Require request, case id, Git baseline, context/valid skip, relevant authority,
-confirmed selection/decisions, and the current plan when revising.
+## Authorization
 
-## Workflow
+Record risk/assurance, exact pre-execution baseline, version, and approval in
+frontmatter. A required requirements artifact must be approved and receive its
+declared requirements commit before planning.
 
-1. Validate case/context; record the exact baseline and risk/assurance metadata.
-2. A requested requirements artifact must be approved and committed with
-   `Doc-Loom-Step: requirements` before planning; never commit a draft as approved.
-3. Write Goal, evidence-backed Success Criteria, and Constraints. Keep the
-   shared adaptive path out; a confirmed TDD exception is a Constraint.
-4. For Guarded work, summarize outcome, material scope, decision, local Git,
-   interruptions, and exclusions in conversation.
-5. Write template `plan.md` as `draft`; reject vague goals, unfalsifiable or
-   unsupported criteria, missing constraints, placeholders, and path leakage.
-6. Compact may record a current unambiguous execute request; Guarded explicitly
-   confirms the written plan. Ask only when intent/contract is ambiguous.
-7. Record approver/time/version/baseline/confirmation, then execute same-turn
-   unless the user holds, revises, or requests review first.
+Compact may use the current unambiguous execute request as approval. Guarded
+requires confirmation of the written current plan; summarize outcome, scope,
+Git effects, interruptions, and exclusions in conversation first.
+Record approver, time, version, and confirmation, then continue to execution
+unless the user holds, revises, or asks for review first.
 
-## Plan Contract
-
-Frontmatter: `case_id`, `plan_version`, `status`, `risk_level`,
-`assurance_mode`, `approved_by`, `approved_at`, `confirmation`, `base_commit`
-(or Git-unavailable reason), `final_status`, `closed_at`.
-
-The body has exactly:
-
-- **Goal:** desired end state and purpose, never solution shape.
-- **Success Criteria:** falsifiable claims, required evidence, and close-time
-  status/evidence columns.
-- **Constraints:** guardrails, non-goals, protected/reconfirm effects,
-  exclusions, and owner mandates.
-
-Persist no other body concern. Context stays inline or in a triggered brief;
-execution owns path and evidence. Precision belongs in completion semantics,
-not extra headings.
-
-Baseline is the exact pre-execution point, never a later plan commit. Requirements
-approval covers only its declared effect. Plan approval covers the contract, not
-path. Compact close may update criterion evidence and terminal metadata.
-
-## Version And Approval
-
-| Event | Record |
-|---|---|
-| Draft | `status: draft`; approval empty. |
-| User approval | `status: approved`; user/time/version/baseline recorded. |
-| Current compact execute request | `status: approved`; record request/time/version/baseline. |
-| Goal, criterion, or Constraint change | Increment version, return to draft, clear current approval. |
-
-Any contract-semantic or shared protected change requires a new draft/version.
-Criterion evidence and adaptive-path choices do not.
-
-## Gates
-
-- No context/valid skip, identity, or resolvable conflict -> return to owner.
-- No approved requirements when required -> no plan execution.
-- No current recorded authorization -> no execution.
-- High risk requires an unambiguous object and matching confirmation/version.
-- Missing guarded conversational approval summary, assurance metadata, or exact
-  review baseline -> correct before execution.
-- A discovery candidate is context, never approval.
+Contract-semantic or shared protected changes increment the version, return to
+`draft`, and clear approval. Adaptive choices and Compact close-time criterion
+evidence/terminal metadata do not change the contract.

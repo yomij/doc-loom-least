@@ -42,7 +42,7 @@ assurance；只在真实触发的计划、审查和收尾边界设 gate。
 - **历史文档是证据，不是权威**。旧需求、旧设计、会议记录默认不能当当前事实用——它们是抽取事实的原材料。
 - **过期文档比缺失文档更危险**。一份看着像权威、实则已与代码脱节的文档，会把 agent 引向错误实现；没有文档时 agent 至少会去读代码或发问。所以治理的目标是**可信知识密度**，不是文档数量——过期的就该降级或归档。
 - **确认 gate 保护真实边界**。guarded、高风险、public contract、workflow/agent policy 等边界必须显式确认；medium 风险本身不建 case，也不增加确认。
-- **TDD 是默认纪律，但允许记录化例外**。纯文档、配置、spike、hotfix 不会被流程卡死，但必须记录替代验证方式。
+- **验证尽量简单，够用即可**。由 agent 决定是否需要测试、需要哪些用例，以及是否采用 TDD；不写新测试无需例外审批。
 - **不比它所治理的改动更大**。Case 只为连续性、持久决策、显式请求或 guarded 执行存在；artifact、Review 和 commit 都由各自触发条件决定。
 - **生命周期扩展按真实边界发生**。未来的产品、调研、设计等领域，只有在出现清晰工作流和 skill 边界时才进入系统，不提前创建占位阶段。
 
@@ -52,7 +52,7 @@ flowchart LR
     P2["不成为复杂流水线"] --> C2["thin router 不做 orchestrator<br/>无 CLI backend"]
     P3["Human-Semantic"] --> C3["Markdown 为人类主记录<br/>yaml 只是路由信号"]
     P1 & P3 --> C4["历史文档=证据<br/>authority=治理后权威"]
-    P2 & P3 --> C5["TDD 默认+记录化例外<br/>确认 gate 不放宽"]
+    P2 & P3 --> C5["agent 自主选择验证<br/>满足成功判据"]
 ```
 
 ---
@@ -114,7 +114,7 @@ agent 进入一个 workspace，不需要查询任何外部系统——读最小�
 | `setup-doc-governance` | 文档治理：扫描抽取事实，生成治理计划，一次确认后执行 |
 | `context-authority` | 按需上下文 gate：读最小上下文、判权威、输出路由 verdict |
 | `plan-confirm` | 结果契约 gate：只写并确认目标、成功判据和约束；路径由执行模型决定 |
-| `tdd-execute` | Case 执行 gate：红绿重构或例外验证 + 按需证据 + 触发后的 Review/修复循环 |
+| `tdd-execute` | Case 执行 gate：按需测试与验证 + 按需证据 + 触发后的 Review/修复循环 |
 | `doc-sync-close` | 收尾 gate：同步文档、映射成功判据证据、按明确要求创建 completion commit |
 | `review` | 只读审查：临时审查由用户触发；满足 guarded-review 条件时由执行流调用 Post-execution 模式 |
 | `grill` | 手动交互拷问（一次一问，纯对话） |
@@ -187,11 +187,11 @@ Review 调用或提交组织。
 约束语义变化，或者风险、authority/public contract、依赖/lockfile/CI/schema/
 config、外部资源、不可逆动作、其他受保护影响发生变化时，才停止并重新确认。
 
-### 5.3 TDD 执行与例外
+### 5.3 按需测试与验证
 
-执行模型默认走 Red → Green → Refactor → Quality Check，但具体路径不写进 plan。TDD 不是教条——纯文档、配置、构建脚本、UI 文案、删除死代码、探索 spike、紧急 hotfix 等可以例外。
+执行模型选择足以验证真实风险和成功判据的最小方案，自主决定是否新增测试、选择哪些用例及是否采用 TDD。具体路径不写进 plan。
 
-例外 ≠ 跳过验证，必须记录替代验证方式（manual / snapshot / build / smoke / reviewer）。无行为变化的重构不强行造失败测试，改用 characterization 锁定现有行为 → 重构 → 验证无回归。
+不写新测试无需例外审批，但成功判据仍需证据。测试或其他检查的选择、理由和结果按需记录；明确要求的检查仍须遵守。
 
 guarded、实质偏离、弱验证、public/authority-sensitive 或显式要求的工作，
 必须进行两次相互独立的只读检查。Engineering 关注正确性、错误路径、测试
@@ -360,7 +360,7 @@ flowchart TD
 > **严格，但不僵硬。**
 > **可追溯，但不繁琐。**
 > **文档优先，但不脱离代码。**
-> **TDD 默认，但允许记录化例外。**
+> **验证必需，测试与 TDD 按需选择。**
 > **确认 gate 保护真实决策边界，比例化 assurance 保护最小路径。**
 > **历史文档作为证据，authority 文档作为治理后的权威。**
 

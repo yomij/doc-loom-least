@@ -1,105 +1,43 @@
 ---
 name: review
-description: Read-only evidence review for explicit code/docs/design/proposal/test/diff/case requests and triggered Post-execution review. Complexity-only requires explicit simplification, deletion, YAGNI, or over-engineering intent.
+description: Read-only review for explicit assessment requests or triggered Post-execution checks. Complexity-only requires explicit simplification intent.
 ---
 
 # review
 
-Enter by explicit review intent or authorized Post-execution invocation for a
-shared trigger. Plan approval never authorizes unrelated ad-hoc review.
+Enter through explicit review intent or an authorized Post-execution trigger.
+Write no files or state; execution owns fixes and persisted evidence.
+Use subagents only when the user requests them.
 
-Read when trigger condition is met:
+## Modes
 
-- [Complexity-only rules](./references/complexity-only.md): `Complexity-only`,
-  the complexity section of `Dual-pass`, or the unnecessary-complexity check
-  inside Post-execution Engineering.
-
-## Modes And Boundary
-
-- `Standard`: correctness/evidence.
-- `Complexity-only`: explicit simplification/YAGNI; assess only complexity and
-  never substitute it for Standard.
+- `Standard`: correctness and evidence.
+- `Complexity-only`: unnecessary complexity only; read
+  `references/complexity-only.md`.
 - `Dual-pass`: explicitly requested Standard plus complexity.
-- `Post-execution`: completed-work Engineering and Spec axes with aggregate.
+- `Post-execution`: separate Engineering and Spec verdicts with an aggregate.
 
-Review writes nothing; execution may persist its returned evidence.
+Review the requested or clear conversation target, not the whole repo by
+default. Report scope, findings with location/evidence/impact/correction,
+and material evidence gaps. Classify findings Critical, Important, or Minor;
+return the complete current set, including an explicit empty result.
 
-## Target And Evidence
+## Post-execution Contract
 
-Target user object, obvious conversation object, non-empty diff, explicit case,
-then one minimal question—never the whole repo by default. State maturity for
-ad-hoc modes; Post-execution is Completed.
+Require the authorized Goal/Success Criteria/Constraints, exact `base_commit`
+(not merge-base), and complete committed, staged, unstaged, and untracked delta.
+Account for unrelated work and use current authority/requirements as Spec
+sources after the approved contract and confirmed decisions.
 
-Post-execution requires:
+- **Engineering:** correctness, regression risk, verification, and complexity.
+- **Spec:** outcome and Constraint compliance. Adaptive path choices are
+  evidence, not requirements unless explicitly constrained.
 
-1. instructions, authorized contract/amendments, case evidence;
-2. exact `base_commit`, never merge-base/three-dot;
-3. complete committed, staged, unstaged, and untracked delta;
-4. explained unrelated scope and expected checks/commits;
-5. trustworthy Spec sources: contract/confirmed decisions, then active
-   authority/ADR/public contract/requirements.
-
-Invalid baseline, empty target, unexplained mixed work, or missing material
-command/Spec evidence returns `insufficient_evidence`; invent nothing without Git.
-
-Read only relevant delta, cited facts, active contracts, adjacent code/tests,
-and command/runtime evidence. Metadata is not proof; missing high-risk evidence
-is a gap/finding; derived/history/scratch never becomes fact.
-
-## Post-Execution Axes
-
-Finish each axis independently; neither verdict is evidence for the other.
-
-### Engineering
-
-Check correctness, regression/edges/errors, high-risk topics, credible tests/
-commands, public/authority/ADR/repository standards, exact Git isolation, and
-unnecessary complexity. Omit tool-enforced issues only after a target pass.
-
-### Spec
-
-Compare complete target with approved contract/amendments and relevant
-authority/requirements. Shared adaptive-path choices are evidence unless made a
-Constraint. Find missing/partial/wrong/unrequested behavior, scope creep,
-Constraint violations, and unsupported success; cite its source.
-
-## Aggregate
-
-| Condition | Result |
+| Condition | Aggregate |
 |---|---|
-| Any unresolved Critical/Important | `changes_required` |
-| Material judgment lacks evidence | `insufficient_evidence` |
+| Unresolved Critical/Important | `changes_required` |
+| Missing material evidence or invalid review target | `insufficient_evidence` |
 | Both axes have only Minor/none | `pass` |
 
-Axes never compensate. Return the complete current set and aggregate;
-execution owns fixes, commits, readiness, and routing.
-
-## Output
-
-Ad-hoc output leads with result, then Critical/Important/Minor findings, gaps,
-scope, mode/maturity, and reviewed/unreviewed sources. Explain non-obvious trust.
-
-Post-execution records each axis, aggregate, exact baseline/commits/delta, and
-worktree scope.
-
-Finding format:
-
-```md
-- `path:line-or-heading`: Problem.
-  Evidence: Observation or contradiction.
-  Impact: Consequence.
-  Required correction: Resolution condition.
-```
-
-Critical covers security/data/auth/public break; Important covers significant
-logic/error/contract/authority defects; Minor covers cosmetic, naming, stale
-links, or redundancy. Use `None within reviewed scope` when empty.
-
-## Gates
-
-- Ad-hoc modes need explicit intent; Post-execution needs an authorized
-  triggered invocation.
-- Missing material evidence never passes.
-- Output no route, ready-to-close/closure verdict, authority proposal, or fix.
-- Use review subagents only when the user explicitly requests them; the main
-  reviewer owns final severity and deduplication.
+Return both verdicts, findings/gaps, aggregate, and exact baseline/delta scope.
+Neither axis compensates for the other; execution owns readiness and routing.

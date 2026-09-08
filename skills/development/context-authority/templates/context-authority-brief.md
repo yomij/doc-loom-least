@@ -1,49 +1,18 @@
+<!-- Persist only when triggered. Keep material context; omit unused sections. -->
 # Context & Authority Brief
 
-## User Request
+## Request And Case
 
-## Intent
+## Workspace / Baseline
 
-- Type:
-- Reason:
-- Minimum Evidence Needed:
+## Sources And Constraints
 
-## Workspace Snapshot
-
-- Workspace:
-- Branch:
-- Worktree:
-- Git Available:
-- Dirty Workspace:
-- Changed Files Summary:
-
-## Case Context
-
-- Existing Case:
-- Proposed Case Slug:
-- Case State:
-
-## Sources Read
-
-| Source | Layer / Type | Why Included | Trust / Freshness |
-|---|---|---|---|
-
-## Sources Excluded
-
-| Source | Reason |
-|---|---|
-
-## Authority / Constraints
-
-## Relevant Code / Tests
+| Source | Authority / trust | Material context |
+|---|---|---|
 
 ## Conflicts / Unknowns
 
-| Topic | Conflict / Unknown | Risk | Required Decision |
-|---|---|---|---|
+| Topic | Risk | Needed decision / evidence |
+|---|---|---|
 
-## Route Verdict
-
-- Verdict:
-- Reason:
-- Required Next Owner:
+## Verdict And Next Owner

@@ -79,7 +79,7 @@ Doc Loom Least 现阶段用尽可能小的机制来解决这些问题：一组�
 | `setup-doc-governance` | 文档治理的初始化与维护。扫描文档、抽取事实、生成治理计划 |
 | `context-authority` | 按需的事实权威把关。读取最小必要上下文，解决冲突，输出路由裁决 |
 | `plan-confirm` | 结果契约把关。只写并确认目标、成功判据和约束；执行路径由模型负责 |
-| `tdd-execute` | Case 执行把关。执行 Red-Green-Refactor 或已记录的例外，按需留证，并负责触发后的 Review/修复循环 |
+| `tdd-execute` | Case 执行把关。自主选择够用的测试或其他验证，按需留证，并负责触发后的 Review/修复循环 |
 | `doc-sync-close` | 收尾把关。同步文档、映射成功判据证据，仅在明确要求时创建 completion commit |
 | `review` | 只读临时审查，以及工作流内部的 Engineering/Spec Post-execution gate |
 | `grill` | 手动交互式压力测试。逐问挑战需求、设计或文档主张 |

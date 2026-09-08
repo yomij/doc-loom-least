@@ -19,7 +19,7 @@ for them, without adopting a CLI backend or pipeline product.
 ## Current Demo State
 
 - Development workflow skills exist for routing, context authority, planning,
-  TDD execution, and closure.
+  execution with agent-selected verification, and closure.
 - Direct reversible one-turn low/medium work runs without a case; compact
   persistent cases retain a concise plan and plan-owned terminal status;
   guarded work adds explicit confirmation, exact-baseline review, and thin
@@ -66,8 +66,8 @@ commits on ordinary work while guarded cases keep thin terminal evidence.
 - Keep ad-hoc `review` and `grill` manual-only; keep triggered Post-execution
   review inside `tdd-execute`, without a new phase or artifact.
 - Keep `docloom-workflow` a thin router and discovery entry, not an executor.
-- Preserve explicit current-plan confirmation for guarded work and TDD or its
-  recorded verification exception for case execution.
+- Preserve explicit current-plan confirmation for guarded work and credible
+  verification for case execution; the agent selects tests and methods.
 
 ## Do Not Build Yet
 
