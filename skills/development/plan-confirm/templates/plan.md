@@ -23,6 +23,8 @@ confirmation:
 base_commit:
 final_status:
 closed_at:
+verification_summary:
+residuals:
 ---
 
 # Goal

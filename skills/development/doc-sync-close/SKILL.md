@@ -16,7 +16,7 @@ Assess each criterion as `met`, `partially_met`, `not_met`, `not_verified`, or
 
 | Case | Carrier |
 |---|---|
-| Compact | Existing plan criterion Status/Evidence and `final_status` / `closed_at`; keep plan approved and add no body section. |
+| Compact | Existing plan criterion Status/Evidence, optional `verification_summary` / `residuals`, and `final_status` / `closed_at`; keep plan approved and add no body section. |
 | Guarded | Thin `closure.md` using `templates/closure.md`. |
 | Legacy with closure | Keep `closure.md` as terminal authority. |
 

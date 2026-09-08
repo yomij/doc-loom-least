@@ -113,7 +113,9 @@ Guarded closure records the final result and residuals without repeating detail.
 Keep only what a later agent needs to understand the outcome, verify success, or
 resume: outcome, criteria result, verification conclusion, and material
 residuals. Point to code, tests, commands, review, or execution evidence;
-do not copy it across plan, execution, closure, dashboard, and handoff.
+do not copy it across plan, execution, closure, dashboard, and handoff. For
+Compact, optional plan frontmatter fields `verification_summary` and
+`residuals` hold the overall conclusion and material leftovers.
 
 Final statuses: `Done`, `Done with Caveats`, `Blocked`, `Cancelled`,
 `Superseded`, `Paused`, `Abandoned`. Unmet criteria or required non-passing

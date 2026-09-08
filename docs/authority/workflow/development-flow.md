@@ -50,6 +50,10 @@ final outcome either in thin `closure.md` (Guarded or legacy) or in Compact
 plan terminal fields (`final_status`, `closed_at`). There is no separate
 routing-state artifact; legacy state files are historical evidence only.
 
+Compact may retain the overall verification conclusion and material residuals
+in optional plan frontmatter fields `verification_summary` and `residuals`;
+Guarded keeps them in thin `closure.md`.
+
 Durable result retention is minimal: outcome, success-criteria result,
 verification conclusion, and material residuals or resume information. Keep
 process detail in triggered execution evidence and do not duplicate it across
