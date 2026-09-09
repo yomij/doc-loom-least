@@ -1,43 +1,41 @@
 ---
 name: doc-sync-close
-description: Close or interrupt a Doc Loom case with criterion evidence, terminal status, and scoped documentation sync.
+description: Record a Doc Loom case's outcome and synchronize affected documentation when closing or interrupting the work.
 ---
 
-# doc-sync-close
+# Close a Case
 
-Follow `references/shared-protocol.md` for status, artifacts, and required
-commits. Use the authorized contract, execution or compact checks, and triggered
-review evidence. Missing identity returns to `docloom-workflow`.
+Read `references/shared-protocol.md` for status, artifacts, and required commits.
+Use the authorized contract, execution evidence or completion checks, and any
+required review results. Return missing case identity to `docloom-workflow`.
 
-## Terminal Evidence
+## Record the Result
 
 Assess each criterion as `met`, `partially_met`, `not_met`, `not_verified`, or
-`out_of_scope`, with evidence. Write the final status to the existing carrier:
+`out_of_scope`, with evidence. Record the outcome, criterion results,
+verification conclusion, and material residuals. Reference execution details
+instead of repeating them.
 
-| Case | Carrier |
+| Case | Result location |
 |---|---|
-| Compact | Existing plan criterion Status/Evidence, optional `verification_summary` / `residuals`, and `final_status` / `closed_at`; keep plan approved and add no body section. |
-| Guarded | Thin `closure.md` using `templates/closure.md`. |
-| Legacy with closure | Keep `closure.md` as terminal authority. |
+| Compact | Plan criterion Status/Evidence and frontmatter `final_status`, `closed_at`; use `verification_summary` and `residuals` when needed. Keep the plan approved; add no body sections. |
+| Guarded | `closure.md`, using `templates/closure.md`. |
+| Legacy with closure | Existing `closure.md` remains the terminal authority. |
 
-The terminal record states the outcome, criteria result, verification
-conclusion, and material residuals or follow-ups. Point to execution evidence.
+Use `Done` only when criteria are met, material findings, deviations, and high
+review risks are resolved, required review passes, terminal evidence is complete,
+all required commits exist, and no case changes remain unexplained. An optional
+`execution.md` need not exist. Use `Done with Caveats` when the main goal is
+complete and residual risks or follow-ups are accepted.
 
-`Done` needs supported criteria, resolved material findings/deviations and high
-review risk, passing triggered review, complete terminal evidence, all explicitly
-required commits, and no unexplained case changes. Missing optional execution
-evidence alone is not a gap. `Done with Caveats` needs a completed main goal
-and accepted residual risk or follow-up.
+## Sync Documentation and Finish
 
-## Sync And Finish
+Update operational evidence and traceable derived views. For authority changes
+or nontrivial derived updates, read `references/doc-update-rules.md`. Apply only
+confirmed narrow authority patches; route structural changes or conflicts to
+governance. Keep unresolved authority proposals visible; they prevent `Done`.
 
-Update operational evidence and traceable derived views. For authority or
-nontrivial derived sync, read `references/doc-update-rules.md`: authority changes
-remain proposals unless the exact narrow patch is confirmed. Structural or
-conflicting changes belong to governance. Unresolved authority candidates remain
-visible and prevent unqualified Done.
-
-Do not change the implementation or contract to make closure pass. Commit only
-when required; report failed required commits or derived refresh accurately.
-Read `templates/handoff.md` only for a real resume point. Report the outcome,
-remaining gaps, and next action after writing the terminal carrier.
+Do not alter the implementation or contract to satisfy closure. Commit when
+required and report any required commit or derived update that failed. Use
+`templates/handoff.md` only when a future resume point is needed. Report the
+outcome, remaining gaps, and next action.

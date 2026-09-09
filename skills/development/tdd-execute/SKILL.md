@@ -1,36 +1,36 @@
 ---
 name: tdd-execute
-description: Execute an authorized Doc Loom contract with agent-selected verification, proportional evidence, and triggered review/fixes.
+description: Implement an authorized Doc Loom contract, choose appropriate verification, and resolve findings from required reviews. Tests and TDD are optional methods.
 ---
 
-# tdd-execute
+# Execute and Verify
 
-Follow `references/shared-protocol.md` for authorization, artifacts, protected
-changes, and commits. Require a non-terminal case, current authorized contract,
-and baseline; return missing prerequisites to their owner.
+Read `references/shared-protocol.md` for authorization, artifacts, protected
+changes, and commits. Require a non-terminal case, a current authorized contract,
+and a baseline. Return missing prerequisites to the responsible skill.
 
-## Verification
+## Implement and Verify
 
-The agent decides whether to add tests, which cases matter, and whether to use
-TDD. Choose the smallest verification sufficient for the real risk and Success
-Criteria. No new tests needs no exception approval; success still needs evidence.
-Record the choice and reason with the results.
+Choose the smallest sufficient verification for the Success Criteria and actual
+risk. Decide whether tests are useful, which cases matter, and whether to use
+TDD. Record the choice, reason, and results; omitting new tests requires no
+exception approval.
 
-Routine choices belong to execution. Contract or protected changes return to
-planning; do not weaken explicit verification Constraints.
+Implement within the contract. Adapt routine execution choices; return contract
+or protected changes to planning. Preserve explicitly required checks.
 
-## Execute And Hand Off
+Use `templates/execution.md` when a shared artifact trigger applies. Otherwise,
+retain a brief completion assessment covering criteria, checks, diff, and scope
+for closure. Commit according to user intent, project policy, and Constraints.
 
-Implement and verify within the contract. Use `templates/execution.md` only
-for shared artifact triggers; otherwise retain a compact criterion/check/diff/
-scope assessment for closure. Commit according to user/project intent and
-Constraints, not for bookkeeping.
+## Review and Close
 
-Invoke `review` in `Post-execution` mode for Guarded work, material deviation,
-weak evidence, public/authority effects, or explicit request. Provide the exact
-baseline and complete delta; persist separate Engineering/Spec results and own
-missing evidence, fixes, and re-review. Other work uses the compact check.
+Invoke `review` in `Post-execution` mode for Guarded work, material deviations,
+weak evidence, public or authority effects, or an explicit request. Supply the
+exact baseline and complete delta. Record separate Engineering and Spec results,
+resolve missing evidence, fix findings, and repeat the affected reviews. Other
+work uses the completion assessment above.
 
-When criteria are supported and required review passes, mark existing execution
-`ready_to_close` and route to `doc-sync-close`. Read `templates/handoff.md` only
-for a real future resume point.
+When criteria are met and required review passes, mark an existing
+`execution.md` as `ready_to_close` and route to `doc-sync-close`. Use
+`templates/handoff.md` only when a future resume point is needed.

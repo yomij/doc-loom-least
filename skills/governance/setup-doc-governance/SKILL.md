@@ -1,41 +1,41 @@
 ---
 name: setup-doc-governance
-description: Initialize, rebuild, or repair documentation governance when requested.
+description: Establish, rebuild, or repair documentation governance on request, with an evidence-based plan and confirmed changes.
 ---
 
-# setup-doc-governance
+# Set Up Documentation Governance
 
 Read `references/governance-rules.md` for layers, authority, routing, and entry
-rules; use `references/shared-protocol.md` for authorization and artifact policy.
-Govern docs only. Code and tests may serve as read-only evidence.
+rules, and `references/shared-protocol.md` for authorization and artifacts.
+Change documentation only; use code and tests as read-only evidence.
 
-## Scope And Plan
+## Scope and Plan
 
-Default to `docs-only`; use `current-case` for case-local governance and
-`full-repo` when code/test evidence is needed or requested.
+Default to `docs-only`. Use `current-case` for case-local governance or
+`full-repo` when code and test evidence is needed or requested.
 
-Each independent batch uses a new `docs/governance/YYYY-MM-DD-<slug>.md`.
-Case-bound governance uses `docs/cases/<case-id>/governance-plan.md`. Preserve
-existing batches; choose a unique slug for a new one.
+For an independent batch, create `docs/governance/YYYY-MM-DD-<slug>.md` with a
+unique slug. For case-bound work, use `docs/cases/<case-id>/governance-plan.md`.
+Preserve existing batches.
 
-Inventory relevant facts, sources, and entries, then write
-`templates/governance-plan.md` with `promote`, `merge`, `bridge`, `archive`, or
-`block` decisions. Include evidence, target, and material risk; omit empty
-sections and unsupported authority areas.
+Inventory relevant facts, sources, and entry points. Use
+`templates/governance-plan.md` to record `promote`, `merge`, `bridge`, `archive`,
+or `block` decisions with evidence, target, and material risk. Omit empty
+sections and authority areas without supporting evidence.
 
-## Apply
+## Apply Confirmed Decisions
 
-The proposed plan does not authorize application. After user confirmation,
-record approver/time/version and apply non-blocked decisions, excluding their
-blocked dependents. Write results into the same plan and refresh the docs index.
-Use `applied` or `applied_with_blocks`; keep unresolved decisions visible.
-Material plan changes increment the version and return to `proposed`.
+Obtain user confirmation before applying the plan; record approver, time, and
+version. Apply non-blocked decisions and exclude dependents of blocked decisions.
+Record results in the same plan, refresh the documentation index, and set
+`applied` or `applied_with_blocks`. Keep unresolved decisions visible. Material
+plan changes require a new version and return to `proposed`.
 
-Preserve the declared active constitution. Creation or migration requires a
-real need and confirmation; an amendment or migration updates index, SSOT map,
-and decision log. Keep agent adapters as pointers to active authority.
+Preserve the active constitution. Create or migrate it only for a demonstrated
+need with confirmation. Amendments and migrations must update the index, SSOT
+map, and decision log. Keep agent adapters as pointers to active authority.
 
-Authority frontmatter includes `status`, `authority: true`, `layer: authority`,
-`type`, `source_of_truth`, `supersedes`, and `superseded_by`. Lifecycle statuses
-are `active`, `draft`, `superseded`, `archived`; high-risk authority also needs
+Include authority frontmatter: `status`, `authority: true`, `layer: authority`,
+`type`, `source_of_truth`, `supersedes`, and `superseded_by`. Use lifecycle status
+`active`, `draft`, `superseded`, or `archived`; high-risk authority also requires
 `owner` and `last_verified`.

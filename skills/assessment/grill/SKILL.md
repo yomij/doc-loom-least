@@ -1,20 +1,18 @@
 ---
 name: grill
-description: Interactively pressure-test a claim when the user explicitly asks to grill, challenge, or question assumptions.
+description: Examine a claim through focused questions when the user explicitly asks to challenge it or question its assumptions.
 ---
 
-# grill
+# Grill
 
-Conversation only: no files, reports, or workflow state changes.
+Clarify the claim and its boundaries, then ask one consequential question at a
+time. Verify discoverable facts yourself. Offer options for discrete choices;
+use open questions otherwise.
 
-Establish the claim and boundaries, then ask one consequential question at a
-time. Check discoverable facts yourself. Offer options only for genuinely
-discrete decisions; otherwise use an open question.
+Build on the user's answers. A short confirmation applies to the current
+unambiguous recommendation; it does not establish a durable authority fact.
 
-Carry the user's last choice into the next question without a fixed script.
-A short answer confirms only the current unambiguous recommendation, not a
-durable authority fact.
-
-Stop when the user ends or the important decisions converge. Briefly summarize
-confirmed decisions, open questions, and remaining assumptions. Later workflow
-owners may consume these decisions in their own artifacts.
+Stop when the user ends the discussion or the important decisions converge.
+Summarize confirmed decisions, open questions, and remaining assumptions.
+Keep the assessment in conversation without changing files or workflow state.
+Workflow owners record decisions in artifacts when needed.

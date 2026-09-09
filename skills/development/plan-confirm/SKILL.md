@@ -1,37 +1,40 @@
 ---
 name: plan-confirm
-description: Write and authorize a Compact or Guarded outcome contract after case identity and context are resolved. Execution owns the implementation path.
+description: Define and obtain authorization for a Compact or Guarded outcome contract once case identity and context are resolved.
 ---
 
-# plan-confirm
+# Define and Confirm a Plan
 
 Read `references/shared-protocol.md` for assurance, authorization, and protected
-changes. Require case identity, context or valid skip, and an exact baseline;
-return missing identity to `docloom-workflow`.
+changes. Require case identity, resolved context or a valid skip, and an exact
+baseline. Return missing identity to `docloom-workflow`.
 
-Write `plan.md` using `templates/plan.md`. Its body contains only:
+## Write the Contract
+
+Use `templates/plan.md`. Keep the body to three sections:
 
 - **Goal:** desired result and purpose.
-- **Success Criteria:** claims and required evidence, with close-time columns.
+- **Success Criteria:** verifiable claims and required evidence; leave Status
+  and Evidence columns for closure.
 - **Constraints:** guardrails, non-goals, protected effects, and owner mandates.
 
-Keep implementation choices out of the plan. `tdd-execute` chooses tests and
-verification; TDD and new tests need no exception mechanism. Explicit required
-checks remain Constraints. Supporting context stays inline or in a triggered
-brief.
+Leave implementation and verification choices to `tdd-execute`, including
+whether to add tests or use TDD. Record explicitly required checks as
+Constraints. Keep supporting context in conversation or a required brief.
 
-## Authorization
+Record risk, assurance, exact pre-execution baseline, version, and approval in
+frontmatter. If a requirements artifact is required, it must be approved and
+receive any declared requirements commit before planning.
 
-Record risk/assurance, exact pre-execution baseline, version, and approval in
-frontmatter. A required requirements artifact must be approved and receive its
-declared requirements commit before planning.
+## Confirm and Continue
 
-Compact may use the current unambiguous execute request as approval. Guarded
-requires confirmation of the written current plan; summarize outcome, scope,
-Git effects, interruptions, and exclusions in conversation first.
-Record approver, time, version, and confirmation, then continue to execution
-unless the user holds, revises, or asks for review first.
+For Compact, the current unambiguous execution request may serve as approval.
+For Guarded, summarize outcome, scope, Git effects, interruptions, and exclusions,
+then obtain confirmation of the written current plan.
 
-Contract-semantic or shared protected changes increment the version, return to
-`draft`, and clear approval. Adaptive choices and Compact close-time criterion
-evidence/terminal metadata do not change the contract.
+Record approver, time, version, and confirmation. Continue to execution unless
+the user asks to hold, revise, or review first.
+
+Changes to contract semantics or shared protected effects require a new version,
+`draft` status, and cleared approval. Execution choices and Compact closure
+evidence or terminal metadata do not change the contract.
