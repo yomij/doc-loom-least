@@ -1,11 +1,11 @@
 # Cases
 
-This file is a derived dashboard for Doc Loom case discovery. Current status
-comes from each case's artifacts in shared order: `closure.md` when present,
-else plan `final_status` / `closed_at`, else `execution.md` / `plan.md`.
+This file is a derived dashboard for Doc Loom case discovery. New task status
+comes from each case's task.md. Legacy status comes from closure.md when
+present, else plan final_status / closed_at, else execution.md / plan.md.
 
-If this dashboard conflicts with case artifacts, follow their documented
-precedence and refresh this file.
+If this dashboard conflicts with the task record or legacy artifacts, follow
+the record's documented status and refresh this file.
 
 ## Active Cases
 
@@ -21,6 +21,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260909-minimal-two-skill-workflow` | Done with Caveats | `20260909-minimal-two-skill-workflow/closure.md` | Four-Skill workflow shipped; finite GPT-5.6 evaluation and user-managed retired-copy cleanup remain caveats. |
 | `20260807-outcome-contract-text-compression` | Done | `20260807-outcome-contract-text-compression/closure.md` | Seven runtime contracts reduced 9,017→7,426 tokens with semantics preserved; installed/distributed Skill sync remains separately authorized. |
 | `20260807-outcome-only-plan-contract` | Done | `20260807-outcome-only-plan-contract/closure.md` | Outcome-only plan contract shipped; installed/distributed Skill sync remains separately authorized. |
 | `20260806-p1-terminal-status-carrier` | Done | `20260806-p1-terminal-status-carrier/closure.md` | Compact closes on plan fields; Guarded keeps thin `closure.md`. Dogfood a Compact plan-only close next. |

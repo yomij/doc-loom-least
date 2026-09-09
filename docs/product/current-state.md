@@ -1,77 +1,31 @@
-# Product Current State
++# Product Current State
 
-This file is an operational input for next-slice discovery. It is not product
-authority. Active authority docs and current skill implementation win on
-conflict.
+This file is an operational input for discovery, not product authority.
 
-## Product Goal
+## Goal
 
-Doc Loom Least is a minimal, document-driven personal product workflow
-substrate. The current usable slice is AI-assisted development through Agent
-Skills and Markdown artifacts.
+Doc Loom Least is a small, Markdown-first personal development workflow for
+using AI agents with durable context and proportionate verification.
 
-## Target User
+## Current behavior
 
-A solo builder or small-team maintainer using AI agents for development work
-who needs durable context and guarded confirmation only when consequences call
-for them, without adopting a CLI backend or pipeline product.
+- docloom-workflow is the normal entry and owns context checks, authorization,
+  execution, verification, optional task.md, status, continuation, discovery,
+  and narrow documentation sync.
+- review is a read-only helper for explicit requests or material risk.
+- grill is an explicit conversational challenge and never changes files or state.
+- setup-doc-governance handles structural documentation and authority changes.
+- Reversible one-turn work needs no record. Durable work uses one task.md.
+- Legacy case artifacts remain readable evidence.
+- There is no runtime backend, daemon, orchestrator, or automatic publishing.
 
-## Current Demo State
+## Current bottleneck
 
-- Development workflow skills exist for routing, context authority, planning,
-  execution with agent-selected verification, and closure.
-- Direct reversible one-turn low/medium work runs without a case; compact
-  persistent cases retain a concise plan and plan-owned terminal status;
-  guarded work adds explicit confirmation, exact-baseline review, and thin
-  `closure.md`.
-- `review` supports explicit ad-hoc assessment and selectively triggered
-  workflow-owned Post-execution Engineering/Spec review; `grill` remains
-  conversation-only.
-- Execution artifacts and semantic commits are conditional. Unqualified `Done`
-  waits for commit success only when the approved plan declared that commit.
-- `docs/cases/README.md` provides a derived dashboard for current and recent
-  cases.
-- `docloom-workflow` can perform read-only next-slice discovery from this file,
-  the cases dashboard, closure follow-ups, and targeted repo evidence.
-- `skills/_shared/references/loop-protocol.md` defines case candidates,
-  next-slice candidates, and the compact scoring output.
-- Case artifacts remain the source of truth for routing and evidence.
+Dogfood the four-Skill flow on ordinary work, a resumed task, a material review,
+and a governance change. Measure whether context loss, unnecessary confirmation,
+false completion, and record churn remain acceptable.
 
-## Current Bottleneck
+## Do not build yet
 
-Proportional Direct/Compact/Guarded paths and plan-owned Compact terminal
-status are in active skills. The remaining bottleneck is real-project dogfood:
-confirm fewer plan revisions, less case-document churn, and fewer bookkeeping
-commits on ordinary work while guarded cases keep thin terminal evidence.
-
-## Feedback / Signals
-
-- User explicitly wants AI-assisted discovery of the next most useful
-  development slice.
-- Prior dashboard integration left next-slice discovery as the next follow-up.
-- The next-slice rubric dogfood found that the default candidate table exposed
-  too much scoring detail.
-- Compact candidate output keeps score factors for ranking but hides them from
-  the default decision view.
-- The project constitution requires the smallest useful workflow contract and
-  rejects heavy orchestration.
-- Real case history showed that medium risk commonly paid the full persistent
-  workflow cost and that numeric shortcut eligibility did not translate into
-  actual usage.
-
-## Constraints
-
-- No CLI backend, daemon, scheduler, MCP server, GitHub Actions loop runner, or
-  centralized orchestrator.
-- Keep ad-hoc `review` and `grill` manual-only; keep triggered Post-execution
-  review inside `tdd-execute`, without a new phase or artifact.
-- Keep `docloom-workflow` a thin router and discovery entry, not an executor.
-- Preserve explicit current-plan confirmation for guarded work and credible
-  verification for case execution; the agent selects tests and methods.
-
-## Do Not Build Yet
-
-- Product, research, design, release, or operations skill groups.
-- Automatic execution of discovered candidates.
-- Automatic promotion of candidate recommendations into authority.
-- External loop-engineering root scaffolds such as `STATE.md` or `LOOP.md`.
+New lifecycle domains, a runtime workflow engine, automatic candidate execution,
+or global installation management.

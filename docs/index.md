@@ -1,31 +1,20 @@
-# Documentation Index
++# Documentation Index
 
-This index routes current Doc Loom Least documentation. Historical and reference materials are evidence only unless promoted by an active authority document.
+This index routes current Doc Loom Least documentation. Authority documents are
+current fact sources; cases and derived documents are evidence or navigation.
 
-| Topic | Current entry |
+| Topic | Entry |
 |---|---|
-| Authority entry | [Authority Index](authority/README.md) |
-| Product scope | [Product Scope](authority/product/scope.md) |
-| Repository and skill architecture | [Repository And Skills](authority/architecture/repo-and-skills.md) |
-| Development workflow | [Development Workflow](authority/workflow/development-flow.md) |
-| Documentation governance | [Documentation Governance](authority/workflow/doc-governance.md) |
-| Agent policy | [Agent Policy](authority/agent/policy.md) |
-| Distribution and install | [Distribution](authority/operations/distribution.md), [INSTALL](../INSTALL.md) |
-| Git commit titles | [Git Commit Titles](authority/operations/git.md) |
-| Constitutional principles | [Constitution](authority/constitution.md) |
-| Lifecycle scope and skill grouping | [ADR-0001 Lifecycle Scope And Skill Grouping](adr/ADR-0001-lifecycle-scope-and-skill-grouping.md) |
-| Human-first workflow and agent responsibility | [ADR-0002 Human-First Agent Responsibility](adr/ADR-0002-human-first-agent-responsibility.md) |
-| Constitution authority location | [ADR-0003 Constitution Authority Location](adr/ADR-0003-constitution-authority-location.md) |
-| Source-of-truth map | [SSOT Map](ssot-map.md) |
-| Project overview | [README](../README.md), [README_CN](../README_CN.md) |
-| Current workflow design | [Workflow And Design](share/workflow-and-design.md) |
-| Governance batch plans | [docs/governance](governance/) |
-| Historical and raw evidence | [docs/archive](archive/) |
-
-## Authority Notes
-
-- `docs/authority/` is the current governed fact entry.
-- `docs/authority/constitution.md` is the constitutional authority above other docs.
-- ADR-0001, ADR-0002, and ADR-0003 remain accepted decision records.
-- README files are navigation and onboarding documents, not higher authority than authority docs, ADRs, or active skill files.
-- `docs/archive/` is historical or raw evidence only.
+| Authority | authority/README.md |
+| Constitution | authority/constitution.md |
+| Product scope | authority/product/scope.md |
+| Repository and Skills | authority/architecture/repo-and-skills.md |
+| Development workflow | authority/workflow/development-flow.md |
+| Documentation governance | authority/workflow/doc-governance.md |
+| Agent policy | authority/agent/policy.md |
+| Distribution | authority/operations/distribution.md and ../INSTALL.md |
+| Git titles | authority/operations/git.md |
+| Cases | cases/README.md and per-case artifacts |
+| Historical evidence | archive/ |
+| Current product input | product/current-state.md |
+| Compatibility decision | adr/ADR-0004-minimal-four-skill-workflow.md |

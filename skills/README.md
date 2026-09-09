@@ -1,42 +1,32 @@
 # Skills Layout
 
-Doc Loom Least skills are grouped by lifecycle domain and cross-cutting capability. The grouping is physical organization only; each skill keeps its frontmatter `name`, so invocation names stay stable.
+Doc Loom Least keeps four discoverable Skills:
 
-| Directory | Contains | Rule |
-|---|---|---|
-| `development/` | `docloom-workflow`, `context-authority`, `plan-confirm`, `tdd-execute`, `doc-sync-close` | Current primary development flow. |
-| `governance/` | `setup-doc-governance` | Documentation and knowledge governance. |
-| `assessment/` | `review`, `grill` | Read-only ad-hoc/workflow review and manual challenge helpers, available across lifecycle domains. |
-| `_shared/` | Shared protocol and templates | Not a directly invoked skill. |
+| Skill | Role |
+|---|---|
+| docloom-workflow | Normal development entry: understand, execute, verify, record when useful, and report. |
+| review | Read-only review on request or when a task needs an independent check. |
+| grill | Manual, conversational challenge of a claim or assumption. |
+| setup-doc-governance | Structural documentation and authority governance. |
 
-`docloom-workflow` is the recommended human-facing doorway. Stage skill names
-remain stable for explicit expert use and internal ownership, but ordinary
-persistent development requests should route without requiring the user to
-select a stage.
+The physical groups are lifecycle organization only:
 
-Future domains such as `product/`, `research/`, and `design/` should be added only when real skills exist. Do not add empty directories as roadmap placeholders.
+skills/development/docloom-workflow/
+skills/assessment/review/
+skills/assessment/grill/
+skills/governance/setup-doc-governance/
 
-## Loading Discipline
+The default entry owns ordinary context checks, authorization boundaries,
+execution, verification, optional durable task records, status, continuation,
+discovery, and narrow documentation sync. It does not require a phase choice.
 
-- Keep frontmatter triggers exact and distinguish the public doorway from
-  explicit/internal stage owners.
-- Keep cross-skill invariants in `_shared`; keep complete procedure at one
-  semantic owner.
-- Route or invoke another Skill by its stable frontmatter `name`, never by
-  importing its `SKILL.md` or private filesystem path.
-- Put a multi-owner file contract in `_shared` and expose a readable local path
-  to each consumer. Treat other local `references/` and `templates/` as private.
-- Keep material used by every invocation in `SKILL.md`; disclose only a named
-  branch or substantial co-located rulebook.
-- Name each local resource and when to read it; resolve its path from the
-  owning Skill directory. No fixed pointer format is required.
-- Retain a template only with an exact producer pointer and artifact owner.
-- Allow intentional workflow return routes, but keep physical file dependencies
-  free of cross-Skill edges and cycles.
-- Load references/templates only for their named condition; do not move prose
-  from one mandatory path to another.
-- Keep the smallest instructions sufficient for the task. Remove model-known
-  knowledge, repeated rules, fixed scripts for conversation, and unnecessary
-  restrictions; do not relocate that prose into references.
+Use review only for an explicit request or when consequence, compatibility,
+authority, permission, or weak evidence warrants a read-only second check. Use
+grill only when the user asks to challenge a claim; it never changes files or
+task state. Use setup-doc-governance for structural authority changes,
+conflicts, archive decisions, and governance plans.
 
-Skillshare discovers canonical skills recursively from this tree. `.skillignore` excludes `docs/archive/**`, and archived reference skills are no longer kept under `docs/archive/raw/reference/`.
+Keep automatic discovery enabled. Skill instructions should state only the
+constraints that change decisions; do not add a router, runtime, placeholder
+domain, or duplicate protocol. Existing legacy case artifacts remain readable
+historical evidence. New durable work uses one task.md record when needed.

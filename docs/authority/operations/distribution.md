@@ -6,41 +6,25 @@ type: operations
 source_of_truth: code
 supersedes: []
 superseded_by: []
-last_verified: 2026-07-13
+owner: user
+last_verified: 2026-09-09
 ---
 
 # Distribution
 
-Doc Loom Least is distributed as Agent Skills. The supported install path is
-`skillshare`.
+Doc Loom Least is distributed as four Agent Skills through skillshare:
 
-Expected canonical skill frontmatter names:
+- docloom-workflow
+- review
+- grill
+- setup-doc-governance
 
-- `docloom-workflow`
-- `setup-doc-governance`
-- `context-authority`
-- `plan-confirm`
-- `tdd-execute`
-- `doc-sync-close`
-- `review`
-- `grill`
+The former context-authority, plan-confirm, tdd-execute, and doc-sync-close
+entry points are retired by ADR-0004. Existing installations are not changed by
+a repository update alone; users should sync the new source and remove stale
+copies according to their skillshare setup.
 
-Canonical skill discovery is limited to the grouped `skills/` tree. Archived
-reference skills are no longer kept under `docs/archive/raw/reference/`.
-`.skillignore` excludes `docs/archive/**`, so archived or imported evidence is
-not published as canonical skills if it contains skill files.
-
-Multi-owner file contracts are stored under `skills/_shared/` and exposed to
-each consumer through local relative symlinks. The shared reference is the
-cross-Skill `shared-protocol.md`; the shared handoff template is exposed only to
-its direct writers, `tdd-execute` and `doc-sync-close`. Single-owner references
-and templates are real private files under their owning Skill. Runtime
-companion-Skill relationships use canonical frontmatter names and rely on the
-supported repository-wide installation, not cross-Skill filesystem imports.
-
-## Sources
-
-- [INSTALL.md](../../../INSTALL.md)
-- [.skillignore](../../../.skillignore)
-- Current symlinks under `skills/**/references/*.md`
-- Current writer symlinks under `skills/**/templates/handoff.md`
+Canonical discovery is recursive under skills/. Archived docs are not canonical.
+No shared protocol, handoff template, or cross-skill symlink is required by the
+current implementation. Review and grill are independent manual helpers;
+docloom-workflow is the normal entry.

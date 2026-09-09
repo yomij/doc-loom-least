@@ -4,6 +4,7 @@ type: adr
 status: accepted
 created: 2026-06-29
 updated: 2026-06-29
+superseded_by: ADR-0004-minimal-four-skill-workflow.md
 tags:
   - doc-loom
   - lifecycle-scope
@@ -33,6 +34,10 @@ The `skills/` tree is grouped by domain and capability:
 | `skills/_shared/` | Shared protocol and templates; not a directly invoked skill. |
 
 Skill names remain stable. Grouping changes physical organization only; users still invoke `docloom-workflow`, `plan-confirm`, `review`, and the other skills by their frontmatter names.
+
+ADR-0004 later supersedes this stable-name consequence for the former
+development-stage entry points; lifecycle scope and the principle of grouped
+physical organization remain in force.
 
 Future lifecycle domains such as `product/`, `research/`, or `design/` should be added only when they contain real skills with clear boundaries. Do not create empty domain directories as roadmap signaling.
 

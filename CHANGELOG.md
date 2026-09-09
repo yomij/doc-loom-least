@@ -3,6 +3,19 @@
 ## Unreleased
 
 ### Changed
+- Consolidated development execution, context checks, planning, verification,
+  closure, and documentation sync into `docloom-workflow`.
+- Retired `context-authority`, `plan-confirm`, `tdd-execute`, and
+  `doc-sync-close` as discoverable Skills; retained `review`, `grill`, and
+  `setup-doc-governance` as independent helpers.
+- Added the optional single-file `task.md` record for durable work and removed
+  the shared cross-Skill protocol and handoff template from the active tree.
+- Recorded the compatibility decision in ADR-0004 and updated installation and
+  authority documentation.
+
+## Historical Unreleased Notes
+
+### Changed
 - Replaced the unused numeric Fast-Path and medium-risk full-flow default with
   independent persistence and guarded-assurance decisions: direct reversible
   work creates no case, compact cases keep conditional evidence, and guarded

@@ -7,70 +7,27 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-07-13
+last_verified: 2026-09-09
 ---
 
 # Documentation Governance
 
-Documentation governance is owned by `setup-doc-governance`.
+setup-doc-governance owns structural documentation governance. It reads the
+active constitution and relevant current authority, inventorying facts, sources,
+entry points, and historical material.
 
-Historical docs are evidence. Authority docs are confirmed current source of
-truth. Each independent governance batch gets its own plan file.
+Use the narrowest scope: current-case, docs-only, or full-repo. Keep a
+governance plan only when the decision needs detail beyond the current task
+record. Structural, authority, conflict, archive, and material lifecycle
+changes require owner confirmation before application. Routine traceable
+derived updates may be applied inside the authorized task.
 
-## Scope
+Authority documents contain confirmed reusable facts. Case records contain
+operational evidence. Derived docs route readers. Archives are historical.
+Scratch is unverified. A fact may have a different true owner, so every new
+authority document declares its source.
 
-| Scope | Meaning |
-|---|---|
-| `current-case` | Govern only current case materials. |
-| `docs-only` | Scan docs, README, ADRs, entry indexes, and historical docs. |
-| `full-repo` | Add relevant code and tests as read-only evidence. |
-
-Default scope is `docs-only`. Escalate to `full-repo` only when authority
-claims need implementation/test verification or the user explicitly asks for it.
-Governance must not modify code, tests, build scripts, or runtime behavior.
-
-## Batch Plan Path
-
-Use the smallest path that fits the batch:
-
-| Context | Plan path |
-|---|---|
-| Governance tied to an active case | `docs/cases/<case-id>/governance-plan.md` |
-| Independent governance batch | `docs/governance/YYYY-MM-DD-<slug>.md` |
-
-Do not write a new independent governance batch into a prior plan file or into
-legacy `docs/governance/GOVERNANCE_PLAN.md`.
-
-## Verdicts
-
-Use one verdict set for files and facts:
-
-| Verdict | Meaning |
-|---|---|
-| `promote` | Extract current facts into a new authority doc. |
-| `merge` | Merge current facts into an existing authority doc. |
-| `bridge` | Keep a thin entry pointing to current authority or archive. |
-| `archive` | Move to archive; not current fact. |
-| `block` | Conflict, high risk, or insufficient evidence requires owner decision. |
-
-Authority sections are created only when they contain confirmed facts. Bridges
-must be thin and must not carry old facts.
-
-Do not create or migrate a constitution only because a conventional constitution
-file is absent. If an active constitution already exists, moving it is a
-confirmed authority change and must update the relevant index, SSOT map, and
-decision log. Constitution content is limited to non-negotiable principles;
-workflow rules and procedures belong in narrower authority docs or skills.
-
-## Application Gate
-
-The first governance plan write is not permission to apply changes. Application
-requires user confirmation of the current plan. After confirmation, apply only
-non-blocked decisions and keep blocked topics visible.
-
-## Sources
-
-- `skills/governance/setup-doc-governance/SKILL.md`
-- `skills/governance/setup-doc-governance/references/governance-rules.md`
-- `skills/governance/setup-doc-governance/templates/governance-plan.md`
-- `skills/development/doc-sync-close/references/doc-update-rules.md`
+Governance verdicts are promote, merge, bridge, archive, and block. Use block
+for conflict, insufficient high-impact evidence, or a material choice without
+owner decision. Do not create a constitution or new lifecycle area merely to
+complete a directory shape.

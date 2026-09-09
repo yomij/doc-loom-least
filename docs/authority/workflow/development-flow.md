@@ -7,127 +7,42 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-09-08
+last_verified: 2026-09-09
 ---
 
 # Development Workflow
 
-Current Skill implementation owns workflow procedure. The shared protocol is a
-compact kernel for cross-skill ownership, authority, status, artifacts,
-authorization, compatibility, and proportional-assurance invariants. Stage
-procedure stays with its owner; detailed references and templates load only
-when triggered.
+The normal development entry is docloom-workflow. Its default behavior is:
 
-## Stage Contract
+1. Understand the requested outcome from current authority, repository
+   instructions, implementation evidence, and the actual worktree.
+2. Execute within authorization, choosing files, tools, sequence, tests, and
+   commits as needed.
+3. Verify each success condition with credible evidence.
+4. Update affected current or derived documentation and report the result.
 
-- `docloom-workflow` is the human-facing doorway, thin router, and case-identity
-  owner. It routes stage ownership internally and does not plan, execute,
-  auto-trigger ad-hoc review, or call a backend.
-- `context-authority` is a conditional pre-plan gate for resume, ambiguity,
-  authority, conflict, public-contract, high-risk, and weakly verified work. It
-  reads the active constitution first when discoverable.
-- `plan-confirm` writes and confirms the current versioned outcome contract. Its
-  plan body contains only Goal, Success Criteria, and Constraints; risk,
-  assurance, baseline, approval, and terminal status remain concise metadata.
-  Current authorization allows same-turn execution unless the user asks to
-  hold, revise, or review first.
-- `tdd-execute` requires current execution authorization. The agent chooses the
-  smallest sufficient verification, including whether to add tests or use TDD.
-  No new tests needs no exception approval; Success Criteria still need evidence.
-- `doc-sync-close` owns path-correct terminal status, safe L2/L3 sync, and
-  confirmed narrow authority patches; structural authority work remains
-  governance work.
-- `review` is read-only and supports explicit ad-hoc assessment plus the
-  workflow-owned Post-execution gate. `grill` remains explicit and manual.
-- `docs/cases/README.md` and `docs/product/current-state.md` are derived inputs,
-  never routing or authority truth. After candidate selection, apply the same
-  two questions; direct work does not acquire case ceremony merely because it
-  came from discovery.
+Reversible one-turn work needs no case. Create docs/cases/<task-id>/task.md only
+when work must survive the turn, preserve a durable decision, handle a meaningful
+interruption, or the user asks for a case. The record carries current state,
+verification evidence, and final result; attachments never own status.
 
-Case status is owned by existing artifacts: plan approval in `plan.md`,
-execution readiness in `execution.md` when that artifact is triggered, and
-final outcome either in thin `closure.md` (Guarded or legacy) or in Compact
-plan terminal fields (`final_status`, `closed_at`). There is no separate
-routing-state artifact; legacy state files are historical evidence only.
+Ask only for an unresolved material fact, a changed outcome or constraint, an
+action outside authorization, or a consequential decision. Necessary lockfile
+or dependency changes inside an authorized outcome do not require a second
+confirmation merely because of their file type.
 
-Compact may retain the overall verification conclusion and material residuals
-in optional plan frontmatter fields `verification_summary` and `residuals`;
-Guarded keeps them in thin `closure.md`.
+Use review for an explicit request or when consequence, compatibility,
+permission, governance, public contract, or weak evidence warrants a read-only
+independent check. Use grill only when the user explicitly asks to challenge a
+claim. Use setup-doc-governance for structural authority changes and conflicts.
 
-Durable result retention is minimal: outcome, success-criteria result,
-verification conclusion, and material residuals or resume information. Keep
-process detail in triggered execution evidence and do not duplicate it across
-artifacts or dashboards.
+On resume, read task.md and the minimum changed evidence; current intent and
+authorization must still apply. Time alone never expires or extends authority.
+Legacy plan, execution, closure, and handoff artifacts remain historical
+evidence and are not batch-migrated.
 
-## Proportional Paths And Confirmation
-
-Answer two independent questions: whether continuity, a durable decision,
-explicit case request, or guarded execution requires a case; and whether
-consequence, irreversibility, exposure, authority impact, or weak verification
-requires guarded assurance.
-
-- Direct reversible one-turn low/medium work uses normal execution,
-  verification, and final reporting without a case.
-- Compact persistent work uses a concise outcome contract and records terminal
-  status/evidence on that plan when the case ends; the current unambiguous
-  execute request may be recorded as approval without another prompt. Compact
-  does not require a separate `closure.md`.
-- Guarded work requires explicit confirmation of the written current plan,
-  exact-baseline deep review, and thin `closure.md` terminal evidence.
-
-Medium risk alone does not create a case or trigger confirmation.
-All paths require credible verification; tests and TDD are execution choices.
-
-Approval binds Goal, Success Criteria, and Constraints. Constraints carry
-guardrails, non-goals, protected effects, reapproval triggers, exclusions, and
-owner-mandated restrictions. Context, files, tasks, commands, sequencing, run
-mode, tests, TDD/verification choice, review invocation, and commit
-organization stay with execution and may adapt inside that contract.
-Publication, history rewriting, unrelated changes, Goal/criterion/Constraint
-changes, risk escalation, authority/public-contract changes,
-dependency/config/CI/schema effects, external resources, irreversible actions,
-and other protected effects require separate authorization. An approved plan
-is not a standing grant for a later session.
-
-Before guarded confirmation, summarize the human outcome, material scope,
-expected local Git actions/commit count, likely interruptions, and excluded
-publication/history actions.
-
-## Required Quality Outcomes
-
-Deep Post-execution Engineering/Spec review is required for guarded work,
-material deviations, weak verification, public/authority-sensitive changes,
-or an explicit Constraint/user request. `tdd-execute` invokes `review`; axes remain
-separate and missing material evidence cannot pass. Other work receives the
-executor's compact Success-Criteria/test/diff/scope completion check. This adds no
-case phase or `review.md`.
-
-Review returns the complete current finding set. Execution fixes findings in
-the smallest coherent, independently valid/revertible batches and re-reviews
-affected axes; finding count does not dictate commit count.
-
-Local commits follow user/project intent, approved Constraints, and semantic
-value; their organization is an execution choice and never a plan-body
-strategy. Ordinary case bookkeeping does not require standalone plan or
-closure commits. The policy is prospective and does not invalidate legacy
-cases.
-
-Unqualified `Done` requires met Success Criteria, passing review when
-triggered, complete path-correct terminal evidence (Compact plan fields or
-Guarded thin `closure.md`), and no unexplained case-related worktree changes.
-Commit success is an additional terminal gate only when user/project policy or
-an approved Constraint explicitly requires it.
-
-## Sources
-
-- `skills/_shared/references/shared-protocol.md`
-- `skills/development/docloom-workflow/SKILL.md`
-- `skills/development/context-authority/SKILL.md`
-- `skills/development/plan-confirm/SKILL.md`
-- `skills/development/tdd-execute/SKILL.md`
-- `skills/development/doc-sync-close/SKILL.md`
-- `skills/development/docloom-workflow/references/loop-protocol.md`
-- `docs/product/current-state.md`
-- `skills/assessment/review/SKILL.md`
-- `skills/assessment/grill/SKILL.md`
-- `docs/cases/README.md`
+Task state is active, paused, blocked, done, cancelled, superseded, or abandoned;
+paused and blocked records name the reason and next action. Completion requires
+credible evidence for every stated success condition.
+Unverified work is reported as unverified. Durable status is carried by task.md
+for new work, not inferred from several report files.
