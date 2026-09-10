@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-09-09
+last_verified: 2026-09-10
 ---
 
 # Distribution
@@ -26,5 +26,6 @@ copies according to their skillshare setup.
 
 Canonical discovery is recursive under skills/. Archived docs are not canonical.
 No shared protocol, handoff template, or cross-skill symlink is required by the
-current implementation. Review and grill are independent manual helpers;
-docloom-workflow is the normal entry.
+current implementation. Review is a separate read-only capability; grill requires
+explicit challenge intent. docloom-workflow is the normal entry. Each installed
+Skill carries its own core rules; README files are not runtime dependencies.

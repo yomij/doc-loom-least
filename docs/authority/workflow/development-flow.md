@@ -7,42 +7,44 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-09-09
+last_verified: 2026-09-10
 ---
 
 # Development Workflow
 
-The normal development entry is docloom-workflow. Its default behavior is:
-
-1. Understand the requested outcome from current authority, repository
-   instructions, implementation evidence, and the actual worktree.
-2. Execute within authorization, choosing files, tools, sequence, tests, and
-   commits as needed.
-3. Verify each success condition with credible evidence.
-4. Update affected current or derived documentation and report the result.
+The normal development entry is docloom-workflow, including ordinary document
+edits. It establishes the outcome from instructions and evidence, executes
+within authorization, verifies success conditions, updates affected documents,
+and reports results. Users do not select a phase.
 
 Reversible one-turn work needs no case. Create docs/cases/<task-id>/task.md only
-when work must survive the turn, preserve a durable decision, handle a meaningful
-interruption, or the user asks for a case. The record carries current state,
-verification evidence, and final result; attachments never own status.
+for continuity, a reusable decision, an interrupted handoff, or an explicit case
+request. It owns current status; attachments provide evidence only. Load its
+local template when creating or restructuring the record, not on every update.
 
-Ask only for an unresolved material fact, a changed outcome or constraint, an
-action outside authorization, or a consequential decision. Necessary lockfile
-or dependency changes inside an authorized outcome do not require a second
-confirmation merely because of their file type.
+Ask only when unresolved facts or conflicts change the outcome, constraints,
+public contract, permissions, or durable authority, or an action needs new
+authorization. Existing authorization covers necessary implementation choices
+including dependency/lockfile edits. Unspecified destructive targets require
+clarification; concrete destructive, irreversible, permission, data-deletion,
+publication, or public-contract changes require authorization if not already
+covered. Continue work independent of any pending decision.
 
-Use review for an explicit request or when consequence, compatibility,
-permission, governance, public contract, or weak evidence warrants a read-only
-independent check. Use grill only when the user explicitly asks to challenge a
-claim. Use setup-doc-governance for structural authority changes and conflicts.
+Use review for explicit requests, changes to security-sensitive behavior,
+authentication or permissions, public API/contracts, data migrations, or shared
+deployment/storage/build behavior used by multiple applications. Other ordinary
+bug fixes, localized refactors, and small features need local verification only.
+A separate read-only pass does not require another agent. Review owns findings;
+the executor owns fixes. Use grill only for explicit assumption challenges and
+setup-doc-governance for structural authority or hierarchy decisions.
 
-On resume, read task.md and the minimum changed evidence; current intent and
-authorization must still apply. Time alone never expires or extends authority.
-Legacy plan, execution, closure, and handoff artifacts remain historical
-evidence and are not batch-migrated.
+On resume, recover intent from the latest request and task.md, then inspect
+changed evidence. Ask only if ambiguity or stale context changes the outcome,
+or additional authorization is needed. Time alone neither expires nor extends
+authorization. Legacy artifacts remain evidence without default migration.
 
-Task state is active, paused, blocked, done, cancelled, superseded, or abandoned;
-paused and blocked records name the reason and next action. Completion requires
-credible evidence for every stated success condition.
-Unverified work is reported as unverified. Durable status is carried by task.md
-for new work, not inferred from several report files.
+Task state is active, paused, blocked, done, cancelled, superseded, or abandoned,
+with evidence, any blocker, and next action. Done requires verification evidence
+for every success condition and no unresolved Critical/Important findings or
+conclusion-blocking gaps in required review. Repeat checks only for changed
+behavior, failures, or unresolved evidence. Report unverified work as such.

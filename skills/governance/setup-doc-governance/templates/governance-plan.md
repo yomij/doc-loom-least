@@ -1,33 +1,35 @@
-<!-- Omit unused sections. File decisions include bridges, archives, and entry updates. -->
 ---
 status: proposed
 plan_version: 1
-scope: docs-only
+target_scope: repository
+evidence_scope: docs-only
 governance_batch: YYYY-MM-DD-short-slug
 approved_by:
 approved_at:
 ---
+<!-- Conditional: use for multiple decisions. Omit unused sections. -->
 
 # Governance Plan
 
-## Scope
+## Scope and authorization
 
-## File And Entry Decisions
+Name target paths/case, evidence limits, and existing approval. Evidence scope
+grants no write permission.
 
-| Source | Verdict | Target / entry role | Reason |
-|---|---|---|---|
+## Decisions
 
-## Fact Decisions
-
-| Fact | Source / evidence | Verdict | Authority target | Risk |
+| Source / evidence | Fact or file | Verdict | Target / entry role | Effect / recovery limits |
 |---|---|---|---|---|
 
-## Blocked Decisions / Follow-ups
+## Blocked decisions
 
-| Topic | Reason | Needed decision / next action |
+| Topic | Missing evidence or approval | Next action |
 |---|---|---|
 
-## Applied Result
+## Applied result
 
-| Change | Result | Evidence |
+| Decision | Change | Verification evidence |
 |---|---|---|
+
+Record approval for this version. Revise pending decisions when scope or effects
+change; ask only beyond prior approval. Preserve completed records.

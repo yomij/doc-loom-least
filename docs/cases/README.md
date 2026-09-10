@@ -21,6 +21,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260910-four-skill-optimization` | Done | `20260910-four-skill-optimization/task.md` | Four capabilities clarified; eight manual scenario simulations and structural checks passed. Runtime token total unchanged; real model behavior is not benchmarked. |
 | `20260909-minimal-two-skill-workflow` | Done with Caveats | `20260909-minimal-two-skill-workflow/closure.md` | Four-Skill workflow shipped; finite GPT-5.6 evaluation and user-managed retired-copy cleanup remain caveats. |
 | `20260807-outcome-contract-text-compression` | Done | `20260807-outcome-contract-text-compression/closure.md` | Seven runtime contracts reduced 9,017→7,426 tokens with semantics preserved; installed/distributed Skill sync remains separately authorized. |
 | `20260807-outcome-only-plan-contract` | Done | `20260807-outcome-only-plan-contract/closure.md` | Outcome-only plan contract shipped; installed/distributed Skill sync remains separately authorized. |

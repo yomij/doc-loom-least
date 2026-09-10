@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-09-09
+last_verified: 2026-09-10
 ---
 
 # Repository And Skills
@@ -18,7 +18,7 @@ discoverable Skills:
 | Skill | Source | Role |
 |---|---|---|
 | docloom-workflow | skills/development/docloom-workflow/SKILL.md | Normal development entry and optional durable task record. |
-| review | skills/assessment/review/SKILL.md | Read-only review on request or when risk and evidence require it. |
+| review | skills/assessment/review/SKILL.md | Separate read-only pass on request or a defined development trigger; no required subagent. |
 | grill | skills/assessment/grill/SKILL.md | Explicit conversational challenge of a claim or assumption. |
 | setup-doc-governance | skills/governance/setup-doc-governance/SKILL.md | Structural documentation and authority governance. |
 
@@ -31,5 +31,8 @@ There is no runtime source tree, package manifest, workflow interpreter, daemon,
 or centralized orchestrator. Physical directories group Skills only. The
 default entry does not require users to select a phase. Supporting resources
 are local to their owner; no shared protocol or cross-Skill symlink is required.
+Each Skill carries its routing and core behavior rules. README files are
+maintenance navigation, not installed runtime dependencies. Resources load only
+under their stated conditions; the four capabilities are not sequential phases.
 Future lifecycle groups are added only when a real boundary and useful contract
 exist.

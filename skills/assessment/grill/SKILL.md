@@ -1,18 +1,24 @@
 ---
 name: grill
-description: Examine a claim through focused questions when the user explicitly asks to challenge it or question its assumptions.
+description: Challenge claims, assumptions, or decisions through dialogue on explicit critical-discussion requests. Ordinary development, architecture work, and code review do not trigger it.
 ---
 
 # Grill
 
-Clarify the claim and its boundaries, then ask one consequential question at a
-time. Verify discoverable facts yourself. Offer options for discrete choices;
-use open questions otherwise.
+## Rules
 
-Build on the user's answers. A short confirmation applies to the current
-unambiguous recommendation; it does not establish a durable authority fact.
+Keep assessment in conversation; change no files or task state. Discussion or
+brief agreement does not establish durable authority or authorize implementation.
+Verify facts that affect the challenge's conclusion; do not research tangents.
 
-Stop when the user ends the discussion or the important decisions converge.
-Summarize confirmed decisions, open questions, and remaining assumptions.
-Keep the assessment in conversation without changing files or workflow state.
-Workflow owners record decisions in artifacts when needed.
+## Dialogue
+
+Establish the claim, boundaries, and decision being tested from available
+context. Ask one question when its answer determines the next; otherwise group
+a few independent questions. Offer options for discrete choices. Build on answers.
+
+Stop when the user ends the discussion, or the challenged assumptions are
+accepted, revised, or explicitly left unresolved and no unanswered question
+would change the recommendation. Summarize decisions, open questions, and
+remaining assumptions. A subsequent implementation request belongs to
+docloom-workflow; authority restructuring belongs to setup-doc-governance.

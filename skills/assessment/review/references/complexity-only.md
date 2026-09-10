@@ -1,16 +1,13 @@
 # Complexity-only Review
 
-Use for Complexity-only or the complexity portion of Dual-pass. In
-Post-execution, report complexity findings within Engineering without replacing
-its correctness checks.
+Use only for an explicitly requested complexity-only assessment. Assess what
+can be removed while preserving required behavior and active contracts; this
+scoped result does not establish overall merge readiness.
 
-Report only complexity that can be removed while preserving required behavior
-and active contracts. Use locatable, replacement-oriented findings:
+Use the Skill's finding fields, severities, and three-state result. Make the
+correction replacement-oriented: what to cut and what replaces it, or nothing.
+Useful tags are `delete`, `stdlib`, `native`, `yagni`, `shrink`, and
+`governance-bloat` (process or artifacts without an identified governance need).
 
-`path:line: <tag> <what to cut>; <replacement or nothing>.`
-
-Tags: `delete`, `stdlib`, `native`, `yagni`, `shrink`, `governance-bloat`.
-The last covers process or artifacts without a real governance need.
-
-State the reviewed scope and findings, or that nothing useful can be cut.
-Estimate reduction only when meaningful; omit generic review checklists.
+State the assessed scope and concrete evidence. Do not add generic checklists
+or speculative simplifications just to produce findings.

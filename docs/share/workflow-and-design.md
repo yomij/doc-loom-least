@@ -11,9 +11,11 @@ reversible one-turn task needs no case. A task that must survive the turn gets
 one task.md with goal, success conditions, constraints and decisions, current
 state, next action, evidence, and result.
 
-Review is read-only and can be explicit or risk-triggered. Grill is manual and
-conversation-only. Governance has its own Skill because structural authority,
-conflict, and archive decisions need a visible owner confirmation.
+Review is read-only and triggered by a request or the concrete conditions in
+docloom-workflow. A separate pass does not require another agent. Grill requires
+explicit challenge intent and stays in conversation. Governance owns structural
+authority and historical-status decisions, reusing approval that already covers
+the concrete changes. Ordinary documentation edits remain development work.
 
 Current authority outranks implementation evidence, accepted decisions, user
 facts in the current task, case records, derived docs, history, and scratch in

@@ -16,15 +16,15 @@ create one task.md with the goal, success conditions, constraints and decisions,
 current state, next action, verification evidence, and result. Legacy
 plan/execution/closure files remain readable historical evidence.
 
-Ask the user only for unresolved material facts, changed outcomes or
-constraints, actions outside authorization, or consequential decisions.
+Ask only when missing facts change the outcome or constraints, or an action
+needs authorization not already provided. Resume reuses established intent.
 
 ## Skills
 
 | Skill | Use |
 |---|---|
 | docloom-workflow | Normal development entry, optional task record, status, continuation, and discovery. |
-| review | Read-only review on request or when risk and evidence warrant it. |
+| review | Separate read-only verification on request or a defined development trigger; no required subagent. |
 | grill | Explicit conversational challenge of a claim or assumption. |
 | setup-doc-governance | Structural documentation and authority governance. |
 

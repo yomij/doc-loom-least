@@ -12,7 +12,8 @@ using AI agents with durable context and proportionate verification.
 - docloom-workflow is the normal entry and owns context checks, authorization,
   execution, verification, optional task.md, status, continuation, discovery,
   and narrow documentation sync.
-- review is a read-only helper for explicit requests or material risk.
+- review is a separate read-only pass for explicit requests or defined
+  development triggers; it does not require another agent.
 - grill is an explicit conversational challenge and never changes files or state.
 - setup-doc-governance handles structural documentation and authority changes.
 - Reversible one-turn work needs no record. Durable work uses one task.md.

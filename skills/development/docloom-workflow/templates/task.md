@@ -1,9 +1,8 @@
 # Durable task record
 
-Create this file at docs/cases/<task-id>/task.md only when a task must survive
-the current turn. Keep one file per task and omit sections that have no useful
-content. Set Current state to active, paused, blocked, done, cancelled,
-superseded, or abandoned.
+Read when creating or restructuring a record at docs/cases/<task-id>/task.md.
+Use for continuity, a reusable decision, an interrupted handoff, or an explicit
+case request. Omit unused sections; routine updates need no template reload.
 
 ~~~md
 # Task
@@ -23,6 +22,7 @@ superseded, or abandoned.
 ## Result and residuals
 ~~~
 
-Current state and Next action are the live handoff. Result and residuals is
-filled when the task ends. A separate evidence file may contain detail, but
-the task record points to it and remains the only current status carrier.
+Current state is active, paused, blocked, done, cancelled, superseded, or
+abandoned. State the evidence and blocker if present. This record owns status
+and the next action; attachments provide evidence only. Mark done only after
+the Skill's verification conditions hold.
