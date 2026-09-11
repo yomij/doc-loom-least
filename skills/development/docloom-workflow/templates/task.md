@@ -20,6 +20,12 @@ case request. Omit unused sections; routine updates need no template reload.
 ## Verification evidence
 
 ## Result and residuals
+
+## Business document
+
+Link the document owned by business-docs when business rules or decisions were
+created or clarified. Do not duplicate its content; omit this section for
+technical-only work without business changes.
 ~~~
 
 Current state is active, paused, blocked, done, cancelled, superseded, or

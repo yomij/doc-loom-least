@@ -21,6 +21,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20260910-independent-business-docs` | Done | [Task](20260910-independent-business-docs/task.md), [业务档案](20260910-independent-business-docs/business.md) | Independent business-docs and development integration shipped in source; structural checks and local review passed. Independent model runs and installed-copy sync were not performed. |
 | `20260910-four-skill-optimization` | Done | `20260910-four-skill-optimization/task.md` | Four capabilities clarified; eight manual scenario simulations and structural checks passed. Runtime token total unchanged; real model behavior is not benchmarked. |
 | `20260909-minimal-two-skill-workflow` | Done with Caveats | `20260909-minimal-two-skill-workflow/closure.md` | Four-Skill workflow shipped; finite GPT-5.6 evaluation and user-managed retired-copy cleanup remain caveats. |
 | `20260807-outcome-contract-text-compression` | Done | `20260807-outcome-contract-text-compression/closure.md` | Seven runtime contracts reduced 9,017→7,426 tokens with semantics preserved; installed/distributed Skill sync remains separately authorized. |

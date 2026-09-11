@@ -21,12 +21,31 @@ Doc Loom Least 是一个面向个人开发者和 AI Agent 的 Markdown-first 工
 | Skill | 用途 |
 |---|---|
 | docloom-workflow | 日常开发入口、可选任务记录、状态、接续和发现。 |
+| business-docs | 独立整理会话业务结论、任务业务档案和历史业务逻辑。 |
 | review | 用户要求或命中明确开发触发条件时的只读复核，无须另建 Agent。 |
 | grill | 用户明确要求时，对主张或假设进行对话式追问。 |
 | setup-doc-governance | 结构性文档和权威治理。 |
 
 context-authority、plan-confirm、tdd-execute、doc-sync-close 四个旧入口由
 ADR-0004 退役；必要行为已归入 docloom-workflow，旧 Case 记录继续作为证据。
+
+## 业务文档
+
+可以直接调用 business-docs，不要求此前使用过 Docloom，也不要求已有 task.md：
+
+- “把这次讨论整理成业务文档，保留最终规则、关键决策和未决问题。”
+- “归档本次任务的业务内容，说明需求修正和实际交付范围。”
+- “梳理现有订单取消逻辑，写给产品和测试看，包含限制条件和异常场景。”
+- “根据历史任务整理优惠券退回规则的演变，区分当前和废弃规则。”
+
+正文保持纯业务表达，来源集中列出；从代码观察到的行为不能代替业务意图，
+找不到的决策原因保留为未知。Docloom 开发过程中记录业务结论和修正，收尾时
+完成归档；纯技术任务无需空档案。优先遵循已有目录约定，否则写入任务目录的
+business.md，或 docs/business/archives/ 下的日期加主题文档，并更新业务索引。
+归档保留历史快照，不自动确立现行业务权威。
+
+规则见[业务文档契约](docs/authority/workflow/business-docs.md)，本仓库的样例见
+[业务文档索引](docs/business/README.md)。
 
 ## 边界
 
@@ -35,7 +54,7 @@ ADR-0004 退役；必要行为已归入 docloom-workflow，旧 Case 记录继续
 
 ## 安装
 
-使用 skillshare 安装四个 Skill：
+使用 skillshare 安装五个 Skill：
 
     skillshare install github.com/yomij/doc-loom-least --track --json
     skillshare sync

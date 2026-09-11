@@ -1,10 +1,11 @@
 # Skills Layout
 
-Doc Loom Least keeps four discoverable Skills:
+Doc Loom Least keeps five discoverable Skills:
 
 | Skill | Role |
 |---|---|
 | docloom-workflow | Normal development entry: understand, execute, verify, record when useful, and report. |
+| business-docs | Standalone business writing, task archival, historical reconstruction, and document updates. |
 | review | Separate read-only verification on request or a defined development trigger. |
 | grill | Manual, conversational challenge of a claim or assumption. |
 | setup-doc-governance | Structural documentation and authority governance. |
@@ -12,6 +13,7 @@ Doc Loom Least keeps four discoverable Skills:
 The physical groups are lifecycle organization only:
 
 skills/development/docloom-workflow/
+skills/product/business-docs/
 skills/assessment/review/
 skills/assessment/grill/
 skills/governance/setup-doc-governance/
@@ -25,7 +27,10 @@ Review triggers are defined in
 not require another agent. Use grill only when the user asks to challenge a
 claim; it never changes files or task state. Use setup-doc-governance for
 structural authority, hierarchy, promotion, and historical-status decisions.
-Ordinary documentation edits stay with docloom-workflow.
+Ordinary documentation edits stay with docloom-workflow. Business-document
+requests go directly to business-docs; development invokes it by name when
+business conclusions need retention. Its template stays local, and standalone
+use requires no development flow or task record.
 
 This README is maintenance navigation. Each installed Skill contains its own
 routing, authorization, and completion rules and conditionally loads local

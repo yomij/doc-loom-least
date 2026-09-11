@@ -1,6 +1,6 @@
 ---
 name: docloom-workflow
-description: Default entry for development requests through implementation and verification, including ordinary documentation edits. Excludes standalone read-only review, assumption-challenging discussion, and documentation governance setup.
+description: Default entry for development requests through implementation and verification, including ordinary documentation edits. Excludes standalone business-document requests, read-only review, assumption-challenging discussion, and documentation governance setup.
 ---
 
 # Doc Loom Workflow
@@ -28,6 +28,14 @@ Work directly toward the user's outcome; do not ask the user to choose a phase.
   inference into authority or restructure governance as ordinary documentation
   maintenance. Discovery-only requests produce an evidence-based recommendation,
   tradeoff, and uncertainty; they do not authorize implementation.
+- When requirements establish or clarify business rules or decisions, use
+  business-docs to capture them and meaningful corrections during work. At
+  closure, finalize its business document and report the link. Check each task
+  for business content; technical-only work reports no business change and
+  needs no empty archive. Invoke by Skill name, not a sibling-directory path.
+  If business-docs is unavailable, preserve the business conclusions and source
+  gaps in the existing record or response, disclose incomplete archival, and
+  do not silently claim that documentation is complete or install globally.
 
 ## Verification
 
@@ -50,10 +58,12 @@ outcome, residuals, and anything unverified or blocked.
 
 Create `docs/cases/<task-id>/task.md` only for continuity beyond this turn,
 reusable decisions that need recording, interruption requiring a handoff, or an
-explicit case request. Reversible one-turn work needs no record by default.
+explicit case request. Reversible one-turn work needs no task record by default;
+business documentation is independent and follows business-docs when relevant.
 Read [templates/task.md](templates/task.md) **conditionally**, when creating or
 restructuring that record. Existing records can be updated without reloading it.
 The record owns status; separate logs and reviews are evidence only.
+Link any business document from the record without duplicating its body.
 
 On resume, recover intent from the latest user instruction and task record,
 then inspect changed worktree and relevant evidence. Ask only if ambiguity or
@@ -67,6 +77,8 @@ with evidence, any blocker, and next action. Done requires verification above.
 ## Escalation
 
 - review owns findings; this executor owns authorized fixes and durable status.
+- business-docs owns standalone business writing, task business archives, and
+  historical business reconstruction; it does not require this workflow.
 - grill applies only to an explicit request to challenge assumptions or claims.
 - setup-doc-governance owns changes to documentation authority, hierarchy,
   knowledge promotion, or current/historical classification. Existing approval

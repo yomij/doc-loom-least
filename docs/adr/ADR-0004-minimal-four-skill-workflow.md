@@ -13,6 +13,10 @@ tags:
 
 # ADR-0004: Minimal Four-Skill Workflow
 
+The install count and business-document persistence are extended by
+[ADR-0005](ADR-0005-independent-business-docs.md). The original decision below
+is retained; retired stage names and the default development loop remain valid.
+
 ## Context
 
 The previous development flow exposed separate context, planning, execution,

@@ -7,7 +7,7 @@ source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-09-09
+last_verified: 2026-09-10
 ---
 
 # Authority Index
@@ -23,6 +23,7 @@ case evidence, derived views, history, and scratch.
 | Product scope | product/scope.md |
 | Repository and Skills | architecture/repo-and-skills.md |
 | Development workflow | workflow/development-flow.md |
+| Business documentation | workflow/business-docs.md |
 | Documentation governance | workflow/doc-governance.md |
 | Agent policy | agent/policy.md |
 | Distribution | operations/distribution.md |

@@ -6,7 +6,7 @@ type: product
 source_of_truth: adr
 supersedes: []
 superseded_by: []
-last_verified: 2026-07-02
+last_verified: 2026-09-10
 ---
 
 # Product Scope
@@ -14,10 +14,12 @@ last_verified: 2026-07-02
 Doc Loom Least is a repo-native, skill-based, Markdown-first personal workflow
 substrate.
 
-The current supported lifecycle domain is development. Future product,
-research, design, release, operations, or other lifecycle domains may be added
-only when a real workflow boundary exists and the smallest useful skill or
-document contract is clear.
+Development remains the primary lifecycle flow. The product group adds only
+business-docs: an independent business-document capability for conversation
+synthesis, task archival, and historical logic reconstruction. This does not
+introduce a full product process. Further product, research, design, release,
+operations, or other lifecycle capabilities may be added only when a real
+workflow boundary and the smallest useful skill or document contract are clear.
 
 In this project, "platform" or "substrate" means a personal workflow home built
 from repository files, Agent Skills, Markdown, and explicit confirmation. It
@@ -37,3 +39,4 @@ backend, or complex pipeline product.
 - [Constitution](../constitution.md)
 - [ADR-0001 Lifecycle Scope And Skill Grouping](../../adr/ADR-0001-lifecycle-scope-and-skill-grouping.md)
 - [ADR-0002 Human-First Agent Responsibility](../../adr/ADR-0002-human-first-agent-responsibility.md)
+- [ADR-0005 Independent Business Documentation](../../adr/ADR-0005-independent-business-docs.md)

@@ -33,6 +33,8 @@ only when an unresolved conflict affects the outcome or binding rules.
 Ordinary reversible one-turn work is direct; durable work uses one optional
 task.md. Resume recovers intent from the latest instruction and record without
 reconfirmation unless ambiguity, stale context, or new authorization requires it.
+Business conclusions use business-docs independently of task-state records;
+standalone conversations and historical investigations need no development flow.
 
 Review is a separate read-only pass on request or for the concrete triggers in
 the [development workflow](../workflow/development-flow.md); it is not an

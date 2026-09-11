@@ -11,6 +11,14 @@ reversible one-turn task needs no case. A task that must survive the turn gets
 one task.md with goal, success conditions, constraints and decisions, current
 state, next action, evidence, and result.
 
+Business documentation is independent of task-state persistence. business-docs
+extracts business rules and sourced decisions from conversations, task outcomes,
+or historical evidence without requiring a prior development flow. Development
+captures business changes during work and finalizes an archive at closure;
+technical-only work needs no empty document. Sources and time scope distinguish
+intended rules, observed behavior, and unknowns. Business archives preserve
+snapshots and do not establish authority automatically.
+
 Review is read-only and triggered by a request or the concrete conditions in
 docloom-workflow. A separate pass does not require another agent. Grill requires
 explicit challenge intent and stays in conversation. Governance owns structural

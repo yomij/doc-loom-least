@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Added
+- Added independent `business-docs` for conversation synthesis, task business
+  archives, historical logic reconstruction, and existing business-document
+  updates, with a local business-facing template.
+- Connected business capture and archival to `docloom-workflow`; recorded the
+  five-Skill scope and sourced-snapshot contract in ADR-0005.
+
 ### Changed
 - Consolidated development execution, context checks, planning, verification,
   closure, and documentation sync into `docloom-workflow`.

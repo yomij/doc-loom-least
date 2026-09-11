@@ -6,6 +6,8 @@
 | Product scope | authority/product/scope.md |
 | Skill layout and names | authority/architecture/repo-and-skills.md and skills/ |
 | Development behavior | authority/workflow/development-flow.md and skills/development/docloom-workflow/SKILL.md |
+| Business documentation behavior | authority/workflow/business-docs.md and skills/product/business-docs/SKILL.md |
+| Business archive discovery | business/README.md; derived navigation, individual archives remain sourced snapshots |
 | Governance behavior | authority/workflow/doc-governance.md and skills/governance/setup-doc-governance/ |
 | Agent responsibility | authority/agent/policy.md |
 | Distribution | authority/operations/distribution.md and INSTALL.md |

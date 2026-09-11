@@ -24,6 +24,7 @@ needs authorization not already provided. Resume reuses established intent.
 | Skill | Use |
 |---|---|
 | docloom-workflow | Normal development entry, optional task record, status, continuation, and discovery. |
+| business-docs | Independent business documentation from conversations, completed tasks, and historical logic. |
 | review | Separate read-only verification on request or a defined development trigger; no required subagent. |
 | grill | Explicit conversational challenge of a claim or assumption. |
 | setup-doc-governance | Structural documentation and authority governance. |
@@ -31,6 +32,23 @@ needs authorization not already provided. Resume reuses established intent.
 The former context-authority, plan-confirm, tdd-execute, and doc-sync-close
 entry points are retired by ADR-0004. Their required behavior belongs to
 docloom-workflow; old case artifacts remain valid evidence.
+
+## Business documentation
+
+Use business-docs directly to turn a conversation into business rules and
+decisions, archive a task's business outcome, or reconstruct historical logic
+from documents and relevant implementation evidence. No prior Docloom session
+or task.md is required. For example: "Summarize the current order-cancellation
+rules for product and QA, including exceptions and unresolved questions."
+
+The business narrative stays free of implementation details; sources, time scope,
+and evidence gaps remain traceable. The default development entry captures
+business conclusions during work and finalizes them at closure. Technical-only
+work needs no empty business archive. Existing placement conventions take
+precedence; defaults are a task's business.md or a dated document under
+docs/business/archives/, with a thin business index. Archives preserve snapshots
+and do not automatically become current authority. See
+[the business contract](docs/authority/workflow/business-docs.md).
 
 ## Boundaries
 
@@ -41,7 +59,7 @@ archives are historical.
 
 ## Installation
 
-Install the four discoverable Skills with skillshare:
+Install the five discoverable Skills with skillshare:
 
     skillshare install github.com/yomij/doc-loom-least --track --json
     skillshare sync

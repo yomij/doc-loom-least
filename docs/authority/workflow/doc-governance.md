@@ -14,7 +14,8 @@ last_verified: 2026-09-10
 
 setup-doc-governance owns documentation authority, hierarchy, knowledge
 promotion, and current/historical classification. Ordinary document edits stay
-with docloom-workflow. The Skill contains its core rules; placement and migration
+with docloom-workflow; business writing and archival use business-docs. The
+governance Skill contains its core rules; placement and migration
 references and the detailed plan template are conditional resources.
 
 Choose target_scope independently from evidence_scope. Target is current-case
@@ -28,6 +29,14 @@ marker alone is not authority, and missing metadata alone does not invalidate an
 owner-designated rule. Cases provide task evidence, derived documents route or
 summarize, archives preserve history, and scratch is unverified. New authority
 must identify its source, status, ownership, and verification date.
+
+Business documents follow the [business documentation contract](business-docs.md).
+Draft/archive labels describe document maturity, not confirmation, delivery,
+verification, or authority. A business archive preserves a sourced snapshot;
+business navigation is derived. Neither automatically becomes current authority.
+Routine drafting, archival, and follow-up links under this approved contract
+need no fresh governance decision. New authority promotion still follows the
+rules below.
 
 Governance verdicts are promote, merge, bridge, archive, and block. Resolve
 conflicts through declared precedence or existing owner decisions. Block only

@@ -10,6 +10,8 @@ current fact sources; cases and derived documents are evidence or navigation.
 | Product scope | authority/product/scope.md |
 | Repository and Skills | authority/architecture/repo-and-skills.md |
 | Development workflow | authority/workflow/development-flow.md |
+| Business documentation contract | authority/workflow/business-docs.md |
+| Business documents (derived navigation) | business/README.md |
 | Documentation governance | authority/workflow/doc-governance.md |
 | Agent policy | authority/agent/policy.md |
 | Distribution | authority/operations/distribution.md and ../INSTALL.md |
@@ -18,3 +20,4 @@ current fact sources; cases and derived documents are evidence or navigation.
 | Historical evidence | archive/ |
 | Current product input | product/current-state.md |
 | Compatibility decision | adr/ADR-0004-minimal-four-skill-workflow.md |
+| Independent business documentation decision | adr/ADR-0005-independent-business-docs.md |

@@ -6,6 +6,8 @@
 |---|---|
 | Confirmed reusable rules | `docs/authority/` |
 | Task decisions and evidence | `docs/cases/<case-id>/` |
+| Business snapshots under the business-docs contract | Existing task's `business.md` or `docs/business/archives/`; explicit draft/archive state, no automatic authority |
+| Business navigation | Existing business index or `docs/business/README.md`; derived |
 | Navigation and derived explanations | Existing documentation index or guides |
 | Superseded material | `docs/archive/` |
 | Unverified drafts | `docs/scratch/` or case notes |

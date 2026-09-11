@@ -22,6 +22,16 @@ for continuity, a reusable decision, an interrupted handoff, or an explicit case
 request. It owns current status; attachments provide evidence only. Load its
 local template when creating or restructuring the record, not on every update.
 
+Business persistence is independent of task-state persistence. Invoke
+business-docs when requirements create or clarify business rules or decisions,
+record meaningful corrections during work, and finalize the business document
+at closure. Report its link, or no business change for technical-only tasks.
+No task record is required solely for a business document. If business-docs is
+unavailable, retain sourced conclusions in the existing record or response and
+report incomplete archival; do not claim full documentation completion.
+Standalone business-document requests go directly to business-docs, whose
+[contract](business-docs.md) covers conversations and historical investigation.
+
 Ask only when unresolved facts or conflicts change the outcome, constraints,
 public contract, permissions, or durable authority, or an action needs new
 authorization. Existing authorization covers necessary implementation choices

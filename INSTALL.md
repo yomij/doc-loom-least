@@ -1,7 +1,7 @@
 # Install Doc Loom Least Skills
 
-Doc Loom Least is distributed as four Agent Skills:
-docloom-workflow, review, grill, and setup-doc-governance.
+Doc Loom Least is distributed as five Agent Skills:
+docloom-workflow, business-docs, review, grill, and setup-doc-governance.
 
 ## Install
 
@@ -34,7 +34,10 @@ global installation as part of repository-only changes.
 
 ## Manual fallback
 
-On a system without skillshare, copy or symlink the four directories containing
+On a system without skillshare, copy or symlink the five directories containing
 SKILL.md under skills/ into the target Skills directory. Keep each directory's
 supporting references beside its owner. The normal entry is docloom-workflow;
-call review or grill explicitly when needed.
+call review or grill explicitly when needed. business-docs is independently
+callable and needs only its own directory and template. Keep it installed
+alongside docloom-workflow for integrated business archival. Repository changes
+alone do not update an existing installation.

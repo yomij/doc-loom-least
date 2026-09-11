@@ -16,17 +16,22 @@ using AI agents with durable context and proportionate verification.
   development triggers; it does not require another agent.
 - grill is an explicit conversational challenge and never changes files or state.
 - setup-doc-governance handles structural documentation and authority changes.
-- Reversible one-turn work needs no record. Durable work uses one task.md.
+- business-docs independently organizes business rules and decisions from
+  conversations, tasks, and historical evidence; development uses it for
+  business conclusions during work and final archival.
+- Reversible one-turn work needs no task record. Durable task state uses one
+  task.md; business documents can exist independently of it.
 - Legacy case artifacts remain readable evidence.
 - There is no runtime backend, daemon, orchestrator, or automatic publishing.
 
 ## Current bottleneck
 
-Dogfood the four-Skill flow on ordinary work, a resumed task, a material review,
-and a governance change. Measure whether context loss, unnecessary confirmation,
-false completion, and record churn remain acceptable.
+Dogfood the five capabilities on ordinary work, a resumed task, a material
+review, a governance change, and standalone business documentation. Measure
+whether context loss, unnecessary confirmation, false completion, unsupported
+business rationale, and record churn remain acceptable.
 
 ## Do not build yet
 
-New lifecycle domains, a runtime workflow engine, automatic candidate execution,
-or global installation management.
+Broader product lifecycle machinery, speculative lifecycle domains, a runtime
+workflow engine, automatic candidate execution, or global installation management.
