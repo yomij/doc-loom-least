@@ -5,6 +5,8 @@ description: Establish or adjust repository documentation authority, hierarchy, 
 
 # Setup Doc Governance
 
+Use the user's language for all output, including templates, unless another language is requested.
+
 ## Scope
 
 Infer the narrowest target from the request:

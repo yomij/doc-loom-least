@@ -5,6 +5,8 @@ description: Default entry for development requests through implementation and v
 
 # Doc Loom Workflow
 
+Use the user's language for all output, including templates, unless another language is requested.
+
 Work directly toward the user's outcome; do not ask the user to choose a phase.
 
 ## Work

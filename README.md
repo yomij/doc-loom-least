@@ -38,8 +38,10 @@ docloom-workflow; old case artifacts remain valid evidence.
 Use business-docs directly to turn a conversation into business rules and
 decisions, archive a task's business outcome, or reconstruct historical logic
 from documents and relevant implementation evidence. No prior Docloom session
-or task.md is required. For example: "Summarize the current order-cancellation
-rules for product and QA, including exceptions and unresolved questions."
+or task.md is required. Documents serve general business readers, including
+people without a technical background. For example: "Explain the current
+order-cancellation rules so customer service and operations staff can understand
+when cancellation is allowed, what happens next, and any unresolved questions."
 
 The business narrative stays free of implementation details; sources, time scope,
 and evidence gaps remain traceable. The default development entry captures

@@ -3,6 +3,7 @@
 Read when creating or restructuring a record at docs/cases/<task-id>/task.md.
 Use for continuity, a reusable decision, an interrupted handoff, or an explicit
 case request. Omit unused sections; routine updates need no template reload.
+Adapt this template to the user's language unless another is requested.
 
 ~~~md
 # Task

@@ -7,7 +7,7 @@ source_of_truth: user_confirmed
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-09-10
+last_verified: 2026-09-11
 ---
 
 # Agent Policy
@@ -15,6 +15,14 @@ last_verified: 2026-09-10
 Agents own discoverable and executable repository work. They preserve user
 intent, follow declared authority, inspect implementation evidence, verify
 results, and update routine documentation without user bookkeeping.
+
+Every Doc Loom Skill uses the user's language for all user-facing output,
+including questions, progress, findings, final responses, documents, and template
+headings, labels, and prose. An explicit output-language request takes precedence;
+neither instructions, templates, nor source material impose a language default.
+Preserve literal quotes and machine-required identifiers/values, with explanations
+in the user's language. Each Skill carries this rule for independent use.
+Source: [2026-09-11 owner request](../../business/archives/2026-09-11-docloom-output-language.md#来源).
 
 A task authorizes its stated outcome and necessary implementation choices,
 including dependency/lockfile edits. Ask only for unresolved facts or decisions

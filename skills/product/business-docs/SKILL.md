@@ -1,97 +1,80 @@
 ---
 name: business-docs
-description: Create or update business documentation for product, QA, and development readers by organizing business rules and decisions. Use to distill requirements discussions, archive task business outcomes, or reconstruct current or historical business logic from documents and code. Excludes technical design and documentation authority governance.
+description: Write business rules and decisions for nontechnical readers from conversations, task outcomes, or current and historical documents and code. Supports document updates; excludes technical design and documentation authority governance.
 ---
 
 # Business Docs
 
-Produce a standalone business document for product, QA, and development readers.
-Use the user's language (Chinese by default). Explain actors, conditions,
-actions, outcomes, exceptions, scope, and decisions without requiring code
-knowledge. Technical sources belong in the source appendix, not the business
-narrative. This Skill works independently of docloom-workflow and task.md.
+Use the user's language for all output, including templates, unless another language is requested.
+
+Works independently of docloom-workflow and task.md. Use the requested audience;
+default to general business readers.
+
+## Audience and expression
+
+Make the body understandable without project or technical knowledge. Explain
+the business problem, actors, conditions, actions, outcomes, and exceptions;
+define necessary terms on first use. Organize by business activity, preserving
+exact limits and uncertainty. Explain technical constraints by their business
+effects; put implementation details and technical identifiers in the source
+appendix. Label illustrative examples and add no unsupported rules.
 
 ## Sources and scope
 
-Infer the topic, requested time/version, and output location from the request
-and existing documents. Use supplied or accessible relevant material; do not
-expand a focused topic into a repository-wide investigation.
+Stay within the requested topic and accessible evidence.
 
-- **Conversation or task:** Extract the initial request, explicit corrections,
-  decisions and their stated reasons from visible conversation and supplied
-  records. During ongoing work, persist meaningful business changes in a draft;
-  do not wait until closure or transcribe every exchange. Missing conversation
-  history is a source gap, not permission to reconstruct what someone said.
-- **Historical logic:** Use old documents, task records, relevant code, tests,
-  configuration, and change history within the allowed evidence scope. Default
-  to current checked-out behavior when no period is specified, state that scope
-  and revision/local-change context, and distinguish it from historical rules.
-  For evolution requests, date/version each change. A test file describes an
-  expectation; only an observed test result is verification evidence. Reading
-  source does not establish deployed behavior.
-- **Existing document:** Locate the matching draft or topic before writing.
-  Preserve established rules and source links; incorporate only supported
-  additions and corrections within the requested scope.
+- **Conversation or task:** Capture requests, corrections, decisions, and stated
+  reasons from visible records. Persist meaningful changes in a draft during
+  work; missing history stays a source gap.
+- **Historical logic:** Use relevant documents, code, tests, configuration, and
+  history. Without a requested period, use the current checkout and state its
+  revision/local changes. Date/version evolving rules. Source inspection does
+  not prove deployment; test definitions do not prove tests passed.
+- **Existing document:** Reuse the matching draft; preserve established rules
+  and sources while applying supported changes.
 
-Follow repository authority and explicit owner decisions for intended rules;
-implementation is evidence of actual behavior. Report disagreements rather
-than silently making either match the other. Keep intended rules, observed
-behavior, and unresolved questions distinct. Never infer business rationale
-from code or turn an agent suggestion into a confirmed decision.
+Follow repository authority and owner decisions for intended rules. Separate
+those rules from observed behavior and unresolved questions; expose conflicts.
+Code cannot establish business rationale, nor agent suggestions owner approval.
+Keep confirmation, delivery, and verification distinct.
 
-Bind substantive rules and decisions to source IDs or links. For conversation
-without stable links, capture the relevant speaker, request/correction, and
-context in the document's source appendix or an existing task record. Mark this
-as a conversation excerpt/summary, not an independently verified transcript.
-If a source or rationale is absent, state the gap. Ask only about ambiguities
-that materially affect the requested conclusion; continue supported sections.
+Link material rules and decisions to sources. Without stable conversation links,
+retain speaker, request/correction, and context as a labeled excerpt/summary in
+the source appendix or task record, not a verified transcript. State missing
+evidence or rationale; ask only when ambiguity changes the conclusion and
+continue supported work.
 
 ## Write and retain
 
-Read [templates/business.md](templates/business.md) when creating or
-restructuring a document; routine updates need no template reload. Organize the
-final understanding by business meaning. Retain only decision history that
-explains a meaningful choice or change. Omit empty sections and technical-only
-details. Keep confirmation, delivery, and verification separate; finishing a
-task or generating a document proves none of them by itself.
+Read [templates/business.md](templates/business.md) for new or restructured
+documents. Adapt sections to the purpose; omit empty sections, irrelevant
+delivery tracking, and decision history that explains no meaningful choice.
 
 Respect an explicit output target and repository conventions. Otherwise:
 
-- With an existing task directory, write `docs/cases/<task-id>/business.md`.
-- Without one, write `docs/business/archives/<YYYY-MM-DD>-<topic>.md`. Drafts
-  may live there with explicit draft status; a directory name grants no status.
-  Do not create task.md just to support business documentation. For distinct
-  same-day topics/tasks with colliding names, add a meaningful suffix.
-- If no writable workspace is available, or the user requests only text,
-  return the document in the conversation and do not claim it was saved.
+- Existing task directory: `docs/cases/<task-id>/business.md`.
+- Otherwise: `docs/business/archives/<YYYY-MM-DD>-<topic>.md`; do not create
+  task.md solely for this document. Use meaningful suffixes for collisions.
+- No writable workspace or text-only request: return inline without claiming a save.
 
-Update the same draft for the same work. Archive when the requested discussion
-snapshot, task result, or historical investigation is complete; name that basis
-and date. Archiving preserves a snapshot and does not imply all rules are
-confirmed, delivered, verified, or authoritative. Retain unresolved items.
-After archival, later business changes get a new document linked to the exact
-rules they change; preserve the old body and add a follow-up link. Do not mark
-an entire topic superseded when only one rule changed. Explicit corrections to
-an archived document retain a dated correction note and source.
-If the default destination already contains an archive, use the new task's
-directory or a dated/specific filename beside it; never overwrite that snapshot
-merely because the topic or task directory matches.
+Update the same draft during work. State draft/archive status explicitly,
+regardless of directory. Archive a completed discussion snapshot, task result,
+or investigation with its date and basis; retain unresolved items. Archival
+proves neither rule approval, delivery, verification, nor authority.
 
-On saving, update the repository's existing business navigation, or create a
-small `docs/business/README.md` when none exists. List topic, document, date,
-draft/archive status, and specific relationships to earlier rules. Do not
-duplicate the body or present the newest task as a complete current rulebook.
-Update affected existing current business authority only within established
-ownership and authorization. New authority or unresolved binding-rule changes
-belong to setup-doc-governance if available, otherwise surface the decision;
-ordinary drafting and archival do not depend on that Skill being installed.
+Preserve archived bodies. Later changes get a new document and two-way links
+identifying affected rules, not whole-topic supersession. Explicit corrections
+retain a dated note and source. Never overwrite an archive on a path collision.
+
+Update existing business navigation, otherwise `docs/business/README.md`, with
+topic, link, date, status, and rule relationships. The index is navigation, not a
+current rulebook. Update existing authority within its ownership and authorization;
+route new authority or unresolved binding-rule changes to setup-doc-governance
+if available, otherwise surface the decision. Ordinary writing needs no such dependency.
 
 ## Finish
 
-Check that the document is understandable without technical sources, material
-rules and decisions are traceable, discarded requirements are not final rules,
-time scopes are not mixed, conflicts and gaps are visible, and links resolve.
-Report the saved location (or inline output), scope, and material uncertainties.
-For workflow closure with no business change or clarification, report that fact
-without creating an empty business document. An explicit historical summary
-still warrants a document even when no business behavior changed.
+Check nontechnical readability, source/link validity, time scope, visible gaps,
+and that discarded requirements are not final rules. Report location, scope,
+and material uncertainties. Technical-only closure needs no empty archive;
+an explicit historical summary still warrants a document without business changes.

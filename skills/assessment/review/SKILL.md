@@ -5,6 +5,8 @@ description: Perform a separate read-only verification pass on existing work whe
 
 # Review
 
+Use the user's language for all output, including templates, unless another language is requested.
+
 Independence means a separate verification pass, not another agent. Use
 subagents only when explicitly requested by the user or required by the runtime.
 Do not modify the target, repository files, or task state; the executor owns

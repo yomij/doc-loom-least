@@ -78,3 +78,7 @@
 - S1：[本次需求与授权记录](task.md#request-and-authorization)，包括用户初始需求 U1、独立调用要求 U2、历史梳理要求 U3，以及方案执行授权 U4。内容为当前可见会话的摘录与摘要。
 - S2：[现行业务文档规则](../../authority/workflow/business-docs.md)及[本次决策记录](../../adr/ADR-0005-independent-business-docs.md)。
 - S3：[任务验证证据](task.md#verification-evidence)。
+
+## 后续变更
+
+- 2026-09-11：[让非技术人员也能读懂业务文档](../../business/archives/2026-09-11-business-docs-general-audience.md)扩大本文“业务目标与范围”中的默认读者定位，并细化 B1 的表达要求；以上正文保留归档时的结论。

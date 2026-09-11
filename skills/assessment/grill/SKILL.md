@@ -5,6 +5,8 @@ description: Challenge claims, assumptions, or decisions through dialogue on exp
 
 # Grill
 
+Use the user's language for all output, including templates, unless another language is requested.
+
 ## Rules
 
 Keep assessment in conversation; change no files or task state. Discussion or

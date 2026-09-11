@@ -8,6 +8,7 @@ approved_by:
 approved_at:
 ---
 <!-- Conditional: use for multiple decisions. Omit unused sections. -->
+<!-- Adapt prose to the user's language unless another is requested; preserve metadata. -->
 
 # Governance Plan
 
