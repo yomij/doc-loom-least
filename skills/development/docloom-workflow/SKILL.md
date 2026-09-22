@@ -1,6 +1,6 @@
 ---
 name: docloom-workflow
-description: Default entry for development requests through implementation and verification, including ordinary documentation edits. Excludes standalone business-document requests, read-only review, assumption-challenging discussion, and documentation governance setup.
+description: Handle repository development work from implementation through verification, including ordinary documentation edits. Use when a request asks to build, fix, refactor, or update project files.
 ---
 
 # Doc Loom Workflow

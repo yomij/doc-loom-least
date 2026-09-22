@@ -1,6 +1,6 @@
 ---
 name: grill
-description: Challenge claims, assumptions, or decisions through dialogue on explicit critical-discussion requests. Ordinary development, architecture work, and code review do not trigger it.
+description: Challenge claims, assumptions, or decisions through focused dialogue. Use when the user explicitly asks to test, critique, or stress-test reasoning.
 ---
 
 # Grill

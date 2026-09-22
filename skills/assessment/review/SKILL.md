@@ -1,6 +1,6 @@
 ---
 name: review
-description: Perform a separate read-only verification pass on existing work when review is requested or a development change requires it. Return findings and a readiness result; do not implement fixes or require another agent.
+description: Perform a separate read-only verification of existing work and report findings and readiness. Use when the user requests a review or the development workflow calls for an independent check.
 ---
 
 # Review

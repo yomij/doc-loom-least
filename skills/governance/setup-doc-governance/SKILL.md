@@ -1,6 +1,6 @@
 ---
 name: setup-doc-governance
-description: Establish or adjust repository documentation authority, hierarchy, knowledge promotion, and current/historical status when requested or needed to resolve a structural governance conflict. Excludes ordinary README, API documentation, and task-note edits.
+description: Establish or change repository documentation authority, hierarchy, knowledge promotion, or current/historical status. Use when a request concerns structural documentation governance or a conflict in those areas.
 ---
 
 # Setup Doc Governance

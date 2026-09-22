@@ -1,6 +1,6 @@
 ---
 name: business-docs
-description: Write business rules and decisions for nontechnical readers from conversations, task outcomes, or current and historical documents and code. Supports document updates; excludes technical design and documentation authority governance.
+description: Create or update business-facing documentation that captures rules, decisions, outcomes, or historical context from conversations, tasks, documents, or code. Use for standalone business-document requests or when development work produces business conclusions to retain.
 ---
 
 # Business Docs
