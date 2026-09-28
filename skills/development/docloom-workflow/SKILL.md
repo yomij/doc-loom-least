@@ -60,8 +60,9 @@ outcome, residuals, and anything unverified or blocked.
 
 Create `docs/cases/<task-id>/task.md` only for continuity beyond this turn,
 reusable decisions that need recording, interruption requiring a handoff, or an
-explicit case request. Reversible one-turn work needs no task record by default;
-business documentation is independent and follows business-docs when relevant.
+explicit case request. Reversible one-turn work needs no task record when none
+of the above conditions applies. Business documentation is independent and
+follows business-docs when relevant.
 Read [templates/task.md](templates/task.md) **conditionally**, when creating or
 restructuring that record. Existing records can be updated without reloading it.
 The record owns status; separate logs and reviews are evidence only.
