@@ -21,6 +21,7 @@ None.
 
 | Case | Closure Status | Evidence | Caveat / Follow-up |
 |---|---|---|---|
+| `20261016-dated-case-names` | Done | [Task](20261016-dated-case-names/task.md) | 新 case 使用创建日期作为 YYYYMMDD 前缀；续办沿用目录。已修改源文件，安装副本未同步。 |
 | `20260928-case-persistence-checks` | Done | [Task](20260928-case-persistence-checks/task.md) | One-turn exemption applies only when no existing persistence condition applies. Source only; installed copy not synced. |
 | `20260910-independent-business-docs` | Done | [Task](20260910-independent-business-docs/task.md), [业务档案](20260910-independent-business-docs/business.md) | Independent business-docs and development integration shipped in source; structural checks and local review passed. Independent model runs and installed-copy sync were not performed. |
 | `20260910-four-skill-optimization` | Done | `20260910-four-skill-optimization/task.md` | Four capabilities clarified; eight manual scenario simulations and structural checks passed. Runtime token total unchanged; real model behavior is not benchmarked. |

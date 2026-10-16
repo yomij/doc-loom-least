@@ -7,7 +7,7 @@ source_of_truth: code
 supersedes: []
 superseded_by: []
 owner: user
-last_verified: 2026-09-10
+last_verified: 2026-10-16
 ---
 
 # Development Workflow
@@ -21,6 +21,8 @@ Reversible one-turn work needs no case. Create docs/cases/<task-id>/task.md only
 for continuity, a reusable decision, an interrupted handoff, or an explicit case
 request. It owns current status; attachments provide evidence only. Load its
 local template when creating or restructuring the record, not on every update.
+New task IDs use `<YYYYMMDD>-<short-slug>`: the case creation date in the user's
+timezone plus a short descriptive slug. Resume work in the existing directory.
 
 Business persistence is independent of task-state persistence. Invoke
 business-docs when requirements create or clarify business rules or decisions,

@@ -63,6 +63,9 @@ reusable decisions that need recording, interruption requiring a handoff, or an
 explicit case request. Reversible one-turn work needs no task record when none
 of the above conditions applies. Business documentation is independent and
 follows business-docs when relevant.
+Use `<YYYYMMDD>-<short-slug>` for new task IDs: the case creation date in the
+user's timezone plus a short descriptive slug. Reuse the existing case directory
+when resuming.
 Read [templates/task.md](templates/task.md) **conditionally**, when creating or
 restructuring that record. Existing records can be updated without reloading it.
 The record owns status; separate logs and reviews are evidence only.
