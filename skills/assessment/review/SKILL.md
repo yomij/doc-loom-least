@@ -1,6 +1,6 @@
 ---
 name: review
-description: Perform a separate read-only verification of existing work and report findings and readiness. Use when the user requests a review or the development workflow calls for an independent check.
+description: Run a separate read-only verification pass on code, diffs, plans, or documents and return prioritized findings with a three-state verdict. Use when the user requests a review or the development workflow triggers an independent check, without modifying files or task state.
 ---
 
 # Review
@@ -26,13 +26,13 @@ Assess correctness, requirements, compatibility, verification evidence, and
 removable complexity within the requested scope. Follow declared repository
 fact ownership; historical or derived prose does not override active rules.
 Report unresolved authority conflicts rather than silently choosing a rule.
-Run checks only without changing repository or external state; use isolated
-temporary outputs where needed, or report the unavailable check.
 
-Read [references/complexity-only.md](references/complexity-only.md)
+Run only read-only checks that leave repository and external state unchanged
+(using isolated temporary paths if needed), or report which checks could not
+run. Read [references/complexity-only.md](references/complexity-only.md)
 **conditionally**, only for an explicitly requested complexity-only assessment.
-Stop after covering the target and questions affecting the result; do not keep
-searching for minor issues.
+Stop once the target and outcome-affecting questions are covered; do not hunt
+indefinitely for minor polish.
 
 ## Findings
 
@@ -51,7 +51,7 @@ none were found.
 
 ## Result
 
-Return exactly one result, applying these rules in order:
+Return exactly one verdict, applying these rules in order:
 
 1. `changes_required`: at least one unresolved Critical or Important finding.
 2. `insufficient_evidence`: no known blocking finding, but missing target,
@@ -59,8 +59,9 @@ Return exactly one result, applying these rules in order:
 3. `pass`: no unresolved Critical or Important finding and no evidence gap
    preventing the scoped conclusion. Minor findings do not prevent pass.
 
-Include scope, baseline/delta, checks, and gaps even when findings determine the
-result. These complete the review; pass grants no merge/publication authority.
+Always report scope, baseline/delta, executed checks, and evidence gaps
+alongside the verdict. Pass confirms the scoped verification only; it grants no
+merge or publication authority.
 
 ## Escalation
 
